@@ -1,5 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:githo/extracted_data/styleShortcut.dart';
+
+class ScreenTitle extends StatelessWidget {
+  final String titleText;
+  ScreenTitle(this.titleText);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 30),
+      child: Text(
+        titleText,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 35,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
+      ),
+    );
+  }
+}
 
 class Heading1 extends StatelessWidget {
   final String _text;
@@ -7,19 +27,16 @@ class Heading1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double _sizedBoxHeight = 10;
-    return Column(
-      children: <Widget>[
-        SizedBox(height: _sizedBoxHeight),
-        Text(
-          _text,
-          style: TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
-          ),
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 10),
+      child: Text(
+        _text,
+        style: TextStyle(
+          fontSize: 30,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
         ),
-        SizedBox(height: _sizedBoxHeight),
-      ],
+      ),
     );
   }
 }
@@ -30,55 +47,16 @@ class Heading2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double _sizedBoxHeight = 10;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        SizedBox(height: _sizedBoxHeight),
-        Text(
-          _text,
-          style: TextStyle(
-            fontSize: 20,
-            //fontWeight: FontWeight.bold,
-          ),
-        ),
-        SizedBox(height: _sizedBoxHeight),
-      ],
-    );
-  }
-}
-
-class HeadingButton extends StatelessWidget {
-  final String text;
-  final Function onPressedFunc;
-  const HeadingButton({required this.text, required this.onPressedFunc});
-
-  @override
-  Widget build(BuildContext context) {
-    const double borderWidth = 5;
-    const double usualScreenPadding = StyleData.screenPaddingValue;
-    const double buttonPadding = usualScreenPadding - borderWidth;
-
-    return OutlinedButton(
-      style: OutlinedButton.styleFrom(
-        primary: Colors.black,
-        side: BorderSide(
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 10),
+      child: Text(
+        _text,
+        style: TextStyle(
+          fontSize: 20,
           color: Colors.black,
-          width: borderWidth,
-        ),
-        minimumSize: Size(double.infinity, 90),
-      ),
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-            horizontal: buttonPadding, vertical: buttonPadding / 2),
-        child: Text(
-          text,
-          style: TextStyle(fontSize: 25),
+          //fontWeight: FontWeight.bold,
         ),
       ),
-      onPressed: () {
-        onPressedFunc();
-      },
     );
   }
 }

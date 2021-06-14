@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:githo/helpers/databaseHelper.dart';
-import 'package:githo/models/habitPlan_model.dart';
+import 'package:githo/models/habitPlanModel.dart';
 import 'package:githo/screens/editHabit.dart';
 
 // Open the editHabit-screen and add a new habitPlan using whatever you type in
@@ -13,18 +13,19 @@ void addNewHabit(
     isActive: false,
     // TextFormFields:
     goal: "",
-    reps: 1,
+    requiredReps: 1,
     challenges: [""],
-    rules: [""],
+    comments: [""],
     // Sliders:
-    timeIndex: 1,
-    activity: 5,
-    requiredRepeats: 2,
+    trainingTimeIndex: 1,
+    requiredTrainings: 5,
+    requiredTrainingPeriods: 2,
+    lastChanged: DateTime.now(),
   );
 
-  void _onSaved(HabitPlan habitPlan) {
-    DatabaseHelper.instance.insertHabitPlan(habitPlan);
-    updatePrevScreens(habitPlan);
+  void _onSaved(HabitPlan habitPlan) async {
+    await DatabaseHelper.instance.insertHabitPlan(habitPlan);
+    updatePrevScreens();
   }
 
   Navigator.push(
@@ -44,8 +45,10 @@ void editHabit(
   Function updatePrevScreens,
   HabitPlan habitPlan,
 ) {
-  void _onSaved(HabitPlan habitPlan) {
-    DatabaseHelper.instance.updateHabitPlan(habitPlan);
+  habitPlan.lastChanged = DateTime.now();
+
+  void _onSaved(HabitPlan habitPlan) async {
+    await DatabaseHelper.instance.updateHabitPlan(habitPlan);
     updatePrevScreens(habitPlan);
   }
 

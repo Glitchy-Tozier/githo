@@ -4,14 +4,23 @@ class DataShortcut {
     "day",
     "week",
     "month",
-    "year"
   ];
-  static const List<String> advTimeFrames = [
+  static const List<String> adjectiveTimeFrames = [
     "hourly",
     "daily",
     "weekly",
     "monthly",
-    "yearly"
   ];
-  static const List<double> maxActivity = [24, 7, 4, 12];
+  static const List<int> maxTrainings = [24, 7, 4];
+
+  static const List<int> repDurationInHours = [
+    1,
+    24,
+    24 * 7,
+  ];
+  static const List<int> stepDurationInHours = [
+    24,
+    24 * 7,
+    24 * 7 * 4,
+  ];
 }

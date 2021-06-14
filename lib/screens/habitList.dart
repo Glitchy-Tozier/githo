@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:githo/extracted_data/styleShortcut.dart';
-import 'package:githo/extracted_functions/editHabitRoutes.dart';
-import 'package:githo/extracted_widgets/headings.dart';
-import 'package:githo/screens/singlelHabitDisplay.dart';
 
-import 'package:githo/extracted_widgets/screenTitle.dart';
+import 'package:githo/extracted_data/styleShortcut.dart';
+import 'package:githo/extracted_data/fullDatabaseImport.dart';
+
+import 'package:githo/extracted_functions/editHabitRoutes.dart';
+
+import 'package:githo/extracted_widgets/headings.dart';
 import 'package:githo/extracted_widgets/screenEndingSpacer.dart';
 
-import 'package:githo/helpers/databaseHelper.dart';
-import 'package:githo/models/habitPlan_model.dart';
+import 'package:githo/screens/singlelHabitDisplay.dart';
 
 class HabitList extends StatefulWidget {
   final Function updateFunction;
@@ -39,36 +39,23 @@ class _HabitListState extends State<HabitList> {
     });
   }
 
-  String _getActiveHabitPlanName(List<HabitPlan> habitPlanList) {
-    String returnText = "";
-
-    for (int i = 0; i < habitPlanList.length; i++) {
-      final HabitPlan habitPlan = habitPlanList[i];
-      if (habitPlan.isActive) {
-        if (returnText == "") {
-          returnText = "Goal: ${habitPlan.goal}";
-        } else {
-          // If somehow multiple habitPlans are active at the same time
-          return "There has been an error. Multiple goals are active at the same time.";
-        }
-      }
-    }
-    if (returnText == "") {
-      // If there is no active habitPlan
-      returnText =
-          "No challenges are active. Click on a challenge to activate it.";
-    }
-    return returnText;
+  List<HabitPlan> _orderHabitPlans(List<HabitPlan> habitPlanList) {
+    // Order the habitPlans in a way that displays the most cecently edited ones at the top
+    habitPlanList.sort((a, b) {
+      String dateStringA = a.lastChanged.toString();
+      String dateStringB = b.lastChanged.toString();
+      return dateStringB.compareTo(dateStringA);
+    });
+    return habitPlanList;
   }
 
-  Widget _createHabitListItem(List<HabitPlan> habitPlanList, int index) {
-    HabitPlan habitPlan = habitPlanList[index];
+  Widget _createHabitListItem(HabitPlan habitPlan) {
     return Column(
       children: <Widget>[
         TextButton(
             child: ListTile(
-              title: Text(habitPlan.goal), //"Titel der Challenge"),
-              subtitle: Text("Subtitle ka okay!!??!"),
+              title: Text(habitPlan.goal),
+              // subtitle: Text("Subtitle ka okay!!??!"),
               trailing: Icon(Icons.visibility),
               tileColor: habitPlan.isActive ? Colors.lightGreen : null,
             ),
@@ -93,7 +80,7 @@ class _HabitListState extends State<HabitList> {
     return Scaffold(
       body: ListView(
         padding: StyleData.screenPadding,
-        children: <Widget>[
+        children: [
           ScreenTitle("List of habits"),
           FutureBuilder(
             future: _habitPlanListFuture,
@@ -110,14 +97,15 @@ class _HabitListState extends State<HabitList> {
                     );
                   } else {
                     // If there are habit plans
-                    String activePlanHeading1 =
-                        _getActiveHabitPlanName(habitPlanList);
                     returnWidgets.add(
-                      Text(activePlanHeading1),
+                      Heading2("Click on a habit-plan to view it."),
                     );
 
-                    for (int i = 0; i < habitPlanList.length; i++) {
-                      Widget listItem = _createHabitListItem(habitPlanList, i);
+                    List<HabitPlan> orderedList =
+                        _orderHabitPlans(habitPlanList);
+
+                    for (int i = 0; i < orderedList.length; i++) {
+                      Widget listItem = _createHabitListItem(orderedList[i]);
                       returnWidgets.add(listItem);
                     }
                   }

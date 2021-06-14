@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:githo/extracted_data/dataShortcut.dart';
 import 'package:githo/extracted_data/styleShortcut.dart';
 
-import 'package:githo/models/habitPlan_model.dart';
-
-import 'package:githo/extracted_widgets/screenTitle.dart';
-import 'package:githo/extracted_widgets/headings.dart';
-import 'package:githo/extracted_widgets/formList.dart';
-import 'package:githo/extracted_widgets/sliderTitle.dart';
-import 'package:githo/extracted_widgets/screenEndingSpacer.dart';
-
 import 'package:githo/extracted_functions/textFormFieldHelpers.dart';
 import 'package:githo/extracted_functions/typeExtentions.dart';
+
+import 'package:githo/extracted_widgets/formList.dart';
+import 'package:githo/extracted_widgets/headings.dart';
+import 'package:githo/extracted_widgets/screenEndingSpacer.dart';
+import 'package:githo/extracted_widgets/sliderTitle.dart';
+
+import 'package:githo/models/habitPlanModel.dart';
 
 class EditHabit extends StatefulWidget {
   final HabitPlan habitPlan;
@@ -43,29 +43,36 @@ class _EditHabitState extends State<EditHabit> {
   bool _expandSettings = false;
   // Text used to describe the slider-values
   final List<String> _timeFrames = DataShortcut.timeFrames;
-  final List<String> _advTimeFrames = DataShortcut.advTimeFrames;
-  final List<double> _maxActivity = DataShortcut.maxActivity;
+  final List<String> _adjTimeFrames = DataShortcut.adjectiveTimeFrames;
+  final List<int> _maxTrainings = DataShortcut.maxTrainings;
 
   // Function for receiving the onSaved-values from formList.dart
   void getChallengeValues(List<String> valueList) {
     this.habitPlan.challenges = valueList;
   }
 
-  void getRuleValues(List<String> valueList) {
-    this.habitPlan.rules = valueList;
+  void getCommentValues(List<String> valueList) {
+    this.habitPlan.comments = valueList;
   }
 
   @override
   Widget build(BuildContext context) {
-    int timeIndex = habitPlan.timeIndex.toInt();
-    String currentTimeUnit = _timeFrames[timeIndex];
-    String currentAdvTimeUnit = _advTimeFrames[timeIndex];
+    int trainingTimeIndex = habitPlan.trainingTimeIndex.toInt();
+    String currentTimeUnit = _timeFrames[trainingTimeIndex];
+    String currentAdjTimeUnit = _adjTimeFrames[trainingTimeIndex];
 
-    String currentTimeFrame = _timeFrames[timeIndex + 1];
-    double currentMaxActivity = _maxActivity[timeIndex];
+    String currentTimeFrame = _timeFrames[trainingTimeIndex + 1];
+    double currentMaxTrainings = _maxTrainings[trainingTimeIndex].toDouble();
+
+    String firstSliderArticle;
+    if (trainingTimeIndex == 0) {
+      firstSliderArticle = "an";
+    } else {
+      firstSliderArticle = "a";
+    }
 
     String thirdSliderText;
-    if (habitPlan.requiredRepeats == 1) {
+    if (habitPlan.requiredTrainingPeriods == 1) {
       thirdSliderText = " is";
     } else {
       thirdSliderText = "s are";
@@ -95,34 +102,34 @@ class _EditHabitState extends State<EditHabit> {
                     ),
                     SizedBox(height: 10),
 
-                    Heading1("${currentAdvTimeUnit.capitalize()} repetitions"),
+                    Heading1("${currentAdjTimeUnit.capitalize()} action count"),
                     TextFormField(
                       textAlign: TextAlign.end,
                       keyboardType: TextInputType.number,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      decoration: inputDecoration("Required repetitions"),
+                      decoration: inputDecoration("Nr of required actions"),
                       validator: (input) => validateNumberField(
                           input, "the required repetitions"),
-                      initialValue: habitPlan.reps.toString(),
-                      onSaved: (input) =>
-                          habitPlan.reps = int.parse(input.toString().trim()),
+                      initialValue: habitPlan.requiredReps.toString(),
+                      onSaved: (input) => habitPlan.requiredReps =
+                          int.parse(input.toString().trim()),
                     ),
                     SizedBox(height: 10),
 
                     // Create the challenge-form-fields
-                    Heading1("Steps towards that goal"),
+                    Heading1("Steps towards your goal"),
                     FormList(
                       fieldName: "Step",
                       valuesGetter: getChallengeValues,
                       inputList: habitPlan.challenges,
                     ),
 
-                    // Create the form-fields for your personal rules
-                    Heading1("Rules set for yourself"),
+                    // Create the form-fields for your personal comments
+                    Heading1("Comments"),
                     FormList(
-                      fieldName: "Rule",
-                      valuesGetter: getRuleValues,
-                      inputList: habitPlan.rules,
+                      fieldName: "Comment",
+                      valuesGetter: getCommentValues,
+                      inputList: habitPlan.comments,
                     ),
 
                     // Extended settings
@@ -156,12 +163,12 @@ class _EditHabitState extends State<EditHabit> {
                             child: Column(
                               children: <Widget>[
                                 SliderTitle([
-                                  ["normal", "It will be a "],
-                                  ["bold", "$currentAdvTimeUnit"],
+                                  ["normal", "It will be $firstSliderArticle "],
+                                  ["bold", "$currentAdjTimeUnit"],
                                   ["normal", " habit."],
                                 ]),
                                 Slider(
-                                  value: habitPlan.timeIndex,
+                                  value: habitPlan.trainingTimeIndex.toDouble(),
                                   min: 0,
                                   max: (_timeFrames.length - 2)
                                       .toDouble(), // -2 BECAUSE -1: .length return a value that is 1 too large AND -1: I want exclude the last value.
@@ -169,33 +176,38 @@ class _EditHabitState extends State<EditHabit> {
                                   onChanged: (double value) {
                                     setState(() {
                                       // Set the correct value for THIS slider
-                                      habitPlan.timeIndex = value;
+                                      habitPlan.trainingTimeIndex =
+                                          value.toInt();
                                       // Correct the Value for the NEXT slider
                                       int newTimeIndex = value.toInt();
-                                      double newMaxActivity =
-                                          _maxActivity[newTimeIndex];
-                                      habitPlan.activity =
-                                          (newMaxActivity * 0.9)
-                                              .floorToDouble();
+                                      double newMaxTrainings =
+                                          _maxTrainings[newTimeIndex]
+                                              .toDouble();
+                                      habitPlan.requiredTrainings =
+                                          (newMaxTrainings * 0.9).floor();
                                     });
                                   },
                                 ),
                                 SliderTitle([
                                   ["normal", "Every $currentTimeFrame, "],
-                                  ["bold", "${habitPlan.activity.toInt()}"],
+                                  [
+                                    "bold",
+                                    "${habitPlan.requiredTrainings.toInt()}"
+                                  ],
                                   [
                                     "normal",
-                                    " out of ${currentMaxActivity.toInt()} ${currentTimeUnit}s must be successful to level up."
+                                    " out of ${currentMaxTrainings.toInt()} ${currentTimeUnit}s must be successful to level up."
                                   ]
                                 ]),
                                 Slider(
-                                  value: habitPlan.activity,
+                                  value: habitPlan.requiredTrainings.toDouble(),
                                   min: 1,
-                                  max: currentMaxActivity,
-                                  divisions: currentMaxActivity.toInt() - 1,
+                                  max: currentMaxTrainings,
+                                  divisions: currentMaxTrainings.toInt() - 1,
                                   onChanged: (double value) {
                                     setState(() {
-                                      habitPlan.activity = value;
+                                      habitPlan.requiredTrainings =
+                                          value.toInt();
                                     });
                                   },
                                 ),
@@ -203,21 +215,23 @@ class _EditHabitState extends State<EditHabit> {
                                 SliderTitle([
                                   [
                                     "bold",
-                                    "${habitPlan.requiredRepeats.toInt()}"
+                                    "${habitPlan.requiredTrainingPeriods.toInt()}"
                                   ],
                                   [
                                     "normal",
-                                    " level-up$thirdSliderText required to advance to the next challenge."
+                                    " level-up$thirdSliderText required to advance to the next step."
                                   ]
                                 ]),
                                 Slider(
-                                  value: habitPlan.requiredRepeats,
+                                  value: habitPlan.requiredTrainingPeriods
+                                      .toDouble(),
                                   min: 1,
                                   max: 10,
                                   divisions: 9,
                                   onChanged: (double value) {
                                     setState(() {
-                                      habitPlan.requiredRepeats = value;
+                                      habitPlan.requiredTrainingPeriods =
+                                          value.toInt();
                                     });
                                   },
                                 ),

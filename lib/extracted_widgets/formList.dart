@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:githo/extracted_functions/textFormFieldHelpers.dart';
 
 class FormList extends StatefulWidget {

@@ -1,9 +1,13 @@
 import 'dart:io';
-import 'package:githo/extracted_data/defaultHabitPlans.dart';
-import 'package:sqflite/sqflite.dart';
 
-import 'package:githo/models/habitPlan_model.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
+
+import 'package:githo/extracted_data/defaultHabitPlans.dart';
+
+import 'package:githo/models/habitPlanModel.dart';
+import 'package:githo/models/progressDataModel.dart';
+import 'package:githo/models/settingsDataModel.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._instance();
@@ -11,27 +15,38 @@ class DatabaseHelper {
 
   DatabaseHelper._instance();
 
-  final String habitPlansTable = "habitPlansTable";
-  final String colId = "id";
-  final String colIsActive = "isActive";
-  final String colGoal = "goal";
-  final String colReps = "reps";
-  final String colChallenges = "challenges";
-  final String colRules = "rules";
-  final String colTimeIndex = "timeIndex";
-  final String colActivity = "activity";
-  final String colRequiredRepeats = "requiredRepeats";
+  static const String habitPlansTable = "habitPlansTable";
+  static const String colId = "id";
+  static const String colIsActive = "isActive";
+  static const String colGoal = "goal";
+  static const String colRequiredReps = "requiredReps";
+  static const String colChallenges = "challenges";
+  static const String colComments = "comments";
+  static const String colTrainingTimeIndex = "trainingTimeIndex";
+  static const String colRequiredTrainings = "requiredTrainings";
+  static const String colRequiredTrainingPeriods = "requiredTrainingPeriods";
+  static const String colLastChanged = "lastChanged";
+
+  static const String progressDataTable = "progressDataTable";
+  static const String colLastActiveDate = "lastActiveDate";
+  static const String colChallengeStartingDate = "challengeStartingDate";
+  static const String colCompletedReps = "completedReps";
+  static const String colCompletedTrainings = "completedTrainings";
+  static const String colLevel = "level";
+
+  static const String settingsDataTable = "settingsDataTable";
+  static const String colPaused = "paused";
 
   Future get _getDb async {
     if (_db == null) {
-      _db = await _initDb();
+      _db = await initDb();
     }
     return _db;
   }
 
-  Future<Database> _initDb() async {
+  Future<Database> initDb() async {
     Directory dir = await getApplicationDocumentsDirectory();
-    String path = dir.path + "/HabitPlanDatabase.db";
+    final String path = dir.path + "/HabitPlanDatabase.db";
 
     var habitPlanDb;
     try {
@@ -48,38 +63,81 @@ class DatabaseHelper {
   }
 
   void _createDb(Database db, int version) async {
+    // Initialize challenge-table
     String commandString = "";
     commandString += "CREATE TABLE $habitPlansTable";
     commandString += "(";
     commandString += "$colId INTEGER PRIMARY KEY AUTOINCREMENT, ";
     commandString += "$colIsActive INTEGER, ";
     commandString += "$colGoal TEXT, ";
-    commandString += "$colReps INTEGER, ";
+    commandString += "$colRequiredReps INTEGER, ";
     commandString += "$colChallenges TEXT, ";
-    commandString += "$colRules TEXT, ";
-    commandString += "$colTimeIndex REAL, ";
-    commandString += "$colActivity REAL, ";
-    commandString += "$colRequiredRepeats REAL";
+    commandString += "$colComments TEXT, ";
+    commandString += "$colTrainingTimeIndex INTEGER, ";
+    commandString += "$colRequiredTrainings INTEGER, ";
+    commandString += "$colRequiredTrainingPeriods INTEGER, ";
+    commandString += "$colLastChanged TEXT";
     commandString += ")";
-
     await db.execute(commandString);
 
     final List<HabitPlan> defaultHabitPlans = DefaultHabitPlans.habitPlanList;
     defaultHabitPlans.forEach((habitPlan) {
-      db.insert(habitPlansTable, habitPlan.toMap());
+      // Initialize default values
+      db.insert(
+        habitPlansTable,
+        habitPlan.toMap(),
+      );
     });
+
+    // Initialize progress-table
+    commandString = "";
+    commandString += "CREATE TABLE $progressDataTable";
+    commandString += "(";
+    commandString += "$colLastActiveDate TEXT, ";
+    commandString += "$colChallengeStartingDate TEXT, ";
+    commandString += "$colCompletedReps INTEGER, ";
+    commandString += "$colCompletedTrainings INTEGER, ";
+    commandString += "$colLevel INTEGER";
+    commandString += ")";
+    await db.execute(commandString);
+
+    db.insert(
+        // Initialize default values
+        progressDataTable,
+        ProgressData(
+          lastActiveDate: DateTime.now(),
+          challengeStartingDate: DateTime.now(),
+          completedReps: 0,
+          completedTrainings: 0,
+          level: 0,
+        ).toMap());
+
+    // Initialize settings-table
+    commandString = "";
+    commandString += "CREATE TABLE $settingsDataTable";
+    commandString += "(";
+    commandString += "$colPaused INTEGER";
+    commandString += ")";
+    await db.execute(commandString);
+
+    db.insert(
+        // Initialize default values
+        settingsDataTable,
+        SettingsData(
+          paused: false,
+        ).toMap());
   }
 
-  Future<List<Map<String, dynamic>>> getHabitPlanMapList() async {
+  Future<List<Map<String, dynamic>>> getDataMapList(String tableName) async {
     Database db = await this._getDb;
 
-    final List<Map<String, dynamic>> result = await db.query(habitPlansTable);
+    final List<Map<String, dynamic>> result = await db.query(tableName);
     return result;
   }
 
   Future<List<HabitPlan>> getHabitPlanList() async {
     final List<Map<String, dynamic>> habitPlanMapList =
-        await getHabitPlanMapList();
+        await getDataMapList(habitPlansTable);
 
     final List<HabitPlan> habitPlanList = [];
 
@@ -135,6 +193,46 @@ class DatabaseHelper {
       habitPlansTable,
       where: "$colId = ?",
       whereArgs: [id],
+    );
+    return result;
+  }
+
+  Future<ProgressData> getProgressData() async {
+    List<Map<String, Object?>> queryResultList =
+        await getDataMapList(progressDataTable);
+    Map<String, Object?> queryResult = queryResultList[0];
+
+    ProgressData result = ProgressData.fromMap(queryResult);
+    return result;
+  }
+
+  Future<int> updateProgressData(ProgressData progressData) async {
+    Database db = await this._getDb;
+    final int result = await db.update(
+      progressDataTable,
+      progressData.toMap(),
+      /* where: "$colId = ?",
+      whereArgs: [habitPlan.id], */
+    );
+    return result;
+  }
+
+  Future<SettingsData> getSettingsData() async {
+    List<Map<String, Object?>> queryResultList =
+        await getDataMapList(settingsDataTable);
+    Map<String, Object?> queryResult = queryResultList[0];
+
+    SettingsData result = SettingsData.fromMap(queryResult);
+    return result;
+  }
+
+  Future<int> updateSettingsData(SettingsData settingsData) async {
+    Database db = await this._getDb;
+    final int result = await db.update(
+      progressDataTable,
+      settingsData.toMap(),
+      /* where: "$colId = ?",
+      whereArgs: [habitPlan.id], */
     );
     return result;
   }

@@ -4,8 +4,12 @@ class CustomListTile extends StatelessWidget {
   final String? leadingString;
   final Widget? leadingWidget;
   final String title;
+  final String titleStyle;
   const CustomListTile(
-      {this.leadingString, this.leadingWidget, required this.title});
+      {this.leadingString,
+      this.leadingWidget,
+      required this.title,
+      this.titleStyle = "normal"});
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +38,12 @@ class CustomListTile extends StatelessWidget {
         print(error);
       }
     }
+    FontWeight titleWeigth;
+    if (titleStyle == "normal") {
+      titleWeigth = FontWeight.normal;
+    } else {
+      titleWeigth = FontWeight.bold;
+    }
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -41,7 +51,9 @@ class CustomListTile extends StatelessWidget {
         Flexible(
           child: Text(
             title,
-            //overflow: TextOverflow.,
+            style: TextStyle(
+              fontWeight: titleWeigth,
+            ),
           ),
         ),
       ],
