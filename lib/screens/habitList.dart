@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:githo/extracted_data/styleShortcut.dart';
+import 'package:githo/extracted_data/styleData.dart';
 import 'package:githo/extracted_data/fullDatabaseImport.dart';
 
 import 'package:githo/extracted_functions/editHabitRoutes.dart';
@@ -54,7 +54,10 @@ class _HabitListState extends State<HabitList> {
       children: <Widget>[
         TextButton(
             child: ListTile(
-              title: Text(habitPlan.goal),
+              title: Text(
+                habitPlan.goal,
+                style: StyleData.textStyle,
+              ),
               // subtitle: Text("Subtitle ka okay!!??!"),
               trailing: Icon(Icons.visibility),
               tileColor: habitPlan.isActive ? Colors.lightGreen : null,
@@ -81,7 +84,6 @@ class _HabitListState extends State<HabitList> {
       body: ListView(
         padding: StyleData.screenPadding,
         children: [
-          ScreenTitle("List of habits"),
           FutureBuilder(
             future: _habitPlanListFuture,
             builder: (context, AsyncSnapshot<List<HabitPlan>> snapshot) {
@@ -93,12 +95,17 @@ class _HabitListState extends State<HabitList> {
                   if (habitPlanList.length == 0) {
                     // If there are no habit plans
                     returnWidgets.add(
-                      Heading1("Please add a habit plan."),
+                      ScreenTitle(
+                        title: "List of habits",
+                        subTitle: "Please add a habit plan.",
+                      ),
                     );
                   } else {
                     // If there are habit plans
                     returnWidgets.add(
-                      Heading2("Click on a habit-plan to view it."),
+                      ScreenTitle(
+                          title: "List of habits",
+                          subTitle: "Click on a habit-plan to look at it."),
                     );
 
                     List<HabitPlan> orderedList =
@@ -115,7 +122,10 @@ class _HabitListState extends State<HabitList> {
                     Heading1("There was an error connecting to the database."),
                   );
                   returnWidgets.add(
-                    Text(snapshot.error.toString()),
+                    Text(
+                      snapshot.error.toString(),
+                      style: StyleData.textStyle,
+                    ),
                   );
                   print(snapshot.error);
                 }

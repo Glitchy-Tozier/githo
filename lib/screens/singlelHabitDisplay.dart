@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:githo/extracted_data/dataShortcut.dart';
 import 'package:githo/extracted_data/fullDatabaseImport.dart';
-import 'package:githo/extracted_data/styleShortcut.dart';
+import 'package:githo/extracted_data/styleData.dart';
 
 import 'package:githo/extracted_functions/editHabitRoutes.dart';
+import 'package:githo/extracted_functions/getStatusString.dart';
 
 import 'package:githo/extracted_widgets/bulletPoint.dart';
 import 'package:githo/extracted_widgets/customListTile.dart';
@@ -30,6 +31,8 @@ class SingleHabitDisplay extends StatefulWidget {
 class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
   final Function updatePrevScreens;
   HabitPlan habitPlan;
+  Future<ProgressData> _progressData =
+      DatabaseHelper.instance.getProgressData();
 
   _SingleHabitDisplayState({
     required this.updatePrevScreens,
@@ -45,6 +48,11 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
         CustomListTile(
           leadingWidget: BulletPoint(),
           title: comment.toString(),
+        ),
+      );
+      widgetList.add(
+        SizedBox(
+          height: StyleData.listRowSpacing,
         ),
       );
     });
@@ -65,63 +73,120 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
     } else {
       timeString = "$requiredReps times";
     }
-    widgetList.add(
+    widgetList.addAll([
       CustomListTile(
           leadingWidget: BulletPoint(),
           title: "Perform $timeString a $timeFrame"),
-    );
+      SizedBox(
+        height: StyleData.listRowSpacing,
+      ),
+    ]);
 
     const List<int> maxRequired = DataShortcut.maxTrainings;
     final int maxReps = maxRequired[trainingTimeIndex].toInt();
     final int currentReps = this.habitPlan.requiredTrainings.toInt();
-    widgetList.add(
+    widgetList.addAll([
       CustomListTile(
           leadingWidget: BulletPoint(),
           title:
               "$currentReps out of $maxReps ${timeFrame}s must be successful in order to level up"),
-    );
+      SizedBox(
+        height: StyleData.listRowSpacing,
+      ),
+    ]);
 
     final int requiredTrainingPeriods =
         this.habitPlan.requiredTrainingPeriods.toInt();
     final String lvlUpEnder = (requiredTrainingPeriods == 1) ? " is" : "s are";
-    widgetList.add(
+    widgetList.addAll([
       CustomListTile(
           leadingWidget: BulletPoint(),
           title:
               "$requiredTrainingPeriods level-up$lvlUpEnder required to progress to the next step"),
-    );
+      SizedBox(
+        height: StyleData.listRowSpacing,
+      ),
+    ]);
 
     return widgetList;
   }
 
-  Future<List<Widget>> _getStepWidgets() async {
-    List<Widget> widgetList = [];
+  Table _getStepTable(ProgressData progressData) {
+    List<TableRow> tableRowList = [];
     final challenges = this.habitPlan.challenges;
-    final ProgressData progressData =
-        await DatabaseHelper.instance.getProgressData();
-
     final int currentStepIndex =
-        (progressData.level / habitPlan.requiredTrainingPeriods).ceil();
-    print(currentStepIndex);
-    for (int i = 0; i < challenges.length; i++) {
-      if (i == currentStepIndex) {
-        widgetList.add(
-          CustomListTile(
-            leadingString: "${i + 1}. ",
-            title: challenges[i].toString(),
-            titleStyle: "bold",
+        (progressData.level - 1 / habitPlan.requiredTrainingPeriods).floor();
+
+    tableRowList.add(
+      TableRow(
+        children: <Widget>[
+          Text(
+            "Lvl",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 20,
+            ),
           ),
+          Text(
+            "Action",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 20,
+            ),
+          ),
+        ],
+      ),
+    );
+
+    for (int i = 0; i < challenges.length; i++) {
+      final String levelStr;
+      if (this.habitPlan.requiredTrainingPeriods == 1) {
+        levelStr = "${i + 1}";
+      } else {
+        final int prevLvlNr = i * habitPlan.requiredTrainingPeriods;
+        final int startingLvl = prevLvlNr + 1;
+        final int endingLvl = prevLvlNr + habitPlan.requiredTrainingPeriods;
+        levelStr = "$startingLvl-$endingLvl";
+      }
+
+      final Widget challengeTextWidget;
+      if ((i == currentStepIndex) && (habitPlan.isActive)) {
+        challengeTextWidget = Text(
+          "${challenges[i]}",
+          style: StyleData.boldTextStyle,
         );
       } else {
-        widgetList.add(
-          CustomListTile(
-            leadingString: "${i + 1}. ",
-            title: challenges[i].toString(),
-          ),
+        challengeTextWidget = Text(
+          "${challenges[i]}",
+          style: StyleData.textStyle,
         );
       }
+      final Widget challengeWidget = Padding(
+        padding: EdgeInsets.only(left: 10, top: StyleData.listRowSpacing),
+        child: challengeTextWidget,
+      );
+
+      tableRowList.add(
+        TableRow(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(top: StyleData.listRowSpacing),
+              child: Text(
+                levelStr,
+                textAlign: TextAlign.center,
+                style: StyleData.textStyle,
+              ),
+            ),
+            challengeWidget,
+          ],
+        ),
+      );
     }
-    return widgetList;
+
+    return Table(columnWidths: const <int, TableColumnWidth>{
+      0: IntrinsicColumnWidth(),
+      1: FlexColumnWidth(),
+    }, children: tableRowList);
   }
 
   FloatingActionButton _variableFloatActButton() {
@@ -197,48 +262,54 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> commentSection;
+    if (habitPlan.comments[0] == "") {
+      commentSection = [];
+    } else {
+      commentSection = <Widget>[
+        Heading1("Comments"),
+        ..._getCommentWidgets(),
+      ];
+    }
+
     return Scaffold(
-      body: ListView(
-        padding: StyleData.screenPadding,
-        children: [
-          ScreenTitle(habitPlan.goal),
-          Heading1("Rules"),
-          ..._getRuleWidgets(),
-          Heading1("Comments"),
-          ..._getCommentWidgets(),
-          Heading1("Steps"),
-          FutureBuilder(
-            future: _getStepWidgets(),
-            builder: (context, AsyncSnapshot<List<Widget>> snapshot) {
-              List<Widget> returnWidgets = [];
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasData) {
-                  List<Widget> widgetList = snapshot.data!;
-                  returnWidgets.addAll(widgetList);
-                } else if (snapshot.hasError) {
-                  // If something went wrong with the database
-                  returnWidgets.add(
-                    Heading1("There was an error connecting to the database."),
-                  );
-                  returnWidgets.add(
-                    Text(snapshot.error.toString()),
-                  );
-                  print(snapshot.error);
-                }
-              } else {
-                // While loading, do this:
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              return Column(
-                children: returnWidgets,
+      body: FutureBuilder(
+        future: _progressData,
+        builder: (context, AsyncSnapshot<ProgressData> snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasData) {
+              ProgressData progressData = snapshot.data!;
+              return ListView(
+                padding: StyleData.screenPadding,
+                children: [
+                  ScreenTitle(
+                    title: habitPlan.goal,
+                    subTitle: getStatusString(this.habitPlan, progressData),
+                  ),
+                  Heading1("Rules"),
+                  ..._getRuleWidgets(),
+                  ...commentSection,
+                  Heading1("Steps"),
+                  _getStepTable(progressData),
+                  ScreenEndingSpacer()
+                ],
               );
-            },
-          ),
-          //..._getStepWidgets(),
-          ScreenEndingSpacer()
-        ],
+            } else if (snapshot.hasError) {
+              // If something went wrong with the database
+              return Column(children: [
+                Heading1("There was an error connecting to the database."),
+                Text(
+                  snapshot.error.toString(),
+                  style: StyleData.textStyle,
+                ),
+              ]);
+            }
+          }
+          // Default return (while loading, for example)
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Padding(

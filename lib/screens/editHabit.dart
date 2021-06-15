@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:githo/extracted_data/dataShortcut.dart';
-import 'package:githo/extracted_data/styleShortcut.dart';
+import 'package:githo/extracted_data/styleData.dart';
 
 import 'package:githo/extracted_functions/textFormFieldHelpers.dart';
 import 'package:githo/extracted_functions/typeExtentions.dart';
@@ -47,11 +47,11 @@ class _EditHabitState extends State<EditHabit> {
   final List<int> _maxTrainings = DataShortcut.maxTrainings;
 
   // Function for receiving the onSaved-values from formList.dart
-  void getChallengeValues(List<String> valueList) {
+  void _getChallengeValues(List<String> valueList) {
     this.habitPlan.challenges = valueList;
   }
 
-  void getCommentValues(List<String> valueList) {
+  void _getCommentValues(List<String> valueList) {
     this.habitPlan.comments = valueList;
   }
 
@@ -85,7 +85,7 @@ class _EditHabitState extends State<EditHabit> {
           padding: StyleData.screenPadding,
           child: Column(
             children: <Widget>[
-              ScreenTitle("Edit Challenge"),
+              ScreenTitle(title: "Edit Challenge"),
               Form(
                 key: _formKey,
                 child: Column(
@@ -120,7 +120,8 @@ class _EditHabitState extends State<EditHabit> {
                     Heading1("Steps towards your goal"),
                     FormList(
                       fieldName: "Step",
-                      valuesGetter: getChallengeValues,
+                      canBeEmpty: false,
+                      valuesGetter: _getChallengeValues,
                       inputList: habitPlan.challenges,
                     ),
 
@@ -128,7 +129,8 @@ class _EditHabitState extends State<EditHabit> {
                     Heading1("Comments"),
                     FormList(
                       fieldName: "Comment",
-                      valuesGetter: getCommentValues,
+                      canBeEmpty: true,
+                      valuesGetter: _getCommentValues,
                       inputList: habitPlan.comments,
                     ),
 

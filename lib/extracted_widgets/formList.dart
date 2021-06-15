@@ -3,11 +3,13 @@ import 'package:githo/extracted_functions/textFormFieldHelpers.dart';
 
 class FormList extends StatefulWidget {
   final String fieldName;
+  final bool canBeEmpty;
   final Function valuesGetter;
   final List<String> inputList;
 
   FormList({
     required this.fieldName,
+    required this.canBeEmpty,
     required this.valuesGetter,
     required this.inputList,
   });
@@ -15,6 +17,7 @@ class FormList extends StatefulWidget {
   @override
   _FormListState createState() => _FormListState(
         fieldName,
+        canBeEmpty,
         valuesGetter,
         inputList,
       );
@@ -28,8 +31,15 @@ class _FormListState extends State<FormList> {
   int listLength = 0;
   late List<String> inputValues;
 
+  final bool canBeEmpty;
   final Function exportValues;
-  _FormListState(String name, this.exportValues, List<String> initValues) {
+
+  _FormListState(
+    String name,
+    this.canBeEmpty,
+    this.exportValues,
+    List<String> initValues,
+  ) {
     // Prepare the value-data
     initValues.add("");
 
@@ -47,7 +57,7 @@ class _FormListState extends State<FormList> {
 
   Widget _textFormField(String name, int index, String value) {
     int fieldNr = index + 1;
-    String fieldName = "$name $fieldNr"; //name + " " + fieldNr.toString();
+    String fieldName = "$name $fieldNr";
 
     return Column(
       children: [
@@ -55,11 +65,23 @@ class _FormListState extends State<FormList> {
           initialValue: value,
           decoration: inputDecoration(fieldName),
           validator: (input) {
-            if (fieldNr != this.listLength) {
-              return checkIfEmpty(
-                input.toString().trim(),
-                fieldName,
-              );
+            if (canBeEmpty == true) {
+              // Use This validation if the fields are optional
+              if ((fieldNr != this.listLength) &&
+                  (this.listLength > this._iniLength)) {
+                return checkIfEmpty(
+                  input.toString().trim(),
+                  fieldName,
+                );
+              }
+            } else {
+              // Use this validation if at least one field NEEDS to be filled out.
+              if (fieldNr != this.listLength) {
+                return checkIfEmpty(
+                  input.toString().trim(),
+                  fieldName,
+                );
+              }
             }
           },
           onChanged: (input) {

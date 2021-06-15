@@ -39,12 +39,12 @@ class DatabaseHelper {
 
   Future get _getDb async {
     if (_db == null) {
-      _db = await initDb();
+      _db = await _initDb();
     }
     return _db;
   }
 
-  Future<Database> initDb() async {
+  Future<Database> _initDb() async {
     Directory dir = await getApplicationDocumentsDirectory();
     final String path = dir.path + "/HabitPlanDatabase.db";
 

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:githo/extracted_data/dataShortcut.dart';
 
 import 'package:githo/extracted_data/fullDatabaseImport.dart';
-import 'package:githo/extracted_data/styleShortcut.dart';
+import 'package:githo/extracted_data/styleData.dart';
+import 'package:githo/extracted_functions/getStatusString.dart';
 import 'package:githo/extracted_widgets/headings.dart';
 import 'package:githo/screens/habitList.dart';
 import 'package:githo/screens/singlelHabitDisplay.dart';
@@ -119,25 +120,40 @@ class _ToDoScreenState extends State<ToDoScreen> {
         child: Stack(
           alignment: Alignment.topCenter,
           children: [
-            TextButton(
-              child: Container(
-                width: double.infinity,
-                child: ScreenTitle(habitPlan.goal),
-              ),
-              style: TextButton.styleFrom(
-                padding: StyleData.screenPadding,
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SingleHabitDisplay(
-                      updateFunction: _reloadScreen,
-                      habitPlan: habitPlan,
+            Column(
+              children: [
+                TextButton(
+                  child: Container(
+                    padding: StyleData.screenPadding,
+                    width: double.infinity,
+                    child: FutureBuilder(
+                      future: this._progressData,
+                      builder: (context, AsyncSnapshot<ProgressData> snapshot) {
+                        if (snapshot.hasData) {
+                          final ProgressData progressData = snapshot.data!;
+                          return ScreenTitle(
+                            title: habitPlan.goal,
+                            subTitle: getStatusString(habitPlan, progressData),
+                          );
+                        } else {
+                          return CircularProgressIndicator();
+                        }
+                      },
                     ),
                   ),
-                );
-              },
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SingleHabitDisplay(
+                          updateFunction: _reloadScreen,
+                          habitPlan: habitPlan,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
             Padding(
               padding: StyleData.screenPadding,
@@ -149,16 +165,21 @@ class _ToDoScreenState extends State<ToDoScreen> {
                     builder: (context, AsyncSnapshot<ProgressData> snapshot) {
                       if (snapshot.hasData) {
                         final ProgressData progressData = snapshot.data!;
-                        return Heading2(
-                            "${progressData.completedReps}/${habitPlan.requiredReps}");
+                        return Text(
+                          "${progressData.completedReps}/${habitPlan.requiredReps}",
+                          style: StyleData.textStyle,
+                        );
                       } else {
                         return CircularProgressIndicator();
                       }
                     },
                   ),
-                  Icon(
-                    Icons.done,
-                    color: Colors.black,
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    child: Icon(
+                      Icons.done,
+                      color: Colors.black,
+                    ),
                   ),
                   FutureBuilder(
                     future: this._progressData,
@@ -170,14 +191,17 @@ class _ToDoScreenState extends State<ToDoScreen> {
                         if (progressData.level == 0) {
                           challengeIndex = 0;
                         } else {
-                          challengeIndex = (progressData.level /
-                                      habitPlan.requiredTrainingPeriods)
-                                  .floor() -
-                              1;
+                          challengeIndex = ((progressData.level - 1) /
+                                  habitPlan.requiredTrainingPeriods)
+                              .floor();
                         }
+
                         final String currentChallenge =
                             habitPlan.challenges[challengeIndex];
-                        return Text(currentChallenge);
+                        return Text(
+                          currentChallenge,
+                          style: StyleData.textStyle,
+                        );
                       } else {
                         return CircularProgressIndicator();
                       }
@@ -239,7 +263,9 @@ class _ToDoScreenState extends State<ToDoScreen> {
                     children: [
                       Heading1("No habit-plan is active."),
                       Text(
-                          "Click on the settings-icon to add or activate your habit-plan"),
+                        "Click on the settings-icon to add or activate your habit-plan",
+                        style: StyleData.textStyle,
+                      ),
                     ],
                   ),
                 );
@@ -254,13 +280,24 @@ class _ToDoScreenState extends State<ToDoScreen> {
               returnWidgets.add(
                 Expanded(
                   child: Center(
-                    child:
-                        Text("There was an error connecting to the database."),
+                    child: Column(
+                      children: [
+                        Heading1(
+                            "There was an error connecting to the database."),
+                        Text(
+                          snapshot.error.toString(),
+                          style: StyleData.textStyle,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );
               returnWidgets.add(
-                Text(snapshot.error.toString()),
+                Text(
+                  snapshot.error.toString(),
+                  style: StyleData.textStyle,
+                ),
               );
               print(snapshot.error);
             }
