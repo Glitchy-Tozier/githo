@@ -3,7 +3,7 @@ import 'package:githo/extracted_data/dataShortcut.dart';
 
 import 'package:githo/extracted_data/fullDatabaseImport.dart';
 import 'package:githo/extracted_data/styleData.dart';
-import 'package:githo/extracted_functions/getChallengeIndex.dart';
+import 'package:githo/extracted_functions/getCurrentStepIndex.dart';
 import 'package:githo/extracted_functions/getStatusString.dart';
 import 'package:githo/extracted_widgets/headings.dart';
 import 'package:githo/screens/habitList.dart';
@@ -59,7 +59,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
         final int trainingTimeIndex = habitPlan.trainingTimeIndex;
         const List<int> timePeriodLength = DataShortcut.maxTrainings;
 
-        // Get the number of time-units passed since {insert first date} (for dayly challenges days)
+        // Get the number of time-units passed since {insert first date} (for dayly trainings days)
         final int repDurationInHours =
             DataShortcut.repDurationInHours[trainingTimeIndex];
         final int lastActiveDiff =
@@ -71,7 +71,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
                     repDurationInHours)
                 .floor();
 
-        // Check if we're in a new "time span". (For dayly challenges, that would be the next day).
+        // Check if we're in a new "time span". (For dayly trainings, that would be the next day).
         final bool inNewTimeFrame = (lastActiveDiff != nowDiff);
         if (inNewTimeFrame) {
           // If this is the first day of the challenge, reset the previous, uncounted reps and
@@ -87,7 +87,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
           progressData.completedReps = 0;
           progressData.lastActiveDate = _getCurrentTime();
 
-          // Calculate the number of time-periods passed. For dayly challenges, that would be how many weeks have passed.
+          // Calculate the number of time-periods passed. For dayly trainings, that would be how many weeks have passed.
           final int timePeriodsPassed =
               (nowDiff / timePeriodLength[trainingTimeIndex]).floor();
           // If we are in a new time-period...
@@ -103,8 +103,8 @@ class _ToDoScreenState extends State<ToDoScreen> {
             // Adjust the user's level according to his score
             if (progressData.completedTrainings >=
                 habitPlan.requiredTrainings) {
-              final int maxLevel = habitPlan.challenges.length *
-                  habitPlan.requiredTrainingPeriods;
+              final int maxLevel =
+                  habitPlan.steps.length * habitPlan.requiredTrainingPeriods;
               print(maxLevel);
               print(progressData.level);
               if (progressData.level < maxLevel) {
@@ -131,8 +131,9 @@ class _ToDoScreenState extends State<ToDoScreen> {
         if (snapshot.hasData) {
           final ProgressData progressData = snapshot.data!;
 
-          final int challengeIndex = getChallengeIndex(habitPlan, progressData);
-          final String currentChallenge = habitPlan.challenges[challengeIndex];
+          final int challengeIndex =
+              getCurrentStepIndex(habitPlan, progressData);
+          final String currentChallenge = habitPlan.steps[challengeIndex];
 
           return TextButton(
             style: ButtonStyle(

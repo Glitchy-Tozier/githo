@@ -1,5 +1,5 @@
 import 'package:githo/extracted_data/dataShortcut.dart';
-import 'package:githo/extracted_functions/getChallengeIndex.dart';
+import 'package:githo/extracted_functions/getCurrentStepIndex.dart';
 import 'package:githo/extracted_functions/typeExtentions.dart';
 
 import 'package:githo/models/habitPlanModel.dart';
@@ -12,7 +12,7 @@ String getStatusString(HabitPlan habitPlan, ProgressData progressData) {
     if (progressData.level == 0) {
       subTitle = "Status: Preparing";
     } else {
-      final int challengeIndex = getChallengeIndex(habitPlan, progressData);
+      final int challengeIndex = getCurrentStepIndex(habitPlan, progressData);
       final int stepNr = challengeIndex + 1;
       final int requiredTrainingPeriods = habitPlan.requiredTrainingPeriods;
       if (requiredTrainingPeriods == 1) {

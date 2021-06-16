@@ -5,6 +5,7 @@ import 'package:githo/extracted_data/fullDatabaseImport.dart';
 import 'package:githo/extracted_data/styleData.dart';
 
 import 'package:githo/extracted_functions/editHabitRoutes.dart';
+import 'package:githo/extracted_functions/getCurrentStepIndex.dart';
 import 'package:githo/extracted_functions/getStatusString.dart';
 
 import 'package:githo/extracted_widgets/bulletPoint.dart';
@@ -113,58 +114,18 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
 
   Table _getStepTable(ProgressData progressData) {
     List<TableRow> tableRowList = [];
-    final challenges = this.habitPlan.challenges;
-    final int currentStepIndex =
-        (progressData.level - 1 / habitPlan.requiredTrainingPeriods).floor();
+    final steps = this.habitPlan.steps;
+    final int currentStepIndex = getCurrentStepIndex(habitPlan, progressData);
 
-    tableRowList.add(
-      TableRow(
-        children: <Widget>[
-          Text(
-            "Lvl",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 20,
-            ),
-          ),
-          Text(
-            "Action",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 20,
-            ),
-          ),
-        ],
-      ),
-    );
+    for (int i = 0; i < steps.length; i++) {
+      final int stepNr = i + 1;
 
-    for (int i = 0; i < challenges.length; i++) {
-      final String levelStr;
-      if (this.habitPlan.requiredTrainingPeriods == 1) {
-        levelStr = "${i + 1}";
-      } else {
-        final int prevLvlNr = i * habitPlan.requiredTrainingPeriods;
-        final int startingLvl = prevLvlNr + 1;
-        final int endingLvl = prevLvlNr + habitPlan.requiredTrainingPeriods;
-        levelStr = "$startingLvl-$endingLvl";
-      }
-
-      final Widget challengeTextWidget;
+      final TextStyle textStyle;
       if ((i == currentStepIndex) && (habitPlan.isActive)) {
-        challengeTextWidget = Text(
-          "${challenges[i]}",
-          style: StyleData.boldTextStyle,
-        );
+        textStyle = StyleData.boldTextStyle;
       } else {
-        challengeTextWidget = Text(
-          "${challenges[i]}",
-          style: StyleData.textStyle,
-        );
+        textStyle = StyleData.textStyle;
       }
-      final Widget challengeWidget = Padding(
-        padding: EdgeInsets.only(left: 10, top: StyleData.listRowSpacing),
-        child: challengeTextWidget,
-      );
 
       tableRowList.add(
         TableRow(
@@ -172,12 +133,18 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
             Padding(
               padding: EdgeInsets.only(top: StyleData.listRowSpacing),
               child: Text(
-                levelStr,
+                stepNr.toString(),
                 textAlign: TextAlign.center,
-                style: StyleData.textStyle,
+                style: textStyle,
               ),
             ),
-            challengeWidget,
+            Padding(
+              padding: EdgeInsets.only(left: 10, top: StyleData.listRowSpacing),
+              child: Text(
+                "${steps[i]}",
+                style: textStyle,
+              ),
+            ),
           ],
         ),
       );
@@ -191,7 +158,6 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
 
   FloatingActionButton _variableFloatActButton() {
     void onClickFunc() async {
-      print("Was active ${habitPlan.isActive}");
       if (habitPlan.isActive == true) {
         // If the viewed habetPlan was active to begin with, disable it.
         habitPlan.isActive = false;

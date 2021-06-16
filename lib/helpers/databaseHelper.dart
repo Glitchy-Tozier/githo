@@ -20,7 +20,7 @@ class DatabaseHelper {
   static const String colIsActive = "isActive";
   static const String colGoal = "goal";
   static const String colRequiredReps = "requiredReps";
-  static const String colChallenges = "challenges";
+  static const String colSteps = "steps";
   static const String colComments = "comments";
   static const String colTrainingTimeIndex = "trainingTimeIndex";
   static const String colRequiredTrainings = "requiredTrainings";
@@ -71,7 +71,7 @@ class DatabaseHelper {
     commandString += "$colIsActive INTEGER, ";
     commandString += "$colGoal TEXT, ";
     commandString += "$colRequiredReps INTEGER, ";
-    commandString += "$colChallenges TEXT, ";
+    commandString += "$colSteps TEXT, ";
     commandString += "$colComments TEXT, ";
     commandString += "$colTrainingTimeIndex INTEGER, ";
     commandString += "$colRequiredTrainings INTEGER, ";
@@ -159,7 +159,7 @@ class DatabaseHelper {
 
     if (resultsMap.length > 1) {
       print(
-          "Something went wrong in getActiveHabitPlan(). Multiple Challenges are active.");
+          "Something went wrong in getActiveHabitPlan(). Multiple Steps are active.");
     }
 
     if (resultsMap.length == 0) {

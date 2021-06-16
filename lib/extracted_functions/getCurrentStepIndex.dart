@@ -1,7 +1,7 @@
 import 'package:githo/models/habitPlanModel.dart';
 import 'package:githo/models/progressDataModel.dart';
 
-int getChallengeIndex(HabitPlan habitPlan, ProgressData progressData) {
+int getCurrentStepIndex(HabitPlan habitPlan, ProgressData progressData) {
   // returns the index of the current challenge.
   final int challengeIndex;
   if (progressData.level == 0) {

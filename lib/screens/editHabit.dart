@@ -48,7 +48,7 @@ class _EditHabitState extends State<EditHabit> {
 
   // Function for receiving the onSaved-values from formList.dart
   void _getChallengeValues(List<String> valueList) {
-    this.habitPlan.challenges = valueList;
+    this.habitPlan.steps = valueList;
   }
 
   void _getCommentValues(List<String> valueList) {
@@ -122,7 +122,7 @@ class _EditHabitState extends State<EditHabit> {
                       fieldName: "Step",
                       canBeEmpty: false,
                       valuesGetter: _getChallengeValues,
-                      inputList: habitPlan.challenges,
+                      inputList: habitPlan.steps,
                     ),
 
                     // Create the form-fields for your personal comments

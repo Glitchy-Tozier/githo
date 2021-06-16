@@ -14,7 +14,7 @@ void addNewHabit(
     // TextFormFields:
     goal: "",
     requiredReps: 1,
-    challenges: [""],
+    steps: [""],
     comments: [""],
     // Sliders:
     trainingTimeIndex: 1,

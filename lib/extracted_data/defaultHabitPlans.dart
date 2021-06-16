@@ -6,7 +6,7 @@ class DefaultHabitPlans {
       isActive: false,
       goal: "Consistently go jogging",
       requiredReps: 1,
-      challenges: [
+      steps: [
         "Dress up and step outside on the street. Then go back and do whatever you want to do.",
         "Take a walk around your house/building",
         "Take a walk spanning a 3-5 buildings",
@@ -26,7 +26,7 @@ class DefaultHabitPlans {
       isActive: false,
       goal: "Talk to anybody, anytime",
       requiredReps: 2,
-      challenges: [
+      steps: [
         "Make eye-contact with a stranger (no matter how long)",
         "Greet a passerby",
         "Ask for the time",
