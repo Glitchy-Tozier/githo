@@ -1,26 +1,26 @@
 class ProgressData {
   DateTime lastActiveDate;
-  DateTime challengeStartingDate;
+  DateTime currentStartingDate;
   int completedReps;
   int completedTrainings;
-  int level;
+  int completedTrainingPeriods;
 
   ProgressData({
-    required this.challengeStartingDate,
+    required this.currentStartingDate,
     required this.lastActiveDate,
     required this.completedReps,
     required this.completedTrainings,
-    required this.level,
+    required this.completedTrainingPeriods,
   });
 
   Map<String, dynamic> toMap() {
     final map = Map<String, dynamic>();
 
     map["lastActiveDate"] = lastActiveDate.toString();
-    map["challengeStartingDate"] = challengeStartingDate.toString();
+    map["currentStartingDate"] = currentStartingDate.toString();
     map["completedReps"] = completedReps;
     map["completedTrainings"] = completedTrainings;
-    map["level"] = level;
+    map["completedTrainingPeriods"] = completedTrainingPeriods;
 
     return map;
   }
@@ -28,10 +28,10 @@ class ProgressData {
   factory ProgressData.fromMap(Map<String, dynamic> map) {
     return ProgressData(
       lastActiveDate: DateTime.parse(map["lastActiveDate"]),
-      challengeStartingDate: DateTime.parse(map["challengeStartingDate"]),
+      currentStartingDate: DateTime.parse(map["currentStartingDate"]),
       completedReps: map["completedReps"],
       completedTrainings: map["completedTrainings"],
-      level: map["level"],
+      completedTrainingPeriods: map["completedTrainingPeriods"],
     );
   }
 }

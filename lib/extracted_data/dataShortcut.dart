@@ -23,4 +23,6 @@ class DataShortcut {
     24 * 7,
     24 * 7 * 4,
   ];
+
+  static const testing = true;
 }

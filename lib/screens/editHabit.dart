@@ -198,7 +198,7 @@ class _EditHabitState extends State<EditHabit> {
                                   ],
                                   [
                                     "normal",
-                                    " out of ${currentMaxTrainings.toInt()} ${currentTimeUnit}s must be successful to level up."
+                                    " out of ${currentMaxTrainings.toInt()} ${currentTimeUnit}s must be successful."
                                   ]
                                 ]),
                                 Slider(
@@ -221,7 +221,7 @@ class _EditHabitState extends State<EditHabit> {
                                   ],
                                   [
                                     "normal",
-                                    " level-up$thirdSliderText required to advance to the next step."
+                                    " successful $currentTimeFrame$thirdSliderText required to advance to the next step."
                                   ]
                                 ]),
                                 Slider(

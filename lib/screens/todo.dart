@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:githo/extracted_data/currentTime.dart';
 import 'package:githo/extracted_data/dataShortcut.dart';
 
 import 'package:githo/extracted_data/fullDatabaseImport.dart';
@@ -18,9 +19,6 @@ class _ToDoScreenState extends State<ToDoScreen> {
   late Future<List<HabitPlan>> _habitPlan;
   late Future<ProgressData> _progressData;
 
-  static const testing = true;
-  late DateTime timeHackNow;
-
   @override
   void initState() {
     super.initState();
@@ -31,30 +29,25 @@ class _ToDoScreenState extends State<ToDoScreen> {
     setState(() {
       _habitPlan = DatabaseHelper.instance.getActiveHabitPlan();
       _progressData = DatabaseHelper.instance.getProgressData();
-      timeHackNow = DateTime.now();
+      if (DataShortcut.testing) {
+        CurrentTime.instance.setTime(DateTime.now());
+      }
       _catchUpProgressData();
     });
-  }
-
-  DateTime _getCurrentTime() {
-    if (testing == true) {
-      return timeHackNow;
-    } else {
-      return DateTime.now();
-    }
   }
 
   void _catchUpProgressData() async {
     if ((await _habitPlan).length != 0) {
       ProgressData progressData = await _progressData;
-      final DateTime challengeStartingDate = progressData.challengeStartingDate;
+      final DateTime currentStartingDate = progressData.currentStartingDate;
       final DateTime lastActive = progressData.lastActiveDate;
-      print(progressData.level);
 
-      print("Start $challengeStartingDate");
+      final DateTime currentTime = CurrentTime.instance.getTime;
+
+      print("Start $currentStartingDate");
       print("Last  $lastActive");
-      print("Now   ${_getCurrentTime()}");
-      if (_getCurrentTime().isAfter(challengeStartingDate)) {
+      print("Now   $currentTime");
+      if (currentTime.isAfter(currentStartingDate)) {
         HabitPlan habitPlan = (await _habitPlan)[0];
         final int trainingTimeIndex = habitPlan.trainingTimeIndex;
         const List<int> timePeriodLength = DataShortcut.maxTrainings;
@@ -63,29 +56,25 @@ class _ToDoScreenState extends State<ToDoScreen> {
         final int repDurationInHours =
             DataShortcut.repDurationInHours[trainingTimeIndex];
         final int lastActiveDiff =
-            (lastActive.difference(challengeStartingDate).inHours /
+            (lastActive.difference(currentStartingDate).inHours /
                     repDurationInHours)
                 .floor();
         final int nowDiff =
-            (_getCurrentTime().difference(challengeStartingDate).inHours /
+            (currentTime.difference(currentStartingDate).inHours /
                     repDurationInHours)
                 .floor();
 
         // Check if we're in a new "time span". (For dayly trainings, that would be the next day).
         final bool inNewTimeFrame = (lastActiveDiff != nowDiff);
         if (inNewTimeFrame) {
-          // If this is the first day of the challenge, reset the previous, uncounted reps and
-          // make the user the level 1
-          if (lastActive.isBefore(challengeStartingDate)) {
-            progressData.level = 1;
-            progressData.completedReps = 0;
-          }
+          // If this is the first day of the challenge:
+
           // Reset reps
           if (progressData.completedReps >= habitPlan.requiredReps) {
             progressData.completedTrainings++;
           }
           progressData.completedReps = 0;
-          progressData.lastActiveDate = _getCurrentTime();
+          progressData.lastActiveDate = currentTime;
 
           // Calculate the number of time-periods passed. For dayly trainings, that would be how many weeks have passed.
           final int timePeriodsPassed =
@@ -94,8 +83,8 @@ class _ToDoScreenState extends State<ToDoScreen> {
           for (int i = 0; i < timePeriodsPassed; i++) {
             print("A WEEK HAS PASSED");
             // Move the starting date for the current challenge
-            progressData.challengeStartingDate =
-                progressData.challengeStartingDate.add(
+            progressData.currentStartingDate =
+                progressData.currentStartingDate.add(
               Duration(
                 hours: DataShortcut.stepDurationInHours[trainingTimeIndex],
               ),
@@ -103,17 +92,14 @@ class _ToDoScreenState extends State<ToDoScreen> {
             // Adjust the user's level according to his score
             if (progressData.completedTrainings >=
                 habitPlan.requiredTrainings) {
-              final int maxLevel =
+              final int maxPeriods =
                   habitPlan.steps.length * habitPlan.requiredTrainingPeriods;
-              print(maxLevel);
-              print(progressData.level);
-              if (progressData.level < maxLevel) {
-                progressData.level++;
+              if (progressData.completedTrainingPeriods < maxPeriods) {
+                progressData.completedTrainingPeriods++;
               }
-            } else if (progressData.level > 1) {
-              progressData.level--;
+            } else if (progressData.completedTrainingPeriods > 0) {
+              progressData.completedTrainingPeriods--;
             }
-            print(progressData.level);
 
             progressData.completedTrainings = 0;
           }
@@ -335,7 +321,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
                 );
               },
             ),
-            (testing)
+            (DataShortcut.testing)
                 ? FloatingActionButton(
                     backgroundColor: Colors.transparent,
                     splashColor: Colors.purple,
@@ -345,11 +331,13 @@ class _ToDoScreenState extends State<ToDoScreen> {
                       if (habitPlanList.length > 0) {
                         final HabitPlan habitPlan = habitPlanList[0];
                         final int timeIndex = habitPlan.trainingTimeIndex;
-                        timeHackNow = timeHackNow.add(
+                        final DateTime changedTime =
+                            CurrentTime.instance.getTime.add(
                           Duration(
                             hours: DataShortcut.repDurationInHours[timeIndex],
                           ),
                         );
+                        CurrentTime.instance.setTime(changedTime);
                         _catchUpProgressData();
                       }
                       setState(() {});

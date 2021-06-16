@@ -29,10 +29,10 @@ class DatabaseHelper {
 
   static const String progressDataTable = "progressDataTable";
   static const String colLastActiveDate = "lastActiveDate";
-  static const String colChallengeStartingDate = "challengeStartingDate";
+  static const String colCurrentStartingDate = "currentStartingDate";
   static const String colCompletedReps = "completedReps";
   static const String colCompletedTrainings = "completedTrainings";
-  static const String colLevel = "level";
+  static const String colCompletedTrainingPeriods = "completedTrainingPeriods";
 
   static const String settingsDataTable = "settingsDataTable";
   static const String colPaused = "paused";
@@ -94,10 +94,10 @@ class DatabaseHelper {
     commandString += "CREATE TABLE $progressDataTable";
     commandString += "(";
     commandString += "$colLastActiveDate TEXT, ";
-    commandString += "$colChallengeStartingDate TEXT, ";
+    commandString += "$colCurrentStartingDate TEXT, ";
     commandString += "$colCompletedReps INTEGER, ";
     commandString += "$colCompletedTrainings INTEGER, ";
-    commandString += "$colLevel INTEGER";
+    commandString += "$colCompletedTrainingPeriods INTEGER";
     commandString += ")";
     await db.execute(commandString);
 
@@ -106,10 +106,10 @@ class DatabaseHelper {
         progressDataTable,
         ProgressData(
           lastActiveDate: DateTime.now(),
-          challengeStartingDate: DateTime.now(),
+          currentStartingDate: DateTime.now(),
           completedReps: 0,
           completedTrainings: 0,
-          level: 0,
+          completedTrainingPeriods: 0,
         ).toMap());
 
     // Initialize settings-table

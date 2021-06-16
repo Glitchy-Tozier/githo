@@ -90,7 +90,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
       CustomListTile(
           leadingWidget: BulletPoint(),
           title:
-              "$currentReps out of $maxReps ${timeFrame}s must be successful in order to level up"),
+              "$currentReps out of $maxReps ${timeFrame}s must be successful in order to advance"),
       SizedBox(
         height: StyleData.listRowSpacing,
       ),
@@ -98,12 +98,12 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
 
     final int requiredTrainingPeriods =
         this.habitPlan.requiredTrainingPeriods.toInt();
-    final String lvlUpEnder = (requiredTrainingPeriods == 1) ? " is" : "s are";
+    final String weekEnder = (requiredTrainingPeriods == 1) ? " is" : "s are";
     widgetList.addAll([
       CustomListTile(
           leadingWidget: BulletPoint(),
           title:
-              "$requiredTrainingPeriods level-up$lvlUpEnder required to progress to the next step"),
+              "$requiredTrainingPeriods successful week$weekEnder required to progress to the next step"),
       SizedBox(
         height: StyleData.listRowSpacing,
       ),
@@ -180,14 +180,14 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
         DateTime now = DateTime.now();
 
         progressData.lastActiveDate = now;
-        progressData.challengeStartingDate = DateTime(
+        progressData.currentStartingDate = DateTime(
           now.year,
           now.month,
           now.day + 8 - now.weekday,
         );
         progressData.completedReps = 0;
         progressData.completedTrainings = 0;
-        progressData.level = 0;
+        progressData.completedTrainingPeriods = 0;
         await DatabaseHelper.instance.updateProgressData(progressData);
 
         // Update the plan you're looking at to be active
