@@ -16,7 +16,7 @@ class ToDoScreen extends StatefulWidget {
 class _ToDoScreenState extends State<ToDoScreen> {
   late Future<List<HabitPlan>> _habitPlan;
   late Future<ProgressData> _progressData;
-  late DateTime timeHackNow;
+  //late DateTime DateTime.now();
 
   @override
   void initState() {
@@ -28,7 +28,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
     setState(() {
       _habitPlan = DatabaseHelper.instance.getActiveHabitPlan();
       _progressData = DatabaseHelper.instance.getProgressData();
-      timeHackNow = DateTime.now();
+      //DateTime.now() = DateTime.now();
       _catchUpProgressData();
     });
   }
@@ -42,8 +42,8 @@ class _ToDoScreenState extends State<ToDoScreen> {
 
       print("Start $challengeStartingDate");
       print("Last  $lastActive");
-      print("Now   $timeHackNow");
-      if (timeHackNow.isAfter(challengeStartingDate)) {
+      print("Now   $DateTime.now()");
+      if (DateTime.now().isAfter(challengeStartingDate)) {
         HabitPlan habitPlan = (await _habitPlan)[0];
         final int trainingTimeIndex = habitPlan.trainingTimeIndex;
         const List<int> timePeriodLength = DataShortcut.maxTrainings;
@@ -56,7 +56,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
                     repDurationInHours)
                 .floor();
         final int nowDiff =
-            (timeHackNow.difference(challengeStartingDate).inHours /
+            (DateTime.now().difference(challengeStartingDate).inHours /
                     repDurationInHours)
                 .floor();
 
@@ -74,7 +74,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
             progressData.completedTrainings++;
           }
           progressData.completedReps = 0;
-          progressData.lastActiveDate = timeHackNow;
+          progressData.lastActiveDate = DateTime.now();
 
           // Calculate the number of time-periods passed. For dayly challenges, that would be how many weeks have passed.
           final int timePeriodsPassed =
@@ -258,7 +258,6 @@ class _ToDoScreenState extends State<ToDoScreen> {
                 // If no HabitPlan is active
                 double screenHeight = MediaQuery.of(context).size.height;
                 return Container(
-                  color: Colors.red,
                   padding: EdgeInsets.only(
                     top: screenHeight * 0.25,
                     right: StyleData.screenPaddingValue,
@@ -345,31 +344,45 @@ class _ToDoScreenState extends State<ToDoScreen> {
                 );
               },
             ),
-            FloatingActionButton(
+            /* FloatingActionButton(
               backgroundColor: Colors.transparent,
               splashColor: Colors.purple,
               elevation: 0,
               onPressed: () {
                 setState(() {
-                  timeHackNow = DateTime(
-                    timeHackNow.year,
-                    timeHackNow.month,
-                    timeHackNow.day + 1,
-                    timeHackNow.hour,
-                    timeHackNow.minute,
-                    timeHackNow.second,
-                    timeHackNow.millisecond,
+                  DateTime.now() = DateTime(
+                    DateTime.now().year,
+                    DateTime.now().month,
+                    DateTime.now().day + 1,
+                    DateTime.now().hour,
+                    DateTime.now().minute,
+                    DateTime.now().second,
+                    DateTime.now().millisecond,
                   );
                   _catchUpProgressData();
                 });
               },
-            ),
-            FloatingActionButton(
-              tooltip: "Mark challenge as done",
-              child: Icon(Icons.done),
-              heroTag: null,
-              onPressed: () {
-                print("the more you know");
+            ), */
+            FutureBuilder(
+              future: this._habitPlan,
+              builder: (context, AsyncSnapshot<List<HabitPlan>> snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data!.length > 0) {
+                    final HabitPlan habitPlan = snapshot.data![0];
+                    return FloatingActionButton(
+                      tooltip: "Mark challenge as done",
+                      child: Icon(Icons.done),
+                      heroTag: null,
+                      onPressed: () {
+                        setState(() {
+                          _catchUpProgressData();
+                          _incrementProgressData(habitPlan);
+                        });
+                      },
+                    );
+                  }
+                }
+                return SizedBox();
               },
             ),
           ],
