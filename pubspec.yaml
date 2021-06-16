@@ -31,10 +31,19 @@ dependencies:
   sqflite: ^2.0.0+3
   path_provider: ^2.0.2
   sqflite_common_ffi: ^2.0.0+1
+  flutter_launcher_icons: ^0.9.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  ios: true
+  android: true
+  image_path_ios: "assets/launcher/icon.png"
+  image_path_android: "assets/launcher/icon.png"
+  adaptive_icon_background: "assets/launcher/background.png"
+  adaptive_icon_foreground: "assets/launcher/foreground.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -46,6 +55,7 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  
 
   # To add assets to your application, add an assets section, like this:
   # assets:
