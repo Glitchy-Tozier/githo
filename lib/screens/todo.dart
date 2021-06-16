@@ -115,6 +115,11 @@ class _ToDoScreenState extends State<ToDoScreen> {
 
   Widget _getToDoScreen(HabitPlan habitPlan) {
     return TextButton(
+      style: ButtonStyle(
+        padding: MaterialStateProperty.all<EdgeInsets>(
+          EdgeInsets.all(0),
+        ),
+      ),
       child: Container(
         width: double.infinity,
         child: Stack(
@@ -213,10 +218,6 @@ class _ToDoScreenState extends State<ToDoScreen> {
           ],
         ),
       ),
-      // Style the screen-button
-      style: TextButton.styleFrom(
-        primary: Colors.black,
-      ),
       onPressed: () {
         setState(() {
           _catchUpProgressData();
@@ -252,6 +253,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
                 // If no HabitPlan is active
                 double screenHeight = MediaQuery.of(context).size.height;
                 return Container(
+                  color: Colors.red,
                   padding: EdgeInsets.only(
                     top: screenHeight * 0.25,
                     right: StyleData.screenPaddingValue,
