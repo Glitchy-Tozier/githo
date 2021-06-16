@@ -3,6 +3,7 @@ import 'package:githo/extracted_data/dataShortcut.dart';
 
 import 'package:githo/extracted_data/fullDatabaseImport.dart';
 import 'package:githo/extracted_data/styleData.dart';
+import 'package:githo/extracted_functions/getChallengeIndex.dart';
 import 'package:githo/extracted_functions/getStatusString.dart';
 import 'package:githo/extracted_widgets/headings.dart';
 import 'package:githo/screens/habitList.dart';
@@ -16,7 +17,9 @@ class ToDoScreen extends StatefulWidget {
 class _ToDoScreenState extends State<ToDoScreen> {
   late Future<List<HabitPlan>> _habitPlan;
   late Future<ProgressData> _progressData;
-  //late DateTime DateTime.now();
+
+  static const testing = true;
+  late DateTime timeHackNow;
 
   @override
   void initState() {
@@ -28,9 +31,17 @@ class _ToDoScreenState extends State<ToDoScreen> {
     setState(() {
       _habitPlan = DatabaseHelper.instance.getActiveHabitPlan();
       _progressData = DatabaseHelper.instance.getProgressData();
-      //DateTime.now() = DateTime.now();
+      timeHackNow = DateTime.now();
       _catchUpProgressData();
     });
+  }
+
+  DateTime _getCurrentTime() {
+    if (testing == true) {
+      return timeHackNow;
+    } else {
+      return DateTime.now();
+    }
   }
 
   void _catchUpProgressData() async {
@@ -42,8 +53,8 @@ class _ToDoScreenState extends State<ToDoScreen> {
 
       print("Start $challengeStartingDate");
       print("Last  $lastActive");
-      print("Now   $DateTime.now()");
-      if (DateTime.now().isAfter(challengeStartingDate)) {
+      print("Now   ${_getCurrentTime()}");
+      if (_getCurrentTime().isAfter(challengeStartingDate)) {
         HabitPlan habitPlan = (await _habitPlan)[0];
         final int trainingTimeIndex = habitPlan.trainingTimeIndex;
         const List<int> timePeriodLength = DataShortcut.maxTrainings;
@@ -56,7 +67,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
                     repDurationInHours)
                 .floor();
         final int nowDiff =
-            (DateTime.now().difference(challengeStartingDate).inHours /
+            (_getCurrentTime().difference(challengeStartingDate).inHours /
                     repDurationInHours)
                 .floor();
 
@@ -74,7 +85,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
             progressData.completedTrainings++;
           }
           progressData.completedReps = 0;
-          progressData.lastActiveDate = DateTime.now();
+          progressData.lastActiveDate = _getCurrentTime();
 
           // Calculate the number of time-periods passed. For dayly challenges, that would be how many weeks have passed.
           final int timePeriodsPassed =
@@ -114,120 +125,99 @@ class _ToDoScreenState extends State<ToDoScreen> {
   }
 
   Widget _getToDoScreen(HabitPlan habitPlan) {
-    return TextButton(
-      style: ButtonStyle(
-        padding: MaterialStateProperty.all<EdgeInsets>(
-          EdgeInsets.all(0),
-        ),
-      ),
-      child: Container(
-        width: double.infinity,
-        child: Stack(
-          alignment: Alignment.topCenter,
-          children: [
-            Column(
-              children: [
-                TextButton(
-                  style: ButtonStyle(
-                    padding: MaterialStateProperty.all<EdgeInsets>(
-                      EdgeInsets.all(0),
-                    ),
-                  ),
-                  child: Container(
-                    padding: StyleData.screenPadding,
-                    width: double.infinity,
-                    child: FutureBuilder(
-                      future: this._progressData,
-                      builder: (context, AsyncSnapshot<ProgressData> snapshot) {
-                        if (snapshot.hasData) {
-                          final ProgressData progressData = snapshot.data!;
-                          return ScreenTitle(
+    return FutureBuilder(
+      future: this._progressData,
+      builder: (context, AsyncSnapshot<ProgressData> snapshot) {
+        if (snapshot.hasData) {
+          final ProgressData progressData = snapshot.data!;
+
+          final int challengeIndex = getChallengeIndex(habitPlan, progressData);
+          final String currentChallenge = habitPlan.challenges[challengeIndex];
+
+          return TextButton(
+            style: ButtonStyle(
+              padding: MaterialStateProperty.all<EdgeInsets>(
+                EdgeInsets.all(0),
+              ),
+              backgroundColor: MaterialStateProperty.all<Color>(
+                (progressData.completedReps >= habitPlan.requiredReps)
+                    ? Colors.green
+                    : Colors.white,
+              ),
+            ),
+            child: Container(
+              width: double.infinity,
+              child: Stack(
+                alignment: Alignment.topCenter,
+                children: [
+                  Column(
+                    children: [
+                      TextButton(
+                        style: ButtonStyle(
+                          padding: MaterialStateProperty.all<EdgeInsets>(
+                            EdgeInsets.all(0),
+                          ),
+                        ),
+                        child: Container(
+                          padding: StyleData.screenPadding,
+                          width: double.infinity,
+                          child: ScreenTitle(
                             title: habitPlan.goal,
                             subTitle: getStatusString(habitPlan, progressData),
-                          );
-                        } else {
-                          return CircularProgressIndicator();
-                        }
-                      },
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SingleHabitDisplay(
-                          updateFunction: _reloadScreen,
-                          habitPlan: habitPlan,
+                          ),
                         ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SingleHabitDisplay(
+                                updateFunction: _reloadScreen,
+                                habitPlan: habitPlan,
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
-              ],
-            ),
-            Padding(
-              padding: StyleData.screenPadding,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  FutureBuilder(
-                    future: this._progressData,
-                    builder: (context, AsyncSnapshot<ProgressData> snapshot) {
-                      if (snapshot.hasData) {
-                        final ProgressData progressData = snapshot.data!;
-                        return Text(
-                          "${progressData.completedReps}/${habitPlan.requiredReps}",
-                          style: StyleData.textStyle,
-                        );
-                      } else {
-                        return CircularProgressIndicator();
-                      }
-                    },
+                    ],
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    child: Icon(
-                      Icons.done,
-                      color: Colors.black,
-                    ),
-                  ),
-                  FutureBuilder(
-                    future: this._progressData,
-                    builder: (context, AsyncSnapshot<ProgressData> snapshot) {
-                      if (snapshot.hasData) {
-                        final ProgressData progressData = snapshot.data!;
-
-                        final int challengeIndex;
-                        if (progressData.level == 0) {
-                          challengeIndex = 0;
-                        } else {
-                          challengeIndex = ((progressData.level - 1) /
-                                  habitPlan.requiredTrainingPeriods)
-                              .floor();
-                        }
-
-                        final String currentChallenge =
-                            habitPlan.challenges[challengeIndex];
-                        return Text(
+                    padding: StyleData.screenPadding,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        (habitPlan.requiredReps == 1)
+                            ? SizedBox()
+                            : Text(
+                                "${progressData.completedReps}/${habitPlan.requiredReps}",
+                                style: StyleData.textStyle,
+                              ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 10),
+                          child: Icon(
+                            Icons.done,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Text(
                           currentChallenge,
                           style: StyleData.textStyle,
-                        );
-                      } else {
-                        return CircularProgressIndicator();
-                      }
-                    },
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
-      ),
-      onPressed: () {
-        setState(() {
-          _catchUpProgressData();
-          _incrementProgressData(habitPlan);
-        });
+            onPressed: () {
+              setState(() {
+                _catchUpProgressData();
+                _incrementProgressData(habitPlan);
+              });
+            },
+          );
+        } else {
+          return CircularProgressIndicator();
+        }
       },
     );
   }
@@ -344,25 +334,27 @@ class _ToDoScreenState extends State<ToDoScreen> {
                 );
               },
             ),
-            /* FloatingActionButton(
-              backgroundColor: Colors.transparent,
-              splashColor: Colors.purple,
-              elevation: 0,
-              onPressed: () {
-                setState(() {
-                  DateTime.now() = DateTime(
-                    DateTime.now().year,
-                    DateTime.now().month,
-                    DateTime.now().day + 1,
-                    DateTime.now().hour,
-                    DateTime.now().minute,
-                    DateTime.now().second,
-                    DateTime.now().millisecond,
-                  );
-                  _catchUpProgressData();
-                });
-              },
-            ), */
+            (testing)
+                ? FloatingActionButton(
+                    backgroundColor: Colors.transparent,
+                    splashColor: Colors.purple,
+                    elevation: 0,
+                    onPressed: () async {
+                      final List<HabitPlan> habitPlanList = (await _habitPlan);
+                      if (habitPlanList.length > 0) {
+                        final HabitPlan habitPlan = habitPlanList[0];
+                        final int timeIndex = habitPlan.trainingTimeIndex;
+                        timeHackNow = timeHackNow.add(
+                          Duration(
+                            hours: DataShortcut.repDurationInHours[timeIndex],
+                          ),
+                        );
+                        _catchUpProgressData();
+                      }
+                      setState(() {});
+                    },
+                  )
+                : SizedBox(),
             FutureBuilder(
               future: this._habitPlan,
               builder: (context, AsyncSnapshot<List<HabitPlan>> snapshot) {

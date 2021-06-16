@@ -1,17 +1,37 @@
-import 'package:githo/extracted_data/fullDatabaseImport.dart';
+import 'package:githo/extracted_data/dataShortcut.dart';
+import 'package:githo/extracted_functions/getChallengeIndex.dart';
+import 'package:githo/extracted_functions/typeExtentions.dart';
+
+import 'package:githo/models/habitPlanModel.dart';
 import 'package:githo/models/progressDataModel.dart';
 
 String getStatusString(HabitPlan habitPlan, ProgressData progressData) {
-  String subTitle = "Status: ";
+  String subTitle;
 
   if (habitPlan.isActive) {
     if (progressData.level == 0) {
-      subTitle += "Preparing";
+      subTitle = "Status: Preparing";
     } else {
-      subTitle += "Level ${progressData.level}";
+      final int challengeIndex = getChallengeIndex(habitPlan, progressData);
+      final int stepNr = challengeIndex + 1;
+      final int requiredTrainingPeriods = habitPlan.requiredTrainingPeriods;
+      if (requiredTrainingPeriods == 1) {
+        subTitle = "Status: Step $stepNr";
+      } else {
+        final String timeFrame = DataShortcut
+            .timeFrames[habitPlan.trainingTimeIndex + 1]
+            .capitalize();
+
+        final int ignoredTimePeriods =
+            challengeIndex * habitPlan.requiredTrainingPeriods;
+        final int currentTimePeriod = progressData.level - ignoredTimePeriods;
+
+        subTitle =
+            "Step $stepNr – $timeFrame $currentTimePeriod/$requiredTrainingPeriods";
+      }
     }
   } else {
-    subTitle += "Inactive";
+    subTitle = "Status: Inactive";
   }
 
   return subTitle;
