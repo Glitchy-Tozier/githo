@@ -128,6 +128,11 @@ class _ToDoScreenState extends State<ToDoScreen> {
             Column(
               children: [
                 TextButton(
+                  style: ButtonStyle(
+                    padding: MaterialStateProperty.all<EdgeInsets>(
+                      EdgeInsets.all(0),
+                    ),
+                  ),
                   child: Container(
                     padding: StyleData.screenPadding,
                     width: double.infinity,

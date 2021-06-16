@@ -32,7 +32,7 @@ class ScreenTitle extends StatelessWidget {
       ]);
     }
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 30),
+      padding: EdgeInsets.only(top: 70, bottom: 50),
       child: Column(
         children: columnContents,
       ),
