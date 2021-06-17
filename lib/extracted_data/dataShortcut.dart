@@ -11,6 +11,12 @@ class DataShortcut {
     "weekly",
     "monthly",
   ];
+  static const List<String> nextTimeFrameNames = [
+    "the next hour",
+    "tomorrow",
+    "the next week",
+    "the next month",
+  ];
   static const List<int> maxTrainings = [24, 7, 4];
 
   static const List<int> repDurationInHours = [

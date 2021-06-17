@@ -21,3 +21,10 @@ class StyleData {
     fontWeight: FontWeight.bold,
   );
 }
+
+TextStyle coloredTextStyle(Color color) {
+  return TextStyle(
+    fontSize: 16,
+    color: color,
+  );
+}

@@ -9,7 +9,9 @@ import 'package:githo/extracted_functions/getCurrentStepIndex.dart';
 import 'package:githo/extracted_functions/getStatusString.dart';
 
 import 'package:githo/extracted_widgets/bulletPoint.dart';
+import 'package:githo/extracted_widgets/confirmActivationChange.dart';
 import 'package:githo/extracted_widgets/customListTile.dart';
+import 'package:githo/extracted_widgets/confirmDeletion.dart';
 import 'package:githo/extracted_widgets/headings.dart';
 import 'package:githo/extracted_widgets/screenEndingSpacer.dart';
 
@@ -160,45 +162,75 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
     void onClickFunc() async {
       if (habitPlan.isActive == true) {
         // If the viewed habetPlan was active to begin with, disable it.
-        habitPlan.isActive = false;
-        await DatabaseHelper.instance.updateHabitPlan(habitPlan);
+        void okayFunc() async {
+          this.habitPlan.isActive = false;
+          await DatabaseHelper.instance.updateHabitPlan(this.habitPlan);
+          updatePrevScreens();
+          Navigator.pop(context);
+        }
+
+        showDialog(
+          context: context,
+          builder: (BuildContext buildContext) => ConfirmActivationChange(
+            title: "Confirm Deactivation",
+            message: "",
+            habitPlan: habitPlan,
+            confirmationFunc: okayFunc,
+          ),
+        );
       } else {
         // If the viewed habitPlan wasn't active, activate it.
 
-        // Mark the old plan as inactive
-        List<HabitPlan> activeHabitPlan =
-            await DatabaseHelper.instance.getActiveHabitPlan();
-        if (activeHabitPlan.length > 0) {
-          HabitPlan oldHabitPlan = activeHabitPlan[0];
-          oldHabitPlan.isActive = false;
-          await DatabaseHelper.instance.updateHabitPlan(oldHabitPlan);
+        void okayFunc() async {
+          // Mark the old plan as inactive
+          List<HabitPlan> activeHabitPlan =
+              await DatabaseHelper.instance.getActiveHabitPlan();
+          if (activeHabitPlan.length > 0) {
+            HabitPlan oldHabitPlan = activeHabitPlan[0];
+            oldHabitPlan.isActive = false;
+            await DatabaseHelper.instance.updateHabitPlan(oldHabitPlan);
+          }
+
+          // Update (and reset) older progressData
+          ProgressData progressData =
+              await DatabaseHelper.instance.getProgressData();
+          DateTime now = DateTime.now();
+
+          progressData.lastActiveDate = now;
+          progressData.currentStartingDate = DateTime(
+            now.year,
+            now.month,
+            now.day + 8 - now.weekday,
+          );
+          progressData.completedReps = 0;
+          progressData.completedTrainings = 0;
+          progressData.completedTrainingPeriods = 0;
+          await DatabaseHelper.instance.updateProgressData(progressData);
+
+          // Update the plan you're looking at to be active
+          habitPlan.isActive = true;
+          habitPlan.lastChanged = DateTime.now();
+          await DatabaseHelper.instance.updateHabitPlan(habitPlan);
+
+          // Refresh previous screens and move there.
+          updatePrevScreens();
+          Navigator.pop(context);
         }
 
-        // Update (and reset) older progressData
-        ProgressData progressData =
-            await DatabaseHelper.instance.getProgressData();
-        DateTime now = DateTime.now();
-
-        progressData.lastActiveDate = now;
-        progressData.currentStartingDate = DateTime(
-          now.year,
-          now.month,
-          now.day + 8 - now.weekday,
+        showDialog(
+          context: context,
+          builder: (BuildContext buildContext) => ConfirmActivationChange(
+            title: "Confirm Activation",
+            message: "",
+            habitPlan: habitPlan,
+            confirmationFunc: okayFunc,
+          ),
         );
-        progressData.completedReps = 0;
-        progressData.completedTrainings = 0;
-        progressData.completedTrainingPeriods = 0;
-        await DatabaseHelper.instance.updateProgressData(progressData);
-
-        // Update the plan you're looking at to be active
-        habitPlan.isActive = true;
-        habitPlan.lastChanged = DateTime.now();
-        await DatabaseHelper.instance.updateHabitPlan(habitPlan);
       }
       // Refresh List Screen AND singleHabitDisplay-screen.
       //_updateThisScreen(habitPlan);
-      updatePrevScreens();
-      Navigator.pop(context);
+      /* updatePrevScreens();
+      Navigator.pop(context); */
     }
 
     Color buttonColor() {
@@ -288,11 +320,14 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
                 Icons.delete,
               ),
               backgroundColor: Colors.red,
-              onPressed: () async {
-                await DatabaseHelper.instance
-                    .deleteHabitPlan(habitPlan.id as int);
-                updatePrevScreens();
-                Navigator.pop(context);
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext buildContext) => ConfirmDeletion(
+                    habitPlan,
+                    updatePrevScreens,
+                  ),
+                );
               },
               heroTag: null,
             ),

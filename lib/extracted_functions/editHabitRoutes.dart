@@ -19,7 +19,7 @@ void addNewHabit(
     // Sliders:
     trainingTimeIndex: 1,
     requiredTrainings: 5,
-    requiredTrainingPeriods: 2,
+    requiredTrainingPeriods: 1,
     lastChanged: DateTime.now(),
   );
 
