@@ -67,7 +67,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
         // Check if we're in a new "time span". (For dayly trainings, that would be the next day).
         final bool inNewTimeFrame = (lastActiveDiff != nowDiff);
         if (inNewTimeFrame) {
-          // If this is the first day of the challenge:
+          // If this is the first day of the step:
 
           // Reset reps
           if (progressData.completedReps >= habitPlan.requiredReps) {
@@ -82,7 +82,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
           // If we are in a new time-period...
           for (int i = 0; i < timePeriodsPassed; i++) {
             print("A WEEK HAS PASSED");
-            // Move the starting date for the current challenge
+            // Move the starting date for the current step
             progressData.currentStartingDate =
                 progressData.currentStartingDate.add(
               Duration(
@@ -94,7 +94,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
                 habitPlan.requiredTrainings) {
               final int maxPeriods =
                   habitPlan.steps.length * habitPlan.requiredTrainingPeriods;
-              if (progressData.completedTrainingPeriods < maxPeriods) {
+              if (progressData.completedTrainingPeriods < maxPeriods - 1) {
                 progressData.completedTrainingPeriods++;
               }
             } else if (progressData.completedTrainingPeriods > 0) {
@@ -117,9 +117,8 @@ class _ToDoScreenState extends State<ToDoScreen> {
         if (snapshot.hasData) {
           final ProgressData progressData = snapshot.data!;
 
-          final int challengeIndex =
-              getCurrentStepIndex(habitPlan, progressData);
-          final String currentChallenge = habitPlan.steps[challengeIndex];
+          final int stepIndex = getCurrentStepIndex(habitPlan, progressData);
+          final String currentStep = habitPlan.steps[stepIndex];
 
           return TextButton(
             style: ButtonStyle(
@@ -187,7 +186,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
                           ),
                         ),
                         Text(
-                          currentChallenge,
+                          currentStep,
                           style: StyleData.textStyle,
                         ),
                       ],
@@ -352,7 +351,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
                   if (snapshot.data!.length > 0) {
                     final HabitPlan habitPlan = snapshot.data![0];
                     return FloatingActionButton(
-                      tooltip: "Mark challenge as done",
+                      tooltip: "Mark step as done",
                       child: Icon(Icons.done),
                       heroTag: null,
                       onPressed: () {

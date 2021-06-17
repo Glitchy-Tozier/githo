@@ -47,7 +47,7 @@ class _EditHabitState extends State<EditHabit> {
   final List<int> _maxTrainings = DataShortcut.maxTrainings;
 
   // Function for receiving the onSaved-values from formList.dart
-  void _getChallengeValues(List<String> valueList) {
+  void _getStepValues(List<String> valueList) {
     this.habitPlan.steps = valueList;
   }
 
@@ -85,7 +85,7 @@ class _EditHabitState extends State<EditHabit> {
           padding: StyleData.screenPadding,
           child: Column(
             children: <Widget>[
-              ScreenTitle(title: "Edit Challenge"),
+              ScreenTitle(title: "Edit Habit-Plan"),
               Form(
                 key: _formKey,
                 child: Column(
@@ -109,19 +109,22 @@ class _EditHabitState extends State<EditHabit> {
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       decoration: inputDecoration("Nr of required actions"),
                       validator: (input) => validateNumberField(
-                          input, "the required repetitions"),
+                        input,
+                        "the required repetitions",
+                        currentTimeUnit,
+                      ),
                       initialValue: habitPlan.requiredReps.toString(),
                       onSaved: (input) => habitPlan.requiredReps =
                           int.parse(input.toString().trim()),
                     ),
                     SizedBox(height: 10),
 
-                    // Create the challenge-form-fields
+                    // Create the step-form-fields
                     Heading1("Steps towards your goal"),
                     FormList(
                       fieldName: "Step",
                       canBeEmpty: false,
-                      valuesGetter: _getChallengeValues,
+                      valuesGetter: _getStepValues,
                       inputList: habitPlan.steps,
                     ),
 

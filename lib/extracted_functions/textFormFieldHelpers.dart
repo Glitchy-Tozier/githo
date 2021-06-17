@@ -22,7 +22,8 @@ String? checkIfEmpty(String? input, String variableText) {
   }
 }
 
-String? validateNumberField(String? input, String variableText) {
+String? validateNumberField(
+    String? input, String variableText, String timeFrameText) {
   final String? emptycheck =
       checkIfEmpty(input.toString().trim(), variableText);
   if (emptycheck != null) {
@@ -33,7 +34,7 @@ String? validateNumberField(String? input, String variableText) {
   if (intput >= 1000) {
     return "Please input smaller numbers";
   } else if (intput == 0) {
-    return "It has to be at least one challenge per day";
+    return "It has to be at least one rep a $timeFrameText";
   } else {
     return null;
   }

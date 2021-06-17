@@ -15,8 +15,8 @@ String getStatusString(HabitPlan habitPlan, ProgressData progressData) {
         .isBefore(progressData.currentStartingDate)) {
       subTitle = "Status: Preparing";
     } else {
-      final int challengeIndex = getCurrentStepIndex(habitPlan, progressData);
-      final int stepNr = challengeIndex + 1;
+      final int stepIndex = getCurrentStepIndex(habitPlan, progressData);
+      final int stepNr = stepIndex + 1;
       final int requiredTrainingPeriods = habitPlan.requiredTrainingPeriods;
       if (requiredTrainingPeriods == 1) {
         subTitle = "Status: Step $stepNr";
@@ -26,9 +26,9 @@ String getStatusString(HabitPlan habitPlan, ProgressData progressData) {
             .capitalize();
 
         final int ignoredTimePeriods =
-            challengeIndex * habitPlan.requiredTrainingPeriods;
+            stepIndex * habitPlan.requiredTrainingPeriods;
         final int currentTimePeriod =
-            progressData.completedTrainingPeriods - ignoredTimePeriods;
+            progressData.completedTrainingPeriods + 1 - ignoredTimePeriods;
 
         subTitle =
             "Step $stepNr – $timeFrame $currentTimePeriod/$requiredTrainingPeriods";

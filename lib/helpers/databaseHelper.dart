@@ -63,7 +63,7 @@ class DatabaseHelper {
   }
 
   void _createDb(Database db, int version) async {
-    // Initialize challenge-table
+    // Initialize habitPlan-table
     String commandString = "";
     commandString += "CREATE TABLE $habitPlansTable";
     commandString += "(";
