@@ -7,6 +7,7 @@ import 'package:githo/models/habitPlanModel.dart';
 import 'package:githo/models/progressDataModel.dart';
 
 String getStatusString(HabitPlan habitPlan, ProgressData progressData) {
+  // Used in the title of some screens.
   String subTitle;
 
   if (habitPlan.isActive) {

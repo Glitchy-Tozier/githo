@@ -151,6 +151,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
                           child: ScreenTitle(
                             title: habitPlan.goal,
                             subTitle: getStatusString(habitPlan, progressData),
+                            addBottomPadding: false,
                           ),
                         ),
                         onPressed: () {

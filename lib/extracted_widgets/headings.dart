@@ -3,10 +3,23 @@ import 'package:flutter/material.dart';
 class ScreenTitle extends StatelessWidget {
   final String title;
   final String? subTitle;
-  ScreenTitle({required this.title, this.subTitle});
+  final bool addBottomPadding;
+
+  ScreenTitle({
+    required this.title,
+    this.subTitle,
+    this.addBottomPadding = true,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final EdgeInsets padding;
+    if (addBottomPadding) {
+      padding = EdgeInsets.only(top: 70, bottom: 50);
+    } else {
+      padding = EdgeInsets.only(top: 70, bottom: 10);
+    }
+
     List<Widget> columnContents = [
       Text(
         title,
@@ -18,6 +31,7 @@ class ScreenTitle extends StatelessWidget {
         ),
       ),
     ];
+
     if (subTitle != null) {
       columnContents.addAll([
         SizedBox(height: 5),
@@ -32,7 +46,7 @@ class ScreenTitle extends StatelessWidget {
       ]);
     }
     return Padding(
-      padding: EdgeInsets.only(top: 70, bottom: 50),
+      padding: padding,
       child: Column(
         children: columnContents,
       ),

@@ -211,8 +211,6 @@ class DatabaseHelper {
     final int result = await db.update(
       progressDataTable,
       progressData.toMap(),
-      /* where: "$colId = ?",
-      whereArgs: [habitPlan.id], */
     );
     return result;
   }
@@ -231,8 +229,6 @@ class DatabaseHelper {
     final int result = await db.update(
       progressDataTable,
       settingsData.toMap(),
-      /* where: "$colId = ?",
-      whereArgs: [habitPlan.id], */
     );
     return result;
   }
