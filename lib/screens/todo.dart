@@ -120,40 +120,31 @@ class _ToDoScreenState extends State<ToDoScreen> {
           final int stepIndex = getCurrentStepIndex(habitPlan, progressData);
           final String currentStep = habitPlan.steps[stepIndex];
 
-          return TextButton(
-            style: ButtonStyle(
-              padding: MaterialStateProperty.all<EdgeInsets>(
-                EdgeInsets.all(0),
-              ),
-              backgroundColor: MaterialStateProperty.all<Color>(
-                (progressData.completedReps >= habitPlan.requiredReps)
-                    ? Colors.green
-                    : Colors.white,
-              ),
-            ),
-            child: Container(
-              width: double.infinity,
+          return Ink(
+            width: double.infinity,
+            color: (progressData.completedReps < habitPlan.requiredReps)
+                ? Colors.white
+                : Colors.green,
+            child: InkWell(
+              splashColor: (progressData.completedReps < habitPlan.requiredReps)
+                  ? Colors.green
+                  : Colors.lightGreenAccent,
               child: Stack(
                 alignment: Alignment.topCenter,
                 children: [
                   Column(
                     children: [
-                      TextButton(
-                        style: ButtonStyle(
-                          padding: MaterialStateProperty.all<EdgeInsets>(
-                            EdgeInsets.all(0),
-                          ),
-                        ),
+                      InkWell(
+                        splashColor: Colors.orangeAccent,
                         child: Container(
                           padding: StyleData.screenPadding,
-                          width: double.infinity,
                           child: ScreenTitle(
                             title: habitPlan.goal,
                             subTitle: getStatusString(habitPlan, progressData),
                             addBottomPadding: false,
                           ),
                         ),
-                        onPressed: () {
+                        onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -194,13 +185,13 @@ class _ToDoScreenState extends State<ToDoScreen> {
                   ),
                 ],
               ),
+              onTap: () {
+                setState(() {
+                  _catchUpProgressData();
+                  _incrementProgressData(habitPlan);
+                });
+              },
             ),
-            onPressed: () {
-              setState(() {
-                _catchUpProgressData();
-                _incrementProgressData(habitPlan);
-              });
-            },
           );
         } else {
           return CircularProgressIndicator();
@@ -228,11 +219,10 @@ class _ToDoScreenState extends State<ToDoScreen> {
       body: FutureBuilder(
         future: _habitPlan,
         builder: (context, AsyncSnapshot<List<HabitPlan>> snapshot) {
-          List<Widget> returnWidgets = [];
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
               if (snapshot.data!.length == 0) {
-                // If no HabitPlan is active
+                // If connection is done but no habitPlan is active:
                 double screenHeight = MediaQuery.of(context).size.height;
                 return Container(
                   padding: EdgeInsets.only(
@@ -253,49 +243,30 @@ class _ToDoScreenState extends State<ToDoScreen> {
                   ),
                 );
               } else {
-                // If there is an active habitPlan
+                // If connection is done and there is an active habitPlan:
 
                 HabitPlan habitPlan = snapshot.data![0];
                 return _getToDoScreen(habitPlan);
               }
             } else if (snapshot.hasError) {
-              // If something went wrong with the database
-              returnWidgets.add(
-                Expanded(
-                  child: Center(
-                    child: Column(
-                      children: [
-                        Heading1(
-                            "There was an error connecting to the database."),
-                        Text(
-                          snapshot.error.toString(),
-                          style: StyleData.textStyle,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-              returnWidgets.add(
-                Text(
-                  snapshot.error.toString(),
-                  style: StyleData.textStyle,
-                ),
-              );
+              // If connection is done but there was an error:
               print(snapshot.error);
-            }
-          } else {
-            // While loading, do this:
-            returnWidgets.add(
-              Expanded(
-                child: Center(
-                  child: CircularProgressIndicator(),
+              return Center(
+                child: Column(
+                  children: [
+                    Heading1("There was an error connecting to the database."),
+                    Text(
+                      snapshot.error.toString(),
+                      style: StyleData.textStyle,
+                    ),
+                  ],
                 ),
-              ),
-            );
+              );
+            }
           }
-          return Column(
-            children: returnWidgets,
+          // While loading, do this:
+          return Center(
+            child: CircularProgressIndicator(),
           );
         },
       ),
