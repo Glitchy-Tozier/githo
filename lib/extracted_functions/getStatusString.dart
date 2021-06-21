@@ -1,4 +1,4 @@
-import 'package:githo/extracted_data/currentTime.dart';
+import 'package:githo/helpers/timeHelper.dart';
 import 'package:githo/extracted_data/dataShortcut.dart';
 import 'package:githo/extracted_functions/getCurrentStepIndex.dart';
 import 'package:githo/extracted_functions/typeExtentions.dart';
@@ -11,7 +11,7 @@ String getStatusString(HabitPlan habitPlan, ProgressData progressData) {
   String subTitle;
 
   if (habitPlan.isActive) {
-    if (CurrentTime.instance.getTime
+    if (TimeHelper.instance.getTime
         .isBefore(progressData.currentStartingDate)) {
       subTitle = "Status: Preparing";
     } else {

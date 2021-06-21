@@ -1,21 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:githo/extracted_data/currentTime.dart';
-import 'package:githo/extracted_data/dataShortcut.dart';
 
+import 'package:githo/helpers/timeHelper.dart';
+import 'package:githo/extracted_data/dataShortcut.dart';
 import 'package:githo/extracted_data/fullDatabaseImport.dart';
 import 'package:githo/extracted_data/styleData.dart';
+
+import 'package:githo/extracted_functions/catchUpProgressData.dart';
 import 'package:githo/extracted_functions/getCurrentStepIndex.dart';
 import 'package:githo/extracted_functions/getStatusString.dart';
+import 'package:githo/extracted_functions/incrementProgressData.dart';
+
 import 'package:githo/extracted_widgets/headings.dart';
+import 'package:githo/extracted_widgets/toDoScreen.dart';
+
 import 'package:githo/screens/habitList.dart';
 import 'package:githo/screens/singlelHabitDisplay.dart';
 
-class ToDoScreen extends StatefulWidget {
+class HomeScreen extends StatefulWidget {
   @override
-  _ToDoScreenState createState() => _ToDoScreenState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _ToDoScreenState extends State<ToDoScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   late Future<List<HabitPlan>> _habitPlan;
   late Future<ProgressData> _progressData;
 
@@ -30,87 +36,13 @@ class _ToDoScreenState extends State<ToDoScreen> {
       _habitPlan = DatabaseHelper.instance.getActiveHabitPlan();
       _progressData = DatabaseHelper.instance.getProgressData();
       if (DataShortcut.testing) {
-        CurrentTime.instance.setTime(DateTime.now());
+        TimeHelper.instance.setTime(DateTime.now());
       }
-      _catchUpProgressData();
+      //catchUpProgressData(_habitPlan, _progressData);
     });
   }
 
-  void _catchUpProgressData() async {
-    if ((await _habitPlan).length != 0) {
-      ProgressData progressData = await _progressData;
-      final DateTime currentStartingDate = progressData.currentStartingDate;
-      final DateTime lastActive = progressData.lastActiveDate;
-
-      final DateTime currentTime = CurrentTime.instance.getTime;
-
-      print("Start $currentStartingDate");
-      print("Last  $lastActive");
-      print("Now   $currentTime");
-      if (currentTime.isAfter(currentStartingDate)) {
-        HabitPlan habitPlan = (await _habitPlan)[0];
-        final int trainingTimeIndex = habitPlan.trainingTimeIndex;
-        const List<int> timePeriodLength = DataShortcut.maxTrainings;
-
-        // Get the number of time-units passed since {insert first date} (for dayly trainings days)
-        final int repDurationInHours =
-            DataShortcut.repDurationInHours[trainingTimeIndex];
-        final int lastActiveDiff =
-            (lastActive.difference(currentStartingDate).inHours /
-                    repDurationInHours)
-                .floor();
-        final int nowDiff =
-            (currentTime.difference(currentStartingDate).inHours /
-                    repDurationInHours)
-                .floor();
-
-        // Check if we're in a new "time span". (For dayly trainings, that would be the next day).
-        final bool inNewTimeFrame = (lastActiveDiff != nowDiff);
-        if (inNewTimeFrame) {
-          // If this is the first day of the step:
-
-          // Reset reps
-          if (progressData.completedReps >= habitPlan.requiredReps) {
-            progressData.completedTrainings++;
-          }
-          progressData.completedReps = 0;
-          progressData.lastActiveDate = currentTime;
-
-          // Calculate the number of time-periods passed. For dayly trainings, that would be how many weeks have passed.
-          final int timePeriodsPassed =
-              (nowDiff / timePeriodLength[trainingTimeIndex]).floor();
-          // If we are in a new time-period...
-          for (int i = 0; i < timePeriodsPassed; i++) {
-            print("A WEEK HAS PASSED");
-            // Move the starting date for the current step
-            progressData.currentStartingDate =
-                progressData.currentStartingDate.add(
-              Duration(
-                hours: DataShortcut.stepDurationInHours[trainingTimeIndex],
-              ),
-            );
-            // Adjust the user's level according to his score
-            if (progressData.completedTrainings >=
-                habitPlan.requiredTrainings) {
-              final int maxPeriods =
-                  habitPlan.steps.length * habitPlan.requiredTrainingPeriods;
-              if (progressData.completedTrainingPeriods < maxPeriods - 1) {
-                progressData.completedTrainingPeriods++;
-              }
-            } else if (progressData.completedTrainingPeriods > 0) {
-              progressData.completedTrainingPeriods--;
-            }
-
-            progressData.completedTrainings = 0;
-          }
-          DatabaseHelper.instance.updateProgressData(progressData);
-        }
-      }
-    }
-    print("\n\n\n");
-  }
-
-  Widget _getToDoScreen(HabitPlan habitPlan) {
+  /* Widget _getToDoScreen(HabitPlan habitPlan) {
     return FutureBuilder(
       future: this._progressData,
       builder: (context, AsyncSnapshot<ProgressData> snapshot) {
@@ -187,31 +119,20 @@ class _ToDoScreenState extends State<ToDoScreen> {
               ),
               onTap: () {
                 setState(() {
-                  _catchUpProgressData();
-                  _incrementProgressData(habitPlan);
+                  catchUpProgressData(_habitPlan, _progressData);
+                  incrementProgressData(habitPlan, progressData);
                 });
               },
             ),
           );
         } else {
-          return CircularProgressIndicator();
+          return Center(
+            child: CircularProgressIndicator(),
+          );
         }
       },
     );
-  }
-
-  void _incrementProgressData(HabitPlan habitPlan) async {
-    // Increment requiredReps-data.
-    ProgressData progressData = await _progressData;
-    progressData
-        .completedReps++; // For some reason, this directly changes the future _progressData
-
-    if (progressData.completedReps == habitPlan.requiredReps) {
-      progressData.completedTrainings++;
-    }
-
-    DatabaseHelper.instance.updateProgressData(progressData);
-  }
+  } */
 
   @override
   Widget build(BuildContext context) {
@@ -244,9 +165,30 @@ class _ToDoScreenState extends State<ToDoScreen> {
                 );
               } else {
                 // If connection is done and there is an active habitPlan:
-
                 HabitPlan habitPlan = snapshot.data![0];
-                return _getToDoScreen(habitPlan);
+                return ToDoScreen(
+                  habitPlan: habitPlan,
+                  futureProgressData: _progressData,
+                );
+                //return _getToDoScreen(habitPlan);
+                /* return FutureBuilder(
+                  future: this._progressData,
+                  builder: (context, AsyncSnapshot<ProgressData> snapshot) {
+                    if (snapshot.hasData) {
+                      final ProgressData progressData = snapshot.data!;
+
+                      final int stepIndex =
+                          getCurrentStepIndex(habitPlan, progressData);
+                      final String currentStep = habitPlan.steps[stepIndex];
+
+                      return SizedBox();
+                    } else {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  },
+                ); */
               }
             } else if (snapshot.hasError) {
               // If connection is done but there was an error:
@@ -303,13 +245,13 @@ class _ToDoScreenState extends State<ToDoScreen> {
                         final HabitPlan habitPlan = habitPlanList[0];
                         final int timeIndex = habitPlan.trainingTimeIndex;
                         final DateTime changedTime =
-                            CurrentTime.instance.getTime.add(
+                            TimeHelper.instance.getTime.add(
                           Duration(
                             hours: DataShortcut.repDurationInHours[timeIndex],
                           ),
                         );
-                        CurrentTime.instance.setTime(changedTime);
-                        _catchUpProgressData();
+                        TimeHelper.instance.setTime(changedTime);
+                        //catchUpProgressData(_habitPlan, _progressData);
                       }
                       setState(() {});
                     },
@@ -325,11 +267,10 @@ class _ToDoScreenState extends State<ToDoScreen> {
                       tooltip: "Mark step as done",
                       child: Icon(Icons.done),
                       heroTag: null,
-                      onPressed: () {
-                        setState(() {
-                          _catchUpProgressData();
-                          _incrementProgressData(habitPlan);
-                        });
+                      onPressed: () async {
+                        //catchUpProgressData(_habitPlan, _progressData);
+                        //incrementProgressData(habitPlan, await _progressData);
+                        setState(() {});
                       },
                     );
                   }

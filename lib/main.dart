@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:githo/extracted_functions/adaptDatabaseToOS.dart';
-import 'package:githo/screens/todo.dart';
+import 'package:githo/screens/homeScreen.dart';
 
 void main() {
   adaptDatabaseToOS();
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: ToDoScreen(),
+      home: HomeScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

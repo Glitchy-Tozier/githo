@@ -1,16 +1,16 @@
 import 'package:githo/extracted_data/dataShortcut.dart';
 
-class CurrentTime {
-  static final CurrentTime instance = CurrentTime._instance();
+class TimeHelper {
+  static final TimeHelper instance = TimeHelper._instance();
   static late DateTime testingTime;
 
-  CurrentTime._instance();
+  TimeHelper._instance();
 
   void setTime(DateTime dateTime) {
     testingTime = dateTime;
   }
 
-  get getTime {
+  DateTime get getTime {
     if (DataShortcut.testing == true) {
       return testingTime;
     } else {

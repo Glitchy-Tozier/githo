@@ -54,7 +54,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
         ),
       );
       widgetList.add(
-        SizedBox(
+        const SizedBox(
           height: StyleData.listRowSpacing,
         ),
       );
@@ -80,7 +80,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
       CustomListTile(
           leadingWidget: BulletPoint(),
           title: "Perform $timeString a $timeFrame"),
-      SizedBox(
+      const SizedBox(
         height: StyleData.listRowSpacing,
       ),
     ]);
@@ -106,7 +106,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
           leadingWidget: BulletPoint(),
           title:
               "$requiredTrainingPeriods successful week$weekEnder required to progress to the next step"),
-      SizedBox(
+      const SizedBox(
         height: StyleData.listRowSpacing,
       ),
     ]);
@@ -205,6 +205,14 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
           progressData.completedReps = 0;
           progressData.completedTrainings = 0;
           progressData.completedTrainingPeriods = 0;
+
+          final int trainingNr =
+              DataShortcut.maxTrainings[habitPlan.trainingTimeIndex] *
+                  habitPlan.requiredTrainingPeriods *
+                  habitPlan.steps.length;
+          for (int i = 0; i < trainingNr; i++) {
+            progressData.trainingData.add("");
+          }
           await DatabaseHelper.instance.updateProgressData(progressData);
 
           // Update the plan you're looking at to be active
@@ -227,10 +235,6 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
           ),
         );
       }
-      // Refresh List Screen AND singleHabitDisplay-screen.
-      //_updateThisScreen(habitPlan);
-      /* updatePrevScreens();
-      Navigator.pop(context); */
     }
 
     Color buttonColor() {

@@ -30,9 +30,11 @@ class DatabaseHelper {
   static const String progressDataTable = "progressDataTable";
   static const String colLastActiveDate = "lastActiveDate";
   static const String colCurrentStartingDate = "currentStartingDate";
-  static const String colCompletedReps = "completedReps";
+  /* static const String colCompletedReps = "completedReps";
   static const String colCompletedTrainings = "completedTrainings";
   static const String colCompletedTrainingPeriods = "completedTrainingPeriods";
+  static const String colTrainingData = "trainingData"; */
+  static const String colStepData = "steps";
 
   static const String settingsDataTable = "settingsDataTable";
   static const String colPaused = "paused";
@@ -95,9 +97,10 @@ class DatabaseHelper {
     commandString += "(";
     commandString += "$colLastActiveDate TEXT, ";
     commandString += "$colCurrentStartingDate TEXT, ";
-    commandString += "$colCompletedReps INTEGER, ";
+    /* commandString += "$colCompletedReps INTEGER, ";
     commandString += "$colCompletedTrainings INTEGER, ";
-    commandString += "$colCompletedTrainingPeriods INTEGER";
+    commandString += "$colCompletedTrainingPeriods INTEGER, "; */
+    commandString += "$colStepData TEXT";
     commandString += ")";
     await db.execute(commandString);
 
@@ -107,9 +110,10 @@ class DatabaseHelper {
         ProgressData(
           lastActiveDate: DateTime.now(),
           currentStartingDate: DateTime.now(),
-          completedReps: 0,
+          /* completedReps: 0,
           completedTrainings: 0,
-          completedTrainingPeriods: 0,
+          completedTrainingPeriods: 0, */
+          steps: [],
         ).toMap());
 
     // Initialize settings-table
