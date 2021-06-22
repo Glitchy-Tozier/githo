@@ -19,12 +19,12 @@ class DataShortcut {
   ];
   static const List<int> maxTrainings = [24, 7, 4];
 
-  static const List<int> repDurationInHours = [
+  static const List<int> trainingDurationInHours = [
     1,
     24,
     24 * 7,
   ];
-  static const List<int> stepDurationInHours = [
+  static const List<int> periodDurationInHours = [
     24,
     24 * 7,
     24 * 7 * 4,

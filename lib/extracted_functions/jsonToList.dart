@@ -1,6 +1,8 @@
 import 'dart:convert';
 
-List<String> jsonToList(String json) {
+import 'package:githo/models/used_classes/step.dart';
+
+List<String> jsonToStringList(String json) {
   List<dynamic> dynamicList = jsonDecode(json);
   List<String> stringList = [];
 
@@ -8,4 +10,14 @@ List<String> jsonToList(String json) {
     stringList.add(element);
   });
   return stringList;
+}
+
+List<StepClass> jsonToStepList(String json) {
+  List<dynamic> dynamicList = jsonDecode(json);
+  List<StepClass> stepList = <StepClass>[];
+
+  dynamicList.forEach((element) {
+    stepList.add(element);
+  });
+  return stepList;
 }

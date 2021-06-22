@@ -42,7 +42,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
       builder: (context, AsyncSnapshot<ProgressData> snapshot) {
         if (snapshot.hasData) {
           final ProgressData progressData = snapshot.data!;
-          catchUpProgressData(habitPlan, progressData);
+          /* catchUpProgressData(habitPlan, progressData);
 
           final int stepIndex = getCurrentStepIndex(habitPlan, progressData);
           final String currentStep = habitPlan.steps[stepIndex];
@@ -158,8 +158,9 @@ class _ToDoScreenState extends State<ToDoScreen> {
         } else {
           return Center(
             child: CircularProgressIndicator(),
-          );
+          );*/
         }
+        return SizedBox();
       },
     );
   }

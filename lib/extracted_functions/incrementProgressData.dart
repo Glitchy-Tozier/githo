@@ -1,4 +1,4 @@
-import 'package:githo/extracted_data/fullDatabaseImport.dart';
+/* import 'package:githo/extracted_data/fullDatabaseImport.dart';
 import 'package:githo/extracted_functions/catchUpProgressData.dart';
 
 void incrementProgressData(HabitPlan habitPlan, ProgressData progressData) {
@@ -15,3 +15,4 @@ void incrementProgressData(HabitPlan habitPlan, ProgressData progressData) {
   // Save
   DatabaseHelper.instance.updateProgressData(progressData);
 }
+ */

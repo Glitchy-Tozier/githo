@@ -1,4 +1,4 @@
-import 'package:githo/models/habitPlanModel.dart';
+/* import 'package:githo/models/habitPlanModel.dart';
 import 'package:githo/models/progressDataModel.dart';
 
 int getCurrentStepIndex(HabitPlan habitPlan, ProgressData progressData) {
@@ -9,3 +9,4 @@ int getCurrentStepIndex(HabitPlan habitPlan, ProgressData progressData) {
 
   return stepIndex;
 }
+ */

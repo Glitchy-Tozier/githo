@@ -5,16 +5,10 @@ import 'package:githo/extracted_data/dataShortcut.dart';
 import 'package:githo/extracted_data/fullDatabaseImport.dart';
 import 'package:githo/extracted_data/styleData.dart';
 
-import 'package:githo/extracted_functions/catchUpProgressData.dart';
-import 'package:githo/extracted_functions/getCurrentStepIndex.dart';
-import 'package:githo/extracted_functions/getStatusString.dart';
-import 'package:githo/extracted_functions/incrementProgressData.dart';
-
 import 'package:githo/extracted_widgets/headings.dart';
 import 'package:githo/extracted_widgets/toDoScreen.dart';
 
 import 'package:githo/screens/habitList.dart';
-import 'package:githo/screens/singlelHabitDisplay.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -247,7 +241,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         final DateTime changedTime =
                             TimeHelper.instance.getTime.add(
                           Duration(
-                            hours: DataShortcut.repDurationInHours[timeIndex],
+                            hours:
+                                DataShortcut.trainingDurationInHours[timeIndex],
                           ),
                         );
                         TimeHelper.instance.setTime(changedTime);

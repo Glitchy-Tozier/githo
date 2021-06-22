@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:githo/helpers/timeHelper.dart';
 import 'package:githo/extracted_functions/jsonToList.dart';
 import 'package:githo/helpers/databaseHelper.dart';
+import 'package:githo/models/habitPlanModel.dart';
 import 'package:githo/models/used_classes/step.dart';
 import 'package:githo/models/used_classes/training.dart';
 import 'package:githo/models/used_classes/trainingPeriod.dart';
@@ -10,23 +11,56 @@ import 'package:githo/models/used_classes/trainingPeriod.dart';
 class ProgressData {
   DateTime lastActiveDate;
   DateTime currentStartingDate;
-  /* int completedReps;
-  int completedTrainings;
-  int completedTrainingPeriods;
-  List<String> trainingData;*/
-  List<Step> steps;
+  String goal;
+  List<StepClass> steps;
 
   ProgressData({
     required this.currentStartingDate,
     required this.lastActiveDate,
-    /* required this.completedReps,
-    required this.completedTrainings,
-    required this.completedTrainingPeriods,
-    required this.trainingData, */
+    required this.goal,
     required this.steps,
   });
+
+  factory ProgressData.emptyData() {
+    return ProgressData(
+      lastActiveDate: TimeHelper.instance.getTime,
+      currentStartingDate: TimeHelper.instance.getTime,
+      goal: "",
+      steps: [],
+    );
+  }
+
+  void adaptToHabitPlan(DateTime startingDate, HabitPlan habitPlan) {
+    this.lastActiveDate = TimeHelper.instance.getTime;
+    this.currentStartingDate = startingDate;
+    this.goal = habitPlan.goal;
+    this.steps = [];
+    for (int i = 0; i < habitPlan.steps.length; i++) {
+      this.steps.add(
+            StepClass(stepIndex: i, habitPlan: habitPlan),
+          );
+    }
+    _setTrainingDates();
+  }
+
   bool get _hasStarted {
     return (TimeHelper.instance.getTime.isAfter(this.currentStartingDate));
+  }
+
+  int get stepDurationInHours {
+    final int duration = this.steps[0].durationInHours;
+    return duration;
+  }
+
+  int get trainingPeriodDurationInHours {
+    final int duration = this.steps[0].trainingPeriods[0].durationInHours;
+    return duration;
+  }
+
+  int get trainingDurationInHours {
+    final int duration =
+        this.steps[0].trainingPeriods[0].trainings[0].durationInHours;
+    return duration;
   }
 
   // Regularly used functions
@@ -38,8 +72,8 @@ class ProgressData {
     DatabaseHelper.instance.updateProgressData(this);
   }
 
-  Map<String, dynamic>? _getActiveData() {
-    for (final Step step in this.steps) {
+  Map<String, dynamic>? getActiveData() {
+    for (final StepClass step in this.steps) {
       Map<String, dynamic>? tempResult = step.getActiveData();
       if (tempResult != null) {
         return tempResult;
@@ -48,7 +82,7 @@ class ProgressData {
   }
 
   Training? _getActiveTraining() {
-    for (final Step step in this.steps) {
+    for (final StepClass step in this.steps) {
       Training? training = step.getActiveTraining();
       if (training != null) {
         return training;
@@ -89,13 +123,13 @@ class ProgressData {
       if (newStartingDate.isBefore(now)) {
         newStartingDate.add(
           Duration(
-            hours: this.steps[0].durationInHours,
+            hours: this.stepDurationInHours,
           ),
         );
       } else {
         newStartingDate.subtract(
           Duration(
-            hours: this.steps[0].durationInHours,
+            hours: this.stepDurationInHours,
           ),
         );
         break;
@@ -119,7 +153,7 @@ class ProgressData {
         for (int i = 0; i < extraPeriods; i++) {
           startingDate.add(
             Duration(
-              hours: this.steps[0].trainingPeriods[0].durationInHours,
+              hours: this.trainingPeriodDurationInHours,
             ),
           );
         }
@@ -132,7 +166,7 @@ class ProgressData {
   }
 
   Training? _getTrainingByDate(DateTime date) {
-    for (final Step step in this.steps) {
+    for (final StepClass step in this.steps) {
       Training? training = step.getTrainingByDate(date);
       if (training != null) {
         return training;
@@ -148,15 +182,10 @@ class ProgressData {
     }
   }
 
-  Map<String, int> updateTime() {
-    final passedTime = Map<String, int>();
-    passedTime["steps"] = 0;
-    passedTime["trainingPeriods"] = 0;
-    passedTime["trainings"] = 0;
-
+  void updateTime() {
     final DateTime currentDate = TimeHelper.instance.getTime;
 
-    final Step firstStep = this.steps.first;
+    final StepClass firstStep = this.steps.first;
     final TrainingPeriod firstPeriod = firstStep.trainingPeriods.first;
     final Training firstTraining = firstPeriod.trainings.first;
     // Make sure we're not in the initial waiting period
@@ -175,7 +204,7 @@ class ProgressData {
       // Check if we have moved to a new training (For dayly trainings, that would be the next day).
       final bool inNewTraining = (lastActiveTrainingsDiff != nowTrainingsDiff);
       if (inNewTraining) {
-        Map<String, dynamic> lastActiveMap = _getActiveData()!;
+        Map<String, dynamic> lastActiveMap = getActiveData()!;
         final Training lastActiveTraining = lastActiveMap["training"];
         lastActiveTraining.setResult();
 
@@ -195,29 +224,41 @@ class ProgressData {
 
       DatabaseHelper.instance.updateProgressData(this);
     }
-    return passedTime;
   }
 
   // Functions for interacting with the database
   Map<String, dynamic> toMap() {
     final map = Map<String, dynamic>();
 
+    List<Map> mapList = [];
+    for (final StepClass step in this.steps) {
+      mapList.add(step.toMap());
+    }
+
     map["lastActiveDate"] = lastActiveDate.toString();
     map["currentStartingDate"] = currentStartingDate.toString();
-    map["steps"] = jsonEncode(steps);
-
+    map["goal"] = goal;
+    map["steps"] = jsonEncode(mapList);
     return map;
   }
 
   factory ProgressData.fromMap(Map<String, dynamic> map) {
-    List<Step> jsonToList(String json) {
-      return [];
+    List<StepClass> jsonToStepList(String json) {
+      List<dynamic> dynamicList = jsonDecode(json);
+      List<StepClass> stepList = <StepClass>[];
+
+      for (final dynamic stepMap in dynamicList) {
+        stepList.add(StepClass.fromMap(stepMap));
+      }
+
+      return stepList;
     }
 
     return ProgressData(
       lastActiveDate: DateTime.parse(map["lastActiveDate"]),
       currentStartingDate: DateTime.parse(map["currentStartingDate"]),
-      steps: jsonToList(map["steps"]),
+      goal: map["goal"],
+      steps: jsonToStepList(map["steps"]),
     );
   }
 }

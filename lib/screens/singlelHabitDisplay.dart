@@ -117,17 +117,17 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
   Table _getStepTable(ProgressData progressData) {
     List<TableRow> tableRowList = [];
     final steps = this.habitPlan.steps;
-    final int currentStepIndex = getCurrentStepIndex(habitPlan, progressData);
+    //final int currentStepIndex = getCurrentStepIndex(habitPlan, progressData);
 
     for (int i = 0; i < steps.length; i++) {
       final int stepNr = i + 1;
 
       final TextStyle textStyle;
-      if ((i == currentStepIndex) && (habitPlan.isActive)) {
+      /* if ((i == currentStepIndex) && (habitPlan.isActive)) {
         textStyle = StyleData.boldTextStyle;
-      } else {
-        textStyle = StyleData.textStyle;
-      }
+      } else { */
+      textStyle = StyleData.textStyle;
+      //}
 
       tableRowList.add(
         TableRow(
@@ -194,25 +194,13 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
           // Update (and reset) older progressData
           ProgressData progressData =
               await DatabaseHelper.instance.getProgressData();
-          DateTime now = DateTime.now();
-
-          progressData.lastActiveDate = now;
-          progressData.currentStartingDate = DateTime(
+          final DateTime now = DateTime.now();
+          final DateTime startingDate = DateTime(
             now.year,
             now.month,
             now.day + 8 - now.weekday,
           );
-          progressData.completedReps = 0;
-          progressData.completedTrainings = 0;
-          progressData.completedTrainingPeriods = 0;
-
-          final int trainingNr =
-              DataShortcut.maxTrainings[habitPlan.trainingTimeIndex] *
-                  habitPlan.requiredTrainingPeriods *
-                  habitPlan.steps.length;
-          for (int i = 0; i < trainingNr; i++) {
-            progressData.trainingData.add("");
-          }
+          progressData.adaptToHabitPlan(startingDate, habitPlan);
           await DatabaseHelper.instance.updateProgressData(progressData);
 
           // Update the plan you're looking at to be active
