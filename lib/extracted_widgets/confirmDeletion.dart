@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:githo/extracted_data/fullDatabaseImport.dart';
 import 'package:githo/extracted_data/styleData.dart';
 import 'package:githo/helpers/databaseHelper.dart';
 import 'package:githo/models/habitPlanModel.dart';
@@ -40,8 +41,14 @@ class ConfirmDeletion extends StatelessWidget {
               "Delete",
               style: coloredTextStyle(Colors.red),
             ),
-            onPressed: () {
+            onPressed: () async {
               DatabaseHelper.instance.deleteHabitPlan(habitPlan.id!);
+
+              ProgressData progressData =
+                  await DatabaseHelper.instance.getProgressData();
+              progressData = ProgressData.emptyData();
+              DatabaseHelper.instance.updateProgressData(progressData);
+
               updateFunc();
               Navigator.pop(context);
               Navigator.pop(context);

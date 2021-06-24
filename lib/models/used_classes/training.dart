@@ -27,6 +27,13 @@ class Training {
     required this.status,
   });
 
+  void setDates(DateTime startingDate) {
+    this.startingDate = startingDate;
+    this.endingDate = startingDate.add(
+      Duration(hours: this.durationInHours),
+    );
+  }
+
   void incrementReps() {
     this.doneReps++;
     if (this.requiredReps == this.doneReps) {
@@ -39,12 +46,17 @@ class Training {
   }
 
   void setResult() {
-    if (this.status == "done") {
-      // If the training was finished in time
-      this.status = "successful";
+    if (this.status == "current") {
+      // If the training never was started
+      this.status = "";
     } else if (this.status == "active") {
       // If the training was started but never successfully finished
       this.status = "unsuccessful";
+    } else if (this.status == "done") {
+      // If the training was finished in time
+      this.status = "successful";
+    } else {
+      print("Unknown Status: ${this.status}");
     }
   }
 

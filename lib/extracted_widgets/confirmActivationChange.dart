@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:githo/extracted_data/styleData.dart';
-import 'package:githo/models/habitPlanModel.dart';
 
 class ConfirmActivationChange extends StatelessWidget {
   final String title;
   final String message;
-  final HabitPlan habitPlan;
   final Function confirmationFunc;
 
   const ConfirmActivationChange({
     required this.title,
     required this.message,
-    required this.habitPlan,
     required this.confirmationFunc,
   });
 

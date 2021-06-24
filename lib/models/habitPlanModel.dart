@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:githo/extracted_functions/jsonToList.dart';
 import 'package:githo/extracted_functions/typeExtentions.dart';
 
 class HabitPlan {
@@ -59,6 +58,16 @@ class HabitPlan {
   }
 
   factory HabitPlan.fromMap(Map<String, dynamic> map) {
+    List<String> jsonToStringList(String json) {
+      List<dynamic> dynamicList = jsonDecode(json);
+      List<String> stringList = [];
+
+      dynamicList.forEach((element) {
+        stringList.add(element);
+      });
+      return stringList;
+    }
+
     return HabitPlan.withId(
       id: map["id"],
       isActive: (map["isActive"] as int).intToBool(),

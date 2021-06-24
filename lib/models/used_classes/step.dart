@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:githo/extracted_data/dataShortcut.dart';
 import 'package:githo/models/habitPlanModel.dart';
-import 'package:githo/models/used_classes/training.dart';
 import 'package:githo/models/used_classes/trainingPeriod.dart';
 
 class StepClass {
@@ -44,26 +43,21 @@ class StepClass {
   void setChildrenDates(DateTime startingDate) {
     for (final TrainingPeriod trainingPeriod in this.trainingPeriods) {
       trainingPeriod.setChildrenDates(startingDate);
-      startingDate.add(Duration(hours: trainingPeriod.durationInHours));
+      startingDate =
+          startingDate.add(Duration(hours: trainingPeriod.durationInHours));
     }
   }
 
-  Training? getActiveTraining() {
-    for (final TrainingPeriod trainingPeriod in this.trainingPeriods) {
-      Training? training = trainingPeriod.getActiveTraining();
-      if (training != null) {
-        return training;
+  Map<String, dynamic>? getDataByDate(DateTime date) {
+    Map<String, dynamic>? map;
+    for (final trainingPeriod in this.trainingPeriods) {
+      map = trainingPeriod.getDataByDate(date);
+      if (map != null) {
+        map["step"] = this;
+        break;
       }
     }
-  }
-
-  Training? getTrainingByDate(DateTime date) {
-    for (final TrainingPeriod trainingPeriod in this.trainingPeriods) {
-      Training? training = trainingPeriod.getTrainingByDate(date);
-      if (training != null) {
-        return training;
-      }
-    }
+    return map;
   }
 
   void resetChildrenProgresses(int startingNumber) {
@@ -75,11 +69,13 @@ class StepClass {
   Map<String, dynamic>? getActiveData() {
     Map<String, dynamic>? result;
     for (final trainingPeriod in this.trainingPeriods) {
-      Map<String, dynamic>? tempResult = trainingPeriod.getActiveData();
-      if (tempResult != null) {
-        result = tempResult;
-        result["step"] = this;
-        break;
+      if (trainingPeriod.status == "active") {
+        Map<String, dynamic>? map = trainingPeriod.getActiveData();
+        if (map != null) {
+          result = map;
+          result["step"] = this;
+          break;
+        }
       }
     }
     return result;

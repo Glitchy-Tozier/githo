@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:githo/extracted_widgets/stepToDo.dart';
 
 import 'package:githo/helpers/timeHelper.dart';
 import 'package:githo/extracted_data/dataShortcut.dart';
@@ -6,7 +7,7 @@ import 'package:githo/extracted_data/fullDatabaseImport.dart';
 import 'package:githo/extracted_data/styleData.dart';
 
 import 'package:githo/extracted_widgets/headings.dart';
-import 'package:githo/extracted_widgets/toDoScreen.dart';
+import 'package:githo/models/used_classes/step.dart';
 
 import 'package:githo/screens/habitList.dart';
 
@@ -16,7 +17,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late Future<List<HabitPlan>> _habitPlan;
   late Future<ProgressData> _progressData;
 
   @override
@@ -27,12 +27,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _reloadScreen() {
     setState(() {
-      _habitPlan = DatabaseHelper.instance.getActiveHabitPlan();
       _progressData = DatabaseHelper.instance.getProgressData();
       if (DataShortcut.testing) {
         TimeHelper.instance.setTime(DateTime.now());
       }
-      //catchUpProgressData(_habitPlan, _progressData);
     });
   }
 
@@ -128,15 +126,23 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   } */
 
+  void incrementFunction() async {
+    final ProgressData progressData = await this._progressData;
+    progressData.incrementData();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder(
-        future: _habitPlan,
-        builder: (context, AsyncSnapshot<List<HabitPlan>> snapshot) {
+        future: _progressData,
+        builder: (context, AsyncSnapshot<ProgressData> snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
-              if (snapshot.data!.length == 0) {
+              ProgressData progressData = snapshot.data!;
+              if (progressData.isActive == false) {
+                /////////////////////////////////aCCHHAANNGGEEEEEEEEEEEEEEEEEEEE
                 // If connection is done but no habitPlan is active:
                 double screenHeight = MediaQuery.of(context).size.height;
                 return Container(
@@ -159,30 +165,23 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               } else {
                 // If connection is done and there is an active habitPlan:
-                HabitPlan habitPlan = snapshot.data![0];
-                return ToDoScreen(
-                  habitPlan: habitPlan,
-                  futureProgressData: _progressData,
+                progressData.updateTime();
+
+                List<Widget> toDoWidgets = [];
+                for (final StepClass step in progressData.steps) {
+                  toDoWidgets.add(
+                    StepToDo(step, incrementFunction),
+                  );
+                }
+                return ListView(
+                  children: [
+                    ScreenTitle(
+                      title: progressData.goal,
+                      //subTitle: getStatusString(progressData),
+                    ),
+                    ...toDoWidgets,
+                  ],
                 );
-                //return _getToDoScreen(habitPlan);
-                /* return FutureBuilder(
-                  future: this._progressData,
-                  builder: (context, AsyncSnapshot<ProgressData> snapshot) {
-                    if (snapshot.hasData) {
-                      final ProgressData progressData = snapshot.data!;
-
-                      final int stepIndex =
-                          getCurrentStepIndex(habitPlan, progressData);
-                      final String currentStep = habitPlan.steps[stepIndex];
-
-                      return SizedBox();
-                    } else {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                  },
-                ); */
               }
             } else if (snapshot.hasError) {
               // If connection is done but there was an error:
@@ -234,37 +233,29 @@ class _HomeScreenState extends State<HomeScreen> {
                     splashColor: Colors.purple,
                     elevation: 0,
                     onPressed: () async {
-                      final List<HabitPlan> habitPlanList = (await _habitPlan);
-                      if (habitPlanList.length > 0) {
-                        final HabitPlan habitPlan = habitPlanList[0];
-                        final int timeIndex = habitPlan.trainingTimeIndex;
-                        final DateTime changedTime =
-                            TimeHelper.instance.getTime.add(
-                          Duration(
-                            hours:
-                                DataShortcut.trainingDurationInHours[timeIndex],
-                          ),
-                        );
-                        TimeHelper.instance.setTime(changedTime);
-                        //catchUpProgressData(_habitPlan, _progressData);
-                      }
+                      final ProgressData progressData = await _progressData;
+                      TimeHelper.instance.timeTravel(progressData);
+
+                      print("Start ${progressData.currentStartingDate}");
+                      print("Last  ${progressData.lastActiveDate}");
+                      print("Now   ${TimeHelper.instance.getTime}");
+
                       setState(() {});
                     },
                   )
                 : SizedBox(),
             FutureBuilder(
-              future: this._habitPlan,
-              builder: (context, AsyncSnapshot<List<HabitPlan>> snapshot) {
+              future: this._progressData,
+              builder: (context, AsyncSnapshot<ProgressData> snapshot) {
                 if (snapshot.hasData) {
-                  if (snapshot.data!.length > 0) {
-                    final HabitPlan habitPlan = snapshot.data![0];
+                  final ProgressData progressData = snapshot.data!;
+                  if (progressData.isActive) {
                     return FloatingActionButton(
                       tooltip: "Mark step as done",
                       child: Icon(Icons.done),
                       heroTag: null,
-                      onPressed: () async {
-                        //catchUpProgressData(_habitPlan, _progressData);
-                        //incrementProgressData(habitPlan, await _progressData);
+                      onPressed: () {
+                        progressData.incrementData();
                         setState(() {});
                       },
                     );

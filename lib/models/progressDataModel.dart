@@ -1,20 +1,26 @@
 import 'dart:convert';
 
+import 'package:githo/extracted_functions/typeExtentions.dart';
+
 import 'package:githo/helpers/timeHelper.dart';
-import 'package:githo/extracted_functions/jsonToList.dart';
 import 'package:githo/helpers/databaseHelper.dart';
+
 import 'package:githo/models/habitPlanModel.dart';
+
 import 'package:githo/models/used_classes/step.dart';
 import 'package:githo/models/used_classes/training.dart';
 import 'package:githo/models/used_classes/trainingPeriod.dart';
 
 class ProgressData {
+  bool isActive;
   DateTime lastActiveDate;
   DateTime currentStartingDate;
   String goal;
   List<StepClass> steps;
 
+  // Constructors
   ProgressData({
+    required this.isActive,
     required this.currentStartingDate,
     required this.lastActiveDate,
     required this.goal,
@@ -23,6 +29,7 @@ class ProgressData {
 
   factory ProgressData.emptyData() {
     return ProgressData(
+      isActive: false,
       lastActiveDate: TimeHelper.instance.getTime,
       currentStartingDate: TimeHelper.instance.getTime,
       goal: "",
@@ -31,18 +38,23 @@ class ProgressData {
   }
 
   void adaptToHabitPlan(DateTime startingDate, HabitPlan habitPlan) {
+    this.isActive = true;
     this.lastActiveDate = TimeHelper.instance.getTime;
     this.currentStartingDate = startingDate;
     this.goal = habitPlan.goal;
     this.steps = [];
     for (int i = 0; i < habitPlan.steps.length; i++) {
       this.steps.add(
-            StepClass(stepIndex: i, habitPlan: habitPlan),
+            StepClass(
+              stepIndex: i,
+              habitPlan: habitPlan,
+            ),
           );
     }
-    _setTrainingDates();
+    _setDates();
   }
 
+  // Regularly used functions
   bool get _hasStarted {
     return (TimeHelper.instance.getTime.isAfter(this.currentStartingDate));
   }
@@ -63,12 +75,48 @@ class ProgressData {
     return duration;
   }
 
-  // Regularly used functions
-  void incrementData() {
-    Training? currentTraining = _getActiveTraining();
-    if (currentTraining != null) {
-      currentTraining.incrementReps();
+  int get trainingsPerPeriod {
+    final int trainingCount = this.steps[0].trainingPeriods[0].trainings.length;
+    return trainingCount;
+  }
+
+  bool _inNewTraining() {
+    final bool inNewTraining;
+
+    Map<String, dynamic>? activeMap = getActiveData();
+    if (activeMap == null) {
+      inNewTraining = true;
+    } else {
+      final DateTime now = TimeHelper.instance.getTime;
+
+      Training activeTraining = activeMap["training"];
+      Training currentTraining = _getDataByDate(now)!["training"];
+
+      if (activeTraining != currentTraining) {
+        inNewTraining = inNewTraining = true;
+      } else {
+        inNewTraining = false;
+      }
     }
+    return inNewTraining;
+  }
+
+  int _getPassedTrainingPeriods({
+    required DateTime startingDate,
+    required DateTime endingDate,
+  }) {
+    final int hoursPassed = endingDate.difference(startingDate).inHours;
+    final int trainingsPassed =
+        (hoursPassed / this.trainingPeriodDurationInHours).floor();
+
+    return trainingsPassed;
+  }
+
+  void incrementData() {
+    final Training currentTraining = getActiveData()!["training"];
+    currentTraining.incrementReps();
+
+    updateTime();
     DatabaseHelper.instance.updateProgressData(this);
   }
 
@@ -81,22 +129,13 @@ class ProgressData {
     }
   }
 
-  Training? _getActiveTraining() {
-    for (final StepClass step in this.steps) {
-      Training? training = step.getActiveTraining();
-      if (training != null) {
-        return training;
-      }
-    }
-  }
-
   Map<String, int> _penalizeInactivity(
     Map<String, dynamic> lastActiveMap,
-    int inactivePeriods,
+    int penalty,
   ) {
-    int newStep = lastActiveMap["step"];
-    int newPeriod = lastActiveMap["trainingPeriod"];
-    for (int i = 0; i < inactivePeriods - 1; i++) {
+    int newStep = (lastActiveMap["step"] as StepClass).number;
+    int newPeriod = (lastActiveMap["trainingPeriod"] as TrainingPeriod).number;
+    for (int i = 0; i < -penalty; i++) {
       if (newPeriod > 1) {
         newPeriod--;
       } else {
@@ -119,14 +158,15 @@ class ProgressData {
     DateTime newStartingDate = this.currentStartingDate;
     DateTime now = TimeHelper.instance.getTime;
     while (5 < 4) {
-      print("A WEEK HAS PASSED");
       if (newStartingDate.isBefore(now)) {
+        print("A WEEK HAS PASSED");
         newStartingDate.add(
           Duration(
             hours: this.stepDurationInHours,
           ),
         );
       } else {
+        print("Wait, no.");
         newStartingDate.subtract(
           Duration(
             hours: this.stepDurationInHours,
@@ -138,38 +178,41 @@ class ProgressData {
     return newStartingDate;
   }
 
-  void _setTrainingDates(
+  void _setDates(
       [Map<String, int> startingTrainingPeriodData = const {
         "step": 1,
         "trainingPeriod": 1
       }]) {
-    if (this._hasStarted) {
-      final int startingStepNr = startingTrainingPeriodData["step"]!;
-      final int startingPeriodNr =
-          startingTrainingPeriodData["trainingPeriod"]!;
-      DateTime startingDate = _getStartingDate();
-      if (startingPeriodNr > 1) {
-        final int extraPeriods = startingPeriodNr - 1;
-        for (int i = 0; i < extraPeriods; i++) {
-          startingDate.add(
-            Duration(
-              hours: this.trainingPeriodDurationInHours,
-            ),
-          );
-        }
+    final int startingStepNr = startingTrainingPeriodData["step"]!;
+    final int startingPeriodNr = startingTrainingPeriodData["trainingPeriod"]!;
+    DateTime startingDate = _getStartingDate();
+
+    // Update starting date
+    this.currentStartingDate = startingDate;
+
+    // Set dates for all the trainings
+    if (startingPeriodNr > 1) {
+      final int extraPeriods = startingPeriodNr - 1;
+      for (int i = 0; i < extraPeriods; i++) {
+        startingDate.add(
+          Duration(
+            hours: this.trainingPeriodDurationInHours,
+          ),
+        );
       }
-      for (final step in this.steps.sublist(startingStepNr - 1)) {
-        step.setChildrenDates(startingDate);
-        startingDate.add(Duration(hours: step.durationInHours));
-      }
+    }
+    for (final StepClass step in this.steps.sublist(startingStepNr - 1)) {
+      step.setChildrenDates(startingDate);
+      startingDate = startingDate.add(Duration(hours: step.durationInHours));
     }
   }
 
-  Training? _getTrainingByDate(DateTime date) {
+  Map<String, dynamic>? _getDataByDate(DateTime date) {
+    Map<String, dynamic>? map = {};
     for (final StepClass step in this.steps) {
-      Training? training = step.getTrainingByDate(date);
-      if (training != null) {
-        return training;
+      map = step.getDataByDate(date);
+      if (map != null) {
+        return map;
       }
     }
   }
@@ -182,48 +225,80 @@ class ProgressData {
     }
   }
 
-  void updateTime() {
-    final DateTime currentDate = TimeHelper.instance.getTime;
+  void _analyzePassedTime() {
+    Map<String, dynamic> lastActiveMap = getActiveData()!;
+    final Training lastActiveTraining = lastActiveMap["training"];
+    lastActiveTraining.setResult();
+    print("lastNr ${lastActiveTraining.number}");
+    print("LastSt ${lastActiveTraining.status}");
 
-    final StepClass firstStep = this.steps.first;
-    final TrainingPeriod firstPeriod = firstStep.trainingPeriods.first;
-    final Training firstTraining = firstPeriod.trainings.first;
-    // Make sure we're not in the initial waiting period
-    if (this._hasStarted) {
-      // Get the number of trainings passed since {insert first date} (for dayly trainings days)
-      final int lastActiveDiffHours =
-          this.lastActiveDate.difference(currentStartingDate).inHours;
-      final int lastActiveTrainingsDiff =
-          (lastActiveDiffHours / firstTraining.durationInHours).floor();
+    // Calculate the number of trainingPeriods passed. For dayly trainings, that would be how many weeks have passed.
+    final DateTime now = TimeHelper.instance.getTime;
+    final int passedTrainingPeriods = _getPassedTrainingPeriods(
+      startingDate: this.currentStartingDate,
+      endingDate: now,
+    );
+    int periodMoveCounter = 0;
+    print("\n\n\n\n\n");
+    print(this.currentStartingDate);
+    for (int i = 0; i < passedTrainingPeriods; i++) {
+      TrainingPeriod passedPeriod = lastActiveMap["trainingPeriod"];
+      passedPeriod.validate();
 
-      final int nowDiffHours =
-          currentDate.difference(currentStartingDate).inHours;
-      final int nowTrainingsDiff =
-          (nowDiffHours / firstTraining.durationInHours).floor();
-
-      // Check if we have moved to a new training (For dayly trainings, that would be the next day).
-      final bool inNewTraining = (lastActiveTrainingsDiff != nowTrainingsDiff);
-      if (inNewTraining) {
-        Map<String, dynamic> lastActiveMap = getActiveData()!;
-        final Training lastActiveTraining = lastActiveMap["training"];
-        lastActiveTraining.setResult();
-
-        // Calculate the number of trainingPeriods passed. For dayly trainings, that would be how many weeks have passed.
-        final int passedTrainingPeriods =
-            (nowTrainingsDiff / firstPeriod.trainings.length).floor();
-        if (passedTrainingPeriods == 1) {
+      if (i == 0) {
+        if (passedPeriod.status == "successful") {
+          periodMoveCounter++;
         } else {
-          Map<String, int> newTrainingPeriodPosition =
-              _penalizeInactivity(lastActiveMap, passedTrainingPeriods);
-          _setTrainingDates(newTrainingPeriodPosition);
-          Training firstTrainingToReset =
-              _getTrainingByDate(this.currentStartingDate)!;
-          _resetTrainingProgresses(firstTrainingToReset);
+          periodMoveCounter--;
         }
+      } else {
+        periodMoveCounter--;
       }
-
-      DatabaseHelper.instance.updateProgressData(this);
     }
+    print(periodMoveCounter);
+    print("\n\n\n\n\n");
+
+    if (periodMoveCounter <= 0) {
+      // No need for the initial validation as the training period will be reset anyways
+      Map<String, int> newTrainingPeriodPosition =
+          _penalizeInactivity(lastActiveMap, periodMoveCounter);
+
+      _setDates(newTrainingPeriodPosition);
+
+      print(this.currentStartingDate);
+      Training firstTrainingToReset =
+          _getDataByDate(this.currentStartingDate)!["training"];
+
+      _resetTrainingProgresses(firstTrainingToReset);
+    }
+  }
+
+  void _moveToCurrentTraining() {
+    Map<String, dynamic> currentData =
+        _getDataByDate(TimeHelper.instance.getTime)!;
+
+    Training currentTraining = currentData["training"];
+    currentTraining.status = "current";
+
+    TrainingPeriod currentPeriod = currentData["trainingPeriod"];
+    currentPeriod.status = "active";
+  }
+
+  void updateTime() {
+    print(this._hasStarted);
+    print(_inNewTraining());
+    if (this._hasStarted && _inNewTraining()) {
+      if (getActiveData() == null) {
+        // No complicated calculations necessary.
+        _setDates();
+      } else {
+        // Analyze what happened since last time opening the app
+        _analyzePassedTime();
+      }
+      // Activate the next Training/TrainingPeriod
+      _moveToCurrentTraining();
+    }
+    DatabaseHelper.instance.updateProgressData(this);
   }
 
   // Functions for interacting with the database
@@ -235,6 +310,7 @@ class ProgressData {
       mapList.add(step.toMap());
     }
 
+    map["isActive"] = isActive.boolToInt();
     map["lastActiveDate"] = lastActiveDate.toString();
     map["currentStartingDate"] = currentStartingDate.toString();
     map["goal"] = goal;
@@ -255,6 +331,7 @@ class ProgressData {
     }
 
     return ProgressData(
+      isActive: (map["isActive"] as int).intToBool(),
       lastActiveDate: DateTime.parse(map["lastActiveDate"]),
       currentStartingDate: DateTime.parse(map["currentStartingDate"]),
       goal: map["goal"],

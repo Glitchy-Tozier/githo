@@ -1,4 +1,5 @@
 import 'package:githo/extracted_data/dataShortcut.dart';
+import 'package:githo/models/progressDataModel.dart';
 
 class TimeHelper {
   static final TimeHelper instance = TimeHelper._instance();
@@ -16,5 +17,13 @@ class TimeHelper {
     } else {
       return DateTime.now();
     }
+  }
+
+  void timeTravel(ProgressData progressData) {
+    testingTime = testingTime.add(
+      Duration(
+        hours: progressData.trainingDurationInHours,
+      ),
+    );
   }
 }

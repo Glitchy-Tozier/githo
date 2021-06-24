@@ -1,17 +1,14 @@
 import 'package:githo/helpers/timeHelper.dart';
-import 'package:githo/extracted_data/dataShortcut.dart';
-import 'package:githo/extracted_functions/typeExtentions.dart';
 
-import 'package:githo/models/habitPlanModel.dart';
 import 'package:githo/models/progressDataModel.dart';
 import 'package:githo/models/used_classes/step.dart';
 import 'package:githo/models/used_classes/trainingPeriod.dart';
 
-String getStatusString(HabitPlan habitPlan, ProgressData progressData) {
+String getStatusString(ProgressData progressData) {
   // Used in the title of some screens.
   String subTitle;
 
-  if (habitPlan.isActive) {
+  if (progressData.steps.length > 0) {
     if (TimeHelper.instance.getTime
         .isBefore(progressData.currentStartingDate)) {
       subTitle = "Status: Preparing";
@@ -24,12 +21,8 @@ String getStatusString(HabitPlan habitPlan, ProgressData progressData) {
       if (trainingPeriodCount == 1) {
         subTitle = "Status: Step $stepNr";
       } else {
-        final String timeFrameText = DataShortcut
-            .timeFrames[habitPlan.trainingTimeIndex + 1]
-            .capitalize();
-
         subTitle =
-            "Step $stepNr – $timeFrameText ${activePeriod.number}/$trainingPeriodCount";
+            "Step $stepNr – ${activePeriod.durationText} ${activePeriod.number}/$trainingPeriodCount";
       }
     }
   } else {

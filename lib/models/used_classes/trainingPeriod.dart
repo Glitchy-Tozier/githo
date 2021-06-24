@@ -2,12 +2,15 @@ import 'dart:convert';
 
 import 'package:githo/extracted_data/dataShortcut.dart';
 import 'package:githo/extracted_data/fullDatabaseImport.dart';
+import 'package:githo/extracted_functions/typeExtentions.dart';
 import 'package:githo/models/used_classes/training.dart';
 
 class TrainingPeriod {
   late int number;
   late int durationInHours;
+  late String durationText;
   late int requiredTrainings;
+  String status = "";
   late List<Training> trainings;
 
   TrainingPeriod({
@@ -20,6 +23,8 @@ class TrainingPeriod {
     final int trainingTimeIndex = habitPlan.trainingTimeIndex;
     this.durationInHours =
         DataShortcut.periodDurationInHours[trainingTimeIndex];
+    this.durationText =
+        DataShortcut.timeFrames[trainingTimeIndex + 1].capitalize();
 
     // Get required trainings
     this.requiredTrainings = habitPlan.requiredTrainings;
@@ -41,32 +46,34 @@ class TrainingPeriod {
   TrainingPeriod.withDirectValues({
     required this.number,
     required this.durationInHours,
+    required this.durationText,
     required this.requiredTrainings,
+    required this.status,
     required this.trainings,
   });
 
   void setChildrenDates(DateTime startingDate) {
     for (final training in this.trainings) {
-      training.startingDate = startingDate;
-      startingDate.add(Duration(hours: training.durationInHours));
+      training.setDates(startingDate);
+      startingDate =
+          startingDate.add(Duration(hours: training.durationInHours));
     }
   }
 
-  Training? getActiveTraining() {
-    for (final Training training in this.trainings) {
-      if ((training.status == "active") || (training.status == "done")) {
-        return training;
-      }
-    }
-  }
+  Map<String, dynamic>? getDataByDate(DateTime date) {
+    Map<String, dynamic>? result;
 
-  Training? getTrainingByDate(date) {
-    for (final Training training in this.trainings) {
-      if (training.startingDate.isBefore(date) &&
+    for (final training in this.trainings) {
+      if ((training.startingDate.isAtSameMomentAs(date) ||
+              training.startingDate.isBefore(date)) &&
           training.endingDate.isAfter(date)) {
-        return training;
+        result = Map<String, dynamic>();
+        result["training"] = training;
+        result["trainingPeriod"] = this;
+        break;
       }
     }
+    return result;
   }
 
   void resetTrainingProgresses(int startingNumber) {
@@ -76,6 +83,22 @@ class TrainingPeriod {
         training.doneReps = 0;
       }
     }
+  }
+
+  Map<String, dynamic>? getActiveData() {
+    Map<String, dynamic>? result;
+
+    for (final training in this.trainings) {
+      if (training.status == "current" ||
+          training.status == "active" ||
+          training.status == "done") {
+        result = Map<String, dynamic>();
+        result["training"] = training;
+        result["trainingPeriod"] = this;
+        break;
+      }
+    }
+    return result;
   }
 
   bool wasSuccessful() {
@@ -91,18 +114,12 @@ class TrainingPeriod {
     return result;
   }
 
-  Map<String, dynamic>? getActiveData() {
-    Map<String, dynamic>? result;
-
-    for (final training in this.trainings) {
-      if (training.status == "active" || training.status == "done") {
-        result = Map<String, dynamic>();
-        result["training"] = training;
-        result["trainingPeriod"] = this;
-        break;
-      }
+  void validate() {
+    if (wasSuccessful()) {
+      this.status = "successful";
+    } else {
+      this.status = "unsuccessful";
     }
-    return result;
   }
 
   Map<String, dynamic> toMap() {
@@ -115,7 +132,9 @@ class TrainingPeriod {
 
     map["number"] = this.number;
     map["durationInHours"] = this.durationInHours;
+    map["durationText"] = this.durationText;
     map["requiredTrainings"] = this.requiredTrainings;
+    map["status"] = this.status;
     map["trainings"] = jsonEncode(mapList);
     return map;
   }
@@ -135,7 +154,9 @@ class TrainingPeriod {
     return TrainingPeriod.withDirectValues(
       number: map["number"],
       durationInHours: map["durationInHours"],
+      durationText: map["durationText"],
       requiredTrainings: map["requiredTrainings"],
+      status: map["status"],
       trainings: jsonToList(map["trainings"]),
     );
   }

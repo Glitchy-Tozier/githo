@@ -8,7 +8,7 @@ import 'package:githo/extracted_functions/editHabitRoutes.dart';
 import 'package:githo/extracted_widgets/headings.dart';
 import 'package:githo/extracted_widgets/screenEndingSpacer.dart';
 
-import 'package:githo/screens/singlelHabitDisplay.dart';
+import 'package:githo/screens/habitDetails.dart';
 
 class HabitList extends StatefulWidget {
   final Function updateFunction;

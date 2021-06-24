@@ -5,8 +5,6 @@ import 'package:githo/extracted_data/fullDatabaseImport.dart';
 import 'package:githo/extracted_data/styleData.dart';
 
 import 'package:githo/extracted_functions/editHabitRoutes.dart';
-import 'package:githo/extracted_functions/getCurrentStepIndex.dart';
-import 'package:githo/extracted_functions/getStatusString.dart';
 
 import 'package:githo/extracted_widgets/bulletPoint.dart';
 import 'package:githo/extracted_widgets/confirmActivationChange.dart';
@@ -165,6 +163,11 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
         void okayFunc() async {
           this.habitPlan.isActive = false;
           await DatabaseHelper.instance.updateHabitPlan(this.habitPlan);
+
+          ProgressData progressData = await this._progressData;
+          progressData = ProgressData.emptyData();
+          await DatabaseHelper.instance.updateProgressData(progressData);
+
           updatePrevScreens();
           Navigator.pop(context);
         }
@@ -174,7 +177,6 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
           builder: (BuildContext buildContext) => ConfirmActivationChange(
             title: "Confirm Deactivation",
             message: "",
-            habitPlan: habitPlan,
             confirmationFunc: okayFunc,
           ),
         );
@@ -218,7 +220,6 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
           builder: (BuildContext buildContext) => ConfirmActivationChange(
             title: "Confirm Activation",
             message: "",
-            habitPlan: habitPlan,
             confirmationFunc: okayFunc,
           ),
         );
@@ -274,7 +275,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
                 children: [
                   ScreenTitle(
                     title: habitPlan.goal,
-                    subTitle: getStatusString(this.habitPlan, progressData),
+                    //subTitle: getStatusString(progressData),
                   ),
                   Heading1("Rules"),
                   ..._getRuleWidgets(),

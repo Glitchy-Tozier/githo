@@ -27,6 +27,7 @@ class DatabaseHelper {
   static const String colRequiredTrainingPeriods = "requiredTrainingPeriods";
   static const String colLastChanged = "lastChanged";
 
+  static const String colProgIsActive = "isActive";
   static const String progressDataTable = "progressDataTable";
   static const String colLastActiveDate = "lastActiveDate";
   static const String colCurrentStartingDate = "currentStartingDate";
@@ -96,6 +97,7 @@ class DatabaseHelper {
     commandString = "";
     commandString += "CREATE TABLE $progressDataTable";
     commandString += "(";
+    commandString += "$colProgIsActive INTEGER, ";
     commandString += "$colLastActiveDate TEXT, ";
     commandString += "$colCurrentStartingDate TEXT, ";
     /* commandString += "$colCompletedReps INTEGER, ";
