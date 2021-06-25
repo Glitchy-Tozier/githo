@@ -5,12 +5,14 @@ import 'package:githo/models/habitPlanModel.dart';
 import 'package:githo/models/used_classes/trainingPeriod.dart';
 
 class StepClass {
-  late int number;
+  late int index; // first: int 0
+  late int number; // first: int 1
   late String text;
   late int durationInHours;
   late List<TrainingPeriod> trainingPeriods;
 
   StepClass({required int stepIndex, required HabitPlan habitPlan}) {
+    this.index = stepIndex;
     this.number = stepIndex + 1;
     this.text = habitPlan.steps[stepIndex];
 
@@ -34,11 +36,35 @@ class StepClass {
     }
   }
   StepClass.withDirectValues({
+    required this.index,
     required this.number,
     required this.text,
     required this.durationInHours,
     required this.trainingPeriods,
   });
+
+  int? get _activePeriodIndex {
+    for (final TrainingPeriod trainingPeriod in this.trainingPeriods) {
+      if (trainingPeriod.status == "active") {
+        return trainingPeriod.index;
+      }
+    }
+    return this.trainingPeriods.length - 1;
+  }
+
+  int regressPeriods(int periodRegressionCount) {
+    int activePeriodIndex = this._activePeriodIndex!;
+
+    for (int i = 0; i < periodRegressionCount; i++) {
+      this.trainingPeriods[activePeriodIndex].reset();
+      if (activePeriodIndex == 0) {
+        return periodRegressionCount - 1;
+      } else {
+        activePeriodIndex--;
+      }
+    }
+    return 0;
+  }
 
   void setChildrenDates(DateTime startingDate) {
     for (final TrainingPeriod trainingPeriod in this.trainingPeriods) {
@@ -82,17 +108,17 @@ class StepClass {
   }
 
   Map<String, dynamic> toMap() {
-    Map<String, dynamic> map = {};
-    List<Map<String, dynamic>> mapList = [];
-
+    List<Map<String, dynamic>> trainingPeriodList = [];
     for (int i = 0; i < this.trainingPeriods.length; i++) {
-      mapList.add(this.trainingPeriods[i].toMap());
+      trainingPeriodList.add(this.trainingPeriods[i].toMap());
     }
 
+    Map<String, dynamic> map = {};
+    map["index"] = this.index;
     map["number"] = this.number;
     map["text"] = this.text;
     map["durationInHours"] = this.durationInHours;
-    map["trainingPeriods"] = jsonEncode(mapList);
+    map["trainingPeriods"] = jsonEncode(trainingPeriodList);
     return map;
   }
 
@@ -109,6 +135,7 @@ class StepClass {
     }
 
     return StepClass.withDirectValues(
+      index: map["index"],
       number: map["number"],
       text: map["text"],
       durationInHours: map["durationInHours"],

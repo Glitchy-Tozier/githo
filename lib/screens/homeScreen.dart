@@ -126,9 +126,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   } */
 
-  void incrementFunction() async {
+  void updateDbAndScreen() async {
     final ProgressData progressData = await this._progressData;
-    progressData.incrementData();
     setState(() {});
   }
 
@@ -170,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 List<Widget> toDoWidgets = [];
                 for (final StepClass step in progressData.steps) {
                   toDoWidgets.add(
-                    StepToDo(step, incrementFunction),
+                    StepToDo(step, updateDbAndScreen),
                   );
                 }
                 return ListView(
@@ -255,8 +254,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Icon(Icons.done),
                       heroTag: null,
                       onPressed: () {
-                        progressData.incrementData();
-                        setState(() {});
+                        //progressData.incrementData();
+                        //setState(() {});
                       },
                     );
                   }

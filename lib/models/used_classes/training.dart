@@ -42,7 +42,14 @@ class Training {
   }
 
   void activate() {
-    this.status = "active";
+    if (this.status == "current") {
+      this.status = "active";
+    }
+  }
+
+  void reset() {
+    this.doneReps = 0;
+    this.status = "";
   }
 
   void setResult() {

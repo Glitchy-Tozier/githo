@@ -6,8 +6,8 @@ import 'package:githo/models/used_classes/trainingPeriod.dart';
 
 class StepToDo extends StatelessWidget {
   final StepClass step;
-  final Function incrementTraining;
-  const StepToDo(this.step, this.incrementTraining);
+  final Function updateFunction;
+  const StepToDo(this.step, this.updateFunction);
 
   final double cardWidth = 100;
   final double activeCardWidth = 130;
@@ -40,7 +40,7 @@ class StepToDo extends StatelessWidget {
         cardRowHeight = rowHeight;
         for (final Training training in trainingPeriod.trainings) {
           final Color color;
-          if (training.status == "succesful") {
+          if (training.status == "successful") {
             color = Colors.green;
           } else if (training.status == "unsuccessful") {
             color = Colors.red;
@@ -48,8 +48,7 @@ class StepToDo extends StatelessWidget {
             color = Colors.grey;
           }
           listViewChildren.add(
-            Align(
-              alignment: Alignment.topLeft,
+            Center(
               child: SizedBox(
                 width: cardWidth,
                 height: cardHeight,
@@ -70,15 +69,18 @@ class StepToDo extends StatelessWidget {
       } else if (trainingPeriod.status == "active") {
         cardRowHeight = activeRowHeight;
         for (final Training training in trainingPeriod.trainings) {
-          if (training.status == "current" || training.status == "active") {
+          if (training.status == "current" ||
+              training.status == "active" ||
+              training.status == "done") {
             listViewChildren.add(
-              Align(
-                alignment: Alignment.topLeft,
+              Center(
                 child: SizedBox(
                   width: cardWidth + 40,
                   height: cardHeight + 40,
                   child: Card(
-                    color: Colors.white,
+                    color: (training.status == "done")
+                        ? Colors.pink
+                        : Colors.white,
                     child: Ink(
                       child: InkWell(
                         child: Text(
@@ -86,7 +88,8 @@ class StepToDo extends StatelessWidget {
                         splashColor: Colors.purple,
                         onTap: () {
                           training.activate();
-                          incrementTraining();
+                          training.incrementReps();
+                          updateFunction();
                         },
                       ),
                     ),
@@ -100,15 +103,12 @@ class StepToDo extends StatelessWidget {
               color = Colors.green;
             } else if (training.status == "unsuccessful") {
               color = Colors.red;
-            } else if (training.status == "done") {
-              color = Colors.pink;
             } else {
               color = Colors.grey;
             }
 
             listViewChildren.add(
-              Align(
-                alignment: Alignment.topLeft,
+              Center(
                 child: SizedBox(
                   width: cardWidth,
                   height: cardHeight,
@@ -131,8 +131,7 @@ class StepToDo extends StatelessWidget {
         cardRowHeight = rowHeight;
         for (final Training training in trainingPeriod.trainings) {
           listViewChildren.add(
-            Align(
-              alignment: Alignment.topLeft,
+            Center(
               child: SizedBox(
                 width: cardWidth,
                 height: cardHeight,

@@ -6,6 +6,7 @@ import 'package:githo/extracted_functions/typeExtentions.dart';
 import 'package:githo/models/used_classes/training.dart';
 
 class TrainingPeriod {
+  late int index;
   late int number;
   late int durationInHours;
   late String durationText;
@@ -17,6 +18,7 @@ class TrainingPeriod {
     required int trainingPeriodIndex,
     required HabitPlan habitPlan,
   }) {
+    this.index = trainingPeriodIndex;
     this.number = trainingPeriodIndex + 1;
 
     // Calculate the duration
@@ -44,6 +46,7 @@ class TrainingPeriod {
   }
 
   TrainingPeriod.withDirectValues({
+    required this.index,
     required this.number,
     required this.durationInHours,
     required this.durationText,
@@ -76,6 +79,16 @@ class TrainingPeriod {
     return result;
   }
 
+  void reset() {
+    // Reset self
+    this.status = "";
+
+    // Reset trainings
+    for (final Training training in this.trainings) {
+      training.reset();
+    }
+  }
+
   void resetTrainingProgresses(int startingNumber) {
     for (final Training training in this.trainings) {
       if (training.number >= startingNumber) {
@@ -101,7 +114,7 @@ class TrainingPeriod {
     return result;
   }
 
-  bool wasSuccessful() {
+  bool get wasSuccessful {
     final bool result;
     int successfulTrainings = 0;
 
@@ -114,28 +127,25 @@ class TrainingPeriod {
     return result;
   }
 
-  void validate() {
-    if (wasSuccessful()) {
-      this.status = "successful";
-    } else {
-      this.status = "unsuccessful";
-    }
+  void setResult() {
+    this.status = "completed";
   }
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = {};
-    List<Map<String, dynamic>> mapList = [];
+    List<Map<String, dynamic>> trainingMapList = [];
 
     for (int i = 0; i < this.trainings.length; i++) {
-      mapList.add(this.trainings[i].toMap());
+      trainingMapList.add(this.trainings[i].toMap());
     }
 
+    map["index"] = this.index;
     map["number"] = this.number;
     map["durationInHours"] = this.durationInHours;
     map["durationText"] = this.durationText;
     map["requiredTrainings"] = this.requiredTrainings;
     map["status"] = this.status;
-    map["trainings"] = jsonEncode(mapList);
+    map["trainings"] = jsonEncode(trainingMapList);
     return map;
   }
 
@@ -152,6 +162,7 @@ class TrainingPeriod {
     }
 
     return TrainingPeriod.withDirectValues(
+      index: map["index"],
       number: map["number"],
       durationInHours: map["durationInHours"],
       durationText: map["durationText"],
