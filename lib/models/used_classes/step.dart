@@ -44,9 +44,10 @@ class StepClass {
   });
 
   int? get _activePeriodIndex {
-    for (final TrainingPeriod trainingPeriod in this.trainingPeriods) {
+    for (int i = 0; i < this.trainingPeriods.length; i++) {
+      final TrainingPeriod trainingPeriod = this.trainingPeriods[i];
       if (trainingPeriod.status == "active") {
-        return trainingPeriod.index;
+        return i;
       }
     }
     return this.trainingPeriods.length - 1;
@@ -55,23 +56,30 @@ class StepClass {
   int regressPeriods(int periodRegressionCount) {
     int activePeriodIndex = this._activePeriodIndex!;
 
-    for (int i = 0; i < periodRegressionCount; i++) {
+    while (periodRegressionCount > 0) {
       this.trainingPeriods[activePeriodIndex].reset();
       if (activePeriodIndex == 0) {
         return periodRegressionCount - 1;
       } else {
         activePeriodIndex--;
+        periodRegressionCount--;
       }
     }
     return 0;
   }
 
-  void setChildrenDates(DateTime startingDate) {
-    for (final TrainingPeriod trainingPeriod in this.trainingPeriods) {
+  DateTime setChildrenDates(DateTime startingDate, int startingPeriodIdx) {
+    final startingPeriodListIdx =
+        startingPeriodIdx.remainder(this.trainingPeriods.length);
+
+    for (int i = startingPeriodListIdx; i < this.trainingPeriods.length; i++) {
+      final TrainingPeriod trainingPeriod = this.trainingPeriods[i];
+
       trainingPeriod.setChildrenDates(startingDate);
       startingDate =
           startingDate.add(Duration(hours: trainingPeriod.durationInHours));
     }
+    return startingDate;
   }
 
   Map<String, dynamic>? getDataByDate(DateTime date) {

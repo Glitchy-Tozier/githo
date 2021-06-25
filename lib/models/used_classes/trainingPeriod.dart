@@ -118,11 +118,11 @@ class TrainingPeriod {
     final bool result;
     int successfulTrainings = 0;
 
-    this.trainings.forEach((Training training) {
-      if (training.doneReps == training.requiredReps) {
+    for (final Training training in this.trainings) {
+      if (training.status == "successful") {
         successfulTrainings++;
       }
-    });
+    }
     result = (successfulTrainings >= requiredTrainings);
     return result;
   }

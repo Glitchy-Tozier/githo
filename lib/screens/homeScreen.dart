@@ -141,7 +141,6 @@ class _HomeScreenState extends State<HomeScreen> {
             if (snapshot.hasData) {
               ProgressData progressData = snapshot.data!;
               if (progressData.isActive == false) {
-                /////////////////////////////////aCCHHAANNGGEEEEEEEEEEEEEEEEEEEE
                 // If connection is done but no habitPlan is active:
                 double screenHeight = MediaQuery.of(context).size.height;
                 return Container(

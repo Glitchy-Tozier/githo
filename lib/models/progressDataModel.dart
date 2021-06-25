@@ -51,7 +51,6 @@ class ProgressData {
             ),
           );
     }
-    _setNewStartingDate();
     _setTrainingDates();
   }
 
@@ -128,34 +127,30 @@ class ProgressData {
         Duration(hours: this.trainingPeriodDurationInHours);
 
     while ((this.currentStartingDate.add(periodDuration)).isBefore(now)) {
-      print("WEEK SUBTRACTED");
+      print("Moved date by one week.");
       this.currentStartingDate = this.currentStartingDate.add(periodDuration);
     }
   }
 
   void _setTrainingDates(
       [Map<String, int> startingTrainingPeriodData = const {
-        "step": 1,
-        "trainingPeriod": 1
+        "step": 0,
+        "trainingPeriod": 0,
       }]) {
-    final int startingStepNr = startingTrainingPeriodData["step"]!;
-    final int startingPeriodNr = startingTrainingPeriodData["trainingPeriod"]!;
+    final int startingStepIdx = startingTrainingPeriodData["step"]!;
+    final int startingPeriodIdx = startingTrainingPeriodData["trainingPeriod"]!;
 
     // Set dates for all the trainings
     DateTime workingDate = this.currentStartingDate;
-    if (startingPeriodNr > 1) {
-      final int extraPeriods = startingPeriodNr - 1;
-      for (int i = 0; i < extraPeriods; i++) {
-        workingDate.add(
-          Duration(
-            hours: this.trainingPeriodDurationInHours,
-          ),
-        );
+
+    for (int i = startingStepIdx; i < this.steps.length; i++) {
+      final StepClass step = this.steps[i];
+
+      if (i == startingStepIdx) {
+        workingDate = step.setChildrenDates(workingDate, startingPeriodIdx);
+      } else {
+        workingDate = step.setChildrenDates(workingDate, 0);
       }
-    }
-    for (final StepClass step in this.steps.sublist(startingStepNr - 1)) {
-      step.setChildrenDates(workingDate);
-      workingDate = workingDate.add(Duration(hours: step.durationInHours));
     }
   }
 
@@ -173,20 +168,34 @@ class ProgressData {
     int failedPeriods,
     Map<String, dynamic> lastActiveMap,
   ) {
+    final int previouslyActivePeriodIdx =
+        (lastActiveMap["trainingPeriod"] as TrainingPeriod).index;
+
     int currentStepIdx = (lastActiveMap["step"] as StepClass).index;
+    int remainingRegressions = failedPeriods +
+        1; // Always reset one additional period to make sure we actually move backwards in time.
+
     while (failedPeriods > 0) {
       StepClass currentStep = this.steps[currentStepIdx];
-      int remainingRegressions = currentStep.regressPeriods(failedPeriods);
+      remainingRegressions = currentStep.regressPeriods(remainingRegressions);
 
-      if (remainingRegressions > 0) {
-        // If there are more loops to come
+      if (remainingRegressions > 0 && currentStepIdx > 0) {
+        // If there are more loops to come AND we haven't reached the start of all challenges
         currentStepIdx--;
-        failedPeriods = remainingRegressions;
       } else {
         // If this was the last loop, return the current trainingPeriod's position
+
+        final int newStartingStepIdx = currentStepIdx;
+        final int newStartingPeriodIdx;
+        if (previouslyActivePeriodIdx == 0) {
+          newStartingPeriodIdx = 0;
+        } else {
+          newStartingPeriodIdx = previouslyActivePeriodIdx - failedPeriods;
+        }
+
         return {
-          "step": currentStep.number,
-          "trainingPeriod": currentStep.trainingPeriods.length - failedPeriods,
+          "step": newStartingStepIdx,
+          "trainingPeriod": newStartingPeriodIdx,
         };
       }
     }
@@ -211,7 +220,6 @@ class ProgressData {
     if (passedTrainingPeriods >= 1) {
       // Analyze the trainingPeriod that was last active
       final TrainingPeriod lastActivePeriod = lastActiveMap["trainingPeriod"];
-      lastActivePeriod.status = "completed";
 
       // Get the number of failed trainigPeriods
       int failedPeriods = passedTrainingPeriods;
@@ -221,7 +229,9 @@ class ProgressData {
 
       _setNewStartingDate();
 
-      if (failedPeriods >= 1) {
+      if (failedPeriods == 0) {
+        lastActivePeriod.status = "completed";
+      } else {
         final Map<String, int> nextPeriodPosition;
         nextPeriodPosition = _resetPeriodValues(failedPeriods, lastActiveMap);
         _setTrainingDates(nextPeriodPosition);

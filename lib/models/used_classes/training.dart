@@ -36,7 +36,7 @@ class Training {
 
   void incrementReps() {
     this.doneReps++;
-    if (this.requiredReps == this.doneReps) {
+    if (this.doneReps >= this.requiredReps) {
       this.status = "done";
     }
   }
@@ -64,6 +64,7 @@ class Training {
       this.status = "successful";
     } else {
       print("Unknown Status: ${this.status}");
+      throw "Unknown Status: ${this.status}";
     }
   }
 

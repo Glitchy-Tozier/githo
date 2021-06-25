@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:githo/extracted_data/styleData.dart';
+import 'package:githo/extracted_widgets/customCard.dart';
 import 'package:githo/extracted_widgets/headings.dart';
 import 'package:githo/models/used_classes/step.dart';
 import 'package:githo/models/used_classes/training.dart';
@@ -21,24 +23,30 @@ class StepToDo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> periodWidgets = [];
-    periodWidgets.add(Heading1(step.text));
-    double cardRowHeight;
+    periodWidgets.add(Padding(
+      padding: StyleData.screenPadding,
+      child: Heading1(step.text),
+    ));
+    double cardRowHeight = rowHeight;
 
     for (int i = 0; i < step.trainingPeriods.length; i++) {
       final TrainingPeriod trainingPeriod = step.trainingPeriods[i];
+
       if (step.trainingPeriods.length > 1) {
         periodWidgets.add(
-          Heading2(
-            "${trainingPeriod.durationText} ${i + 1}/${step.trainingPeriods.length} – ${trainingPeriod.status}",
+          Padding(
+            padding: StyleData.screenPadding,
+            child: Heading2(
+              "${trainingPeriod.durationText} ${i + 1}/${step.trainingPeriods.length}",
+            ),
           ),
         );
       }
 
       List<Widget> listViewChildren = [];
 
-      if (trainingPeriod.status == "completed") {
-        cardRowHeight = rowHeight;
-        for (final Training training in trainingPeriod.trainings) {
+      for (final Training training in trainingPeriod.trainings) {
+        if (trainingPeriod.status == "completed") {
           final Color color;
           if (training.status == "successful") {
             color = Colors.green;
@@ -47,54 +55,40 @@ class StepToDo extends StatelessWidget {
           } else {
             color = Colors.grey;
           }
+
           listViewChildren.add(
-            Center(
-              child: SizedBox(
-                width: cardWidth,
-                height: cardHeight,
-                child: Card(
-                  color: color,
-                  child: Ink(
-                    child: InkWell(
-                      child: Icon(Icons.check_rounded),
-                      splashColor: Colors.red,
-                      onTap: () {},
-                    ),
-                  ),
-                ),
-              ),
+            CustomCard(
+              width: cardWidth,
+              height: cardHeight,
+              child: Icon(Icons.check_rounded),
+              onTap: () {},
+              color: color,
             ),
           );
-        }
-      } else if (trainingPeriod.status == "active") {
-        cardRowHeight = activeRowHeight;
-        for (final Training training in trainingPeriod.trainings) {
+        } else if (trainingPeriod.status == "active") {
+          cardRowHeight = activeRowHeight;
           if (training.status == "current" ||
               training.status == "active" ||
               training.status == "done") {
+            final Color color;
+            if (training.status == "done") {
+              color = Colors.pink;
+            } else {
+              color = Colors.white;
+            }
             listViewChildren.add(
-              Center(
-                child: SizedBox(
-                  width: cardWidth + 40,
-                  height: cardHeight + 40,
-                  child: Card(
-                    color: (training.status == "done")
-                        ? Colors.pink
-                        : Colors.white,
-                    child: Ink(
-                      child: InkWell(
-                        child: Text(
-                            "${training.doneReps}/${training.requiredReps}\n${training.status}"),
-                        splashColor: Colors.purple,
-                        onTap: () {
-                          training.activate();
-                          training.incrementReps();
-                          updateFunction();
-                        },
-                      ),
-                    ),
-                  ),
-                ),
+              CustomCard(
+                width: activeCardWidth,
+                height: activeCardHeight,
+                child: Text(training.startingDate.toString()),
+                /* child: Text(
+                    "${training.doneReps}/${training.requiredReps}\n${training.status}"), */
+                onTap: () {
+                  training.activate();
+                  training.incrementReps();
+                  updateFunction();
+                },
+                color: color,
               ),
             );
           } else {
@@ -108,49 +102,31 @@ class StepToDo extends StatelessWidget {
             }
 
             listViewChildren.add(
-              Center(
-                child: SizedBox(
-                  width: cardWidth,
-                  height: cardHeight,
-                  child: Card(
-                    color: color,
-                    child: Ink(
-                      child: InkWell(
-                        child: Text(training.status),
-                        splashColor: Colors.red,
-                        onTap: () {},
-                      ),
-                    ),
-                  ),
-                ),
+              CustomCard(
+                width: cardWidth,
+                height: cardHeight,
+                child: Text(training.startingDate.toString()),
+
+                //child: Text(training.status),
+                onTap: () {},
+                color: color,
               ),
             );
           }
-        }
-      } else {
-        cardRowHeight = rowHeight;
-        for (final Training training in trainingPeriod.trainings) {
+        } else {
           listViewChildren.add(
-            Center(
-              child: SizedBox(
-                width: cardWidth,
-                height: cardHeight,
-                child: Card(
-                  color: Colors.grey,
-                  child: Ink(
-                    child: InkWell(
-                      child: Center(child: Icon(Icons.lock)),
-                      splashColor: Colors.red,
-                      onTap: () {},
-                    ),
-                  ),
-                ),
-              ),
+            CustomCard(
+              width: cardWidth,
+              height: cardHeight,
+              child: Text(training.startingDate.toString()),
+
+//              child: Icon(Icons.lock),
+              onTap: () {},
+              color: Colors.grey,
             ),
           );
         }
       }
-
       periodWidgets.add(
         SizedBox(
           height: cardRowHeight,
@@ -163,6 +139,7 @@ class StepToDo extends StatelessWidget {
       );
     }
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: periodWidgets,
     );
   }

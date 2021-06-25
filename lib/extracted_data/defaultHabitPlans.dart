@@ -27,7 +27,7 @@ class DefaultHabitPlans {
       goal: "Talk to anybody, anytime",
       requiredReps: 2,
       steps: [
-        "Make eye-contact with a stranger (no matter how long)",
+        "Make eye-contact with a stranger (as short as you want)",
         "Greet a passerby",
         "Ask for the time",
         "Ask for directions to a landmark/location",
