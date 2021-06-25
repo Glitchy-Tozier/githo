@@ -252,8 +252,9 @@ class ProgressData {
       }
       // Activate the next Training/TrainingPeriod
       _moveToCurrentTraining();
+      // Save all changes
+      DatabaseHelper.instance.updateProgressData(this);
     }
-    DatabaseHelper.instance.updateProgressData(this);
   }
 
   // Functions for interacting with the database

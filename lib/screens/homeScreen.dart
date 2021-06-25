@@ -127,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
   } */
 
   void updateDbAndScreen() async {
-    final ProgressData progressData = await this._progressData;
+    DatabaseHelper.instance.updateProgressData(await this._progressData);
     setState(() {});
   }
 
