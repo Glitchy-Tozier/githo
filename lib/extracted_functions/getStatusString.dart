@@ -1,12 +1,12 @@
-import 'package:githo/helpers/timeHelper.dart';
+/* import 'package:githo/helpers/timeHelper.dart';
 
 import 'package:githo/models/progressDataModel.dart';
 import 'package:githo/models/used_classes/step.dart';
 import 'package:githo/models/used_classes/trainingPeriod.dart';
 
-String getStatusString(ProgressData progressData) {
+String getStatusString(final ProgressData progressData) {
   // Used in the title of some screens.
-  String subTitle;
+  final String subTitle;
 
   if (progressData.steps.length > 0) {
     if (TimeHelper.instance.getTime
@@ -31,3 +31,4 @@ String getStatusString(ProgressData progressData) {
 
   return subTitle;
 }
+ */

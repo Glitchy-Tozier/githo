@@ -3,7 +3,7 @@
 
 import 'package:flutter/material.dart';
 
-InputDecoration inputDecoration(String text) {
+InputDecoration inputDecoration(final String text) {
   // Provide the basic Styling for TextFormFields.
   return InputDecoration(
     labelText: text,
@@ -13,7 +13,7 @@ InputDecoration inputDecoration(String text) {
   );
 }
 
-String? checkIfEmpty(String? input, String variableText) {
+String? checkIfEmpty(final String? input, final String variableText) {
   // Check if the TextFormField is empty.
   if (input!.trim().isEmpty) {
     return "Please fill out $variableText";
@@ -23,7 +23,10 @@ String? checkIfEmpty(String? input, String variableText) {
 }
 
 String? validateNumberField(
-    String? input, String variableText, String timeFrameText) {
+  final String? input,
+  final String variableText,
+  final String timeFrameText,
+) {
   final String? emptycheck =
       checkIfEmpty(input.toString().trim(), variableText);
   if (emptycheck != null) {

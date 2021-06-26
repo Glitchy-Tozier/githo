@@ -55,7 +55,11 @@ class _FormListState extends State<FormList> {
     this.inputValues = new List.generate(this.listLength - 1, (index) => "");
   }
 
-  Widget _textFormField(String name, int index, String value) {
+  Widget _textFormField(
+    final String name,
+    final int index,
+    final String value,
+  ) {
     int fieldNr = index + 1;
     String fieldName = "$name $fieldNr";
 
@@ -107,7 +111,7 @@ class _FormListState extends State<FormList> {
             }
           },
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
       ],
     );
   }
@@ -116,13 +120,13 @@ class _FormListState extends State<FormList> {
   Widget build(BuildContext context) {
     return Column(children: [
       ...this._inputFields,
-      Text("⋮",
-          style: TextStyle(
+      const Text("⋮",
+          style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
             color: Colors.black,
           )),
-      SizedBox(
+      const SizedBox(
         height: 10,
       ),
     ]);

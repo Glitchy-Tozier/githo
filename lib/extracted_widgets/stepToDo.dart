@@ -11,6 +11,7 @@ class StepToDo extends StatelessWidget {
   final StepClass step;
   final Function updateFunction;
   final GlobalKey globalKey;
+
   const StepToDo(this.globalKey, this.step, this.updateFunction);
 
   @override
@@ -82,7 +83,7 @@ class StepToDo extends StatelessWidget {
           final Widget child;
           final Function onTap;
           if (training.status == "current") {
-            child = Heading1(
+            child = const Heading1(
               "Click to\nactivate",
             );
             final Function onConfirmation = () {
@@ -168,9 +169,9 @@ class StepToDo extends StatelessWidget {
 
       periodWidgets.add(
         SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           scrollDirection: Axis.horizontal,
-          padding: EdgeInsets.only(
+          padding: const EdgeInsets.only(
             left: StyleData.screenPaddingValue / 2,
             right: StyleData.screenPaddingValue / 2,
           ),

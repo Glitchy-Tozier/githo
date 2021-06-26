@@ -174,8 +174,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Heading1("No habit-plan is active."),
-                      Text(
+                      const Heading1("No habit-plan is active."),
+                      const Text(
                         "Click on the settings-icon to add or activate your habit-plan",
                         style: StyleData.textStyle,
                       ),
@@ -199,7 +199,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       ...List.generate(progressData.steps.length, (i) {
                         final StepClass step = progressData.steps[i];
-                        return StepToDo(globalKey, step, updateDbAndScreen);
+                        return StepToDo(
+                          globalKey,
+                          step,
+                          updateDbAndScreen,
+                        );
                       }),
                       ScreenEndingSpacer(),
                     ],
@@ -212,7 +216,8 @@ class _HomeScreenState extends State<HomeScreen> {
               return Center(
                 child: Column(
                   children: [
-                    Heading1("There was an error connecting to the database."),
+                    const Heading1(
+                        "There was an error connecting to the database."),
                     Text(
                       snapshot.error.toString(),
                       style: StyleData.textStyle,
@@ -250,23 +255,31 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
             ),
-            (DataShortcut.testing)
-                ? FloatingActionButton(
-                    backgroundColor: Colors.transparent,
-                    splashColor: Colors.purple,
-                    elevation: 0,
-                    onPressed: () async {
-                      final ProgressData progressData = await _progressData;
-                      TimeHelper.instance.timeTravel(progressData);
+            FutureBuilder(
+              future: this._progressData,
+              builder: (context, AsyncSnapshot<ProgressData> snapshot) {
+                if (snapshot.hasData) {
+                  final ProgressData progressData = snapshot.data!;
+                  if (progressData.isActive && DataShortcut.testing) {
+                    return FloatingActionButton(
+                      backgroundColor: Colors.transparent,
+                      splashColor: Colors.purple,
+                      elevation: 0,
+                      onPressed: () {
+                        TimeHelper.instance.timeTravel(progressData);
 
-                      print("Start ${progressData.currentStartingDate}");
-                      print("Last  ${progressData.lastActiveDate}");
-                      print("Now   ${TimeHelper.instance.getTime}");
+                        print("Start ${progressData.currentStartingDate}");
+                        print("Last  ${progressData.lastActiveDate}");
+                        print("Now   ${TimeHelper.instance.getTime}");
 
-                      setState(() {});
-                    },
-                  )
-                : SizedBox(),
+                        setState(() {});
+                      },
+                    );
+                  }
+                }
+                return SizedBox();
+              },
+            ),
             FutureBuilder(
               future: this._progressData,
               builder: (context, AsyncSnapshot<ProgressData> snapshot) {

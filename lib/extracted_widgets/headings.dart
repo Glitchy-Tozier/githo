@@ -5,7 +5,7 @@ class ScreenTitle extends StatelessWidget {
   final String? subTitle;
   final bool addBottomPadding;
 
-  ScreenTitle({
+  const ScreenTitle({
     required this.title,
     this.subTitle,
     this.addBottomPadding = true,
@@ -24,7 +24,7 @@ class ScreenTitle extends StatelessWidget {
       Text(
         title,
         textAlign: TextAlign.center,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 35,
           fontWeight: FontWeight.bold,
           color: Colors.black,
@@ -34,11 +34,11 @@ class ScreenTitle extends StatelessWidget {
 
     if (subTitle != null) {
       columnContents.addAll([
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         Text(
           subTitle!,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 20,
             color: Colors.black,
           ),
@@ -56,15 +56,16 @@ class ScreenTitle extends StatelessWidget {
 
 class Heading1 extends StatelessWidget {
   final String _text;
-  Heading1(this._text);
+
+  const Heading1(this._text);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: Text(
         _text,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 30,
           fontWeight: FontWeight.bold,
           color: Colors.black,
@@ -76,15 +77,16 @@ class Heading1 extends StatelessWidget {
 
 class Heading2 extends StatelessWidget {
   final String _text;
-  Heading2(this._text);
+
+  const Heading2(this._text);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: Text(
         _text,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 20,
           color: Colors.black,
           //fontWeight: FontWeight.bold,

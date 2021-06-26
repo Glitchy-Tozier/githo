@@ -3,24 +3,24 @@ import 'package:githo/models/progressDataModel.dart';
 
 class TimeHelper {
   static final TimeHelper instance = TimeHelper._instance();
-  static late DateTime testingTime;
+  static late DateTime _testingTime;
 
   TimeHelper._instance();
 
-  void setTime(DateTime dateTime) {
-    testingTime = dateTime;
+  void setTime(final DateTime dateTime) {
+    _testingTime = dateTime;
   }
 
   DateTime get getTime {
     if (DataShortcut.testing == true) {
-      return testingTime;
+      return _testingTime;
     } else {
       return DateTime.now();
     }
   }
 
-  void timeTravel(ProgressData progressData) {
-    testingTime = testingTime.add(
+  void timeTravel(final ProgressData progressData) {
+    _testingTime = _testingTime.add(
       Duration(
         hours: progressData.trainingDurationInHours,
       ),

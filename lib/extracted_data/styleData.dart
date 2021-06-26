@@ -22,7 +22,7 @@ class StyleData {
   );
 }
 
-TextStyle coloredTextStyle(Color color) {
+TextStyle coloredTextStyle(final Color color) {
   return TextStyle(
     fontSize: 16,
     color: color,

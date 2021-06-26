@@ -37,7 +37,10 @@ class ProgressData {
     );
   }
 
-  void adaptToHabitPlan(DateTime startingDate, HabitPlan habitPlan) {
+  void adaptToHabitPlan(
+    final DateTime startingDate,
+    final HabitPlan habitPlan,
+  ) {
     this.isActive = true;
     this.lastActiveDate = TimeHelper.instance.getTime;
     this.currentStartingDate = startingDate;
@@ -89,8 +92,8 @@ class ProgressData {
     } else {
       final DateTime now = TimeHelper.instance.getTime;
 
-      Training activeTraining = activeMap["training"];
-      Training currentTraining = _getDataByDate(now)!["training"];
+      final Training activeTraining = activeMap["training"];
+      final Training currentTraining = _getDataByDate(now)!["training"];
 
       if (activeTraining != currentTraining) {
         inNewTraining = inNewTraining = true;
@@ -102,8 +105,8 @@ class ProgressData {
   }
 
   int _getPassedTrainingPeriods({
-    required DateTime startingDate,
-    required DateTime endingDate,
+    required final DateTime startingDate,
+    required final DateTime endingDate,
   }) {
     final int hoursPassed = endingDate.difference(startingDate).inHours;
     final int trainingsPassed =
@@ -122,7 +125,7 @@ class ProgressData {
   }
 
   void _setNewStartingDate() {
-    DateTime now = TimeHelper.instance.getTime;
+    final DateTime now = TimeHelper.instance.getTime;
     final Duration periodDuration =
         Duration(hours: this.trainingPeriodDurationInHours);
 
@@ -133,7 +136,7 @@ class ProgressData {
   }
 
   void _setTrainingDates(
-      [Map<String, int> startingTrainingPeriodData = const {
+      [final Map<String, int> startingTrainingPeriodData = const {
         "step": 0,
         "trainingPeriod": 0,
       }]) {
@@ -154,8 +157,8 @@ class ProgressData {
     }
   }
 
-  Map<String, dynamic>? _getDataByDate(DateTime date) {
-    Map<String, dynamic>? map = {};
+  Map<String, dynamic>? _getDataByDate(final DateTime date) {
+    Map<String, dynamic>? map;
     for (final StepClass step in this.steps) {
       map = step.getDataByDate(date);
       if (map != null) {
@@ -165,8 +168,8 @@ class ProgressData {
   }
 
   Map<String, int> _resetPeriodValues(
-    int failedPeriods,
-    Map<String, dynamic> lastActiveMap,
+    final int failedPeriods,
+    final Map<String, dynamic> lastActiveMap,
   ) {
     final int previouslyActivePeriodIdx =
         (lastActiveMap["trainingPeriod"] as TrainingPeriod).index;
@@ -240,13 +243,13 @@ class ProgressData {
   }
 
   void _moveToCurrentTraining() {
-    Map<String, dynamic> currentData =
+    final Map<String, dynamic> currentData =
         _getDataByDate(TimeHelper.instance.getTime)!;
 
-    Training currentTraining = currentData["training"];
+    final Training currentTraining = currentData["training"];
     currentTraining.status = "current";
 
-    TrainingPeriod currentPeriod = currentData["trainingPeriod"];
+    final TrainingPeriod currentPeriod = currentData["trainingPeriod"];
     currentPeriod.status = "active";
   }
 
@@ -291,7 +294,7 @@ class ProgressData {
     return map;
   }
 
-  factory ProgressData.fromMap(Map<String, dynamic> map) {
+  factory ProgressData.fromMap(final Map<String, dynamic> map) {
     List<StepClass> jsonToStepList(String json) {
       List<dynamic> dynamicList = jsonDecode(json);
       List<StepClass> stepList = <StepClass>[];

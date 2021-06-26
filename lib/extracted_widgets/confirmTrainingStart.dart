@@ -15,7 +15,7 @@ class ConfirmTrainingStart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(
+      title: const Text(
         "Tackle the next training?",
         style: StyleData.textStyle,
       ),

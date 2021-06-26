@@ -65,7 +65,7 @@ class _HabitListState extends State<HabitList> {
                 // If there are no habit plans
                 return Padding(
                   padding: StyleData.screenPadding,
-                  child: ScreenTitle(
+                  child: const ScreenTitle(
                     title: "List of habits",
                     subTitle: "Please add a habit plan.",
                   ),
@@ -76,7 +76,7 @@ class _HabitListState extends State<HabitList> {
                 columnItems.add(
                   Padding(
                     padding: StyleData.screenPadding,
-                    child: ScreenTitle(
+                    child: const ScreenTitle(
                         title: "List of habits",
                         subTitle: "Click on a habit-plan to look at it."),
                   ),
@@ -130,7 +130,8 @@ class _HabitListState extends State<HabitList> {
                 padding: StyleData.screenPadding,
                 child: Column(
                   children: [
-                    Heading1("There was an error connecting to the database."),
+                    const Heading1(
+                        "There was an error connecting to the database."),
                     Text(
                       snapshot.error.toString(),
                       style: StyleData.textStyle,
@@ -142,7 +143,7 @@ class _HabitListState extends State<HabitList> {
           }
           // While loading, do this:
           return Center(
-            child: CircularProgressIndicator(),
+            child: const CircularProgressIndicator(),
           );
         },
       ),

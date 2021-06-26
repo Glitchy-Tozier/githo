@@ -18,7 +18,7 @@ class EditHabit extends StatefulWidget {
   final HabitPlan habitPlan;
   final Function onSavedFunction;
 
-  EditHabit({
+  const EditHabit({
     required this.habitPlan,
     required this.onSavedFunction,
   });
@@ -85,13 +85,13 @@ class _EditHabitState extends State<EditHabit> {
           padding: StyleData.screenPadding,
           child: Column(
             children: <Widget>[
-              ScreenTitle(title: "Edit Habit-Plan"),
+              const ScreenTitle(title: "Edit Habit-Plan"),
               Form(
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Heading1("Goal"),
+                    const Heading1("Goal"),
                     TextFormField(
                       decoration: inputDecoration("Your goal"),
                       validator: (input) =>
@@ -120,7 +120,7 @@ class _EditHabitState extends State<EditHabit> {
                     SizedBox(height: 10),
 
                     // Create the step-form-fields
-                    Heading1("Steps towards your goal"),
+                    const Heading1("Steps towards your goal"),
                     FormList(
                       fieldName: "Step",
                       canBeEmpty: false,
@@ -129,7 +129,7 @@ class _EditHabitState extends State<EditHabit> {
                     ),
 
                     // Create the form-fields for your personal comments
-                    Heading1("Comments"),
+                    const Heading1("Comments"),
                     FormList(
                       fieldName: "Comment",
                       canBeEmpty: true,

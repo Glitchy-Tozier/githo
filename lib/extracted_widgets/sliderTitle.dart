@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class SliderTitle extends StatelessWidget {
   final List<List<String>> textDataPairs;
+
   const SliderTitle(this.textDataPairs);
 
   @override

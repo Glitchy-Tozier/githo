@@ -6,14 +6,14 @@ class DefaultHabitPlans {
       isActive: false,
       goal: "Consistently go jogging",
       requiredReps: 1,
-      steps: [
+      steps: const <String>[
         "Dress up and step outside on the street. Then go back and do whatever you want to do.",
         "Take a walk around your house/building",
         "Take a walk spanning a 3-5 buildings",
         "Jog around 3-5 buildings",
         "Go jogging. Well done."
       ],
-      comments: [
+      comments: const <String>[
         "Dress up in your running-gear for each challenge, even for the first one.",
         "Whatever step you're on, don't overdo it. We want to go jogging CONSISTENTLY, not twice and then have a hurting foot for a week."
       ],
@@ -26,7 +26,7 @@ class DefaultHabitPlans {
       isActive: false,
       goal: "Talk to anybody, anytime",
       requiredReps: 2,
-      steps: [
+      steps: const <String>[
         "Make eye-contact with a stranger (no matter how short)",
         "Greet a passerby",
         "Ask for the time",
@@ -36,7 +36,7 @@ class DefaultHabitPlans {
         "Give a compliment, then don't walk on. After they say something, reply. (After your reply, you may run away, screaming in terror.)",
         "Make small-talk about anything"
       ],
-      comments: ["Approach one male and one female"],
+      comments: const <String>["Approach one male and one female"],
       trainingTimeIndex: 1,
       requiredTrainings: 5,
       requiredTrainingPeriods: 2,
@@ -50,14 +50,14 @@ class DefaultHabitPlans {
       isActive: false,
       goal: "Testing without errors",
       requiredReps: 1,
-      steps: [
+      steps: const <String>[
         "This is step oneeey",
         "This is step twough",
         "This is step tré",
         "This is step four",
         "This is step faive",
       ],
-      comments: [
+      comments: const <String>[
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
         "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."
       ],
@@ -70,14 +70,14 @@ class DefaultHabitPlans {
       isActive: false,
       goal: "Testing without (t)errors",
       requiredReps: 3,
-      steps: [
+      steps: const <String>[
         "This is step oneeey",
         "This is step twough",
         "This is step tré",
         "This is step four",
         "This is step faive",
       ],
-      comments: [
+      comments: const <String>[
         "'t' as in hours",
         "Also, this one needs 3 reps",
       ],

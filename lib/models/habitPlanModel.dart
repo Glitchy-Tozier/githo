@@ -57,9 +57,9 @@ class HabitPlan {
     return map;
   }
 
-  factory HabitPlan.fromMap(Map<String, dynamic> map) {
+  factory HabitPlan.fromMap(final Map<String, dynamic> map) {
     List<String> jsonToStringList(String json) {
-      List<dynamic> dynamicList = jsonDecode(json);
+      final List<dynamic> dynamicList = jsonDecode(json);
       List<String> stringList = [];
 
       dynamicList.forEach((element) {

@@ -80,7 +80,10 @@ class StepClass {
     return 0;
   }
 
-  DateTime setChildrenDates(DateTime startingDate, int startingPeriodIdx) {
+  DateTime setChildrenDates(
+    DateTime startingDate,
+    final int startingPeriodIdx,
+  ) {
     final startingPeriodListIdx =
         startingPeriodIdx.remainder(this.trainingPeriods.length);
 
@@ -94,7 +97,7 @@ class StepClass {
     return startingDate;
   }
 
-  Map<String, dynamic>? getDataByDate(DateTime date) {
+  Map<String, dynamic>? getDataByDate(final DateTime date) {
     Map<String, dynamic>? map;
     for (final trainingPeriod in this.trainingPeriods) {
       map = trainingPeriod.getDataByDate(date);
@@ -106,7 +109,7 @@ class StepClass {
     return map;
   }
 
-  void resetChildrenProgresses(int startingNumber) {
+  void resetChildrenProgresses(final int startingNumber) {
     for (final TrainingPeriod trainingPeriod in this.trainingPeriods) {
       trainingPeriod.resetTrainingProgresses(startingNumber);
     }

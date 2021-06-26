@@ -8,7 +8,7 @@ class CustomCard extends StatelessWidget {
   final Function? onTap;
   final Color color;
 
-  CustomCard({
+  const CustomCard({
     required this.margin,
     required this.width,
     required this.height,
@@ -38,7 +38,7 @@ class CustomCard extends StatelessWidget {
               width: 2,
             ), */
             borderRadius: BorderRadius.circular(7),
-            boxShadow: <BoxShadow>[
+            boxShadow: const <BoxShadow>[
               BoxShadow(
                 blurRadius: 3,
                 offset: Offset(2, 2),

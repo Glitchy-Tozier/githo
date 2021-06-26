@@ -17,7 +17,7 @@ class SingleHabitDisplay extends StatefulWidget {
   final Function updateFunction;
   final HabitPlan habitPlan;
 
-  SingleHabitDisplay({
+  const SingleHabitDisplay({
     required this.updateFunction,
     required this.habitPlan,
   });
@@ -256,7 +256,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
       commentSection = [];
     } else {
       commentSection = <Widget>[
-        Heading1("Comments"),
+        const Heading1("Comments"),
         ..._getCommentWidgets(),
       ];
     }
@@ -275,10 +275,10 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
                     title: habitPlan.goal,
                     //subTitle: getStatusString(progressData),
                   ),
-                  Heading1("Rules"),
+                  const Heading1("Rules"),
                   ..._getRuleWidgets(),
                   ...commentSection,
-                  Heading1("Steps"),
+                  const Heading1("Steps"),
                   _getStepTable(progressData),
                   ScreenEndingSpacer()
                 ],
@@ -286,7 +286,8 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
             } else if (snapshot.hasError) {
               // If something went wrong with the database
               return Column(children: [
-                Heading1("There was an error connecting to the database."),
+                const Heading1(
+                    "There was an error connecting to the database."),
                 Text(
                   snapshot.error.toString(),
                   style: StyleData.textStyle,

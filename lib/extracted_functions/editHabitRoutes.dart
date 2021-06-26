@@ -7,15 +7,15 @@ import 'package:githo/screens/editHabit.dart';
 // Open the editHabit-screen and add a new habitPlan using whatever you type in
 void addNewHabit(
   BuildContext context,
-  Function updatePrevScreens,
+  final Function updatePrevScreens,
 ) {
   HabitPlan habitPlan = HabitPlan(
     isActive: false,
     // TextFormFields:
     goal: "",
     requiredReps: 1,
-    steps: [""],
-    comments: [""],
+    steps: const <String>[""],
+    comments: const <String>[""],
     // Sliders:
     trainingTimeIndex: 1,
     requiredTrainings: 5,
@@ -42,12 +42,12 @@ void addNewHabit(
 // Sent an existing habitPlan to the editHabit-screen and edit it
 void editHabit(
   BuildContext context,
-  Function updatePrevScreens,
-  HabitPlan habitPlan,
+  final Function updatePrevScreens,
+  final HabitPlan habitPlan,
 ) {
   habitPlan.lastChanged = DateTime.now();
 
-  void _onSaved(HabitPlan habitPlan) async {
+  void _onSaved(final HabitPlan habitPlan) async {
     await DatabaseHelper.instance.updateHabitPlan(habitPlan);
     updatePrevScreens(habitPlan);
   }

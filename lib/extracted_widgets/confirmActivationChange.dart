@@ -17,7 +17,7 @@ class ConfirmActivationChange extends StatelessWidget {
         title,
         style: StyleData.textStyle,
       ),
-      content: Text(
+      content: const Text(
         "All previous progress will be lost.",
         style: StyleData.textStyle,
       ),

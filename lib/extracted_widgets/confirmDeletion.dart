@@ -7,16 +7,17 @@ import 'package:githo/models/habitPlanModel.dart';
 class ConfirmDeletion extends StatelessWidget {
   final HabitPlan habitPlan;
   final Function updateFunc;
+
   const ConfirmDeletion(this.habitPlan, this.updateFunc);
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(
+      title: const Text(
         "Confirm deletion",
         style: StyleData.textStyle,
       ),
-      content: Text(
+      content: const Text(
         "All previous progress will be lost.",
         style: StyleData.textStyle,
       ),
