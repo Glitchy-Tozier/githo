@@ -12,7 +12,8 @@ import 'package:githo/screens/habitDetails.dart';
 
 class HabitList extends StatefulWidget {
   final Function updateFunction;
-  HabitList({required this.updateFunction});
+  const HabitList({required this.updateFunction});
+
   @override
   _HabitListState createState() =>
       _HabitListState(updatePrevScreens: updateFunction);
@@ -49,101 +50,116 @@ class _HabitListState extends State<HabitList> {
     return habitPlanList;
   }
 
-  Widget _createHabitListItem(HabitPlan habitPlan) {
-    return Column(
-      children: <Widget>[
-        TextButton(
-            child: ListTile(
-              title: Text(
-                habitPlan.goal,
-                style: StyleData.textStyle,
+  Widget _createHabitListItem(final HabitPlan habitPlan) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: ElevatedButton(
+        child: Text(
+          habitPlan.goal,
+          style: coloredTextStyle(Colors.white),
+        ),
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all<Color>(
+            habitPlan.isActive ? Colors.green : Colors.black54,
+          ),
+          minimumSize: MaterialStateProperty.all<Size>(
+            Size(double.infinity, 60),
+          ),
+          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+            EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          ),
+        ),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SingleHabitDisplay(
+                updateFunction: _updateLoadedScreens,
+                habitPlan: habitPlan,
               ),
-              // subtitle: Text("Subtitle ka okay!!??!"),
-              trailing: Icon(Icons.visibility),
-              tileColor: habitPlan.isActive ? Colors.lightGreen : null,
             ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SingleHabitDisplay(
-                    updateFunction: _updateLoadedScreens,
-                    habitPlan: habitPlan,
-                  ),
-                ),
-              );
-            }),
-        Divider(color: Colors.black),
-      ],
+          );
+        },
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        padding: StyleData.screenPadding,
-        children: [
-          FutureBuilder(
-            future: _habitPlanListFuture,
-            builder: (context, AsyncSnapshot<List<HabitPlan>> snapshot) {
-              List<Widget> returnWidgets = [];
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasData) {
-                  List<HabitPlan> habitPlanList = snapshot.data!;
+      body: FutureBuilder(
+        future: _habitPlanListFuture,
+        builder: (context, AsyncSnapshot<List<HabitPlan>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasData) {
+              List<HabitPlan> habitPlanList = snapshot.data!;
 
-                  if (habitPlanList.length == 0) {
-                    // If there are no habit plans
-                    returnWidgets.add(
-                      ScreenTitle(
+              if (habitPlanList.length == 0) {
+                // If there are no habit plans
+                return Padding(
+                  padding: StyleData.screenPadding,
+                  child: ScreenTitle(
+                    title: "List of habits",
+                    subTitle: "Please add a habit plan.",
+                  ),
+                );
+              } else {
+                // If there are habit plans
+                List<Widget> columnItems = [];
+                columnItems.add(
+                  Padding(
+                    padding: StyleData.screenPadding,
+                    child: ScreenTitle(
                         title: "List of habits",
-                        subTitle: "Please add a habit plan.",
-                      ),
-                    );
-                  } else {
-                    // If there are habit plans
-                    returnWidgets.add(
-                      ScreenTitle(
-                          title: "List of habits",
-                          subTitle: "Click on a habit-plan to look at it."),
-                    );
+                        subTitle: "Click on a habit-plan to look at it."),
+                  ),
+                );
 
-                    List<HabitPlan> orderedList =
-                        _orderHabitPlans(habitPlanList);
+                final List<HabitPlan> orderedHabitPlans =
+                    _orderHabitPlans(habitPlanList);
 
-                    for (int i = 0; i < orderedList.length; i++) {
-                      Widget listItem = _createHabitListItem(orderedList[i]);
-                      returnWidgets.add(listItem);
-                    }
-                  }
-                } else if (snapshot.hasError) {
-                  // If something went wrong with the database
-                  returnWidgets.add(
+                columnItems.add(
+                  Expanded(
+                    child: ListView.builder(
+                      padding: StyleData.screenPadding,
+                      physics: BouncingScrollPhysics(),
+                      itemCount: orderedHabitPlans.length + 1,
+                      itemBuilder: (BuildContext buildContex, int i) {
+                        if (i < orderedHabitPlans.length) {
+                          return _createHabitListItem(orderedHabitPlans[i]);
+                        } else {
+                          // On the last loop, add the ScreenEndingSpacer.
+                          return ScreenEndingSpacer();
+                        }
+                      },
+                    ),
+                  ),
+                );
+                return Column(children: columnItems);
+              }
+            } else if (snapshot.hasError) {
+              // If something went wrong with the database
+              print(snapshot.error);
+
+              return Padding(
+                padding: StyleData.screenPadding,
+                child: Column(
+                  children: [
                     Heading1("There was an error connecting to the database."),
-                  );
-                  returnWidgets.add(
                     Text(
                       snapshot.error.toString(),
                       style: StyleData.textStyle,
                     ),
-                  );
-                  print(snapshot.error);
-                }
-              } else {
-                // While loading, do this:
-                returnWidgets.add(
-                  Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              }
-              return Column(
-                children: returnWidgets,
+                  ],
+                ),
               );
-            },
-          ),
-          ScreenEndingSpacer(),
-        ],
+            }
+          }
+          // While loading, do this:
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
