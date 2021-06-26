@@ -33,7 +33,7 @@ class ProgressData {
       lastActiveDate: TimeHelper.instance.getTime,
       currentStartingDate: TimeHelper.instance.getTime,
       goal: "",
-      steps: [],
+      steps: const [],
     );
   }
 
@@ -281,7 +281,7 @@ class ProgressData {
   Map<String, dynamic> toMap() {
     final map = Map<String, dynamic>();
 
-    List<Map> mapList = [];
+    final List<Map> mapList = [];
     for (final StepClass step in this.steps) {
       mapList.add(step.toMap());
     }
@@ -296,8 +296,8 @@ class ProgressData {
 
   factory ProgressData.fromMap(final Map<String, dynamic> map) {
     List<StepClass> jsonToStepList(String json) {
-      List<dynamic> dynamicList = jsonDecode(json);
-      List<StepClass> stepList = <StepClass>[];
+      final List<dynamic> dynamicList = jsonDecode(json);
+      final List<StepClass> stepList = <StepClass>[];
 
       for (final dynamic stepMap in dynamicList) {
         stepList.add(StepClass.fromMap(stepMap));

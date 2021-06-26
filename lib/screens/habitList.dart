@@ -72,7 +72,7 @@ class _HabitListState extends State<HabitList> {
                 );
               } else {
                 // If there are habit plans
-                List<Widget> columnItems = [];
+                final List<Widget> columnItems = [];
                 columnItems.add(
                   Padding(
                     padding: StyleData.screenPadding,

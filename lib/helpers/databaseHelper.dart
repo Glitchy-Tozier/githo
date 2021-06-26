@@ -46,7 +46,7 @@ class DatabaseHelper {
   }
 
   Future<Database> _initDb() async {
-    Directory dir = await getApplicationDocumentsDirectory();
+    final Directory dir = await getApplicationDocumentsDirectory();
     final String path = dir.path + "/HabitPlanDatabase.db";
 
     var habitPlanDb;
@@ -56,8 +56,8 @@ class DatabaseHelper {
         version: 1,
         onCreate: _createDb,
       );
-    } catch (e) {
-      print(e);
+    } catch (error) {
+      print(error);
     }
 
     return habitPlanDb;
@@ -136,7 +136,7 @@ class DatabaseHelper {
   }
 
   Future<List<Map<String, dynamic>>> getDataMapList(String tableName) async {
-    Database db = await this._getDb;
+    final Database db = await this._getDb;
 
     final List<Map<String, dynamic>> result = await db.query(tableName);
     return result;
@@ -148,14 +148,15 @@ class DatabaseHelper {
 
     final List<HabitPlan> habitPlanList = [];
 
-    habitPlanMapList.forEach((habitPlanMap) {
+    for (final Map<String, dynamic> habitPlanMap in habitPlanMapList) {
       habitPlanList.add(HabitPlan.fromMap(habitPlanMap));
-    });
+    }
+
     return habitPlanList;
   }
 
   Future<List<HabitPlan>> getActiveHabitPlan() async {
-    Database db = await this._getDb;
+    final Database db = await this._getDb;
 
     final List<Map<String, Object?>> resultsMap;
     resultsMap = await db.query(
@@ -170,21 +171,24 @@ class DatabaseHelper {
     }
 
     if (resultsMap.length == 0) {
-      return <HabitPlan>[];
+      return const <HabitPlan>[];
     } else {
-      List<HabitPlan> activeHabitPlan = [HabitPlan.fromMap(resultsMap[0])];
+      // A hacky solution to null-issues
+      final List<HabitPlan> activeHabitPlan = [
+        HabitPlan.fromMap(resultsMap[0]),
+      ];
       return activeHabitPlan;
     }
   }
 
-  Future<int> insertHabitPlan(HabitPlan habitPlan) async {
-    Database db = await this._getDb;
+  Future<int> insertHabitPlan(final HabitPlan habitPlan) async {
+    final Database db = await this._getDb;
     final int result = await db.insert(habitPlansTable, habitPlan.toMap());
     return result;
   }
 
   Future<int> updateHabitPlan(HabitPlan habitPlan) async {
-    Database db = await this._getDb;
+    final Database db = await this._getDb;
     final int result = await db.update(
       habitPlansTable,
       habitPlan.toMap(),
@@ -195,7 +199,7 @@ class DatabaseHelper {
   }
 
   Future<int> deleteHabitPlan(int id) async {
-    Database db = await this._getDb;
+    final Database db = await this._getDb;
     final int result = await db.delete(
       habitPlansTable,
       where: "$colId = ?",
@@ -205,16 +209,16 @@ class DatabaseHelper {
   }
 
   Future<ProgressData> getProgressData() async {
-    List<Map<String, Object?>> queryResultList =
+    final List<Map<String, Object?>> queryResultList =
         await getDataMapList(progressDataTable);
-    Map<String, Object?> queryResult = queryResultList[0];
+    final Map<String, Object?> queryResult = queryResultList[0];
 
-    ProgressData result = ProgressData.fromMap(queryResult);
+    final ProgressData result = ProgressData.fromMap(queryResult);
     return result;
   }
 
   Future<int> updateProgressData(ProgressData progressData) async {
-    Database db = await this._getDb;
+    final Database db = await this._getDb;
     final int result = await db.update(
       progressDataTable,
       progressData.toMap(),
@@ -223,16 +227,16 @@ class DatabaseHelper {
   }
 
   Future<SettingsData> getSettingsData() async {
-    List<Map<String, Object?>> queryResultList =
+    final List<Map<String, Object?>> queryResultList =
         await getDataMapList(settingsDataTable);
-    Map<String, Object?> queryResult = queryResultList[0];
+    final Map<String, Object?> queryResult = queryResultList[0];
 
-    SettingsData result = SettingsData.fromMap(queryResult);
+    final SettingsData result = SettingsData.fromMap(queryResult);
     return result;
   }
 
   Future<int> updateSettingsData(SettingsData settingsData) async {
-    Database db = await this._getDb;
+    final Database db = await this._getDb;
     final int result = await db.update(
       progressDataTable,
       settingsData.toMap(),

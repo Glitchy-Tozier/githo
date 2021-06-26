@@ -7,7 +7,7 @@ class SliderTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<TextSpan> textSpanList = [];
+    final List<TextSpan> textSpanList = [];
 
     // Style the spans according to the input
     textDataPairs.forEach((textSpanData) {

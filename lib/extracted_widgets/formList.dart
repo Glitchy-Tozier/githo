@@ -27,7 +27,7 @@ class _FormListState extends State<FormList> {
   // A function that sends back the values.
   final int _iniLength = 2;
 
-  List<Widget> _inputFields = [];
+  final List<Widget> _inputFields = [];
   int listLength = 0;
   late List<String> inputValues;
 

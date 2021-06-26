@@ -41,7 +41,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
   });
 
   List<Widget> _getCommentWidgets() {
-    List<Widget> widgetList = [];
+    final List<Widget> widgetList = [];
 
     // Personal Comments
     this.habitPlan.comments.forEach((comment) {
@@ -61,7 +61,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
   }
 
   List<Widget> _getRuleWidgets() {
-    List<Widget> widgetList = [];
+    final List<Widget> widgetList = [];
 
     final requiredReps = this.habitPlan.requiredReps;
     final int trainingTimeIndex = this.habitPlan.trainingTimeIndex.toInt();
@@ -113,7 +113,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
   }
 
   Table _getStepTable(ProgressData progressData) {
-    List<TableRow> tableRowList = [];
+    final List<TableRow> tableRowList = [];
     final steps = this.habitPlan.steps;
     //final int currentStepIndex = getCurrentStepIndex(habitPlan, progressData);
 
@@ -150,10 +150,13 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
       );
     }
 
-    return Table(columnWidths: const <int, TableColumnWidth>{
-      0: IntrinsicColumnWidth(),
-      1: FlexColumnWidth(),
-    }, children: tableRowList);
+    return Table(
+      columnWidths: const <int, TableColumnWidth>{
+        0: IntrinsicColumnWidth(),
+        1: FlexColumnWidth(),
+      },
+      children: tableRowList,
+    );
   }
 
   FloatingActionButton _variableFloatActButton() {
@@ -251,9 +254,9 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> commentSection;
+    final List<Widget> commentSection;
     if (habitPlan.comments[0] == "") {
-      commentSection = [];
+      commentSection = const <Widget>[];
     } else {
       commentSection = <Widget>[
         const Heading1("Comments"),

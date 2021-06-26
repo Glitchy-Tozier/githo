@@ -25,7 +25,7 @@ class StepClass {
     this.durationInHours = stepHours;
 
     // Create all the TrainingPeriod-instances
-    this.trainingPeriods = [];
+    this.trainingPeriods = <TrainingPeriod>[];
     for (int i = 0; i < habitPlan.requiredTrainingPeriods; i++) {
       final int trainingPeriodIndex = stepIndex * trainingPeriodCount + i;
       this.trainingPeriods.add(
@@ -131,12 +131,12 @@ class StepClass {
   }
 
   Map<String, dynamic> toMap() {
-    List<Map<String, dynamic>> trainingPeriodList = [];
+    final List<Map<String, dynamic>> trainingPeriodList = [];
     for (int i = 0; i < this.trainingPeriods.length; i++) {
       trainingPeriodList.add(this.trainingPeriods[i].toMap());
     }
 
-    Map<String, dynamic> map = {};
+    final Map<String, dynamic> map = {};
     map["index"] = this.index;
     map["number"] = this.number;
     map["text"] = this.text;
@@ -147,8 +147,8 @@ class StepClass {
 
   factory StepClass.fromMap(Map<String, dynamic> map) {
     List<TrainingPeriod> jsonToList(String json) {
-      List<dynamic> dynamicList = jsonDecode(json);
-      List<TrainingPeriod> stepList = [];
+      final List<dynamic> dynamicList = jsonDecode(json);
+      final List<TrainingPeriod> stepList = [];
 
       for (final dynamic periodMap in dynamicList) {
         stepList.add(TrainingPeriod.fromMap(periodMap));

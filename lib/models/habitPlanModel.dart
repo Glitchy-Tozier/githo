@@ -60,7 +60,7 @@ class HabitPlan {
   factory HabitPlan.fromMap(final Map<String, dynamic> map) {
     List<String> jsonToStringList(String json) {
       final List<dynamic> dynamicList = jsonDecode(json);
-      List<String> stringList = [];
+      final List<String> stringList = [];
 
       dynamicList.forEach((element) {
         stringList.add(element);

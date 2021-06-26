@@ -34,7 +34,7 @@ class StepToDo extends StatelessWidget {
       cardMarginRL *= 1.3;
     }
 
-    List<Widget> periodWidgets = [];
+    final List<Widget> periodWidgets = [];
     periodWidgets.add(
       Padding(
         padding: StyleData.screenPadding,
@@ -56,7 +56,7 @@ class StepToDo extends StatelessWidget {
         );
       }
 
-      List<Widget> listViewChildren = [];
+      final List<Widget> listViewChildren = [];
 
       for (final Training training in trainingPeriod.trainings) {
         if (trainingPeriod.status == "completed") {

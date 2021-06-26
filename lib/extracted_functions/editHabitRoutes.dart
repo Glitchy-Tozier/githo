@@ -14,8 +14,8 @@ void addNewHabit(
     // TextFormFields:
     goal: "",
     requiredReps: 1,
-    steps: const <String>[""],
-    comments: const <String>[""],
+    steps: <String>[""],
+    comments: <String>[""],
     // Sliders:
     trainingTimeIndex: 1,
     requiredTrainings: 5,
