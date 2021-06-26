@@ -16,46 +16,59 @@ class ConfirmDeletion extends StatelessWidget {
         "Confirm deletion",
         style: StyleData.textStyle,
       ),
-      content: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          TextButton.icon(
-            icon: Icon(
-              Icons.cancel,
-              color: Colors.orange,
-            ),
-            label: Text(
-              "Cancel",
-              style: coloredTextStyle(Colors.orange),
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          TextButton.icon(
-            icon: Icon(
-              Icons.delete,
-              color: Colors.red,
-            ),
-            label: Text(
-              "Delete",
-              style: coloredTextStyle(Colors.red),
-            ),
-            onPressed: () async {
-              DatabaseHelper.instance.deleteHabitPlan(habitPlan.id!);
-
-              ProgressData progressData =
-                  await DatabaseHelper.instance.getProgressData();
-              progressData = ProgressData.emptyData();
-              DatabaseHelper.instance.updateProgressData(progressData);
-
-              updateFunc();
-              Navigator.pop(context);
-              Navigator.pop(context);
-            },
-          ),
-        ],
+      content: Text(
+        "All previous progress will be lost.",
+        style: StyleData.textStyle,
       ),
+      actions: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            ElevatedButton.icon(
+              icon: Icon(
+                Icons.cancel,
+                color: Colors.white,
+              ),
+              label: Text(
+                "Cancel",
+                style: coloredTextStyle(Colors.white),
+              ),
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(Colors.orange),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            ElevatedButton.icon(
+              icon: Icon(
+                Icons.delete,
+                color: Colors.white,
+              ),
+              label: Text(
+                "Delete",
+                style: coloredTextStyle(Colors.white),
+              ),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+              ),
+              onPressed: () async {
+                DatabaseHelper.instance.deleteHabitPlan(habitPlan.id!);
+
+                ProgressData progressData =
+                    await DatabaseHelper.instance.getProgressData();
+                progressData = ProgressData.emptyData();
+                DatabaseHelper.instance.updateProgressData(progressData);
+
+                updateFunc();
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

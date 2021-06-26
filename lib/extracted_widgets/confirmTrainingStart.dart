@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:githo/extracted_data/styleData.dart';
 
-class ConfirmActivationChange extends StatelessWidget {
+class ConfirmTrainingStart extends StatelessWidget {
   final String title;
+  final String trainingDescription;
   final Function confirmationFunc;
 
-  const ConfirmActivationChange({
+  const ConfirmTrainingStart({
     required this.title,
+    required this.trainingDescription,
     required this.confirmationFunc,
   });
 
@@ -14,11 +16,11 @@ class ConfirmActivationChange extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(
-        title,
+        "Tackle the next training?",
         style: StyleData.textStyle,
       ),
       content: Text(
-        "All previous progress will be lost.",
+        "To-Do: $trainingDescription",
         style: StyleData.textStyle,
       ),
       actions: <Widget>[
@@ -48,7 +50,7 @@ class ConfirmActivationChange extends StatelessWidget {
                 color: Colors.white,
               ),
               label: Text(
-                "Confirm",
+                "Start",
                 style: coloredTextStyle(Colors.white),
               ),
               style: ButtonStyle(

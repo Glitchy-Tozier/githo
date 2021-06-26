@@ -176,7 +176,6 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
           context: context,
           builder: (BuildContext buildContext) => ConfirmActivationChange(
             title: "Confirm Deactivation",
-            message: "",
             confirmationFunc: okayFunc,
           ),
         );
@@ -219,7 +218,6 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
           context: context,
           builder: (BuildContext buildContext) => ConfirmActivationChange(
             title: "Confirm Activation",
-            message: "",
             confirmationFunc: okayFunc,
           ),
         );

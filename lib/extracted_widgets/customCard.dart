@@ -15,7 +15,8 @@ class CustomCard extends StatelessWidget {
     required this.child,
     required this.onTap,
     required this.color,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class CustomCard extends StatelessWidget {
           width: this.width,
           height: this.height,
           child: InkWell(
-            child: this.child,
+            child: Center(child: this.child),
             splashColor: Colors.black,
             onTap: (onTap == null) ? null : () => onTap!(),
           ),
@@ -39,9 +40,7 @@ class CustomCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(7),
             boxShadow: <BoxShadow>[
               BoxShadow(
-                //color: Colors.green,
                 blurRadius: 3,
-                //spreadRadius: 1,
                 offset: Offset(2, 2),
               ),
             ],

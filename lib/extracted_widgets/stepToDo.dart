@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:githo/extracted_data/styleData.dart';
+import 'package:githo/extracted_widgets/confirmTrainingStart.dart';
 import 'package:githo/extracted_widgets/customCard.dart';
 import 'package:githo/extracted_widgets/headings.dart';
 import 'package:githo/models/used_classes/step.dart';
@@ -78,9 +79,41 @@ class StepToDo extends StatelessWidget {
             ),
           );
         } else if (trainingPeriod.status == "active") {
-          if (training.status == "current" ||
-              training.status == "active" ||
-              training.status == "done") {
+          final Widget child;
+          final Function onTap;
+          if (training.status == "current") {
+            child = Heading1(
+              "Click to\nactivate",
+            );
+            final Function onConfirmation = () {
+              training.activate();
+              updateFunction();
+            };
+
+            listViewChildren.add(
+              CustomCard(
+                key: globalKey,
+                margin: cardMarginRL,
+                width: activeCardWidth,
+                height: activeCardHeight,
+                child: child,
+                onTap: () => showDialog(
+                  context: context,
+                  builder: (BuildContext buildContext) => ConfirmTrainingStart(
+                    title: "Confirm Activation",
+                    trainingDescription: step.text,
+                    confirmationFunc: onConfirmation,
+                  ),
+                ),
+                color: Colors.white,
+              ),
+            );
+          } else if (training.status == "active" || training.status == "done") {
+            child = Heading1("${training.doneReps}/${training.requiredReps}");
+            onTap = () {
+              training.incrementReps();
+              updateFunction();
+            };
             final Color color;
             if (training.status == "done") {
               color = Colors.pink;
@@ -89,18 +122,12 @@ class StepToDo extends StatelessWidget {
             }
             listViewChildren.add(
               CustomCard(
+                key: globalKey,
                 margin: cardMarginRL,
                 width: activeCardWidth,
                 height: activeCardHeight,
-                child: Text(
-                  "${training.doneReps}/${training.requiredReps}\n${training.status}",
-                  key: globalKey,
-                ),
-                onTap: () {
-                  training.activate();
-                  training.incrementReps();
-                  updateFunction();
-                },
+                child: child,
+                onTap: onTap,
                 color: color,
               ),
             );
