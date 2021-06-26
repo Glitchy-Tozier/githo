@@ -20,14 +20,14 @@ class DefaultHabitPlans {
       trainingTimeIndex: 1,
       requiredTrainings: 6,
       requiredTrainingPeriods: 1,
-      lastChanged: DateTime.now(),
+      lastChanged: DateTime(2019),
     ),
     HabitPlan(
       isActive: false,
       goal: "Talk to anybody, anytime",
       requiredReps: 2,
       steps: [
-        "Make eye-contact with a stranger (as short as you want)",
+        "Make eye-contact with a stranger (no matter how short)",
         "Greet a passerby",
         "Ask for the time",
         "Ask for directions to a landmark/location",
@@ -40,7 +40,51 @@ class DefaultHabitPlans {
       trainingTimeIndex: 1,
       requiredTrainings: 5,
       requiredTrainingPeriods: 2,
-      lastChanged: DateTime.now(),
+      lastChanged: DateTime(2015),
+    ),
+  ];
+
+  static final List<HabitPlan> testingHabitPlanList = [
+    // THIS IS ONLY TO HELP WITH DEBUGGING AND TESTING. ALL NORMAL HABITPLANS GO ABOVE!
+    HabitPlan(
+      isActive: false,
+      goal: "Testing without errors",
+      requiredReps: 1,
+      steps: [
+        "This is step oneeey",
+        "This is step twough",
+        "This is step tré",
+        "This is step four",
+        "This is step faive",
+      ],
+      comments: [
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."
+      ],
+      trainingTimeIndex: 1,
+      requiredTrainings: 1,
+      requiredTrainingPeriods: 3,
+      lastChanged: DateTime(0),
+    ),
+    HabitPlan(
+      isActive: false,
+      goal: "Testing without (t)errors",
+      requiredReps: 3,
+      steps: [
+        "This is step oneeey",
+        "This is step twough",
+        "This is step tré",
+        "This is step four",
+        "This is step faive",
+      ],
+      comments: [
+        "'t' as in hours",
+        "Also, this one needs 3 reps",
+      ],
+      trainingTimeIndex: 1,
+      requiredTrainings: 1,
+      requiredTrainingPeriods: 3,
+      lastChanged: DateTime(0),
     ),
   ];
 }

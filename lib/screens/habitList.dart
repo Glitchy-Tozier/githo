@@ -4,6 +4,7 @@ import 'package:githo/extracted_data/styleData.dart';
 import 'package:githo/extracted_data/fullDatabaseImport.dart';
 
 import 'package:githo/extracted_functions/editHabitRoutes.dart';
+import 'package:githo/extracted_widgets/buttonListItem.dart';
 
 import 'package:githo/extracted_widgets/headings.dart';
 import 'package:githo/extracted_widgets/screenEndingSpacer.dart';
@@ -50,40 +51,6 @@ class _HabitListState extends State<HabitList> {
     return habitPlanList;
   }
 
-  Widget _createHabitListItem(final HabitPlan habitPlan) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
-      child: ElevatedButton(
-        child: Text(
-          habitPlan.goal,
-          style: coloredTextStyle(Colors.white),
-        ),
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(
-            habitPlan.isActive ? Colors.green : Colors.black54,
-          ),
-          minimumSize: MaterialStateProperty.all<Size>(
-            Size(double.infinity, 60),
-          ),
-          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-            EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-          ),
-        ),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SingleHabitDisplay(
-                updateFunction: _updateLoadedScreens,
-                habitPlan: habitPlan,
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,7 +93,25 @@ class _HabitListState extends State<HabitList> {
                       itemCount: orderedHabitPlans.length + 1,
                       itemBuilder: (BuildContext buildContex, int i) {
                         if (i < orderedHabitPlans.length) {
-                          return _createHabitListItem(orderedHabitPlans[i]);
+                          final HabitPlan habitPlan = orderedHabitPlans[i];
+
+                          return ButtonListItem(
+                            text: habitPlan.goal,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SingleHabitDisplay(
+                                    updateFunction: _updateLoadedScreens,
+                                    habitPlan: habitPlan,
+                                  ),
+                                ),
+                              );
+                            },
+                            color: habitPlan.isActive
+                                ? Colors.green
+                                : Colors.black54,
+                          );
                         } else {
                           // On the last loop, add the ScreenEndingSpacer.
                           return ScreenEndingSpacer();

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:githo/extracted_data/dataShortcut.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -31,10 +32,6 @@ class DatabaseHelper {
   static const String progressDataTable = "progressDataTable";
   static const String colLastActiveDate = "lastActiveDate";
   static const String colCurrentStartingDate = "currentStartingDate";
-  /* static const String colCompletedReps = "completedReps";
-  static const String colCompletedTrainings = "completedTrainings";
-  static const String colCompletedTrainingPeriods = "completedTrainingPeriods";
-  static const String colTrainingData = "trainingData"; */
   static const String colProgGoal = "goal";
   static const String colProgSteps = "steps";
 
@@ -85,13 +82,24 @@ class DatabaseHelper {
     await db.execute(commandString);
 
     final List<HabitPlan> defaultHabitPlans = DefaultHabitPlans.habitPlanList;
-    defaultHabitPlans.forEach((habitPlan) {
+    for (final HabitPlan habitPlan in defaultHabitPlans) {
       // Initialize default values
       db.insert(
         habitPlansTable,
         habitPlan.toMap(),
       );
-    });
+    }
+    if (DataShortcut.testing == true) {
+      final List<HabitPlan> testingHabitPlans =
+          DefaultHabitPlans.testingHabitPlanList;
+      for (final HabitPlan habitPlan in testingHabitPlans) {
+        // Initialize default values
+        db.insert(
+          habitPlansTable,
+          habitPlan.toMap(),
+        );
+      }
+    }
 
     // Initialize progress-table
     commandString = "";
@@ -100,9 +108,6 @@ class DatabaseHelper {
     commandString += "$colProgIsActive INTEGER, ";
     commandString += "$colLastActiveDate TEXT, ";
     commandString += "$colCurrentStartingDate TEXT, ";
-    /* commandString += "$colCompletedReps INTEGER, ";
-    commandString += "$colCompletedTrainings INTEGER, ";
-    commandString += "$colCompletedTrainingPeriods INTEGER, "; */
     commandString += "$colProgGoal TEXT, ";
     commandString += "$colProgSteps TEXT";
     commandString += ")";
