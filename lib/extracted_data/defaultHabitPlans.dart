@@ -81,7 +81,7 @@ class DefaultHabitPlans {
         "'t' as in hours",
         "Also, this one needs 3 reps",
       ],
-      trainingTimeIndex: 1,
+      trainingTimeIndex: 0,
       requiredTrainings: 1,
       requiredTrainingPeriods: 3,
       lastChanged: DateTime(0),
