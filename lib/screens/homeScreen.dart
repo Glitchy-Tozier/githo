@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:githo/extracted_widgets/screenEndingSpacer.dart';
 import 'package:githo/extracted_widgets/stepToDo.dart';
 
 import 'package:githo/helpers/timeHelper.dart';
@@ -19,9 +20,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late Future<ProgressData> _progressData;
 
+  final GlobalKey globalKey = GlobalKey();
+
   @override
   void initState() {
     super.initState();
+
     _reloadScreen();
   }
 
@@ -31,6 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (DataShortcut.testing) {
         TimeHelper.instance.setTime(DateTime.now());
       }
+      _scrollToActiveTraining(delay: 1);
     });
   }
 
@@ -131,6 +136,22 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {});
   }
 
+  void _scrollToActiveTraining({final int delay = 0}) {
+    // Scroll to the active Training, if there is one.
+    Future.delayed(
+      Duration(seconds: delay),
+      () {
+        if (globalKey.currentContext != null) {
+          Scrollable.ensureVisible(
+            globalKey.currentContext!,
+            duration: const Duration(seconds: 1),
+            alignment: 0.5,
+          );
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -163,22 +184,26 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               } else {
                 // If connection is done and there is an active habitPlan:
-                progressData.updateTime();
-
-                List<Widget> toDoWidgets = [];
-                for (final StepClass step in progressData.steps) {
-                  toDoWidgets.add(
-                    StepToDo(step, updateDbAndScreen),
-                  );
+                final bool somethingChanged = progressData.updateTime();
+                if (somethingChanged) {
+                  _scrollToActiveTraining();
                 }
-                return ListView(
-                  children: [
-                    ScreenTitle(
-                      title: progressData.goal,
-                      //subTitle: getStatusString(progressData),
-                    ),
-                    ...toDoWidgets,
-                  ],
+
+                return SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  child: Column(
+                    children: <Widget>[
+                      ScreenTitle(
+                        title: progressData.goal,
+                        //subTitle: getStatusString(progressData),
+                      ),
+                      ...List.generate(progressData.steps.length, (i) {
+                        final StepClass step = progressData.steps[i];
+                        return StepToDo(globalKey, step, updateDbAndScreen);
+                      }),
+                      ScreenEndingSpacer(),
+                    ],
+                  ),
                 );
               }
             } else if (snapshot.hasError) {
@@ -255,6 +280,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       onPressed: () {
                         //progressData.incrementData();
                         //setState(() {});
+                        _scrollToActiveTraining();
                       },
                     );
                   }

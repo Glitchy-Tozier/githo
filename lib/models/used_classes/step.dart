@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:githo/extracted_data/dataShortcut.dart';
+import 'package:githo/helpers/timeHelper.dart';
 import 'package:githo/models/habitPlanModel.dart';
 import 'package:githo/models/used_classes/trainingPeriod.dart';
 
@@ -42,6 +43,17 @@ class StepClass {
     required this.durationInHours,
     required this.trainingPeriods,
   });
+
+  bool get isActive {
+    final DateTime now = TimeHelper.instance.getTime;
+    final Map<String, dynamic>? activeMap = getDataByDate(now);
+
+    if (activeMap == null) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 
   int? get _activePeriodIndex {
     for (int i = 0; i < this.trainingPeriods.length; i++) {

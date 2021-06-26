@@ -250,7 +250,9 @@ class ProgressData {
     currentPeriod.status = "active";
   }
 
-  void updateTime() {
+  bool updateTime() {
+    final bool somethingChanged;
+
     if (this._hasStarted && _inNewTraining()) {
       if (getActiveData() == null) {
         // If this is the first training we ever arrive in
@@ -264,7 +266,12 @@ class ProgressData {
       _moveToCurrentTraining();
       // Save all changes
       DatabaseHelper.instance.updateProgressData(this);
+
+      somethingChanged = true;
+    } else {
+      somethingChanged = false;
     }
+    return somethingChanged;
   }
 
   // Functions for interacting with the database

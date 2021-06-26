@@ -9,25 +9,36 @@ import 'package:githo/models/used_classes/trainingPeriod.dart';
 class StepToDo extends StatelessWidget {
   final StepClass step;
   final Function updateFunction;
-  const StepToDo(this.step, this.updateFunction);
-
-  final double cardWidth = 100;
-  final double activeCardWidth = 130;
-
-  final double cardHeight = 70;
-  final double activeCardHeight = 90;
-
-  final double rowHeight = 80;
-  final double activeRowHeight = 100;
+  final GlobalKey globalKey;
+  const StepToDo(this.globalKey, this.step, this.updateFunction);
 
   @override
   Widget build(BuildContext context) {
+    double cardWidth = 100;
+    double activeCardWidth = 130;
+
+    double cardHeight = 70;
+    double activeCardHeight = 90;
+
+    double cardMarginRL = 6;
+
+    if (step.isActive) {
+      cardWidth *= 1.3;
+      activeCardWidth *= 1.3;
+
+      cardHeight *= 1.3;
+      activeCardHeight *= 1.3;
+
+      cardMarginRL *= 1.3;
+    }
+
     List<Widget> periodWidgets = [];
-    periodWidgets.add(Padding(
-      padding: StyleData.screenPadding,
-      child: Heading1(step.text),
-    ));
-    double cardRowHeight = rowHeight;
+    periodWidgets.add(
+      Padding(
+        padding: StyleData.screenPadding,
+        child: Heading1(step.text),
+      ),
+    );
 
     for (int i = 0; i < step.trainingPeriods.length; i++) {
       final TrainingPeriod trainingPeriod = step.trainingPeriods[i];
@@ -58,15 +69,15 @@ class StepToDo extends StatelessWidget {
 
           listViewChildren.add(
             CustomCard(
+              margin: cardMarginRL,
               width: cardWidth,
               height: cardHeight,
               child: Icon(Icons.check_rounded),
-              onTap: () {},
+              onTap: null,
               color: color,
             ),
           );
         } else if (trainingPeriod.status == "active") {
-          cardRowHeight = activeRowHeight;
           if (training.status == "current" ||
               training.status == "active" ||
               training.status == "done") {
@@ -78,11 +89,13 @@ class StepToDo extends StatelessWidget {
             }
             listViewChildren.add(
               CustomCard(
+                margin: cardMarginRL,
                 width: activeCardWidth,
                 height: activeCardHeight,
-                child: Text(training.startingDate.toString()),
-                /* child: Text(
-                    "${training.doneReps}/${training.requiredReps}\n${training.status}"), */
+                child: Text(
+                  "${training.doneReps}/${training.requiredReps}\n${training.status}",
+                  key: globalKey,
+                ),
                 onTap: () {
                   training.activate();
                   training.incrementReps();
@@ -103,12 +116,11 @@ class StepToDo extends StatelessWidget {
 
             listViewChildren.add(
               CustomCard(
+                margin: cardMarginRL,
                 width: cardWidth,
                 height: cardHeight,
-                child: Text(training.startingDate.toString()),
-
-                //child: Text(training.status),
-                onTap: () {},
+                child: Text(training.status),
+                onTap: null,
                 color: color,
               ),
             );
@@ -116,27 +128,40 @@ class StepToDo extends StatelessWidget {
         } else {
           listViewChildren.add(
             CustomCard(
+              margin: cardMarginRL,
               width: cardWidth,
               height: cardHeight,
-              child: Text(training.startingDate.toString()),
-
-//              child: Icon(Icons.lock),
-              onTap: () {},
+              child: Icon(Icons.lock),
+              onTap: null,
               color: Colors.grey,
             ),
           );
         }
       }
+
       periodWidgets.add(
-        SizedBox(
-          height: cardRowHeight,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            shrinkWrap: true,
+        SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          scrollDirection: Axis.horizontal,
+          padding: EdgeInsets.only(
+            left: StyleData.screenPaddingValue / 2,
+            right: StyleData.screenPaddingValue / 2,
+          ),
+          child: Row(
             children: listViewChildren,
           ),
         ),
       );
+      /* periodWidgets.add(
+        SizedBox(
+          height: cardRowHeight,
+          child: ListView(
+            physics: BouncingScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            children: listViewChildren,
+          ),
+        ),
+      ); */
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
