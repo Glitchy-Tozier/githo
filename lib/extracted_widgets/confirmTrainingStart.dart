@@ -28,7 +28,7 @@ class ConfirmTrainingStart extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             ElevatedButton.icon(
-              icon: Icon(
+              icon: const Icon(
                 Icons.cancel,
                 color: Colors.white,
               ),
@@ -45,7 +45,7 @@ class ConfirmTrainingStart extends StatelessWidget {
               },
             ),
             ElevatedButton.icon(
-              icon: Icon(
+              icon: const Icon(
                 Icons.check_circle,
                 color: Colors.white,
               ),

@@ -15,9 +15,9 @@ class ScreenTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     final EdgeInsets padding;
     if (addBottomPadding) {
-      padding = EdgeInsets.only(top: 70, bottom: 50);
+      padding = const EdgeInsets.only(top: 70, bottom: 50);
     } else {
-      padding = EdgeInsets.only(top: 70, bottom: 10);
+      padding = const EdgeInsets.only(top: 70, bottom: 10);
     }
 
     List<Widget> columnContents = [
@@ -83,11 +83,11 @@ class Heading2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.only(top: 15, bottom: 5),
       child: Text(
         _text,
         style: const TextStyle(
-          fontSize: 20,
+          fontSize: 25,
           color: Colors.black,
           //fontWeight: FontWeight.bold,
         ),

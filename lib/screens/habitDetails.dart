@@ -227,19 +227,23 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
       }
     }
 
-    Color buttonColor() {
-      if (habitPlan.isActive == true) {
-        return Colors.black;
-      } else {
-        return Colors.green;
-      }
+    final Icon child;
+    if (habitPlan.isActive == true) {
+      child = const Icon(Icons.star_outline);
+    } else {
+      child = const Icon(Icons.star);
+    }
+
+    final Color color;
+    if (habitPlan.isActive == true) {
+      color = Colors.black;
+    } else {
+      color = Colors.green;
     }
 
     return FloatingActionButton(
-      child: Icon(
-        Icons.grade,
-      ),
-      backgroundColor: buttonColor(),
+      child: child,
+      backgroundColor: color,
       onPressed: () => onClickFunc(),
       heroTag: null,
     );
@@ -311,7 +315,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             FloatingActionButton(
-              child: Icon(
+              child: const Icon(
                 Icons.delete,
               ),
               backgroundColor: Colors.red,
@@ -328,7 +332,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
             ),
             _variableFloatActButton(),
             FloatingActionButton(
-              child: Icon(
+              child: const Icon(
                 Icons.edit,
               ),
               backgroundColor: Colors.orange,

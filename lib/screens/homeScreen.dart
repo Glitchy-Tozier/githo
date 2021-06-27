@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:githo/extracted_widgets/confirmTrainingStart.dart';
 import 'package:githo/extracted_widgets/screenEndingSpacer.dart';
 import 'package:githo/extracted_widgets/stepToDo.dart';
 
@@ -9,6 +10,7 @@ import 'package:githo/extracted_data/styleData.dart';
 
 import 'package:githo/extracted_widgets/headings.dart';
 import 'package:githo/models/used_classes/step.dart';
+import 'package:githo/models/used_classes/training.dart';
 
 import 'package:githo/screens/habitList.dart';
 
@@ -100,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                         Padding(
                           padding: EdgeInsets.symmetric(vertical: 10),
-                          child: Icon(
+                          child: const Icon(
                             Icons.done,
                             color: Colors.black,
                           ),
@@ -131,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   } */
 
-  void updateDbAndScreen() async {
+  void _updateDbAndScreen() async {
     DatabaseHelper.instance.updateProgressData(await this._progressData);
     setState(() {});
   }
@@ -202,7 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         return StepToDo(
                           globalKey,
                           step,
-                          updateDbAndScreen,
+                          _updateDbAndScreen,
                         );
                       }),
                       ScreenEndingSpacer(),
@@ -241,7 +243,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: <Widget>[
             FloatingActionButton(
               tooltip: "Go to settings",
-              child: Icon(Icons.settings),
+              child: const Icon(Icons.settings),
               backgroundColor: Colors.orange,
               heroTag: null, //"settingsHero",
               onPressed: () {
@@ -288,12 +290,31 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (progressData.isActive) {
                     return FloatingActionButton(
                       tooltip: "Mark step as done",
-                      child: Icon(Icons.done),
+                      child: const Icon(Icons.done),
                       heroTag: null,
                       onPressed: () {
-                        //progressData.incrementData();
-                        //setState(() {});
-                        _scrollToActiveTraining();
+                        final Map<String, dynamic>? activeMap =
+                            progressData.getActiveData();
+
+                        if (activeMap != null) {
+                          final Training activeTraining = activeMap["training"];
+                          final StepClass activeStep = activeMap["step"];
+                          if (activeTraining.status == "current") {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext buildContext) =>
+                                  ConfirmTrainingStart(
+                                title: "Confirm Activation",
+                                trainingDescription: activeStep.text,
+                                confirmationFunc: activeTraining.activate,
+                              ),
+                            );
+                          } else {
+                            activeTraining.incrementReps();
+                          }
+                          _updateDbAndScreen();
+                          _scrollToActiveTraining();
+                        }
                       },
                     );
                   }

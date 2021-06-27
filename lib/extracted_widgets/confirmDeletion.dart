@@ -26,7 +26,7 @@ class ConfirmDeletion extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             ElevatedButton.icon(
-              icon: Icon(
+              icon: const Icon(
                 Icons.cancel,
                 color: Colors.white,
               ),
@@ -43,7 +43,7 @@ class ConfirmDeletion extends StatelessWidget {
               },
             ),
             ElevatedButton.icon(
-              icon: Icon(
+              icon: const Icon(
                 Icons.delete,
                 color: Colors.white,
               ),

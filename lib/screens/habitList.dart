@@ -148,7 +148,7 @@ class _HabitListState extends State<HabitList> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
         onPressed: () {
           addNewHabit(context, _updateLoadedScreens);
         },

@@ -1,4 +1,5 @@
 import 'package:githo/extracted_data/dataShortcut.dart';
+import 'package:githo/helpers/timeHelper.dart';
 import 'package:githo/models/habitPlanModel.dart';
 
 class Training {
@@ -26,6 +27,22 @@ class Training {
     required this.endingDate,
     required this.status,
   });
+
+  bool get isNow {
+    final DateTime now = TimeHelper.instance.getTime;
+    if (now.isAfter(this.startingDate) && now.isBefore(this.endingDate))
+      return true;
+    else
+      return false;
+  }
+
+  bool get hasPassed {
+    final DateTime now = TimeHelper.instance.getTime;
+    if (now.isAfter(this.endingDate))
+      return true;
+    else
+      return false;
+  }
 
   void setDates(DateTime startingDate) {
     this.startingDate = startingDate;
@@ -55,7 +72,7 @@ class Training {
   void setResult() {
     if (this.status == "current") {
       // If the training never was started
-      this.status = "";
+      this.status = "ignored";
     } else if (this.status == "active") {
       // If the training was started but never successfully finished
       this.status = "unsuccessful";

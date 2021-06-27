@@ -150,7 +150,7 @@ class _EditHabitState extends State<EditHabit> {
                           headerBuilder:
                               (BuildContext context, bool isExpanded) {
                             return ListTile(
-                              //leading: Icon(Icons.settings),
+                              //leading: const Icon(Icons.settings),
                               title: Text(
                                 "Extended Settings",
                                 textAlign: TextAlign.left,
@@ -255,7 +255,7 @@ class _EditHabitState extends State<EditHabit> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.save),
+        child: const Icon(Icons.save),
         onPressed: () {
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();

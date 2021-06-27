@@ -27,8 +27,9 @@ class ButtonListItem extends StatelessWidget {
             const Size(double.infinity, 60),
           ),
           padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-            const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
           ),
+          alignment: Alignment.centerLeft,
         ),
         onPressed: () => onPressed(),
       ),
