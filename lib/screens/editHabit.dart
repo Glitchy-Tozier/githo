@@ -150,7 +150,6 @@ class _EditHabitState extends State<EditHabit> {
                           headerBuilder:
                               (BuildContext context, bool isExpanded) {
                             return ListTile(
-                              //leading: const Icon(Icons.settings),
                               title: Text(
                                 "Extended Settings",
                                 textAlign: TextAlign.left,

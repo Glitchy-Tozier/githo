@@ -26,4 +26,12 @@ class TimeHelper {
       ),
     );
   }
+
+  void superTimeTravel(final ProgressData progressData) {
+    _testingTime = _testingTime.add(
+      Duration(
+        hours: progressData.trainingPeriodDurationInHours,
+      ),
+    );
+  }
 }

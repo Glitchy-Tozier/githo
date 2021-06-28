@@ -263,19 +263,30 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (snapshot.hasData) {
                   final ProgressData progressData = snapshot.data!;
                   if (progressData.isActive && DataShortcut.testing) {
-                    return FloatingActionButton(
-                      backgroundColor: Colors.transparent,
-                      splashColor: Colors.purple,
-                      elevation: 0,
-                      onPressed: () {
-                        TimeHelper.instance.timeTravel(progressData);
+                    return SizedBox(
+                      height: 50,
+                      width: 50,
+                      child: InkWell(
+                        //backgroundColor: Colors.transparent,
+                        splashColor: Colors.purple,
+                        //elevation: 0,
+                        onTap: () {
+                          TimeHelper.instance.timeTravel(progressData);
 
-                        print("Start ${progressData.currentStartingDate}");
-                        print("Last  ${progressData.lastActiveDate}");
-                        print("Now   ${TimeHelper.instance.getTime}");
+                          print("Start ${progressData.currentStartingDate}");
+                          print("Last  ${progressData.lastActiveDate}");
+                          print("Now   ${TimeHelper.instance.getTime}");
 
-                        setState(() {});
-                      },
+                          setState(() {});
+                        },
+                        onLongPress: () {
+                          TimeHelper.instance.superTimeTravel(progressData);
+
+                          print("Start ${progressData.currentStartingDate}");
+                          print("Last  ${progressData.lastActiveDate}");
+                          print("Now   ${TimeHelper.instance.getTime}");
+                        },
+                      ),
                     );
                   }
                 }
@@ -306,7 +317,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ConfirmTrainingStart(
                                 title: "Confirm Activation",
                                 trainingDescription: activeStep.text,
-                                confirmationFunc: activeTraining.activate,
+                                confirmationFunc: () {
+                                  activeTraining.activate();
+                                  _updateDbAndScreen();
+                                },
                               ),
                             );
                           } else {

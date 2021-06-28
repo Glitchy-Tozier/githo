@@ -178,7 +178,7 @@ class ProgressData {
     int remainingRegressions = failedPeriods +
         1; // Always reset one additional period to make sure we actually move backwards in time.
 
-    while (failedPeriods > 0) {
+    while (true) {
       StepClass currentStep = this.steps[currentStepIdx];
       remainingRegressions = currentStep.regressPeriods(remainingRegressions);
 
@@ -202,7 +202,6 @@ class ProgressData {
         };
       }
     }
-    throw "ProgressData: _resetPeriodValues(...) was called with a failedPeriods smaller or equal to 0";
   }
 
   void _analyzePassedTime() {
@@ -227,12 +226,14 @@ class ProgressData {
       // Get the number of failed trainigPeriods
       int failedPeriods = passedTrainingPeriods;
       if (lastActivePeriod.wasSuccessful) {
-        failedPeriods--;
+        print("WAS SUCCESSFUL!!!!!!!!!!");
+        failedPeriods -= 2;
       }
 
+      print("failedPeriods: $failedPeriods");
       _setNewStartingDate();
 
-      if (failedPeriods == 0) {
+      if (failedPeriods < 0) {
         lastActivePeriod.status = "completed";
       } else {
         final Map<String, int> nextPeriodPosition;
