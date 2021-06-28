@@ -41,7 +41,7 @@ class ConfirmTrainingStart extends StatelessWidget {
                     MaterialStateProperty.all<Color>(Colors.orange),
               ),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.pop(context);
               },
             ),
             ElevatedButton.icon(
@@ -57,8 +57,8 @@ class ConfirmTrainingStart extends StatelessWidget {
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
               ),
               onPressed: () {
-                confirmationFunc();
                 Navigator.pop(context);
+                confirmationFunc();
               },
             ),
           ],

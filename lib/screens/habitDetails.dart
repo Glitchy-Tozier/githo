@@ -5,9 +5,9 @@ import 'package:githo/extracted_data/fullDatabaseImport.dart';
 import 'package:githo/extracted_data/styleData.dart';
 
 import 'package:githo/extracted_functions/editHabitRoutes.dart';
+import 'package:githo/extracted_widgets/activationFAB.dart';
 
 import 'package:githo/extracted_widgets/bulletPoint.dart';
-import 'package:githo/extracted_widgets/confirmActivationChange.dart';
 import 'package:githo/extracted_widgets/customListTile.dart';
 import 'package:githo/extracted_widgets/confirmDeletion.dart';
 import 'package:githo/extracted_widgets/headings.dart';
@@ -159,96 +159,6 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
     );
   }
 
-  FloatingActionButton _variableFloatActButton() {
-    void onClickFunc() async {
-      if (habitPlan.isActive == true) {
-        // If the viewed habetPlan was active to begin with, disable it.
-        void okayFunc() async {
-          this.habitPlan.isActive = false;
-          await DatabaseHelper.instance.updateHabitPlan(this.habitPlan);
-
-          ProgressData progressData = await this._progressData;
-          progressData = ProgressData.emptyData();
-          await DatabaseHelper.instance.updateProgressData(progressData);
-
-          updatePrevScreens();
-          Navigator.pop(context);
-        }
-
-        showDialog(
-          context: context,
-          builder: (BuildContext buildContext) => ConfirmActivationChange(
-            title: "Confirm Deactivation",
-            confirmationFunc: okayFunc,
-          ),
-        );
-      } else {
-        // If the viewed habitPlan wasn't active, activate it.
-
-        void okayFunc() async {
-          // Mark the old plan as inactive
-          List<HabitPlan> activeHabitPlan =
-              await DatabaseHelper.instance.getActiveHabitPlan();
-          if (activeHabitPlan.length > 0) {
-            HabitPlan oldHabitPlan = activeHabitPlan[0];
-            oldHabitPlan.isActive = false;
-            await DatabaseHelper.instance.updateHabitPlan(oldHabitPlan);
-          }
-
-          // Update (and reset) older progressData
-          ProgressData progressData =
-              await DatabaseHelper.instance.getProgressData();
-          final DateTime now = DateTime.now();
-          final DateTime startingDate = DateTime(
-            now.year,
-            now.month,
-            now.day + 8 - now.weekday,
-          );
-          progressData.adaptToHabitPlan(startingDate, habitPlan);
-          await DatabaseHelper.instance.updateProgressData(progressData);
-
-          // Update the plan you're looking at to be active
-          habitPlan.isActive = true;
-          habitPlan.lastChanged = DateTime.now();
-          await DatabaseHelper.instance.updateHabitPlan(habitPlan);
-
-          // Refresh previous screens and move there.
-          updatePrevScreens();
-          Navigator.pop(context);
-        }
-
-        showDialog(
-          context: context,
-          builder: (BuildContext buildContext) => ConfirmActivationChange(
-            title: "Confirm Activation",
-            confirmationFunc: okayFunc,
-          ),
-        );
-      }
-    }
-
-    final Icon child;
-    if (habitPlan.isActive == true) {
-      child = const Icon(Icons.star_outline);
-    } else {
-      child = const Icon(Icons.star);
-    }
-
-    final Color color;
-    if (habitPlan.isActive == true) {
-      color = Colors.black;
-    } else {
-      color = Colors.green;
-    }
-
-    return FloatingActionButton(
-      child: child,
-      backgroundColor: color,
-      onPressed: () => onClickFunc(),
-      heroTag: null,
-    );
-  }
-
   void _updateLoadedScreens(HabitPlan changedHabitPlan) {
     setState(() {
       this.habitPlan = changedHabitPlan;
@@ -330,7 +240,10 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
               },
               heroTag: null,
             ),
-            _variableFloatActButton(),
+            ActivationFAB(
+              habitPlan: habitPlan,
+              updateFunction: () => setState(() => updatePrevScreens()),
+            ),
             FloatingActionButton(
               child: const Icon(
                 Icons.edit,

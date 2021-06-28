@@ -6,9 +6,9 @@ import 'package:githo/models/habitPlanModel.dart';
 
 class ConfirmDeletion extends StatelessWidget {
   final HabitPlan habitPlan;
-  final Function updateFunc;
+  final Function updateFunction;
 
-  const ConfirmDeletion(this.habitPlan, this.updateFunc);
+  const ConfirmDeletion(this.habitPlan, this.updateFunction);
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class ConfirmDeletion extends StatelessWidget {
                     MaterialStateProperty.all<Color>(Colors.orange),
               ),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.pop(context);
               },
             ),
             ElevatedButton.icon(
@@ -62,7 +62,7 @@ class ConfirmDeletion extends StatelessWidget {
                 progressData = ProgressData.emptyData();
                 DatabaseHelper.instance.updateProgressData(progressData);
 
-                updateFunc();
+                updateFunction();
                 Navigator.pop(context);
                 Navigator.pop(context);
               },
