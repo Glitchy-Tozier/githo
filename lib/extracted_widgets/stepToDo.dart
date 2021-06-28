@@ -29,7 +29,7 @@ class StepToDo extends StatelessWidget {
       cardHeight *= 1.3;
       cardMarginRL *= 1.3;
     }
-    double activeTrainingNr = double.infinity;
+    //double activeTrainingNr = double.infinity;
 
     final List<Widget> periodWidgets = [];
     periodWidgets.add(
@@ -105,7 +105,7 @@ class StepToDo extends StatelessWidget {
             }
           } else if (training.isNow) {
             key = globalKey;
-            activeTrainingNr = training.number.toDouble();
+            // = training.number.toDouble();
 
             if (training.status == "current") {
               width *= 1.3;

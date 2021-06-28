@@ -30,18 +30,20 @@ class CustomCard extends StatelessWidget {
             child: Center(child: this.child),
             splashColor: Colors.black,
             onTap: (onTap == null) ? null : () => onTap!(),
+            borderRadius: BorderRadius.circular(7),
           ),
           decoration: BoxDecoration(
             color: this.color,
             /* border: Border.all(
               color: Colors.black,
-              width: 2,
+              width: 4,
             ), */
             borderRadius: BorderRadius.circular(7),
             boxShadow: const <BoxShadow>[
               BoxShadow(
-                blurRadius: 3,
-                offset: Offset(2, 2),
+                color: Colors.grey,
+                blurRadius: 5,
+                offset: Offset(4, 4),
               ),
             ],
           ),

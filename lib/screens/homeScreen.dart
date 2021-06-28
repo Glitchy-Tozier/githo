@@ -195,9 +195,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   physics: BouncingScrollPhysics(),
                   child: Column(
                     children: <Widget>[
-                      ScreenTitle(
-                        title: progressData.goal,
-                        //subTitle: getStatusString(progressData),
+                      Padding(
+                        padding: StyleData.screenPadding,
+                        child: ScreenTitle(
+                          title: progressData.goal,
+                          //subTitle: getStatusString(progressData),
+                        ),
                       ),
                       ...List.generate(progressData.steps.length, (i) {
                         final StepClass step = progressData.steps[i];
