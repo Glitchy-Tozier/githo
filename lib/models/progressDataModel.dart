@@ -13,7 +13,6 @@ import 'package:githo/models/used_classes/trainingPeriod.dart';
 
 class ProgressData {
   bool isActive;
-  DateTime lastActiveDate;
   DateTime currentStartingDate;
   String goal;
   List<StepClass> steps;
@@ -22,7 +21,6 @@ class ProgressData {
   ProgressData({
     required this.isActive,
     required this.currentStartingDate,
-    required this.lastActiveDate,
     required this.goal,
     required this.steps,
   });
@@ -30,19 +28,18 @@ class ProgressData {
   factory ProgressData.emptyData() {
     return ProgressData(
       isActive: false,
-      lastActiveDate: TimeHelper.instance.getTime,
       currentStartingDate: TimeHelper.instance.getTime,
       goal: "",
       steps: const [],
     );
   }
 
-  void adaptToHabitPlan(
-    final DateTime startingDate,
-    final HabitPlan habitPlan,
-  ) {
+  void adaptToHabitPlan({
+    required final HabitPlan habitPlan,
+    required final DateTime startingDate,
+    final int startingStepNr = 1,
+  }) {
     this.isActive = true;
-    this.lastActiveDate = TimeHelper.instance.getTime;
     this.currentStartingDate = startingDate;
     this.goal = habitPlan.goal;
     this.steps = [];
@@ -54,7 +51,15 @@ class ProgressData {
             ),
           );
     }
-    _setTrainingDates();
+
+    final int startingStepIdx = startingStepNr - 1;
+    this.steps[startingStepNr].trainingPeriods[0].status = "waiting for start";
+
+    final Map<String, int> startingIdxData = {
+      "step": startingStepIdx,
+      "trainingPeriod": 0,
+    };
+    _setTrainingDates(startingIdxData);
   }
 
   // Regularly used functions
@@ -117,10 +122,16 @@ class ProgressData {
 
   Map<String, dynamic>? getActiveData() {
     for (final StepClass step in this.steps) {
-      Map<String, dynamic>? tempResult = step.getActiveData();
+      final Map<String, dynamic>? tempResult = step.getActiveData();
       if (tempResult != null) {
         return tempResult;
       }
+    }
+  }
+
+  void _activateStartingPeriod() {
+    for (final StepClass step in this.steps) {
+      step.activateStartingPeriod();
     }
   }
 
@@ -136,12 +147,12 @@ class ProgressData {
   }
 
   void _setTrainingDates(
-      [final Map<String, int> startingTrainingPeriodData = const {
+      [final Map<String, int> startingIndexData = const {
         "step": 0,
         "trainingPeriod": 0,
       }]) {
-    final int startingStepIdx = startingTrainingPeriodData["step"]!;
-    final int startingPeriodIdx = startingTrainingPeriodData["trainingPeriod"]!;
+    final int startingStepIdx = startingIndexData["step"]!;
+    final int startingPeriodIdx = startingIndexData["trainingPeriod"]!;
 
     // Set dates for all the trainings
     DateTime workingDate = this.currentStartingDate;
@@ -260,12 +271,17 @@ class ProgressData {
     if (this._hasStarted && _inNewTraining()) {
       if (getActiveData() == null) {
         // If this is the first training we ever arrive in
-        _setNewStartingDate();
-        _setTrainingDates();
-      } else {
-        // Analyze what happened since last time opening the app
-        _analyzePassedTime();
+
+        _activateStartingPeriod();
+
+        //_setNewStartingDate();
+        //_setTrainingDates();
       }
+      //else {
+      // Analyze what happened since last time opening the app
+      _analyzePassedTime();
+      //}
+
       // Activate the next Training/TrainingPeriod
       _moveToCurrentTraining();
       // Save all changes
@@ -288,7 +304,6 @@ class ProgressData {
     }
 
     map["isActive"] = isActive.boolToInt();
-    map["lastActiveDate"] = lastActiveDate.toString();
     map["currentStartingDate"] = currentStartingDate.toString();
     map["goal"] = goal;
     map["steps"] = jsonEncode(mapList);
@@ -309,7 +324,6 @@ class ProgressData {
 
     return ProgressData(
       isActive: (map["isActive"] as int).intToBool(),
-      lastActiveDate: DateTime.parse(map["lastActiveDate"]),
       currentStartingDate: DateTime.parse(map["currentStartingDate"]),
       goal: map["goal"],
       steps: jsonToStepList(map["steps"]),

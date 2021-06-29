@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:githo/extracted_data/fullDatabaseImport.dart';
 import 'package:githo/extracted_data/styleData.dart';
+import 'package:githo/extracted_functions/textFormFieldHelpers.dart';
 import 'package:githo/helpers/databaseHelper.dart';
 import 'package:githo/models/habitPlanModel.dart';
 import 'package:intl/intl.dart';
@@ -21,16 +23,27 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
   final Function updateFunction;
   _ConfirmStartingTimeState(this.habitPlan, this.updateFunction);
 
+  final _formKey = GlobalKey<FormState>();
+  bool _expandSettings = false;
+
   late DateTime startingDate;
+  String startingPeriod = "The first training";
+  late String startingDateString;
+  final TextEditingController dateController = TextEditingController();
+
+  int startingStep = 1;
+
   @override
   void initState() {
     super.initState();
-    this.startingDate = _getDefaultStartingTime(widget.habitPlan);
+    this.startingDate = _getDefaultStartingTime(this.habitPlan);
   }
 
   DateTime _getDefaultStartingTime(final HabitPlan habitPlan) {
     final DateTime now = DateTime.now();
     final DateTime startingDate;
+
+    print(habitPlan.trainingTimeIndex);
 
     switch (habitPlan.trainingTimeIndex) {
       case 0:
@@ -53,9 +66,14 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
     return startingDate;
   }
 
+  String _format(DateTime dateTime) {
+    return DateFormat("EEEE, dd.MM.yyyy").format(dateTime);
+  }
+
   void _updateDataBase(
     HabitPlan habitPlan,
     final DateTime startingDate,
+    final int startingStep,
   ) async {
     // Mark the old plan as inactive
     final List<HabitPlan> activeHabitPlanList =
@@ -68,25 +86,115 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
 
     // Update (and reset) older progressData
     ProgressData progressData = await DatabaseHelper.instance.getProgressData();
-    progressData.adaptToHabitPlan(startingDate, habitPlan);
+    progressData.adaptToHabitPlan(
+      habitPlan: habitPlan,
+      startingDate: startingDate,
+      startingStepNr: startingStep,
+    );
     await DatabaseHelper.instance.updateProgressData(progressData);
 
     // Update the plan you're looking at to be active
     habitPlan.isActive = true;
     habitPlan.lastChanged = DateTime.now();
     await DatabaseHelper.instance.updateHabitPlan(habitPlan);
+
+    this.updateFunction(habitPlan);
   }
 
   @override
   Widget build(BuildContext context) {
+    this.startingDateString = _format(startingDate);
+    this.dateController.text = startingDateString;
+
     return AlertDialog(
       title: const Text(
         "Confirm starting time",
         style: StyleData.textStyle,
       ),
-      content: Text(
-        "The first training will start at ",
-        style: StyleData.textStyle,
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            "The first training will start at $startingDateString",
+            style: StyleData.textStyle,
+          ),
+          SizedBox(height: 20),
+          Form(
+            key: _formKey,
+            child: ExpansionPanelList(
+              //expandedHeaderPadding: EdgeInsets.all(0),
+              elevation: 0,
+              expansionCallback: (int index, bool isExpanded) {
+                setState(() {
+                  _expandSettings = !_expandSettings;
+                });
+              },
+              children: [
+                ExpansionPanel(
+                  headerBuilder: (BuildContext context, bool isExpanded) {
+                    return ListTile(
+                      title: Text(
+                        "Extended Settings",
+                        textAlign: TextAlign.left,
+                        style: StyleData.textStyle,
+                      ),
+                    );
+                  },
+                  canTapOnHeader: true,
+                  isExpanded: _expandSettings,
+                  body: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(height: 4),
+                      TextFormField(
+                        controller: this.dateController,
+                        decoration: inputDecoration("Starting date"),
+                        readOnly: true,
+                        onTap: () {
+                          final DateTime now = DateTime.now();
+                          showDatePicker(
+                            context: context,
+                            firstDate: DateTime(now.year, now.month, now.day),
+                            initialDate: this.startingDate,
+                            lastDate: DateTime(now.year + 2000),
+                          ).then(
+                            (newStartingDate) {
+                              if (newStartingDate != null) {
+                                setState(() {
+                                  this.startingDate = newStartingDate;
+                                });
+                              }
+                            },
+                          );
+                        },
+                        //onChanged: ,
+                      ),
+                      SizedBox(height: 10),
+                      TextFormField(
+                        initialValue: "1",
+                        textAlign: TextAlign.end,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        decoration: inputDecoration("Starting step"),
+                        validator: (input) => validateNumberField(
+                          input: input,
+                          maxInput: habitPlan.steps.length,
+                          variableText: "the starting step",
+                          onEmptyText:
+                              "Please insert a number between 1 and ${habitPlan.steps.length}",
+                        ),
+                        onSaved: (input) =>
+                            startingStep = int.parse(input.toString().trim()),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
       actions: <Widget>[
         Row(
@@ -111,7 +219,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
             ),
             ElevatedButton.icon(
               icon: const Icon(
-                Icons.delete,
+                Icons.check_circle,
                 color: Colors.white,
               ),
               label: Text(
@@ -122,9 +230,16 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
               ),
               onPressed: () {
-                Navigator.pop(context);
-                _updateDataBase(widget.habitPlan, startingDate);
-                widget.updateFunction();
+                if (_formKey.currentState!.validate()) {
+                  _formKey.currentState!.save();
+
+                  Navigator.pop(context);
+                  _updateDataBase(
+                    this.habitPlan,
+                    this.startingDate,
+                    this.startingStep,
+                  );
+                }
               },
             ),
           ],

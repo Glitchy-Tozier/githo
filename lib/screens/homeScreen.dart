@@ -277,8 +277,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           TimeHelper.instance.timeTravel(progressData);
 
                           print("Start ${progressData.currentStartingDate}");
-                          print("Last  ${progressData.lastActiveDate}");
-                          print("Now   ${TimeHelper.instance.getTime}");
+                          print("Now   ${TimeHelper.instance.getTime}\n");
 
                           setState(() {});
                         },
@@ -286,8 +285,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           TimeHelper.instance.superTimeTravel(progressData);
 
                           print("Start ${progressData.currentStartingDate}");
-                          print("Last  ${progressData.lastActiveDate}");
-                          print("Now   ${TimeHelper.instance.getTime}");
+                          print("Now   ${TimeHelper.instance.getTime}\n");
                         },
                       ),
                     );

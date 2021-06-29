@@ -79,6 +79,11 @@ class TrainingPeriod {
     return result;
   }
 
+  void activate() {
+    this.status = "active";
+    this.trainings[0].status = "active";
+  }
+
   void reset() {
     // Reset self
     this.status = "";

@@ -22,11 +22,12 @@ String? checkIfEmpty(final String? input, final String variableText) {
   }
 }
 
-String? validateNumberField(
-  final String? input,
-  final String variableText,
-  final String timeFrameText,
-) {
+String? validateNumberField({
+  required final String? input,
+  required final int maxInput,
+  required final String variableText,
+  required final String onEmptyText,
+}) {
   final String? emptycheck =
       checkIfEmpty(input.toString().trim(), variableText);
   if (emptycheck != null) {
@@ -34,10 +35,10 @@ String? validateNumberField(
   }
 
   final int intput = int.parse(input.toString().trim()); // I'm so funny!
-  if (intput >= 1000) {
-    return "Please input smaller numbers";
+  if (intput > maxInput) {
+    return "Input numbers between 1 and $maxInput";
   } else if (intput == 0) {
-    return "It has to be at least one rep a $timeFrameText";
+    return onEmptyText;
   } else {
     return null;
   }

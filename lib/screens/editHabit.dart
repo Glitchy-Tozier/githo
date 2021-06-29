@@ -109,9 +109,11 @@ class _EditHabitState extends State<EditHabit> {
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       decoration: inputDecoration("Nr of required actions"),
                       validator: (input) => validateNumberField(
-                        input,
-                        "the required repetitions",
-                        currentTimeUnit,
+                        input: input,
+                        maxInput: 1000,
+                        variableText: "the required repetitions",
+                        onEmptyText:
+                            "It has to be at least one rep a $currentTimeUnit",
                       ),
                       initialValue: habitPlan.requiredReps.toString(),
                       onSaved: (input) => habitPlan.requiredReps =

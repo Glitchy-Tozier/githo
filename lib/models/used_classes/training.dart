@@ -7,8 +7,8 @@ class Training {
   late int durationInHours;
   int doneReps = 0;
   late int requiredReps;
-  DateTime startingDate = DateTime.now();
-  DateTime endingDate = DateTime.now();
+  DateTime startingDate = DateTime(135);
+  DateTime endingDate = DateTime(246);
   String status = "";
 
   Training({required int trainingIndex, required HabitPlan habitPlan}) {

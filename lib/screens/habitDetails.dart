@@ -242,7 +242,12 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
             ),
             ActivationFAB(
               habitPlan: habitPlan,
-              updateFunction: () => setState(() => updatePrevScreens()),
+              updateFunction: (final HabitPlan changedHabitPlan) {
+                print("hi");
+                updatePrevScreens();
+                this.habitPlan = changedHabitPlan;
+                setState(() {});
+              },
             ),
             FloatingActionButton(
               child: const Icon(

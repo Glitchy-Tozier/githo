@@ -24,8 +24,7 @@ class ActivationFAB extends StatelessWidget {
         await DatabaseHelper.instance.updateProgressData(progressData);
 
         // Update previous screens and close screen
-        updateFunction();
-        //Navigator.pop(context);
+        updateFunction(habitPlan);
       }
 
       showDialog(
@@ -46,10 +45,6 @@ class ActivationFAB extends StatelessWidget {
             updateFunction,
           ),
         );
-
-        /* // Refresh previous screens
-        updateFunction();
-        //Navigator.pop(context); */
       }
 
       showDialog(

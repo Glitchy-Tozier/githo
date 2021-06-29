@@ -130,6 +130,14 @@ class StepClass {
     return result;
   }
 
+  void activateStartingPeriod() {
+    for (final trainingPeriod in this.trainingPeriods) {
+      if (trainingPeriod.status == "waiting for start") {
+        trainingPeriod.activate();
+      }
+    }
+  }
+
   Map<String, dynamic> toMap() {
     final List<Map<String, dynamic>> trainingPeriodList = [];
     for (int i = 0; i < this.trainingPeriods.length; i++) {
