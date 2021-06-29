@@ -43,8 +43,6 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
     final DateTime now = DateTime.now();
     final DateTime startingDate;
 
-    print(habitPlan.trainingTimeIndex);
-
     switch (habitPlan.trainingTimeIndex) {
       case 0:
         // start on the next day, 0am

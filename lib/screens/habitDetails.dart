@@ -6,10 +6,11 @@ import 'package:githo/extracted_data/styleData.dart';
 
 import 'package:githo/extracted_functions/editHabitRoutes.dart';
 import 'package:githo/extracted_widgets/activationFAB.dart';
+import 'package:githo/extracted_widgets/alert_dialogs/confirmEdit.dart';
 
 import 'package:githo/extracted_widgets/bulletPoint.dart';
 import 'package:githo/extracted_widgets/customListTile.dart';
-import 'package:githo/extracted_widgets/confirmDeletion.dart';
+import 'package:githo/extracted_widgets/alert_dialogs/confirmDeletion.dart';
 import 'package:githo/extracted_widgets/headings.dart';
 import 'package:githo/extracted_widgets/screenEndingSpacer.dart';
 
@@ -243,7 +244,6 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
             ActivationFAB(
               habitPlan: habitPlan,
               updateFunction: (final HabitPlan changedHabitPlan) {
-                print("hi");
                 updatePrevScreens();
                 this.habitPlan = changedHabitPlan;
                 setState(() {});
@@ -255,11 +255,24 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
               ),
               backgroundColor: Colors.orange,
               onPressed: () {
-                editHabit(
-                  context,
-                  _updateLoadedScreens,
-                  habitPlan,
-                );
+                if (this.habitPlan.isActive) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext buildContext) => ConfirmEdit(
+                      confirmationFunc: () => editHabit(
+                        context,
+                        _updateLoadedScreens,
+                        this.habitPlan,
+                      ),
+                    ),
+                  );
+                } else {
+                  editHabit(
+                    context,
+                    _updateLoadedScreens,
+                    this.habitPlan,
+                  );
+                }
               },
               heroTag: null,
             )

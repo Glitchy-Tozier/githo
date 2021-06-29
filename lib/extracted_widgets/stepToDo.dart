@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:githo/extracted_data/styleData.dart';
-import 'package:githo/extracted_widgets/confirmTrainingStart.dart';
+import 'package:githo/extracted_widgets/alert_dialogs/confirmTrainingStart.dart';
 import 'package:githo/extracted_widgets/customCard.dart';
 import 'package:githo/extracted_widgets/headings.dart';
 import 'package:githo/models/used_classes/step.dart';

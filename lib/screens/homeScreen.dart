@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:githo/extracted_widgets/confirmTrainingStart.dart';
+import 'package:githo/extracted_widgets/alert_dialogs/confirmTrainingStart.dart';
 import 'package:githo/extracted_widgets/screenEndingSpacer.dart';
 import 'package:githo/extracted_widgets/stepToDo.dart';
 

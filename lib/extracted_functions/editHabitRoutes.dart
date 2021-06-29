@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:githo/helpers/databaseHelper.dart';
 import 'package:githo/models/habitPlanModel.dart';
+import 'package:githo/models/progressDataModel.dart';
 import 'package:githo/screens/editHabit.dart';
 
 // Open the editHabit-screen and add a new habitPlan using whatever you type in
@@ -48,7 +49,13 @@ void editHabit(
   habitPlan.lastChanged = DateTime.now();
 
   void _onSaved(final HabitPlan habitPlan) async {
+    // Reset progressData because it should not be active.
+    DatabaseHelper.instance.updateProgressData(ProgressData.emptyData());
+
+    // Disable the habitPlan to make sure nothing gets messed up by changing its values.
+    habitPlan.isActive = false;
     await DatabaseHelper.instance.updateHabitPlan(habitPlan);
+
     updatePrevScreens(habitPlan);
   }
 
