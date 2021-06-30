@@ -109,90 +109,95 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
         "Confirm starting time",
         style: StyleData.textStyle,
       ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            "The first training will start at $startingDateString",
-            style: StyleData.textStyle,
-          ),
-          SizedBox(height: 20),
-          Form(
-            key: _formKey,
-            child: ExpansionPanelList(
-              //expandedHeaderPadding: EdgeInsets.all(0),
-              elevation: 0,
-              expansionCallback: (int index, bool isExpanded) {
-                setState(() {
-                  _expandSettings = !_expandSettings;
-                });
-              },
-              children: [
-                ExpansionPanel(
-                  headerBuilder: (BuildContext context, bool isExpanded) {
-                    return ListTile(
-                      title: Text(
-                        "Extended Settings",
-                        textAlign: TextAlign.left,
-                        style: StyleData.textStyle,
-                      ),
-                    );
+      content: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "The first training will start at $startingDateString",
+                style: StyleData.textStyle,
+              ),
+              SizedBox(height: 20),
+              Form(
+                key: _formKey,
+                child: ExpansionPanelList(
+                  //expandedHeaderPadding: EdgeInsets.all(0),
+                  elevation: 0,
+                  expansionCallback: (int index, bool isExpanded) {
+                    setState(() {
+                      _expandSettings = !_expandSettings;
+                    });
                   },
-                  canTapOnHeader: true,
-                  isExpanded: _expandSettings,
-                  body: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(height: 4),
-                      TextFormField(
-                        controller: this.dateController,
-                        decoration: inputDecoration("Starting date"),
-                        readOnly: true,
-                        onTap: () {
-                          final DateTime now = DateTime.now();
-                          showDatePicker(
-                            context: context,
-                            firstDate: DateTime(now.year, now.month, now.day),
-                            initialDate: this.startingDate,
-                            lastDate: DateTime(now.year + 2000),
-                          ).then(
-                            (newStartingDate) {
-                              if (newStartingDate != null) {
-                                setState(() {
-                                  this.startingDate = newStartingDate;
-                                });
-                              }
+                  children: [
+                    ExpansionPanel(
+                      headerBuilder: (BuildContext context, bool isExpanded) {
+                        return ListTile(
+                          title: Text(
+                            "Extended Settings",
+                            textAlign: TextAlign.left,
+                            style: StyleData.textStyle,
+                          ),
+                        );
+                      },
+                      canTapOnHeader: true,
+                      isExpanded: _expandSettings,
+                      body: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(height: 4),
+                          TextFormField(
+                            controller: this.dateController,
+                            decoration: inputDecoration("Starting date"),
+                            readOnly: true,
+                            onTap: () {
+                              final DateTime now = DateTime.now();
+                              showDatePicker(
+                                context: context,
+                                firstDate:
+                                    DateTime(now.year, now.month, now.day),
+                                initialDate: this.startingDate,
+                                lastDate: DateTime(now.year + 2000),
+                              ).then(
+                                (newStartingDate) {
+                                  if (newStartingDate != null) {
+                                    setState(() {
+                                      this.startingDate = newStartingDate;
+                                    });
+                                  }
+                                },
+                              );
                             },
-                          );
-                        },
-                        //onChanged: ,
-                      ),
-                      SizedBox(height: 10),
-                      TextFormField(
-                        initialValue: "1",
-                        textAlign: TextAlign.end,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
+                          ),
+                          SizedBox(height: 10),
+                          TextFormField(
+                            initialValue: "1",
+                            textAlign: TextAlign.end,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            decoration: inputDecoration("Starting step"),
+                            validator: (input) => validateNumberField(
+                              input: input,
+                              maxInput: habitPlan.steps.length,
+                              variableText: "the starting step",
+                              onEmptyText:
+                                  "Please insert a number between 1 and ${habitPlan.steps.length}",
+                            ),
+                            onSaved: (input) => startingStep =
+                                int.parse(input.toString().trim()),
+                          ),
                         ],
-                        decoration: inputDecoration("Starting step"),
-                        validator: (input) => validateNumberField(
-                          input: input,
-                          maxInput: habitPlan.steps.length,
-                          variableText: "the starting step",
-                          onEmptyText:
-                              "Please insert a number between 1 and ${habitPlan.steps.length}",
-                        ),
-                        onSaved: (input) =>
-                            startingStep = int.parse(input.toString().trim()),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
       actions: <Widget>[
         Row(

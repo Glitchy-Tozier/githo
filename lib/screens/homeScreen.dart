@@ -41,98 +41,6 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  /* Widget _getToDoScreen(HabitPlan habitPlan) {
-    return FutureBuilder(
-      future: this._progressData,
-      builder: (context, AsyncSnapshot<ProgressData> snapshot) {
-        if (snapshot.hasData) {
-          final ProgressData progressData = snapshot.data!;
-
-          final int stepIndex = getCurrentStepIndex(habitPlan, progressData);
-          final String currentStep = habitPlan.steps[stepIndex];
-
-          return Ink(
-            width: double.infinity,
-            color: (progressData.completedReps < habitPlan.requiredReps)
-                ? Colors.white
-                : Colors.green,
-            child: InkWell(
-              splashColor: (progressData.completedReps < habitPlan.requiredReps)
-                  ? Colors.green
-                  : Colors.lightGreenAccent,
-              child: Stack(
-                alignment: Alignment.topCenter,
-                children: [
-                  Column(
-                    children: [
-                      InkWell(
-                        splashColor: Colors.orangeAccent,
-                        child: Container(
-                          padding: StyleData.screenPadding,
-                          child: ScreenTitle(
-                            title: habitPlan.goal,
-                            subTitle: getStatusString(habitPlan, progressData),
-                            addBottomPadding: false,
-                          ),
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SingleHabitDisplay(
-                                updateFunction: _reloadScreen,
-                                habitPlan: habitPlan,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: StyleData.screenPadding,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        (habitPlan.requiredReps == 1)
-                            ? SizedBox()
-                            : Text(
-                                "${progressData.completedReps}/${habitPlan.requiredReps}",
-                                style: StyleData.textStyle,
-                              ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 10),
-                          child: const Icon(
-                            Icons.done,
-                            color: Colors.black,
-                          ),
-                        ),
-                        Text(
-                          currentStep,
-                          style: StyleData.textStyle,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              onTap: () {
-                setState(() {
-                  catchUpProgressData(_habitPlan, _progressData);
-                  incrementProgressData(habitPlan, progressData);
-                });
-              },
-            ),
-          );
-        } else {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
-    );
-  } */
-
   void _updateDbAndScreen() async {
     DatabaseHelper.instance.updateProgressData(await this._progressData);
     setState(() {});
@@ -314,15 +222,17 @@ class _HomeScreenState extends State<HomeScreen> {
                           if (activeTraining.status == "current") {
                             showDialog(
                               context: context,
-                              builder: (BuildContext buildContext) =>
-                                  ConfirmTrainingStart(
-                                title: "Confirm Activation",
-                                trainingDescription: activeStep.text,
-                                confirmationFunc: () {
-                                  activeTraining.activate();
-                                  _updateDbAndScreen();
-                                },
-                              ),
+                              builder: (BuildContext buildContext) {
+                                return ConfirmTrainingStart(
+                                  title: "Confirm Activation",
+                                  trainingDescription: activeStep.text,
+                                  training: activeTraining,
+                                  confirmationFunc: () {
+                                    activeTraining.activate();
+                                    _updateDbAndScreen();
+                                  },
+                                );
+                              },
                             );
                           } else {
                             activeTraining.incrementReps();

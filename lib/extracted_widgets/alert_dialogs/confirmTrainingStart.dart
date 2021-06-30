@@ -1,26 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:githo/extracted_data/styleData.dart';
+import 'package:githo/models/used_classes/training.dart';
 
 class ConfirmTrainingStart extends StatelessWidget {
   final String title;
   final String trainingDescription;
+  final Training training;
   final Function confirmationFunc;
 
   const ConfirmTrainingStart({
     required this.title,
     required this.trainingDescription,
+    required this.training,
     required this.confirmationFunc,
   });
 
   @override
   Widget build(BuildContext context) {
+    final String amountString;
+    if (training.requiredReps == 1) {
+      amountString = "Perform once";
+    } else {
+      amountString = "Perform ${training.requiredReps} times";
+    }
+
     return AlertDialog(
       title: const Text(
         "Tackle the next training?",
         style: StyleData.textStyle,
       ),
       content: Text(
-        "To-Do: $trainingDescription",
+        "To-Do: $trainingDescription\n\nReps: $amountString",
         style: StyleData.textStyle,
       ),
       actions: <Widget>[

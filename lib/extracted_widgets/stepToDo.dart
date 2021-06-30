@@ -33,7 +33,6 @@ class StepToDo extends StatelessWidget {
             padding: StyleData.screenPadding,
             child: Heading2(
               "${trainingPeriod.durationText} ${i + 1}/${step.trainingPeriods.length}",
-              //style: TextStyle(fontSize: textSize),
             ),
           ),
         );
@@ -42,8 +41,6 @@ class StepToDo extends StatelessWidget {
       final List<Widget> listViewChildren = [];
 
       for (final Training training in trainingPeriod.trainings) {
-        Key key = ObjectKey(training.number);
-
         double textSize = 25;
         double cardWidth = 100;
         double cardHeight = 70;
@@ -97,14 +94,12 @@ class StepToDo extends StatelessWidget {
               );
             }
           } else if (training.isNow) {
-            key = globalKey;
-            // = training.number.toDouble();
-
             if (training.status == "current") {
               cardWidth *= 1.3;
               cardHeight *= 1.3;
               child = Text(
-                "Click to\nactivate",
+                "Start training",
+                textAlign: TextAlign.center,
                 style: TextStyle(fontSize: textSize),
               );
               final Function onConfirmation = () {
@@ -113,16 +108,17 @@ class StepToDo extends StatelessWidget {
               };
               onTap = () => showDialog(
                     context: context,
-                    builder: (BuildContext buildContext) =>
-                        ConfirmTrainingStart(
-                      title: "Confirm Activation",
-                      trainingDescription: step.text,
-                      confirmationFunc: onConfirmation,
-                    ),
+                    builder: (BuildContext buildContext) {
+                      return ConfirmTrainingStart(
+                        title: "Confirm Activation",
+                        trainingDescription: step.text,
+                        training: training,
+                        confirmationFunc: onConfirmation,
+                      );
+                    },
                   );
               color = Colors.amberAccent;
             } else {
-              key = globalKey;
               cardWidth *= 1.3;
               cardHeight *= 1.3;
               child = Text(
@@ -151,17 +147,30 @@ class StepToDo extends StatelessWidget {
           color = Colors.grey.shade300;
         }
 
-        listViewChildren.add(
-          CustomCard(
-            key: key,
-            margin: cardMarginRL,
-            width: cardWidth,
-            height: cardHeight,
-            child: child,
-            onTap: onTap,
-            color: color,
-          ),
-        );
+        if (training.isNow) {
+          listViewChildren.add(
+            CustomCard(
+              key: globalKey,
+              margin: cardMarginRL,
+              width: cardWidth,
+              height: cardHeight,
+              child: child,
+              onTap: onTap,
+              color: color,
+            ),
+          );
+        } else {
+          listViewChildren.add(
+            CustomCard(
+              margin: cardMarginRL,
+              width: cardWidth,
+              height: cardHeight,
+              child: child,
+              onTap: onTap,
+              color: color,
+            ),
+          );
+        }
       }
 
       periodWidgets.add(
