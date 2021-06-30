@@ -16,21 +16,6 @@ class StepToDo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double textSize = 25;
-
-    double cardWidth = 100;
-    double cardHeight = 70;
-    double cardMarginRL = 6;
-
-    if (step.isActive) {
-      textSize *= 1.3;
-
-      cardWidth *= 1.3;
-      cardHeight *= 1.3;
-      cardMarginRL *= 1.3;
-    }
-    //double activeTrainingNr = double.infinity;
-
     final List<Widget> periodWidgets = [];
     periodWidgets.add(
       Padding(
@@ -58,8 +43,12 @@ class StepToDo extends StatelessWidget {
 
       for (final Training training in trainingPeriod.trainings) {
         Key key = ObjectKey(training.number);
-        double width = cardWidth;
-        double height = cardHeight;
+
+        double textSize = 25;
+        double cardWidth = 100;
+        double cardHeight = 70;
+        double cardMarginRL = 6;
+
         final Widget child;
         Function? onTap; // Usually Null
         final Color color;
@@ -74,6 +63,10 @@ class StepToDo extends StatelessWidget {
             color = Colors.grey.shade400;
           }
         } else if (trainingPeriod.status == "active") {
+          textSize *= 1.3;
+          cardWidth *= 1.3;
+          cardHeight *= 1.3;
+          cardMarginRL *= 1.3;
           if (training.hasPassed) {
             if (training.status == "successful") {
               color = Colors.green;
@@ -108,8 +101,8 @@ class StepToDo extends StatelessWidget {
             // = training.number.toDouble();
 
             if (training.status == "current") {
-              width *= 1.3;
-              height *= 1.3;
+              cardWidth *= 1.3;
+              cardHeight *= 1.3;
               child = Text(
                 "Click to\nactivate",
                 style: TextStyle(fontSize: textSize),
@@ -130,8 +123,8 @@ class StepToDo extends StatelessWidget {
               color = Colors.amberAccent;
             } else {
               key = globalKey;
-              width *= 1.3;
-              height *= 1.3;
+              cardWidth *= 1.3;
+              cardHeight *= 1.3;
               child = Text(
                 "${training.doneReps}/${training.requiredReps}",
                 style: TextStyle(
@@ -162,8 +155,8 @@ class StepToDo extends StatelessWidget {
           CustomCard(
             key: key,
             margin: cardMarginRL,
-            width: width,
-            height: height,
+            width: cardWidth,
+            height: cardHeight,
             child: child,
             onTap: onTap,
             color: color,

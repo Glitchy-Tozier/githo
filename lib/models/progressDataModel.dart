@@ -53,7 +53,7 @@ class ProgressData {
     }
 
     final int startingStepIdx = startingStepNr - 1;
-    this.steps[startingStepNr].trainingPeriods[0].status = "waiting for start";
+    this.steps[startingStepIdx].trainingPeriods[0].status = "waiting for start";
 
     final Map<String, int> startingIdxData = {
       "step": startingStepIdx,
