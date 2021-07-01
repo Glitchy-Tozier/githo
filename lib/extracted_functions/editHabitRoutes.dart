@@ -46,9 +46,9 @@ void editHabit(
   final Function updatePrevScreens,
   final HabitPlan habitPlan,
 ) {
-  habitPlan.lastChanged = DateTime.now();
-
   void _onSaved(final HabitPlan habitPlan) async {
+    habitPlan.lastChanged = DateTime.now();
+
     // Reset progressData because it should not be active.
     DatabaseHelper.instance.updateProgressData(ProgressData.emptyData());
 

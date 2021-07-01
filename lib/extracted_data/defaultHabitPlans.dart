@@ -9,7 +9,7 @@ class DefaultHabitPlans {
       steps: const <String>[
         "Dress up and step outside on the street. Then go back and do whatever you want to do.",
         "Take a walk around your house/building",
-        "Take a walk spanning a 3-5 buildings",
+        "Take a walk spanning 3-5 buildings",
         "Jog around 3-5 buildings",
         "Go jogging. Well done."
       ],

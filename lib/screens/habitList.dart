@@ -5,6 +5,7 @@ import 'package:githo/extracted_data/fullDatabaseImport.dart';
 
 import 'package:githo/extracted_functions/editHabitRoutes.dart';
 import 'package:githo/extracted_widgets/buttonListItem.dart';
+import 'package:githo/extracted_widgets/dividers/fatDivider.dart';
 
 import 'package:githo/extracted_widgets/headings.dart';
 import 'package:githo/extracted_widgets/screenEndingSpacer.dart';
@@ -73,14 +74,16 @@ class _HabitListState extends State<HabitList> {
               } else {
                 // If there are habit plans
                 final List<Widget> columnItems = [];
-                columnItems.add(
+                columnItems.addAll([
                   Padding(
                     padding: StyleData.screenPadding,
                     child: const ScreenTitle(
-                        title: "List of habits",
-                        subTitle: "Click on a habit-plan to look at it."),
+                      title: "List of habits",
+                      subTitle: "Click on a habit-plan to look at it.",
+                    ),
                   ),
-                );
+                  FatDivider(),
+                ]);
 
                 final List<HabitPlan> orderedHabitPlans =
                     _orderHabitPlans(habitPlanList);
@@ -120,7 +123,10 @@ class _HabitListState extends State<HabitList> {
                     ),
                   ),
                 );
-                return Column(children: columnItems);
+                return Column(
+                  children: columnItems,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                );
               }
             } else if (snapshot.hasError) {
               // If something went wrong with the database

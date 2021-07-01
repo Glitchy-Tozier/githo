@@ -83,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   width: double.infinity,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Heading1("No habit-plan is active."),
                       const Text(
@@ -100,28 +100,28 @@ class _HomeScreenState extends State<HomeScreen> {
                   _scrollToActiveTraining();
                 }
 
-                return SingleChildScrollView(
+                return ListView(
+                  padding: const EdgeInsets.symmetric(horizontal: 0),
                   physics: BouncingScrollPhysics(),
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: StyleData.screenPadding,
-                        child: ScreenTitle(
-                          title: progressData.goal,
-                          //subTitle: getStatusString(progressData),
-                        ),
+                  shrinkWrap: true,
+                  children: <Widget>[
+                    Padding(
+                      padding: StyleData.screenPadding,
+                      child: ScreenTitle(
+                        title: progressData.goal,
+                        //subTitle: getStatusString(progressData),
                       ),
-                      ...List.generate(progressData.steps.length, (i) {
-                        final StepClass step = progressData.steps[i];
-                        return StepToDo(
-                          globalKey,
-                          step,
-                          _updateDbAndScreen,
-                        );
-                      }),
-                      ScreenEndingSpacer(),
-                    ],
-                  ),
+                    ),
+                    ...List.generate(progressData.steps.length, (i) {
+                      final StepClass step = progressData.steps[i];
+                      return StepToDo(
+                        globalKey,
+                        step,
+                        _updateDbAndScreen,
+                      );
+                    }),
+                    ScreenEndingSpacer(),
+                  ],
                 );
               }
             } else if (snapshot.hasError) {

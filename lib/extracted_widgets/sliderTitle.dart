@@ -17,7 +17,7 @@ class SliderTitle extends StatelessWidget {
         textSpanList.add(
           TextSpan(
             text: text,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 18,
               color: Colors.black,
             ),
@@ -27,7 +27,7 @@ class SliderTitle extends StatelessWidget {
         textSpanList.add(
           TextSpan(
             text: text,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
               color: Colors.black,
@@ -40,9 +40,14 @@ class SliderTitle extends StatelessWidget {
     });
 
     // Build/return widgets
-    return RichText(
-      text: TextSpan(
-        children: textSpanList,
+    return SizedBox(
+      width: double.infinity,
+      child: Center(
+        child: RichText(
+          text: TextSpan(
+            children: textSpanList,
+          ),
+        ),
       ),
     );
   }

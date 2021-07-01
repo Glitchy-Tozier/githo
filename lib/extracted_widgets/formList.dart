@@ -40,12 +40,13 @@ class _FormListState extends State<FormList> {
     this.exportValues,
     List<String> initValues,
   ) {
-    // Prepare the value-data
-    initValues.add("");
-
     // Generate the TextFormFields
-    for (int i = 0; i < initValues.length; i++) {
-      this._inputFields.add(_textFormField(name, i, initValues[i]));
+    for (int i = 0; i < initValues.length + 1; i++) {
+      if (i < initValues.length) {
+        this._inputFields.add(_textFormField(name, i, initValues[i]));
+      } else {
+        this._inputFields.add(_textFormField(name, i, ""));
+      }
     }
     _updateScores();
   }
@@ -102,12 +103,15 @@ class _FormListState extends State<FormList> {
                 _updateScores();
               });
             }
+
+            print(inputValues.length);
+            print(inputValues);
           },
           onSaved: (input) {
             if (fieldNr != this.listLength) {
               // Only do this if the current TextFormField is not the last (empty) TextFormField
               this.inputValues[index] = input.toString().trim();
-              exportValues(inputValues);
+              exportValues(this.inputValues);
             }
           },
         ),
@@ -118,17 +122,18 @@ class _FormListState extends State<FormList> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      ...this._inputFields,
-      const Text("⋮",
+    return Column(
+      children: [
+        ...this._inputFields,
+        const Text(
+          "⋮",
           style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
             color: Colors.black,
-          )),
-      const SizedBox(
-        height: 10,
-      ),
-    ]);
+          ),
+        ),
+      ],
+    );
   }
 }

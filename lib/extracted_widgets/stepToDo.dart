@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:githo/extracted_data/styleData.dart';
 import 'package:githo/extracted_widgets/alert_dialogs/confirmTrainingStart.dart';
 import 'package:githo/extracted_widgets/alert_dialogs/trainingDone.dart';
-import 'package:githo/extracted_widgets/customCard.dart';
+import 'package:githo/extracted_widgets/dividers/fatDivider.dart';
+import 'package:githo/extracted_widgets/dividers/thinDivider.dart';
+import 'package:githo/extracted_widgets/trainingCard.dart';
 import 'package:githo/extracted_widgets/headings.dart';
 import 'package:githo/models/used_classes/step.dart';
 import 'package:githo/models/used_classes/training.dart';
@@ -17,18 +19,23 @@ class StepToDo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> periodWidgets = [];
-    periodWidgets.add(
+    final List<Widget> periodWidgets = []; // What will be the returned contents
+
+    periodWidgets.addAll([
+      FatDivider(),
       Padding(
         padding: StyleData.screenPadding,
         child: Heading1(step.text),
       ),
-    );
+    ]);
 
     for (int i = 0; i < step.trainingPeriods.length; i++) {
       final TrainingPeriod trainingPeriod = step.trainingPeriods[i];
 
       if (step.trainingPeriods.length > 1) {
+        if (i > 0) {
+          periodWidgets.add(ThinDivider());
+        }
         periodWidgets.add(
           Padding(
             padding: StyleData.screenPadding,
@@ -158,9 +165,9 @@ class StepToDo extends StatelessWidget {
 
         if (training.isNow) {
           listViewChildren.add(
-            CustomCard(
+            TrainingCard(
               key: globalKey,
-              margin: cardMarginRL,
+              horizontalMargin: cardMarginRL,
               width: cardWidth,
               height: cardHeight,
               child: child,
@@ -170,8 +177,8 @@ class StepToDo extends StatelessWidget {
           );
         } else {
           listViewChildren.add(
-            CustomCard(
-              margin: cardMarginRL,
+            TrainingCard(
+              horizontalMargin: cardMarginRL,
               width: cardWidth,
               height: cardHeight,
               child: child,
@@ -182,6 +189,7 @@ class StepToDo extends StatelessWidget {
         }
       }
 
+      // Create horizontal scrollView
       periodWidgets.add(
         SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -196,6 +204,7 @@ class StepToDo extends StatelessWidget {
         ),
       );
     }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: periodWidgets,

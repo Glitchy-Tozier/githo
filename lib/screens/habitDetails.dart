@@ -11,6 +11,7 @@ import 'package:githo/extracted_widgets/alert_dialogs/confirmEdit.dart';
 import 'package:githo/extracted_widgets/bulletPoint.dart';
 import 'package:githo/extracted_widgets/customListTile.dart';
 import 'package:githo/extracted_widgets/alert_dialogs/confirmDeletion.dart';
+import 'package:githo/extracted_widgets/dividers/fatDivider.dart';
 import 'package:githo/extracted_widgets/headings.dart';
 import 'package:githo/extracted_widgets/screenEndingSpacer.dart';
 
@@ -174,8 +175,17 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
       commentSection = const <Widget>[];
     } else {
       commentSection = <Widget>[
-        const Heading1("Comments"),
-        ..._getCommentWidgets(),
+        const FatDivider(),
+        Padding(
+          padding: StyleData.screenPadding,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Heading1("Comments"),
+              ..._getCommentWidgets(),
+            ],
+          ),
+        ),
       ];
     }
 
@@ -187,17 +197,40 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
             if (snapshot.hasData) {
               ProgressData progressData = snapshot.data!;
               return ListView(
-                padding: StyleData.screenPadding,
+                padding: const EdgeInsets.symmetric(horizontal: 0),
+                physics: const BouncingScrollPhysics(),
+                shrinkWrap: true,
                 children: [
-                  ScreenTitle(
-                    title: habitPlan.goal,
-                    //subTitle: getStatusString(progressData),
+                  Padding(
+                    padding: StyleData.screenPadding,
+                    child: ScreenTitle(
+                      title: habitPlan.goal,
+                      //subTitle: getStatusString(progressData),
+                    ),
                   ),
-                  const Heading1("Rules"),
-                  ..._getRuleWidgets(),
+                  const FatDivider(),
+                  Padding(
+                    padding: StyleData.screenPadding,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Heading1("Rules"),
+                        ..._getRuleWidgets(),
+                      ],
+                    ),
+                  ),
                   ...commentSection,
-                  const Heading1("Steps"),
-                  _getStepTable(progressData),
+                  const FatDivider(),
+                  Padding(
+                    padding: StyleData.screenPadding,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Heading1("Steps"),
+                        _getStepTable(progressData),
+                      ],
+                    ),
+                  ),
                   ScreenEndingSpacer()
                 ],
               );

@@ -3,22 +3,15 @@ import 'package:flutter/material.dart';
 class ScreenTitle extends StatelessWidget {
   final String title;
   final String? subTitle;
-  final bool addBottomPadding;
 
   const ScreenTitle({
     required this.title,
     this.subTitle,
-    this.addBottomPadding = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    final EdgeInsets padding;
-    if (addBottomPadding) {
-      padding = const EdgeInsets.only(top: 70, bottom: 50);
-    } else {
-      padding = const EdgeInsets.only(top: 70, bottom: 10);
-    }
+    final padding = const EdgeInsets.only(top: 70, bottom: 30);
 
     List<Widget> columnContents = [
       Text(
@@ -48,6 +41,7 @@ class ScreenTitle extends StatelessWidget {
     return Padding(
       padding: padding,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: columnContents,
       ),
     );
@@ -56,7 +50,6 @@ class ScreenTitle extends StatelessWidget {
 
 class Heading1 extends StatelessWidget {
   final String _text;
-
   const Heading1(this._text);
 
   @override
@@ -77,7 +70,6 @@ class Heading1 extends StatelessWidget {
 
 class Heading2 extends StatelessWidget {
   final String _text;
-
   const Heading2(this._text);
 
   @override
@@ -87,7 +79,7 @@ class Heading2 extends StatelessWidget {
       child: Text(
         _text,
         style: const TextStyle(
-          fontSize: 25,
+          fontSize: 20,
           color: Colors.black,
           //fontWeight: FontWeight.bold,
         ),
