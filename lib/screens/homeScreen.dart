@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:githo/extracted_widgets/alert_dialogs/confirmTrainingStart.dart';
+import 'package:githo/extracted_widgets/alert_dialogs/trainingDone.dart';
 import 'package:githo/extracted_widgets/screenEndingSpacer.dart';
 import 'package:githo/extracted_widgets/stepToDo.dart';
 
@@ -175,8 +176,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   final ProgressData progressData = snapshot.data!;
                   if (progressData.isActive && DataShortcut.testing) {
                     return SizedBox(
-                      height: 50,
-                      width: 50,
+                      height: 55,
+                      width: 150,
                       child: InkWell(
                         //backgroundColor: Colors.transparent,
                         splashColor: Colors.purple,
@@ -236,6 +237,15 @@ class _HomeScreenState extends State<HomeScreen> {
                             );
                           } else {
                             activeTraining.incrementReps();
+                            if (activeTraining.doneReps ==
+                                activeTraining.requiredReps) {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext buildContext) {
+                                  return TrainingDoneAlert();
+                                },
+                              );
+                            }
                           }
                           _updateDbAndScreen();
                           _scrollToActiveTraining();

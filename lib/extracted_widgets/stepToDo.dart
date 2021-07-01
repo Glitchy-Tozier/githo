@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:githo/extracted_data/styleData.dart';
 import 'package:githo/extracted_widgets/alert_dialogs/confirmTrainingStart.dart';
+import 'package:githo/extracted_widgets/alert_dialogs/trainingDone.dart';
 import 'package:githo/extracted_widgets/customCard.dart';
 import 'package:githo/extracted_widgets/headings.dart';
 import 'package:githo/models/used_classes/step.dart';
@@ -131,6 +132,14 @@ class StepToDo extends StatelessWidget {
               onTap = () {
                 training.incrementReps();
                 updateFunction();
+                if (training.doneReps == training.requiredReps) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext buildContext) {
+                      return TrainingDoneAlert();
+                    },
+                  );
+                }
               };
               if (training.status == "done") {
                 color = Colors.lightGreenAccent;
