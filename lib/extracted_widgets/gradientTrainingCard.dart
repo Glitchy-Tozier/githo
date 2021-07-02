@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ActiveTrainingCard extends StatelessWidget {
+class GradinentTrainingCard extends StatelessWidget {
   final double horizontalMargin;
   final double width;
   final double height;
@@ -11,7 +11,7 @@ class ActiveTrainingCard extends StatelessWidget {
   final double bottomMargin = 15;
   final double borderRadius = 7;
 
-  const ActiveTrainingCard({
+  const GradinentTrainingCard({
     required this.horizontalMargin,
     required this.width,
     required this.height,

@@ -103,9 +103,6 @@ class _FormListState extends State<FormList> {
                 _updateScores();
               });
             }
-
-            print(inputValues.length);
-            print(inputValues);
           },
           onSaved: (input) {
             if (fieldNr != this.listLength) {

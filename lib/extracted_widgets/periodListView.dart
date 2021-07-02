@@ -1,8 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:githo/extracted_data/styleData.dart';
-import 'package:githo/extracted_widgets/activeTrainingCard.dart';
 
+import 'package:githo/extracted_widgets/gradientTrainingCard.dart';
 import 'package:githo/extracted_widgets/alert_dialogs/confirmTrainingStart.dart';
 import 'package:githo/extracted_widgets/alert_dialogs/trainingDone.dart';
 import 'package:githo/extracted_widgets/trainingCard.dart';
@@ -119,11 +121,14 @@ class PeriodListView extends StatelessWidget {
               training.incrementReps();
               updateFunction();
               if (training.doneReps == training.requiredReps) {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext buildContext) {
-                    return TrainingDoneAlert();
-                  },
+                Timer(
+                  const Duration(milliseconds: 700),
+                  () => showDialog(
+                    context: context,
+                    builder: (BuildContext buildContext) {
+                      return TrainingDoneAlert();
+                    },
+                  ),
                 );
               }
             };
@@ -145,7 +150,7 @@ class PeriodListView extends StatelessWidget {
       if (training.isNow) {
         if (training.status == "current") {
           listViewChildren.add(
-            ActiveTrainingCard(
+            GradinentTrainingCard(
               key: globalKey,
               horizontalMargin: cardMarginRL,
               width: cardWidth,
