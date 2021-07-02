@@ -8,6 +8,7 @@ class FatDivider extends StatelessWidget {
     return const Divider(
       height: 30,
       thickness: 10,
+      color: Colors.orange,
     );
   }
 }

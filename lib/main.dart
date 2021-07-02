@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: "GITHO - Get Into The Habit Of…",
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        primarySwatch: Colors.orange,
       ),
       home: HomeScreen(),
       debugShowCheckedModeBanner: false,

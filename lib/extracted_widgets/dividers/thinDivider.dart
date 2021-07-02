@@ -4,6 +4,8 @@ class ThinDivider extends StatelessWidget {
   const ThinDivider();
   @override
   Widget build(BuildContext context) {
-    return Divider();
+    return Divider(
+      color: Colors.orange,
+    );
   }
 }

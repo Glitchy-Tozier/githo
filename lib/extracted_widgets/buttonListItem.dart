@@ -19,7 +19,7 @@ class ButtonListItem extends StatelessWidget {
       child: ElevatedButton(
         child: Text(
           text,
-          style: coloredTextStyle(Colors.white),
+          style: coloredTextStyle(Colors.black),
         ),
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(color),

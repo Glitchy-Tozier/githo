@@ -260,6 +260,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
             FloatingActionButton(
               child: const Icon(
                 Icons.delete,
+                color: Colors.white,
               ),
               backgroundColor: Colors.red,
               onPressed: () {
@@ -284,6 +285,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
             FloatingActionButton(
               child: const Icon(
                 Icons.edit,
+                color: Colors.white,
               ),
               backgroundColor: Colors.orange,
               onPressed: () {

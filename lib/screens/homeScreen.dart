@@ -155,7 +155,10 @@ class _HomeScreenState extends State<HomeScreen> {
           children: <Widget>[
             FloatingActionButton(
               tooltip: "Go to settings",
-              child: const Icon(Icons.settings),
+              child: const Icon(
+                Icons.settings,
+                color: Colors.white,
+              ),
               backgroundColor: Colors.orange,
               heroTag: null, //"settingsHero",
               onPressed: () {
@@ -211,7 +214,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (progressData.isActive) {
                     return FloatingActionButton(
                       tooltip: "Mark step as done",
-                      child: const Icon(Icons.done),
+                      backgroundColor: Colors.green,
+                      child: const Icon(
+                        Icons.done,
+                        color: Colors.white,
+                      ),
                       heroTag: null,
                       onPressed: () {
                         final Map<String, dynamic>? activeMap =

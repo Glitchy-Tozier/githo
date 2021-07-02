@@ -266,7 +266,11 @@ class _EditHabitState extends State<EditHabit> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.save),
+        backgroundColor: Colors.green,
+        child: const Icon(
+          Icons.save,
+          color: Colors.white,
+        ),
         onPressed: () {
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();

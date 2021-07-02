@@ -112,8 +112,8 @@ class _HabitListState extends State<HabitList> {
                               );
                             },
                             color: habitPlan.isActive
-                                ? Colors.green
-                                : Colors.black54,
+                                ? Colors.lightGreen
+                                : Colors.grey.shade300,
                           );
                         } else {
                           // On the last loop, add the ScreenEndingSpacer.
@@ -154,7 +154,11 @@ class _HabitListState extends State<HabitList> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
+        backgroundColor: Colors.green,
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
         onPressed: () {
           addNewHabit(context, _updateLoadedScreens);
         },

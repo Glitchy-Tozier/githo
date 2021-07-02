@@ -15,6 +15,7 @@ class StepToDo extends StatelessWidget {
   final StepClass step;
   final Function updateFunction;
   final GlobalKey globalKey;
+  static const double periodHeadingPadding = 12;
 
   const StepToDo(this.globalKey, this.step, this.updateFunction);
 
@@ -37,7 +38,9 @@ class StepToDo extends StatelessWidget {
       FatDivider(),
       Padding(
         padding: StyleData.screenPadding,
-        child: TextButton(
+        child: InkWell(
+          splashColor: stepColor,
+          borderRadius: BorderRadius.circular(7),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -60,7 +63,7 @@ class StepToDo extends StatelessWidget {
               )
             ],
           ),
-          onPressed: () {
+          onTap: () {
             final Color statusColor;
             if (step.status == "active") {
               statusColor = Colors.amber.shade600;
@@ -103,78 +106,92 @@ class StepToDo extends StatelessWidget {
           periodWidgets.add(ThinDivider());
         }
 
+        final Widget periodHeading;
         // Add the heading
-        periodWidgets.add(
-          Padding(
+        if (trainingPeriod.status == "active") {
+          periodHeading = Padding(
             padding: StyleData.screenPadding,
-            child: TextButton(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
+            child: InkWell(
+              splashColor: Colors.orange,
+              borderRadius: BorderRadius.circular(5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: periodHeadingPadding,
+                    ),
+                    child: Text(
                       "${trainingPeriod.durationText.capitalize()} ${i + 1} of ${step.trainingPeriods.length}",
                       style: const TextStyle(
                         fontSize: 20,
                         color: Colors.black,
                       ),
                     ),
-                    (trainingPeriod.status == "active")
-                        ? Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 9, vertical: 5),
-                            child: const Text(
-                              "Info",
-                              style: const TextStyle(
-                                fontSize: 20,
-                                color: Colors.black,
-                              ),
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.orange,
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(7),
-                              ),
-                            ),
-                          )
-                        : SizedBox(),
-                  ],
-                ),
+                  ),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+                    child: const Text(
+                      "Info",
+                      style: const TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.orange,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(7),
+                      ),
+                    ),
+                  )
+                ],
               ),
-              onPressed: (trainingPeriod.status == "active")
-                  ? () {
-                      final String periodString = (step.trainingPeriods.length >
-                              1)
-                          ? ", ${trainingPeriod.durationText.capitalize()} ${trainingPeriod.number}"
-                          : "";
+              onTap: () {
+                final String periodString = (step.trainingPeriods.length > 1)
+                    ? ", ${trainingPeriod.durationText.capitalize()} ${trainingPeriod.number}"
+                    : "";
 
-                      final String toDoString = "ToDo: ${this.step.text}";
-                      final String progressString =
-                          "Progress: ${trainingPeriod.successfulTrainings} out of ${trainingPeriod.requiredTrainings} trainings have been successful";
-                      final int remainingTrainings =
-                          trainingPeriod.requiredTrainings -
-                              trainingPeriod.successfulTrainings;
-                      final String remainingString =
-                          "Remaining: $remainingTrainings more trainings progress";
+                final String toDoString = "ToDo: ${this.step.text}";
+                final String progressString =
+                    "Progress: ${trainingPeriod.successfulTrainings} out of ${trainingPeriod.requiredTrainings} trainings have been successful";
+                final int remainingTrainings =
+                    trainingPeriod.requiredTrainings -
+                        trainingPeriod.successfulTrainings;
+                final String remainingString =
+                    "Remaining: $remainingTrainings more trainings progress";
 
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext buildContext) {
-                          return TextDialog(
-                            title:
-                                Text("Step ${this.step.number}$periodString"),
-                            text:
-                                "$toDoString\n\n$progressString\n\n$remainingString",
-                            buttonColor: Colors.orange,
-                          );
-                        },
-                      );
-                    }
-                  : null,
+                showDialog(
+                  context: context,
+                  builder: (BuildContext buildContext) {
+                    return TextDialog(
+                      title: Text("Step ${this.step.number}$periodString"),
+                      text:
+                          "$toDoString\n\n$progressString\n\n$remainingString",
+                      buttonColor: Colors.orange,
+                    );
+                  },
+                );
+              },
             ),
-          ),
-        );
+          );
+        } else {
+          periodHeading = Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: periodHeadingPadding,
+              horizontal: StyleData.screenPaddingValue,
+            ),
+            child: Text(
+              "${trainingPeriod.durationText.capitalize()} ${i + 1} of ${step.trainingPeriods.length}",
+              style: const TextStyle(
+                fontSize: 20,
+                color: Colors.black,
+              ),
+            ),
+          );
+        }
+        periodWidgets.add(periodHeading);
       }
 
       periodWidgets.add(

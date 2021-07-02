@@ -24,12 +24,13 @@ class PeriodListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Widget> listViewChildren = [];
+    double cardMarginRL = 6;
 
     for (final Training training in trainingPeriod.trainings) {
       double textSize = 25;
       double cardWidth = 100;
       double cardHeight = 70;
-      double cardMarginRL = 6;
+      cardMarginRL = 6;
 
       final Widget child;
       Function? onTap; // Usually Null
@@ -169,9 +170,8 @@ class PeriodListView extends StatelessWidget {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.only(
-        left: StyleData.screenPaddingValue / 2,
-        right: StyleData.screenPaddingValue / 2,
+      padding: EdgeInsets.symmetric(
+        horizontal: StyleData.screenPaddingValue - cardMarginRL,
       ),
       child: Row(
         children: listViewChildren,

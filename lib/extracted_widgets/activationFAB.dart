@@ -61,9 +61,15 @@ class ActivationFAB extends StatelessWidget {
   Widget build(BuildContext context) {
     final Icon child;
     if (habitPlan.isActive == true) {
-      child = const Icon(Icons.star_outline);
+      child = const Icon(
+        Icons.star_outline,
+        color: Colors.white,
+      );
     } else {
-      child = const Icon(Icons.star);
+      child = const Icon(
+        Icons.star,
+        color: Colors.white,
+      );
     }
 
     final Color color;
