@@ -182,9 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 55,
                       width: 150,
                       child: InkWell(
-                        //backgroundColor: Colors.transparent,
                         splashColor: Colors.purple,
-                        //elevation: 0,
                         onTap: () {
                           TimeHelper.instance.timeTravel(progressData);
 
