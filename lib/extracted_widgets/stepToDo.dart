@@ -15,7 +15,7 @@ class StepToDo extends StatelessWidget {
   final StepClass step;
   final Function updateFunction;
   final GlobalKey globalKey;
-  static const double periodHeadingPadding = 12;
+  //static const double periodHeadingPadding = 12;
 
   const StepToDo(this.globalKey, this.step, this.updateFunction);
 
@@ -29,13 +29,15 @@ class StepToDo extends StatelessWidget {
         stepColor = Colors.green;
         break;
       case "active":
-        stepColor = Colors.amberAccent;
+        stepColor = Colors.orange;
         break;
       default:
         stepColor = Colors.grey.shade300;
     }
     periodWidgets.addAll([
-      FatDivider(),
+      FatDivider(
+        color: stepColor,
+      ),
       Padding(
         padding: StyleData.screenPadding,
         child: InkWell(
@@ -66,7 +68,7 @@ class StepToDo extends StatelessWidget {
           onTap: () {
             final Color statusColor;
             if (step.status == "active") {
-              statusColor = Colors.amber.shade600;
+              statusColor = Colors.orange;
             } else if (step.status == "locked") {
               statusColor = Colors.grey.shade700;
             } else {
@@ -87,7 +89,7 @@ class StepToDo extends StatelessWidget {
                       )
                     ],
                   ),
-                  text: "ToDo: ${this.step.text}",
+                  text: "To-do: ${this.step.text}",
                   buttonColor: stepColor,
                 );
               },
@@ -103,12 +105,14 @@ class StepToDo extends StatelessWidget {
       if (step.trainingPeriods.length > 1) {
         // Add a divider
         if (i > 0) {
-          periodWidgets.add(ThinDivider());
+          periodWidgets.add(ThinDivider(
+            color: stepColor,
+          ));
         }
 
         final Widget periodHeading;
         // Add the heading
-        if (trainingPeriod.status == "active") {
+        /* if (trainingPeriod.status == "active") {
           periodHeading = Padding(
             padding: StyleData.screenPadding,
             child: InkWell(
@@ -176,21 +180,21 @@ class StepToDo extends StatelessWidget {
               },
             ),
           );
-        } else {
-          periodHeading = Padding(
-            padding: EdgeInsets.symmetric(
-              vertical: periodHeadingPadding,
-              horizontal: StyleData.screenPaddingValue,
+        } else { */
+        periodHeading = Padding(
+          padding: EdgeInsets.symmetric(
+            //vertical: periodHeadingPadding,
+            horizontal: StyleData.screenPaddingValue,
+          ),
+          child: Text(
+            "${trainingPeriod.durationText.capitalize()} ${i + 1} of ${step.trainingPeriods.length}",
+            style: const TextStyle(
+              fontSize: 20,
+              color: Colors.black,
             ),
-            child: Text(
-              "${trainingPeriod.durationText.capitalize()} ${i + 1} of ${step.trainingPeriods.length}",
-              style: const TextStyle(
-                fontSize: 20,
-                color: Colors.black,
-              ),
-            ),
-          );
-        }
+          ),
+        );
+        //}
         periodWidgets.add(periodHeading);
       }
 

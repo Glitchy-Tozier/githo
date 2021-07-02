@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 
 class ThinDivider extends StatelessWidget {
-  const ThinDivider();
+  final Color? color;
+  const ThinDivider({this.color});
+
   @override
   Widget build(BuildContext context) {
+    final Color dividerColor;
+    if (this.color == null) {
+      dividerColor = Theme.of(context).primaryColor;
+    } else {
+      dividerColor = this.color!;
+    }
     return Divider(
-      color: Colors.orange,
+      color: dividerColor,
     );
   }
 }

@@ -112,8 +112,8 @@ class _HabitListState extends State<HabitList> {
                               );
                             },
                             color: habitPlan.isActive
-                                ? Colors.lightGreen
-                                : Colors.grey.shade300,
+                                ? Colors.green
+                                : Theme.of(context).buttonColor,
                           );
                         } else {
                           // On the last loop, add the ScreenEndingSpacer.

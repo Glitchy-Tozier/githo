@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
 
 class FatDivider extends StatelessWidget {
-  const FatDivider();
+  final Color? color;
+  const FatDivider({this.color});
 
   @override
   Widget build(BuildContext context) {
-    return const Divider(
+    final Color dividerColor;
+    if (this.color == null) {
+      dividerColor = Theme.of(context).primaryColor;
+    } else {
+      dividerColor = this.color!;
+    }
+
+    return Divider(
       height: 30,
       thickness: 10,
-      color: Colors.orange,
+      color: dividerColor,
     );
   }
 }

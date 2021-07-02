@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:githo/extracted_data/styleData.dart';
+import 'package:githo/extracted_widgets/activeTrainingCard.dart';
 
 import 'package:githo/extracted_widgets/alert_dialogs/confirmTrainingStart.dart';
 import 'package:githo/extracted_widgets/alert_dialogs/trainingDone.dart';
@@ -86,7 +87,7 @@ class PeriodListView extends StatelessWidget {
             child = Text(
               "Start training",
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: textSize),
+              style: TextStyle(fontSize: textSize, color: Colors.white),
             );
             final Function onConfirmation = () {
               training.activate();
@@ -103,7 +104,7 @@ class PeriodListView extends StatelessWidget {
                     );
                   },
                 );
-            color = Colors.amberAccent;
+            color = Colors.orange; // Doesn't do anything.
           } else {
             cardWidth *= 1.3;
             cardHeight *= 1.3;
@@ -134,7 +135,7 @@ class PeriodListView extends StatelessWidget {
           }
         } else {
           child = const Icon(Icons.lock_clock);
-          color = Colors.amberAccent;
+          color = Colors.orange;
         }
       } else {
         child = const Icon(Icons.lock);
@@ -142,17 +143,30 @@ class PeriodListView extends StatelessWidget {
       }
 
       if (training.isNow) {
-        listViewChildren.add(
-          TrainingCard(
-            key: globalKey,
-            horizontalMargin: cardMarginRL,
-            width: cardWidth,
-            height: cardHeight,
-            child: child,
-            onTap: onTap,
-            color: color,
-          ),
-        );
+        if (training.status == "current") {
+          listViewChildren.add(
+            ActiveTrainingCard(
+              key: globalKey,
+              horizontalMargin: cardMarginRL,
+              width: cardWidth,
+              height: cardHeight,
+              child: child,
+              onTap: onTap,
+            ),
+          );
+        } else {
+          listViewChildren.add(
+            TrainingCard(
+              key: globalKey,
+              horizontalMargin: cardMarginRL,
+              width: cardWidth,
+              height: cardHeight,
+              child: child,
+              onTap: onTap,
+              color: color,
+            ),
+          );
+        }
       } else {
         listViewChildren.add(
           TrainingCard(
