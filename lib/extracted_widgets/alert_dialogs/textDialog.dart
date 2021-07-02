@@ -1,34 +1,33 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:githo/extracted_data/styleData.dart';
 
-class TrainingDoneAlert extends StatelessWidget {
+class TextDialog extends StatelessWidget {
+  final Widget title;
+  final String text;
+  final Color buttonColor;
+  const TextDialog({
+    required this.title,
+    required this.text,
+    required this.buttonColor,
+  });
   @override
   Widget build(BuildContext context) {
-    const List<String> buttonStrings = [
-      "I'm amazing",
-      "Yay",
-      "Nice job, me",
-    ];
-    final Random random = new Random();
-    final String buttonString =
-        buttonStrings[random.nextInt(buttonStrings.length)];
-
     return AlertDialog(
-      title: const Text(
-        "Training completed!",
-        style: StyleData.textStyle,
+      title: title,
+      content: SingleChildScrollView(
+        child: Text(
+          text,
+          style: StyleData.textStyle,
+        ),
       ),
-      // content: Text(""),
       actions: <Widget>[
         ElevatedButton(
           child: Text(
-            buttonString,
-            style: coloredTextStyle(Colors.white),
+            "Okay",
+            style: StyleData.textStyle,
           ),
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+            backgroundColor: MaterialStateProperty.all<Color>(buttonColor),
             minimumSize: MaterialStateProperty.all<Size>(
               const Size(double.infinity, 60),
             ),

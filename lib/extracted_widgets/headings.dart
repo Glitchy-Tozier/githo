@@ -48,9 +48,9 @@ class ScreenTitle extends StatelessWidget {
   }
 }
 
-class Heading1 extends StatelessWidget {
+class Heading extends StatelessWidget {
   final String _text;
-  const Heading1(this._text);
+  const Heading(this._text);
 
   @override
   Widget build(BuildContext context) {
@@ -59,29 +59,9 @@ class Heading1 extends StatelessWidget {
       child: Text(
         _text,
         style: const TextStyle(
-          fontSize: 30,
+          fontSize: 35,
           fontWeight: FontWeight.bold,
           color: Colors.black,
-        ),
-      ),
-    );
-  }
-}
-
-class Heading2 extends StatelessWidget {
-  final String _text;
-  const Heading2(this._text);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 15, bottom: 5),
-      child: Text(
-        _text,
-        style: const TextStyle(
-          fontSize: 20,
-          color: Colors.black,
-          //fontWeight: FontWeight.bold,
         ),
       ),
     );

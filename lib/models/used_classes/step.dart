@@ -55,6 +55,22 @@ class StepClass {
     }
   }
 
+  String get status {
+    int completedCount = 0;
+    for (final TrainingPeriod trainingPeriod in this.trainingPeriods) {
+      if (trainingPeriod.status == "completed") {
+        completedCount++;
+      } else if (trainingPeriod.status == "active") {
+        return "active";
+      }
+    }
+    if (completedCount == this.trainingPeriods.length) {
+      return "completed";
+    } else {
+      return "locked";
+    }
+  }
+
   int? get _activePeriodIndex {
     for (int i = 0; i < this.trainingPeriods.length; i++) {
       final TrainingPeriod trainingPeriod = this.trainingPeriods[i];

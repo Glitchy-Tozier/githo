@@ -99,7 +99,7 @@ class _EditHabitState extends State<EditHabit> {
                 children: <Widget>[
                   const Padding(
                     padding: StyleData.screenPadding,
-                    child: const Heading1("Goal"),
+                    child: const Heading("Goal"),
                   ),
                   Padding(
                     padding: StyleData.screenPadding,
@@ -116,7 +116,7 @@ class _EditHabitState extends State<EditHabit> {
 
                   Padding(
                     padding: StyleData.screenPadding,
-                    child: Heading1(
+                    child: Heading(
                         "${currentAdjTimeUnit.capitalize()} action count"),
                   ),
                   Padding(
@@ -143,7 +143,7 @@ class _EditHabitState extends State<EditHabit> {
                   // Create the step-form-fields
                   const Padding(
                     padding: StyleData.screenPadding,
-                    child: const Heading1("Steps towards your goal"),
+                    child: const Heading("Steps towards your goal"),
                   ),
                   Padding(
                     padding: StyleData.screenPadding,
@@ -159,7 +159,7 @@ class _EditHabitState extends State<EditHabit> {
                   // Create the form-fields for your personal comments
                   const Padding(
                     padding: StyleData.screenPadding,
-                    child: const Heading1("Comments"),
+                    child: const Heading("Comments"),
                   ),
                   Padding(
                     padding: StyleData.screenPadding,
@@ -175,7 +175,7 @@ class _EditHabitState extends State<EditHabit> {
                   const FatDivider(),
                   const Padding(
                     padding: StyleData.screenPadding,
-                    child: const Heading1("Extended Settings"),
+                    child: const Heading("Extended Settings"),
                   ),
                   Padding(
                     padding: StyleData.screenPadding,

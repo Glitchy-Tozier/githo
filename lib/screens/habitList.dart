@@ -136,7 +136,7 @@ class _HabitListState extends State<HabitList> {
                 padding: StyleData.screenPadding,
                 child: Column(
                   children: [
-                    const Heading1(
+                    const Heading(
                         "There was an error connecting to the database."),
                     Text(
                       snapshot.error.toString(),

@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:githo/extracted_data/dataShortcut.dart';
 import 'package:githo/extracted_data/fullDatabaseImport.dart';
-import 'package:githo/extracted_functions/typeExtentions.dart';
 import 'package:githo/models/used_classes/training.dart';
 
 class TrainingPeriod {
@@ -25,8 +24,7 @@ class TrainingPeriod {
     final int trainingTimeIndex = habitPlan.trainingTimeIndex;
     this.durationInHours =
         DataShortcut.periodDurationInHours[trainingTimeIndex];
-    this.durationText =
-        DataShortcut.timeFrames[trainingTimeIndex + 1].capitalize();
+    this.durationText = DataShortcut.timeFrames[trainingTimeIndex + 1];
 
     // Get required trainings
     this.requiredTrainings = habitPlan.requiredTrainings;
@@ -130,6 +128,17 @@ class TrainingPeriod {
     }
     result = (successfulTrainings >= requiredTrainings);
     return result;
+  }
+
+  int get successfulTrainings {
+    int successfulTrainings = 0;
+
+    for (final Training training in this.trainings) {
+      if (training.status == "successful") {
+        successfulTrainings++;
+      }
+    }
+    return successfulTrainings;
   }
 
   void setResult() {

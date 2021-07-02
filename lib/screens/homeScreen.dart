@@ -85,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Heading1("No habit-plan is active."),
+                      const Heading("No habit-plan is active."),
                       const Text(
                         "Click on the settings-icon to add or activate your habit-plan",
                         style: StyleData.textStyle,
@@ -130,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
               return Center(
                 child: Column(
                   children: [
-                    const Heading1(
+                    const Heading(
                         "There was an error connecting to the database."),
                     Text(
                       snapshot.error.toString(),

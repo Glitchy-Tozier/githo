@@ -13,8 +13,11 @@ class Training {
 
   Training({required int trainingIndex, required HabitPlan habitPlan}) {
     this.number = trainingIndex + 1;
+
+    final int trainingTimeIndex = habitPlan.trainingTimeIndex;
     this.durationInHours =
-        DataShortcut.trainingDurationInHours[habitPlan.trainingTimeIndex];
+        DataShortcut.trainingDurationInHours[trainingTimeIndex];
+
     this.requiredReps = habitPlan.requiredReps;
   }
 

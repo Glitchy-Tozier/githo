@@ -181,7 +181,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Heading1("Comments"),
+              const Heading("Comments"),
               ..._getCommentWidgets(),
             ],
           ),
@@ -214,7 +214,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Heading1("Rules"),
+                        const Heading("Rules"),
                         ..._getRuleWidgets(),
                       ],
                     ),
@@ -226,7 +226,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Heading1("Steps"),
+                        const Heading("Steps"),
                         _getStepTable(progressData),
                       ],
                     ),
@@ -237,8 +237,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
             } else if (snapshot.hasError) {
               // If something went wrong with the database
               return Column(children: [
-                const Heading1(
-                    "There was an error connecting to the database."),
+                const Heading("There was an error connecting to the database."),
                 Text(
                   snapshot.error.toString(),
                   style: StyleData.textStyle,
