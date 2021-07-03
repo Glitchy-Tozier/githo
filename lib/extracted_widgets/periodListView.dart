@@ -149,15 +149,6 @@ class PeriodListView extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: textSize, color: Colors.white),
             );
-            /* RichText(
-              text: TextSpan(
-                children: [
-                  WidgetSpan(
-                    child: Icon(Icons.ads_click),
-                  ),
-                ],
-              ),
-            ); */
             final Function onConfirmation = () {
               training.activate();
               updateFunction();

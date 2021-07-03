@@ -38,34 +38,37 @@ class StepToDo extends StatelessWidget {
         color: stepColor,
       ),
       Padding(
-        padding: StyleData.screenPadding,
+        padding: StyleData.screenPadding * 0.75,
         child: Material(
           color: Colors.transparent,
           child: InkWell(
             splashColor: stepColor,
             borderRadius: BorderRadius.circular(7),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Heading("Step ${step.number}"),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
-                  child: const Text(
-                    "Info",
-                    style: const TextStyle(
-                      fontSize: 30,
-                      color: Colors.black,
+            child: Padding(
+              padding: StyleData.screenPadding * 0.25,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Heading("Step ${step.number}"),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+                    child: const Text(
+                      "Info",
+                      style: const TextStyle(
+                        fontSize: 30,
+                        color: Colors.black,
+                      ),
                     ),
-                  ),
-                  decoration: BoxDecoration(
-                    color: stepColor,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(7),
+                    decoration: BoxDecoration(
+                      color: stepColor,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(7),
+                      ),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
             onTap: () {
               final Color statusColor;
@@ -115,9 +118,7 @@ class StepToDo extends StatelessWidget {
 
         periodWidgets.add(
           Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: StyleData.screenPaddingValue,
-            ),
+            padding: StyleData.screenPadding,
             child: Text(
               "${trainingPeriod.durationText.capitalize()} ${i + 1} of ${step.trainingPeriods.length}",
               style: const TextStyle(

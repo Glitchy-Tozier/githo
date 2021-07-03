@@ -5,10 +5,8 @@ import 'package:githo/extracted_data/styleData.dart';
 
 class BackgroundWidget extends StatelessWidget {
   final Widget child;
-  const BackgroundWidget({
-    required this.child,
-    Key? key,
-  }) : super(key: key);
+
+  const BackgroundWidget({required this.child, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,16 +14,15 @@ class BackgroundWidget extends StatelessWidget {
       children: [
         // Background
         Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             image: DecorationImage(
-              image: new AssetImage("assets/pixabayColorGradient.jpg"),
+              image: AssetImage("assets/pixabayColorGradient.jpg"),
               fit: BoxFit.cover,
             ),
           ),
         ),
         Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: StyleData.screenPaddingValue * 0.5),
+          padding: StyleData.screenPadding * 0.5,
           child: ClipRect(
             child: BackdropFilter(
               filter: ImageFilter.blur(
