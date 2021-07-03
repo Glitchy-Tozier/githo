@@ -1,8 +1,8 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 import 'package:githo/extracted_data/styleData.dart';
+import 'package:githo/extracted_widgets/alert_dialogs/textDialog.dart';
 
 import 'package:githo/extracted_widgets/gradientTrainingCard.dart';
 import 'package:githo/extracted_widgets/alert_dialogs/confirmTrainingStart.dart';
@@ -24,12 +24,33 @@ class PeriodListView extends StatelessWidget {
     required this.globalKey,
   });
 
+  String _getDurationDiff(final DateTime dateTime1, final DateTime dateTime2) {
+    final Duration difference = dateTime2.difference(dateTime1);
+    print(dateTime1);
+    print(dateTime2);
+    print(difference.inDays);
+
+    if (difference.inDays > 1) {
+      return "${difference.inDays} days";
+    } else if (difference.inDays == 1) {
+      return "${difference.inDays} day";
+    } else if (difference.inHours >= 1) {
+      return "${difference.inHours} h";
+    } else if (difference.inMinutes >= 1) {
+      return "${difference.inDays} min";
+    } else {
+      return "${difference.inSeconds} s";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> listViewChildren = [];
     double cardMarginRL = 6;
 
-    for (final Training training in trainingPeriod.trainings) {
+    for (int i = 0; i < trainingPeriod.trainings.length; i++) {
+      final Training training = trainingPeriod.trainings[i];
+
       double textSize = 25;
       double cardWidth = 100;
       double cardHeight = 70;
@@ -47,6 +68,43 @@ class PeriodListView extends StatelessWidget {
           color = Colors.red;
         } else {
           color = Colors.grey.shade400;
+        }
+      } else if (trainingPeriod.status == "waiting for start") {
+        textSize *= 0.9;
+        cardWidth *= 1.3;
+        cardHeight *= 1.3;
+        cardMarginRL *= 1.3;
+
+        color = Colors.orange;
+        if (i == 0) {
+          final String remainingTime = _getDurationDiff(
+            DateTime.now(),
+            training.startingDate,
+          );
+          child = Text(
+            "Starting in\n$remainingTime",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: textSize,
+            ),
+          );
+          onTap = () => showDialog(
+                context: context,
+                builder: (BuildContext buildContext) {
+                  return TextDialog(
+                    title: const Text("Waiting for training to start"),
+                    text:
+                        "To-do: $stepDescription\n\nRemaining time: $remainingTime",
+                    buttonColor: Colors.orange,
+                  );
+                },
+              );
+          Timer(
+            const Duration(seconds: 1),
+            () => updateFunction(),
+          );
+        } else {
+          child = const Icon(Icons.lock_clock);
         }
       } else if (trainingPeriod.status == "active") {
         textSize *= 1.3;
@@ -83,14 +141,23 @@ class PeriodListView extends StatelessWidget {
             );
           }
         } else if (training.isNow) {
+          cardWidth *= 1.3;
+          cardHeight *= 1.3;
           if (training.status == "current") {
-            cardWidth *= 1.3;
-            cardHeight *= 1.3;
             child = Text(
               "Start training",
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: textSize, color: Colors.white),
             );
+            /* RichText(
+              text: TextSpan(
+                children: [
+                  WidgetSpan(
+                    child: Icon(Icons.ads_click),
+                  ),
+                ],
+              ),
+            ); */
             final Function onConfirmation = () {
               training.activate();
               updateFunction();
@@ -108,8 +175,6 @@ class PeriodListView extends StatelessWidget {
                 );
             color = Colors.orange; // Doesn't do anything.
           } else {
-            cardWidth *= 1.3;
-            cardHeight *= 1.3;
             child = Text(
               "${training.doneReps}/${training.requiredReps}",
               style: TextStyle(

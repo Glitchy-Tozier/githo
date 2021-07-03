@@ -64,7 +64,7 @@ class GradinentTrainingCard extends StatelessWidget {
             ),
           ),
           borderRadius: BorderRadius.circular(borderRadius),
-          elevation: 5,
+          elevation: 7,
         ),
       ),
     );

@@ -6,6 +6,7 @@ import 'package:githo/extracted_data/styleData.dart';
 
 import 'package:githo/extracted_functions/textFormFieldHelpers.dart';
 import 'package:githo/extracted_functions/typeExtentions.dart';
+import 'package:githo/extracted_widgets/backgroundWidget.dart';
 import 'package:githo/extracted_widgets/dividers/fatDivider.dart';
 import 'package:githo/extracted_widgets/dividers/thinDivider.dart';
 
@@ -80,189 +81,196 @@ class _EditHabitState extends State<EditHabit> {
     }
 
     return Scaffold(
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 0),
-          physics: const BouncingScrollPhysics(),
-          shrinkWrap: true,
-          children: <Widget>[
-            const Padding(
-              padding: StyleData.screenPadding,
-              child: const ScreenTitle(title: "Edit Habit-Plan"),
-            ),
-            const FatDivider(),
-            Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  const Padding(
-                    padding: StyleData.screenPadding,
-                    child: const Heading("Goal"),
-                  ),
-                  Padding(
-                    padding: StyleData.screenPadding,
-                    child: TextFormField(
-                      decoration: inputDecoration("Your goal"),
-                      validator: (input) =>
-                          checkIfEmpty(input.toString().trim(), "your goal"),
-                      initialValue: habitPlan.goal,
-                      onSaved: (input) =>
-                          habitPlan.goal = input.toString().trim(),
-                    ),
-                  ),
-                  const ThinDivider(),
-
-                  Padding(
-                    padding: StyleData.screenPadding,
-                    child: Heading(
-                        "${currentAdjTimeUnit.capitalize()} action count"),
-                  ),
-                  Padding(
-                    padding: StyleData.screenPadding,
-                    child: TextFormField(
-                      textAlign: TextAlign.end,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      decoration: inputDecoration("Nr of required actions"),
-                      validator: (input) => validateNumberField(
-                        input: input,
-                        maxInput: 1000,
-                        variableText: "the required repetitions",
-                        onEmptyText:
-                            "It has to be at least one rep a $currentTimeUnit",
-                      ),
-                      initialValue: habitPlan.requiredReps.toString(),
-                      onSaved: (input) => habitPlan.requiredReps =
-                          int.parse(input.toString().trim()),
-                    ),
-                  ),
-                  const ThinDivider(),
-
-                  // Create the step-form-fields
-                  const Padding(
-                    padding: StyleData.screenPadding,
-                    child: const Heading("Steps towards your goal"),
-                  ),
-                  Padding(
-                    padding: StyleData.screenPadding,
-                    child: FormList(
-                      fieldName: "Step",
-                      canBeEmpty: false,
-                      valuesGetter: _getStepValues,
-                      inputList: habitPlan.steps,
-                    ),
-                  ),
-                  const ThinDivider(),
-
-                  // Create the form-fields for your personal comments
-                  const Padding(
-                    padding: StyleData.screenPadding,
-                    child: const Heading("Comments"),
-                  ),
-                  Padding(
-                    padding: StyleData.screenPadding,
-                    child: FormList(
-                      fieldName: "Comment",
-                      canBeEmpty: true,
-                      valuesGetter: _getCommentValues,
-                      inputList: habitPlan.comments,
-                    ),
-                  ),
-
-                  // Extended settings
-                  const FatDivider(),
-                  const Padding(
-                    padding: StyleData.screenPadding,
-                    child: const Heading("Extended Settings"),
-                  ),
-                  Padding(
-                    padding: StyleData.screenPadding,
-                    child: SliderTitle([
-                      ["normal", "It will be $firstSliderArticle "],
-                      ["bold", "$currentAdjTimeUnit"],
-                      ["normal", " habit."],
-                    ]),
-                  ),
-                  Padding(
-                    padding: StyleData.screenPadding,
-                    child: Slider(
-                      value: habitPlan.trainingTimeIndex.toDouble(),
-                      min: 0,
-                      max: (_timeFrames.length - 2)
-                          .toDouble(), // -2 BECAUSE -1: .length return a value that is 1 too large AND -1: I want exclude the last value.
-                      divisions: _timeFrames.length - 2,
-                      onChanged: (double value) {
-                        setState(() {
-                          // Set the correct value for THIS slider
-                          habitPlan.trainingTimeIndex = value.toInt();
-                          // Correct the Value for the NEXT slider
-                          int newTimeIndex = value.toInt();
-                          double newMaxTrainings =
-                              _maxTrainings[newTimeIndex].toDouble();
-                          habitPlan.requiredTrainings =
-                              (newMaxTrainings * 0.9).floor();
-                        });
-                      },
-                    ),
-                  ),
-                  const ThinDivider(),
-                  Padding(
-                    padding: StyleData.screenPadding,
-                    child: SliderTitle([
-                      ["normal", "Every $currentTimeFrame, "],
-                      ["bold", "${habitPlan.requiredTrainings.toInt()}"],
-                      [
-                        "normal",
-                        " out of ${currentMaxTrainings.toInt()} ${currentTimeUnit}s must be successful."
-                      ]
-                    ]),
-                  ),
-                  Padding(
-                    padding: StyleData.screenPadding,
-                    child: Slider(
-                      value: habitPlan.requiredTrainings.toDouble(),
-                      min: 1,
-                      max: currentMaxTrainings,
-                      divisions: currentMaxTrainings.toInt() - 1,
-                      onChanged: (double value) {
-                        setState(() {
-                          habitPlan.requiredTrainings = value.toInt();
-                        });
-                      },
-                    ),
-                  ),
-                  const ThinDivider(),
-                  Padding(
-                    padding: StyleData.screenPadding,
-                    child: SliderTitle([
-                      ["bold", "${habitPlan.requiredTrainingPeriods.toInt()}"],
-                      [
-                        "normal",
-                        " successful $currentTimeFrame$thirdSliderText required to advance to the next step."
-                      ]
-                    ]),
-                  ),
-                  Padding(
-                    padding: StyleData.screenPadding,
-                    child: Slider(
-                      value: habitPlan.requiredTrainingPeriods.toDouble(),
-                      min: 1,
-                      max: 10,
-                      divisions: 9,
-                      onChanged: (double value) {
-                        setState(() {
-                          habitPlan.requiredTrainingPeriods = value.toInt();
-                        });
-                      },
-                    ),
-                  ),
-                ],
+      body: BackgroundWidget(
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 0),
+            physics: const BouncingScrollPhysics(),
+            shrinkWrap: true,
+            children: <Widget>[
+              const Padding(
+                padding: StyleData.screenPadding,
+                child: const ScreenTitle(title: "Edit Habit-Plan"),
               ),
-            ),
-            ScreenEndingSpacer(),
-          ],
+              const FatDivider(),
+              Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const Padding(
+                      padding: StyleData.screenPadding,
+                      child: const Heading("Goal"),
+                    ),
+                    Padding(
+                      padding: StyleData.screenPadding,
+                      child: TextFormField(
+                        decoration: inputDecoration("Your goal"),
+                        validator: (input) =>
+                            checkIfEmpty(input.toString().trim(), "your goal"),
+                        initialValue: habitPlan.goal,
+                        onSaved: (input) =>
+                            habitPlan.goal = input.toString().trim(),
+                      ),
+                    ),
+                    const ThinDivider(),
+
+                    Padding(
+                      padding: StyleData.screenPadding,
+                      child: Heading(
+                          "${currentAdjTimeUnit.capitalize()} action count"),
+                    ),
+                    Padding(
+                      padding: StyleData.screenPadding,
+                      child: TextFormField(
+                        textAlign: TextAlign.end,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        decoration: inputDecoration("Nr of required actions"),
+                        validator: (input) => validateNumberField(
+                          input: input,
+                          maxInput: 1000,
+                          variableText: "the required repetitions",
+                          onEmptyText:
+                              "It has to be at least one rep a $currentTimeUnit",
+                        ),
+                        initialValue: habitPlan.requiredReps.toString(),
+                        onSaved: (input) => habitPlan.requiredReps =
+                            int.parse(input.toString().trim()),
+                      ),
+                    ),
+                    const ThinDivider(),
+
+                    // Create the step-form-fields
+                    const Padding(
+                      padding: StyleData.screenPadding,
+                      child: const Heading("Steps towards your goal"),
+                    ),
+                    Padding(
+                      padding: StyleData.screenPadding,
+                      child: FormList(
+                        fieldName: "Step",
+                        canBeEmpty: false,
+                        valuesGetter: _getStepValues,
+                        inputList: habitPlan.steps,
+                      ),
+                    ),
+                    const ThinDivider(),
+
+                    // Create the form-fields for your personal comments
+                    const Padding(
+                      padding: StyleData.screenPadding,
+                      child: const Heading("Comments"),
+                    ),
+                    Padding(
+                      padding: StyleData.screenPadding,
+                      child: FormList(
+                        fieldName: "Comment",
+                        canBeEmpty: true,
+                        valuesGetter: _getCommentValues,
+                        inputList: habitPlan.comments,
+                      ),
+                    ),
+
+                    // Extended settings
+                    const FatDivider(),
+                    const Padding(
+                      padding: StyleData.screenPadding,
+                      child: const Heading("Extended Settings"),
+                    ),
+                    Padding(
+                      padding: StyleData.screenPadding,
+                      child: SliderTitle([
+                        ["normal", "It will be $firstSliderArticle "],
+                        ["bold", "$currentAdjTimeUnit"],
+                        ["normal", " habit."],
+                      ]),
+                    ),
+                    Padding(
+                      padding: StyleData.screenPadding,
+                      child: Slider(
+                        value: habitPlan.trainingTimeIndex.toDouble(),
+                        min: 0,
+                        max: (_timeFrames.length - 2)
+                            .toDouble(), // -2 BECAUSE -1: .length return a value that is 1 too large AND -1: I want exclude the last value.
+                        divisions: _timeFrames.length - 2,
+                        onChanged: (double value) {
+                          setState(() {
+                            // Set the correct value for THIS slider
+                            habitPlan.trainingTimeIndex = value.toInt();
+                            // Correct the Value for the NEXT slider
+                            int newTimeIndex = value.toInt();
+                            double newMaxTrainings =
+                                _maxTrainings[newTimeIndex].toDouble();
+                            habitPlan.requiredTrainings =
+                                (newMaxTrainings * 0.9).floor();
+                          });
+                        },
+                      ),
+                    ),
+                    const ThinDivider(),
+                    Padding(
+                      padding: StyleData.screenPadding,
+                      child: SliderTitle([
+                        ["normal", "Every $currentTimeFrame, "],
+                        ["bold", "${habitPlan.requiredTrainings.toInt()}"],
+                        [
+                          "normal",
+                          " out of ${currentMaxTrainings.toInt()} ${currentTimeUnit}s must be successful."
+                        ]
+                      ]),
+                    ),
+                    Padding(
+                      padding: StyleData.screenPadding,
+                      child: Slider(
+                        value: habitPlan.requiredTrainings.toDouble(),
+                        min: 1,
+                        max: currentMaxTrainings,
+                        divisions: currentMaxTrainings.toInt() - 1,
+                        onChanged: (double value) {
+                          setState(() {
+                            habitPlan.requiredTrainings = value.toInt();
+                          });
+                        },
+                      ),
+                    ),
+                    const ThinDivider(),
+                    Padding(
+                      padding: StyleData.screenPadding,
+                      child: SliderTitle([
+                        [
+                          "bold",
+                          "${habitPlan.requiredTrainingPeriods.toInt()}"
+                        ],
+                        [
+                          "normal",
+                          " successful $currentTimeFrame$thirdSliderText required to advance to the next step."
+                        ]
+                      ]),
+                    ),
+                    Padding(
+                      padding: StyleData.screenPadding,
+                      child: Slider(
+                        value: habitPlan.requiredTrainingPeriods.toDouble(),
+                        min: 1,
+                        max: 10,
+                        divisions: 9,
+                        onChanged: (double value) {
+                          setState(() {
+                            habitPlan.requiredTrainingPeriods = value.toInt();
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              ScreenEndingSpacer(),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(

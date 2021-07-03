@@ -64,7 +64,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
     return startingDate;
   }
 
-  String _format(DateTime dateTime) {
+  String _formatDate(final DateTime dateTime) {
     return DateFormat("EEEE, dd.MM.yyyy").format(dateTime);
   }
 
@@ -101,7 +101,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
 
   @override
   Widget build(BuildContext context) {
-    this.startingDateString = _format(startingDate);
+    this.startingDateString = _formatDate(startingDate);
     this.dateController.text = startingDateString;
 
     return AlertDialog(

@@ -39,61 +39,65 @@ class StepToDo extends StatelessWidget {
       ),
       Padding(
         padding: StyleData.screenPadding,
-        child: InkWell(
-          splashColor: stepColor,
-          borderRadius: BorderRadius.circular(7),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Heading("Step ${step.number}"),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
-                child: const Text(
-                  "Info",
-                  style: const TextStyle(
-                    fontSize: 30,
-                    color: Colors.black,
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            splashColor: stepColor,
+            borderRadius: BorderRadius.circular(7),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Heading("Step ${step.number}"),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+                  child: const Text(
+                    "Info",
+                    style: const TextStyle(
+                      fontSize: 30,
+                      color: Colors.black,
+                    ),
                   ),
-                ),
-                decoration: BoxDecoration(
-                  color: stepColor,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(7),
+                  decoration: BoxDecoration(
+                    color: stepColor,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(7),
+                    ),
                   ),
-                ),
-              )
-            ],
-          ),
-          onTap: () {
-            final Color statusColor;
-            if (step.status == "active") {
-              statusColor = Colors.orange;
-            } else if (step.status == "locked") {
-              statusColor = Colors.grey.shade700;
-            } else {
-              statusColor = stepColor;
-            }
+                )
+              ],
+            ),
+            onTap: () {
+              final Color statusColor;
+              if (step.status == "active") {
+                statusColor = Colors.orange;
+              } else if (step.status == "locked") {
+                statusColor = Colors.grey.shade700;
+              } else {
+                statusColor = stepColor;
+              }
 
-            showDialog(
-              context: context,
-              builder: (BuildContext buildContext) {
-                return TextDialog(
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Step ${step.number}"),
-                      Text(
-                        step.status,
-                        style: TextStyle(color: statusColor),
-                      )
-                    ],
-                  ),
-                  text: "To-do: ${this.step.text}",
-                  buttonColor: stepColor,
-                );
-              },
-            );
-          },
+              showDialog(
+                context: context,
+                builder: (BuildContext buildContext) {
+                  return TextDialog(
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Step ${step.number}"),
+                        Text(
+                          step.status,
+                          style: TextStyle(color: statusColor),
+                        )
+                      ],
+                    ),
+                    text: "To-do: ${this.step.text}",
+                    buttonColor: stepColor,
+                  );
+                },
+              );
+            },
+          ),
         ),
       ),
     ]);

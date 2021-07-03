@@ -7,6 +7,8 @@ InputDecoration inputDecoration(final String text) {
   // Provide the basic Styling for TextFormFields.
   return InputDecoration(
     labelText: text,
+    /* fillColor: Colors.white,
+    filled: true, */
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(10),
     ),

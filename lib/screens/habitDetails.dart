@@ -7,6 +7,7 @@ import 'package:githo/extracted_data/styleData.dart';
 import 'package:githo/extracted_functions/editHabitRoutes.dart';
 import 'package:githo/extracted_widgets/activationFAB.dart';
 import 'package:githo/extracted_widgets/alert_dialogs/confirmEdit.dart';
+import 'package:githo/extracted_widgets/backgroundWidget.dart';
 
 import 'package:githo/extracted_widgets/bulletPoint.dart';
 import 'package:githo/extracted_widgets/customListTile.dart';
@@ -190,66 +191,69 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
     }
 
     return Scaffold(
-      body: FutureBuilder(
-        future: _progressData,
-        builder: (context, AsyncSnapshot<ProgressData> snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasData) {
-              ProgressData progressData = snapshot.data!;
-              return ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 0),
-                physics: const BouncingScrollPhysics(),
-                shrinkWrap: true,
-                children: [
-                  Padding(
-                    padding: StyleData.screenPadding,
-                    child: ScreenTitle(
-                      title: habitPlan.goal,
-                      //subTitle: getStatusString(progressData),
+      body: BackgroundWidget(
+        child: FutureBuilder(
+          future: _progressData,
+          builder: (context, AsyncSnapshot<ProgressData> snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasData) {
+                ProgressData progressData = snapshot.data!;
+                return ListView(
+                  padding: const EdgeInsets.symmetric(horizontal: 0),
+                  physics: const BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  children: [
+                    Padding(
+                      padding: StyleData.screenPadding,
+                      child: ScreenTitle(
+                        title: habitPlan.goal,
+                        //subTitle: getStatusString(progressData),
+                      ),
                     ),
-                  ),
-                  const FatDivider(),
-                  Padding(
-                    padding: StyleData.screenPadding,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Heading("Rules"),
-                        ..._getRuleWidgets(),
-                      ],
+                    const FatDivider(),
+                    Padding(
+                      padding: StyleData.screenPadding,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Heading("Rules"),
+                          ..._getRuleWidgets(),
+                        ],
+                      ),
                     ),
-                  ),
-                  ...commentSection,
-                  const FatDivider(),
-                  Padding(
-                    padding: StyleData.screenPadding,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Heading("Steps"),
-                        _getStepTable(progressData),
-                      ],
+                    ...commentSection,
+                    const FatDivider(),
+                    Padding(
+                      padding: StyleData.screenPadding,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Heading("Steps"),
+                          _getStepTable(progressData),
+                        ],
+                      ),
                     ),
+                    ScreenEndingSpacer()
+                  ],
+                );
+              } else if (snapshot.hasError) {
+                // If something went wrong with the database
+                return Column(children: [
+                  const Heading(
+                      "There was an error connecting to the database."),
+                  Text(
+                    snapshot.error.toString(),
+                    style: StyleData.textStyle,
                   ),
-                  ScreenEndingSpacer()
-                ],
-              );
-            } else if (snapshot.hasError) {
-              // If something went wrong with the database
-              return Column(children: [
-                const Heading("There was an error connecting to the database."),
-                Text(
-                  snapshot.error.toString(),
-                  style: StyleData.textStyle,
-                ),
-              ]);
+                ]);
+              }
             }
-          }
-          // Default return (while loading, for example)
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        },
+            // Default return (while loading, for example)
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          },
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Padding(

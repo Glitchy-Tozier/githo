@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:githo/extracted_widgets/alert_dialogs/confirmTrainingStart.dart';
 import 'package:githo/extracted_widgets/alert_dialogs/trainingDone.dart';
+import 'package:githo/extracted_widgets/backgroundWidget.dart';
 import 'package:githo/extracted_widgets/screenEndingSpacer.dart';
 import 'package:githo/extracted_widgets/stepToDo.dart';
 
@@ -58,6 +59,8 @@ class _HomeScreenState extends State<HomeScreen> {
             duration: const Duration(seconds: 1),
             alignment: 0.5,
           );
+        } else {
+          print("GlobalKey is null");
         }
       },
     );
@@ -66,86 +69,88 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder(
-        future: _progressData,
-        builder: (context, AsyncSnapshot<ProgressData> snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasData) {
-              ProgressData progressData = snapshot.data!;
-              if (progressData.isActive == false) {
-                // If connection is done but no habitPlan is active:
-                double screenHeight = MediaQuery.of(context).size.height;
-                return Container(
-                  padding: EdgeInsets.only(
-                    top: screenHeight * 0.25,
-                    right: StyleData.screenPaddingValue,
-                    left: StyleData.screenPaddingValue,
-                  ),
-                  width: double.infinity,
+      body: BackgroundWidget(
+        child: FutureBuilder(
+          future: _progressData,
+          builder: (context, AsyncSnapshot<ProgressData> snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasData) {
+                ProgressData progressData = snapshot.data!;
+                if (progressData.isActive == false) {
+                  // If connection is done but no habitPlan is active:
+                  double screenHeight = MediaQuery.of(context).size.height;
+                  return Container(
+                    padding: EdgeInsets.only(
+                      top: screenHeight * 0.25,
+                      right: StyleData.screenPaddingValue,
+                      left: StyleData.screenPaddingValue,
+                    ),
+                    width: double.infinity,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Heading("No habit-plan is active."),
+                        const Text(
+                          "Click on the settings-icon to add or activate your habit-plan",
+                          style: StyleData.textStyle,
+                        ),
+                      ],
+                    ),
+                  );
+                } else {
+                  // If connection is done and there is an active habitPlan:
+                  final bool somethingChanged = progressData.updateTime();
+                  if (somethingChanged) {
+                    _scrollToActiveTraining();
+                  }
+
+                  return ListView(
+                    padding: const EdgeInsets.symmetric(horizontal: 0),
+                    physics: BouncingScrollPhysics(),
+                    shrinkWrap: true,
+                    children: <Widget>[
+                      Padding(
+                        padding: StyleData.screenPadding,
+                        child: ScreenTitle(
+                          title: progressData.goal,
+                          //subTitle: getStatusString(progressData),
+                        ),
+                      ),
+                      ...List.generate(progressData.steps.length, (i) {
+                        final StepClass step = progressData.steps[i];
+                        return StepToDo(
+                          globalKey,
+                          step,
+                          _updateDbAndScreen,
+                        );
+                      }),
+                      ScreenEndingSpacer(),
+                    ],
+                  );
+                }
+              } else if (snapshot.hasError) {
+                // If connection is done but there was an error:
+                print(snapshot.error);
+                return Center(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Heading("No habit-plan is active."),
-                      const Text(
-                        "Click on the settings-icon to add or activate your habit-plan",
+                      const Heading(
+                          "There was an error connecting to the database."),
+                      Text(
+                        snapshot.error.toString(),
                         style: StyleData.textStyle,
                       ),
                     ],
                   ),
                 );
-              } else {
-                // If connection is done and there is an active habitPlan:
-                final bool somethingChanged = progressData.updateTime();
-                if (somethingChanged) {
-                  _scrollToActiveTraining();
-                }
-
-                return ListView(
-                  padding: const EdgeInsets.symmetric(horizontal: 0),
-                  physics: BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  children: <Widget>[
-                    Padding(
-                      padding: StyleData.screenPadding,
-                      child: ScreenTitle(
-                        title: progressData.goal,
-                        //subTitle: getStatusString(progressData),
-                      ),
-                    ),
-                    ...List.generate(progressData.steps.length, (i) {
-                      final StepClass step = progressData.steps[i];
-                      return StepToDo(
-                        globalKey,
-                        step,
-                        _updateDbAndScreen,
-                      );
-                    }),
-                    ScreenEndingSpacer(),
-                  ],
-                );
               }
-            } else if (snapshot.hasError) {
-              // If connection is done but there was an error:
-              print(snapshot.error);
-              return Center(
-                child: Column(
-                  children: [
-                    const Heading(
-                        "There was an error connecting to the database."),
-                    Text(
-                      snapshot.error.toString(),
-                      style: StyleData.textStyle,
-                    ),
-                  ],
-                ),
-              );
             }
-          }
-          // While loading, do this:
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        },
+            // While loading, do this:
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          },
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Padding(

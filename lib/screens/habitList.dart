@@ -4,6 +4,7 @@ import 'package:githo/extracted_data/styleData.dart';
 import 'package:githo/extracted_data/fullDatabaseImport.dart';
 
 import 'package:githo/extracted_functions/editHabitRoutes.dart';
+import 'package:githo/extracted_widgets/backgroundWidget.dart';
 import 'package:githo/extracted_widgets/buttonListItem.dart';
 import 'package:githo/extracted_widgets/dividers/fatDivider.dart';
 
@@ -55,103 +56,105 @@ class _HabitListState extends State<HabitList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder(
-        future: _habitPlanListFuture,
-        builder: (context, AsyncSnapshot<List<HabitPlan>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasData) {
-              List<HabitPlan> habitPlanList = snapshot.data!;
+      body: BackgroundWidget(
+        child: FutureBuilder(
+          future: _habitPlanListFuture,
+          builder: (context, AsyncSnapshot<List<HabitPlan>> snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasData) {
+                List<HabitPlan> habitPlanList = snapshot.data!;
 
-              if (habitPlanList.length == 0) {
-                // If there are no habit plans
-                return Padding(
-                  padding: StyleData.screenPadding,
-                  child: const ScreenTitle(
-                    title: "List of habits",
-                    subTitle: "Please add a habit plan.",
-                  ),
-                );
-              } else {
-                // If there are habit plans
-                final List<Widget> columnItems = [];
-                columnItems.addAll([
-                  Padding(
+                if (habitPlanList.length == 0) {
+                  // If there are no habit plans
+                  return Padding(
                     padding: StyleData.screenPadding,
                     child: const ScreenTitle(
                       title: "List of habits",
-                      subTitle: "Click on a habit-plan to look at it.",
+                      subTitle: "Please add a habit plan.",
                     ),
-                  ),
-                  FatDivider(),
-                ]);
-
-                final List<HabitPlan> orderedHabitPlans =
-                    _orderHabitPlans(habitPlanList);
-
-                columnItems.add(
-                  Expanded(
-                    child: ListView.builder(
+                  );
+                } else {
+                  // If there are habit plans
+                  final List<Widget> columnItems = [];
+                  columnItems.addAll([
+                    Padding(
                       padding: StyleData.screenPadding,
-                      physics: BouncingScrollPhysics(),
-                      itemCount: orderedHabitPlans.length + 1,
-                      itemBuilder: (BuildContext buildContex, int i) {
-                        if (i < orderedHabitPlans.length) {
-                          final HabitPlan habitPlan = orderedHabitPlans[i];
-
-                          return ButtonListItem(
-                            text: habitPlan.goal,
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SingleHabitDisplay(
-                                    updateFunction: _updateLoadedScreens,
-                                    habitPlan: habitPlan,
-                                  ),
-                                ),
-                              );
-                            },
-                            color: habitPlan.isActive
-                                ? Colors.green
-                                : Theme.of(context).buttonColor,
-                          );
-                        } else {
-                          // On the last loop, add the ScreenEndingSpacer.
-                          return ScreenEndingSpacer();
-                        }
-                      },
+                      child: const ScreenTitle(
+                        title: "List of habits",
+                        subTitle: "Click on a habit-plan to look at it.",
+                      ),
                     ),
+                    FatDivider(),
+                  ]);
+
+                  final List<HabitPlan> orderedHabitPlans =
+                      _orderHabitPlans(habitPlanList);
+
+                  columnItems.add(
+                    Expanded(
+                      child: ListView.builder(
+                        padding: StyleData.screenPadding,
+                        physics: BouncingScrollPhysics(),
+                        itemCount: orderedHabitPlans.length + 1,
+                        itemBuilder: (BuildContext buildContex, int i) {
+                          if (i < orderedHabitPlans.length) {
+                            final HabitPlan habitPlan = orderedHabitPlans[i];
+
+                            return ButtonListItem(
+                              text: habitPlan.goal,
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SingleHabitDisplay(
+                                      updateFunction: _updateLoadedScreens,
+                                      habitPlan: habitPlan,
+                                    ),
+                                  ),
+                                );
+                              },
+                              color: habitPlan.isActive
+                                  ? Colors.green
+                                  : Theme.of(context).buttonColor,
+                            );
+                          } else {
+                            // On the last loop, add the ScreenEndingSpacer.
+                            return ScreenEndingSpacer();
+                          }
+                        },
+                      ),
+                    ),
+                  );
+                  return Column(
+                    children: columnItems,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                  );
+                }
+              } else if (snapshot.hasError) {
+                // If something went wrong with the database
+                print(snapshot.error);
+
+                return Padding(
+                  padding: StyleData.screenPadding,
+                  child: Column(
+                    children: [
+                      const Heading(
+                          "There was an error connecting to the database."),
+                      Text(
+                        snapshot.error.toString(),
+                        style: StyleData.textStyle,
+                      ),
+                    ],
                   ),
-                );
-                return Column(
-                  children: columnItems,
-                  mainAxisAlignment: MainAxisAlignment.start,
                 );
               }
-            } else if (snapshot.hasError) {
-              // If something went wrong with the database
-              print(snapshot.error);
-
-              return Padding(
-                padding: StyleData.screenPadding,
-                child: Column(
-                  children: [
-                    const Heading(
-                        "There was an error connecting to the database."),
-                    Text(
-                      snapshot.error.toString(),
-                      style: StyleData.textStyle,
-                    ),
-                  ],
-                ),
-              );
             }
-          }
-          // While loading, do this:
-          return Center(
-            child: const CircularProgressIndicator(),
-          );
-        },
+            // While loading, do this:
+            return Center(
+              child: const CircularProgressIndicator(),
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.green,
