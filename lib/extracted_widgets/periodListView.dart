@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:githo/extracted_data/styleData.dart';
+import 'package:githo/extracted_functions/getDurationDiff.dart';
 import 'package:githo/extracted_widgets/alert_dialogs/textDialog.dart';
 
 import 'package:githo/extracted_widgets/gradientTrainingCard.dart';
@@ -24,25 +25,6 @@ class PeriodListView extends StatelessWidget {
     required this.globalKey,
   });
 
-  String _getDurationDiff(final DateTime dateTime1, final DateTime dateTime2) {
-    final Duration difference = dateTime2.difference(dateTime1);
-    print(dateTime1);
-    print(dateTime2);
-    print(difference.inDays);
-
-    if (difference.inDays > 1) {
-      return "${difference.inDays} days";
-    } else if (difference.inDays == 1) {
-      return "${difference.inDays} day";
-    } else if (difference.inHours >= 1) {
-      return "${difference.inHours} h";
-    } else if (difference.inMinutes >= 1) {
-      return "${difference.inDays} min";
-    } else {
-      return "${difference.inSeconds} s";
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final List<Widget> listViewChildren = [];
@@ -51,6 +33,7 @@ class PeriodListView extends StatelessWidget {
     for (int i = 0; i < trainingPeriod.trainings.length; i++) {
       final Training training = trainingPeriod.trainings[i];
 
+      GlobalKey? key;
       double textSize = 25;
       double cardWidth = 100;
       double cardHeight = 70;
@@ -77,7 +60,9 @@ class PeriodListView extends StatelessWidget {
 
         color = Colors.orange;
         if (i == 0) {
-          final String remainingTime = _getDurationDiff(
+          key = globalKey;
+
+          final String remainingTime = getDurationDiff(
             DateTime.now(),
             training.startingDate,
           );
@@ -94,7 +79,7 @@ class PeriodListView extends StatelessWidget {
                   return TextDialog(
                     title: const Text("Waiting for training to start"),
                     text:
-                        "To-do: $stepDescription\n\nRemaining time: $remainingTime",
+                        "Starting in $remainingTime\n\nTo-do: $stepDescription",
                     buttonColor: Colors.orange,
                   );
                 },
@@ -141,6 +126,7 @@ class PeriodListView extends StatelessWidget {
             );
           }
         } else if (training.isNow) {
+          key = globalKey;
           cardWidth *= 1.3;
           cardHeight *= 1.3;
           if (training.status == "current") {
@@ -203,34 +189,21 @@ class PeriodListView extends StatelessWidget {
         color = Colors.grey.shade300;
       }
 
-      if (training.isNow) {
-        if (training.status == "current") {
-          listViewChildren.add(
-            GradinentTrainingCard(
-              key: globalKey,
-              horizontalMargin: cardMarginRL,
-              width: cardWidth,
-              height: cardHeight,
-              child: child,
-              onTap: onTap,
-            ),
-          );
-        } else {
-          listViewChildren.add(
-            TrainingCard(
-              key: globalKey,
-              horizontalMargin: cardMarginRL,
-              width: cardWidth,
-              height: cardHeight,
-              child: child,
-              onTap: onTap,
-              color: color,
-            ),
-          );
-        }
+      if (training.isNow && training.status == "current") {
+        listViewChildren.add(
+          GradinentTrainingCard(
+            key: key,
+            horizontalMargin: cardMarginRL,
+            width: cardWidth,
+            height: cardHeight,
+            child: child,
+            onTap: onTap,
+          ),
+        );
       } else {
         listViewChildren.add(
           TrainingCard(
+            key: key,
             horizontalMargin: cardMarginRL,
             width: cardWidth,
             height: cardHeight,

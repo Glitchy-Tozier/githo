@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:githo/extracted_functions/getDurationDiff.dart';
 import 'package:githo/extracted_widgets/alert_dialogs/confirmTrainingStart.dart';
+import 'package:githo/extracted_widgets/alert_dialogs/textDialog.dart';
 import 'package:githo/extracted_widgets/alert_dialogs/trainingDone.dart';
 import 'package:githo/extracted_widgets/backgroundWidget.dart';
 import 'package:githo/extracted_widgets/screenEndingSpacer.dart';
@@ -60,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
             alignment: 0.5,
           );
         } else {
-          print("GlobalKey is null");
+          print("\nGlobalKey is null\n");
         }
       },
     );
@@ -113,17 +115,21 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: StyleData.screenPadding,
                         child: ScreenTitle(
                           title: progressData.goal,
-                          //subTitle: getStatusString(progressData),
                         ),
                       ),
-                      ...List.generate(progressData.steps.length, (i) {
-                        final StepClass step = progressData.steps[i];
-                        return StepToDo(
-                          globalKey,
-                          step,
-                          _updateDbAndScreen,
-                        );
-                      }),
+                      Column(
+                        // This column exists to make sure all trainings are being cached. (= to disable lazyloading)
+                        children: [
+                          ...List.generate(progressData.steps.length, (i) {
+                            final StepClass step = progressData.steps[i];
+                            return StepToDo(
+                              globalKey,
+                              step,
+                              _updateDbAndScreen,
+                            );
+                          }),
+                        ],
+                      ),
                       ScreenEndingSpacer(),
                     ],
                   );
@@ -215,51 +221,87 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (snapshot.hasData) {
                   final ProgressData progressData = snapshot.data!;
                   if (progressData.isActive) {
+                    final Map<String, dynamic>? activeMap =
+                        progressData.getActiveData();
+
+                    final IconData icon;
+                    final Function onClickFunc;
+
+                    if (activeMap == null) {
+                      icon = Icons.timelapse;
+
+                      onClickFunc = () {
+                        final Map<String, dynamic> waitingMap =
+                            progressData.getWaitingData()!;
+
+                        final Training training = waitingMap["training"];
+                        final StepClass step = waitingMap["step"];
+                        final String stepDescription = step.text;
+
+                        final String remainingTime = getDurationDiff(
+                          DateTime.now(),
+                          training.startingDate,
+                        );
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext buildContext) {
+                            return TextDialog(
+                              title:
+                                  const Text("Waiting for training to start"),
+                              text:
+                                  "Starting in $remainingTime\n\nTo-do: $stepDescription",
+                              buttonColor: Colors.orange,
+                            );
+                          },
+                        );
+                      };
+                    } else {
+                      icon = Icons.done;
+
+                      onClickFunc = () {
+                        final Training activeTraining = activeMap["training"];
+                        final StepClass activeStep = activeMap["step"];
+                        if (activeTraining.status == "current") {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext buildContext) {
+                              return ConfirmTrainingStart(
+                                title: "Confirm Activation",
+                                trainingDescription: activeStep.text,
+                                training: activeTraining,
+                                confirmationFunc: () {
+                                  activeTraining.activate();
+                                  _updateDbAndScreen();
+                                },
+                              );
+                            },
+                          );
+                        } else {
+                          activeTraining.incrementReps();
+                          if (activeTraining.doneReps ==
+                              activeTraining.requiredReps) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext buildContext) {
+                                return TrainingDoneAlert();
+                              },
+                            );
+                          }
+                        }
+                        _updateDbAndScreen();
+                      };
+                    }
                     return FloatingActionButton(
                       tooltip: "Mark step as done",
                       backgroundColor: Colors.green,
-                      child: const Icon(
-                        Icons.done,
+                      child: Icon(
+                        icon,
                         color: Colors.white,
                       ),
                       heroTag: null,
                       onPressed: () {
-                        final Map<String, dynamic>? activeMap =
-                            progressData.getActiveData();
-
-                        if (activeMap != null) {
-                          final Training activeTraining = activeMap["training"];
-                          final StepClass activeStep = activeMap["step"];
-                          if (activeTraining.status == "current") {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext buildContext) {
-                                return ConfirmTrainingStart(
-                                  title: "Confirm Activation",
-                                  trainingDescription: activeStep.text,
-                                  training: activeTraining,
-                                  confirmationFunc: () {
-                                    activeTraining.activate();
-                                    _updateDbAndScreen();
-                                  },
-                                );
-                              },
-                            );
-                          } else {
-                            activeTraining.incrementReps();
-                            if (activeTraining.doneReps ==
-                                activeTraining.requiredReps) {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext buildContext) {
-                                  return TrainingDoneAlert();
-                                },
-                              );
-                            }
-                          }
-                          _updateDbAndScreen();
-                          _scrollToActiveTraining();
-                        }
+                        onClickFunc();
+                        _scrollToActiveTraining();
                       },
                     );
                   }

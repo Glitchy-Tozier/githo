@@ -129,6 +129,15 @@ class ProgressData {
     }
   }
 
+  Map<String, dynamic>? getWaitingData() {
+    for (final StepClass step in this.steps) {
+      final Map<String, dynamic>? tempResult = step.getWaitingData();
+      if (tempResult != null) {
+        return tempResult;
+      }
+    }
+  }
+
   void _activateStartingPeriod() {
     for (final StepClass step in this.steps) {
       step.activateStartingPeriod();

@@ -146,6 +146,18 @@ class StepClass {
     return result;
   }
 
+  Map<String, dynamic>? getWaitingData() {
+    for (final trainingPeriod in this.trainingPeriods) {
+      if (trainingPeriod.status == "waiting for start") {
+        final Map<String, dynamic> result = {};
+        result["step"] = this;
+        result["trainingPeriod"] = trainingPeriod;
+        result["training"] = trainingPeriod.trainings[0];
+        return result;
+      }
+    }
+  }
+
   void activateStartingPeriod() {
     for (final trainingPeriod in this.trainingPeriods) {
       if (trainingPeriod.status == "waiting for start") {
