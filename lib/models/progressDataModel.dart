@@ -282,14 +282,9 @@ class ProgressData {
         // If this is the first training we ever arrive in
 
         _activateStartingPeriod();
-
-        //_setNewStartingDate();
-        //_setTrainingDates();
       }
-      //else {
       // Analyze what happened since last time opening the app
       _analyzePassedTime();
-      //}
 
       // Activate the next Training/TrainingPeriod
       _moveToCurrentTraining();

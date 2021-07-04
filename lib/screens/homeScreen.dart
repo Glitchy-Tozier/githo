@@ -132,15 +132,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           title: progressData.goal,
                         ),
                       ),
-                      ElevatedButton(
-                        onPressed: () => showModalBottomSheet(
-                          context: context,
-                          backgroundColor: Colors.transparent,
-                          builder: (context) =>
-                              WelcomeSheet(progressData: progressData),
-                        ),
-                        child: Text("hsrenatis"),
-                      ),
                       Column(
                         // This column exists to make sure all trainings are being cached. (= to disable lazyloading)
                         children: [
