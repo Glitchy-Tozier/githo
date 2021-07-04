@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:githo/extracted_functions/getDurationDiff.dart';
 import 'package:githo/extracted_widgets/alert_dialogs/confirmTrainingStart.dart';
-import 'package:githo/extracted_widgets/alert_dialogs/textDialog.dart';
 import 'package:githo/extracted_widgets/alert_dialogs/trainingDone.dart';
 import 'package:githo/extracted_widgets/backgroundWidget.dart';
+import 'package:githo/extracted_widgets/bottom_sheets/textSheet.dart';
+import 'package:githo/extracted_widgets/bottom_sheets/welcomeSheet.dart';
 import 'package:githo/extracted_widgets/screenEndingSpacer.dart';
 import 'package:githo/extracted_widgets/stepToDo.dart';
 
@@ -25,6 +26,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late Future<ProgressData> _progressData;
+  bool somethingChanged = false;
 
   final GlobalKey globalKey = GlobalKey();
 
@@ -33,6 +35,19 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
 
     _reloadScreen();
+
+    WidgetsBinding.instance?.addPostFrameCallback(
+      (_) async {
+        if (somethingChanged) {
+          final ProgressData progressData = await _progressData;
+          showModalBottomSheet(
+            context: context,
+            backgroundColor: Colors.transparent,
+            builder: (context) => WelcomeSheet(progressData: progressData),
+          );
+        }
+      },
+    );
   }
 
   void _reloadScreen() {
@@ -101,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 } else {
                   // If connection is done and there is an active habitPlan:
-                  final bool somethingChanged = progressData.updateTime();
+                  somethingChanged = progressData.updateTime();
                   if (somethingChanged) {
                     _scrollToActiveTraining();
                   }
@@ -116,6 +131,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: ScreenTitle(
                           title: progressData.goal,
                         ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () => showModalBottomSheet(
+                          context: context,
+                          backgroundColor: Colors.transparent,
+                          builder: (context) =>
+                              WelcomeSheet(progressData: progressData),
+                        ),
+                        child: Text("hsrenatis"),
                       ),
                       Column(
                         // This column exists to make sure all trainings are being cached. (= to disable lazyloading)
@@ -242,17 +266,28 @@ class _HomeScreenState extends State<HomeScreen> {
                           DateTime.now(),
                           training.startingDate,
                         );
-                        showDialog(
+                        showModalBottomSheet(
                           context: context,
-                          builder: (BuildContext buildContext) {
-                            return TextDialog(
-                              title:
-                                  const Text("Waiting for training to start"),
-                              text:
-                                  "Starting in $remainingTime\n\nTo-do: $stepDescription",
-                              buttonColor: Colors.orange,
-                            );
-                          },
+                          backgroundColor: Colors.transparent,
+                          builder: (context) => TextSheet(
+                            headingString: "Waiting for training to start",
+                            textSpan: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: "Starting in ",
+                                  style: StyleData.textStyle,
+                                ),
+                                TextSpan(
+                                  text: "$remainingTime.\n\nTo-do: ",
+                                  style: StyleData.boldTextStyle,
+                                ),
+                                TextSpan(
+                                  text: stepDescription,
+                                  style: StyleData.textStyle,
+                                ),
+                              ],
+                            ),
+                          ),
                         );
                       };
                     } else {

@@ -14,7 +14,7 @@ class ConfirmEdit extends StatelessWidget {
         style: StyleData.textStyle,
       ),
       content: const Text(
-        "When editing a habit-plan, all progress is reset.\n\nYou will need to re-activate the plan after changing it.",
+        "Trough saving the active habit-plan, all progress is reset.\n\nYou will need to re-activate the plan after changing it.",
         style: StyleData.textStyle,
       ),
       actions: <Widget>[

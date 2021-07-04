@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'package:githo/extracted_data/styleData.dart';
 import 'package:githo/extracted_functions/getDurationDiff.dart';
-import 'package:githo/extracted_widgets/alert_dialogs/textDialog.dart';
 
+import 'package:githo/extracted_widgets/bottom_sheets/textSheet.dart';
 import 'package:githo/extracted_widgets/gradientTrainingCard.dart';
 import 'package:githo/extracted_widgets/alert_dialogs/confirmTrainingStart.dart';
 import 'package:githo/extracted_widgets/alert_dialogs/trainingDone.dart';
@@ -73,16 +73,28 @@ class PeriodListView extends StatelessWidget {
               fontSize: textSize,
             ),
           );
-          onTap = () => showDialog(
+          onTap = () => showModalBottomSheet(
                 context: context,
-                builder: (BuildContext buildContext) {
-                  return TextDialog(
-                    title: const Text("Waiting for training to start"),
-                    text:
-                        "Starting in $remainingTime\n\nTo-do: $stepDescription",
-                    buttonColor: Colors.orange,
-                  );
-                },
+                backgroundColor: Colors.transparent,
+                builder: (context) => TextSheet(
+                  headingString: "Waiting for training to start",
+                  textSpan: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: "Starting in ",
+                        style: StyleData.textStyle,
+                      ),
+                      TextSpan(
+                        text: "$remainingTime.\n\nTo-do: ",
+                        style: StyleData.boldTextStyle,
+                      ),
+                      TextSpan(
+                        text: stepDescription,
+                        style: StyleData.textStyle,
+                      ),
+                    ],
+                  ),
+                ),
               );
           Timer(
             const Duration(seconds: 1),

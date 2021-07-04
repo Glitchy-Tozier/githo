@@ -28,3 +28,11 @@ TextStyle coloredTextStyle(final Color color) {
     color: color,
   );
 }
+
+TextStyle coloredBoldTextStyle(final Color color) {
+  return TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+    color: color,
+  );
+}

@@ -46,16 +46,17 @@ void editHabit(
   final Function updatePrevScreens,
   final HabitPlan habitPlan,
 ) {
-  void _onSaved(final HabitPlan habitPlan) async {
+  void _onSaved(final HabitPlan habitPlan) {
     habitPlan.lastChanged = DateTime.now();
 
-    // Reset progressData because it should not be active.
-    DatabaseHelper.instance.updateProgressData(ProgressData.emptyData());
+    // IF the habitPlan was active, disable it to make sure nothing gets messed up by changing its values.
+    if (habitPlan.isActive) {
+      // Reset progressData because it should not be active.
+      DatabaseHelper.instance.updateProgressData(ProgressData.emptyData());
+      habitPlan.isActive = false;
+    }
 
-    // Disable the habitPlan to make sure nothing gets messed up by changing its values.
-    habitPlan.isActive = false;
-    await DatabaseHelper.instance.updateHabitPlan(habitPlan);
-
+    DatabaseHelper.instance.updateHabitPlan(habitPlan);
     updatePrevScreens(habitPlan);
   }
 

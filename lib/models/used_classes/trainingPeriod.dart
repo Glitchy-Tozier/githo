@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:githo/extracted_data/dataShortcut.dart';
 import 'package:githo/extracted_data/fullDatabaseImport.dart';
+import 'package:githo/helpers/timeHelper.dart';
 import 'package:githo/models/used_classes/training.dart';
 
 class TrainingPeriod {
@@ -131,14 +132,25 @@ class TrainingPeriod {
   }
 
   int get successfulTrainings {
+    // This also counts the current day!!
     int successfulTrainings = 0;
 
     for (final Training training in this.trainings) {
-      if (training.status == "successful") {
+      if (training.status == "successful" || training.status == "done") {
         successfulTrainings++;
       }
     }
     return successfulTrainings;
+  }
+
+  int get remainingTrainings {
+    int remainingTrainings = 0;
+    for (final Training training in this.trainings) {
+      if (training.endingDate.isAfter(TimeHelper.instance.getTime)) {
+        remainingTrainings++;
+      }
+    }
+    return remainingTrainings;
   }
 
   void setResult() {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:githo/extracted_data/styleData.dart';
 import 'package:githo/extracted_functions/typeExtentions.dart';
-import 'package:githo/extracted_widgets/alert_dialogs/textDialog.dart';
+import 'package:githo/extracted_widgets/bottom_sheets/textSheet.dart';
 import 'package:githo/extracted_widgets/dividers/fatDivider.dart';
 import 'package:githo/extracted_widgets/dividers/thinDivider.dart';
 import 'package:githo/extracted_widgets/periodListView.dart';
@@ -73,14 +73,40 @@ class StepToDo extends StatelessWidget {
             onTap: () {
               final Color statusColor;
               if (step.status == "active") {
-                statusColor = Colors.orange;
+                statusColor = Colors.orange.shade800;
               } else if (step.status == "locked") {
-                statusColor = Colors.grey.shade700;
+                statusColor = Colors.grey.shade800;
               } else {
-                statusColor = stepColor;
+                statusColor = Colors.green.shade800;
               }
 
-              showDialog(
+              showModalBottomSheet(
+                context: context,
+                backgroundColor: Colors.transparent,
+                builder: (context) => TextSheet(
+                  headingString: "Step ${step.number}",
+                  textSpan: TextSpan(
+                    children: [
+                      const TextSpan(
+                        text: "Status: ",
+                        style: StyleData.textStyle,
+                      ),
+                      TextSpan(
+                        text: "${step.status}\n\n",
+                        style: coloredBoldTextStyle(statusColor),
+                      ),
+                      const TextSpan(
+                          text: "To-do: ", style: StyleData.boldTextStyle),
+                      TextSpan(
+                        text: this.step.text,
+                        style: StyleData.textStyle,
+                      ),
+                    ],
+                  ),
+                ),
+              );
+
+              /* showDialog(
                 context: context,
                 builder: (BuildContext buildContext) {
                   return TextDialog(
@@ -98,7 +124,7 @@ class StepToDo extends StatelessWidget {
                     buttonColor: stepColor,
                   );
                 },
-              );
+              ); */
             },
           ),
         ),
