@@ -36,7 +36,7 @@ String? validateNumberField({
 
   final int intput = int.parse(input.toString().trim()); // I'm so funny!
   if (intput > maxInput) {
-    return "Input numbers between 1 and $maxInput";
+    return "Must be between 1 and $maxInput";
   } else if (intput == 0) {
     return onEmptyText;
   } else {

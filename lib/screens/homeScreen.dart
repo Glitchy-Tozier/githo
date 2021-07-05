@@ -26,7 +26,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late Future<ProgressData> _progressData;
-  bool somethingChanged = false;
+  bool initialLoad = true;
 
   final GlobalKey globalKey = GlobalKey();
 
@@ -35,19 +35,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
 
     _reloadScreen();
-
-    WidgetsBinding.instance?.addPostFrameCallback(
-      (_) async {
-        if (somethingChanged) {
-          final ProgressData progressData = await _progressData;
-          showModalBottomSheet(
-            context: context,
-            backgroundColor: Colors.transparent,
-            builder: (context) => WelcomeSheet(progressData: progressData),
-          );
-        }
-      },
-    );
   }
 
   void _reloadScreen() {
@@ -56,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (DataShortcut.testing) {
         TimeHelper.instance.setTime(DateTime.now());
       }
-      _scrollToActiveTraining(delay: 1);
+      _scrollToActiveTraining(delay: 0);
     });
   }
 
@@ -94,6 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
               if (snapshot.hasData) {
                 ProgressData progressData = snapshot.data!;
                 if (progressData.isActive == false) {
+                  initialLoad = false;
                   // If connection is done but no habitPlan is active:
                   double screenHeight = MediaQuery.of(context).size.height;
                   return Container(
@@ -116,10 +104,22 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 } else {
                   // If connection is done and there is an active habitPlan:
-                  somethingChanged = progressData.updateTime();
+                  final bool somethingChanged = progressData.updateTime();
                   if (somethingChanged) {
                     _scrollToActiveTraining();
+
+                    if (initialLoad == true) {
+                      WidgetsBinding.instance?.addPostFrameCallback(
+                        (_) => showModalBottomSheet(
+                          context: context,
+                          backgroundColor: Colors.transparent,
+                          builder: (context) =>
+                              WelcomeSheet(progressData: progressData),
+                        ),
+                      );
+                    }
                   }
+                  initialLoad = false;
 
                   return ListView(
                     padding: const EdgeInsets.symmetric(horizontal: 0),
@@ -150,6 +150,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 }
               } else if (snapshot.hasError) {
+                initialLoad = false;
+
                 // If connection is done but there was an error:
                 print(snapshot.error);
                 return Center(

@@ -31,6 +31,7 @@ class TextSheet extends StatelessWidget {
         ),
       ),
       child: Container(
+        //height: 400,
         padding: const EdgeInsets.only(
           right: StyleData.screenPaddingValue,
           bottom: 30,
@@ -60,7 +61,7 @@ class TextSheet extends StatelessWidget {
             Heading(headingString),
             RichText(
               overflow: TextOverflow.ellipsis,
-              maxLines: 7,
+              maxLines: 8,
               text: textSpan,
             ),
           ],
