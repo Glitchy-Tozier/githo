@@ -16,8 +16,8 @@ class WelcomeSheet extends StatelessWidget {
     final TrainingPeriod trainingPeriod;
     final TextSpan text;
 
-    if (progressData.getActiveData() != null) {
-      dataMap = progressData.getActiveData()!;
+    if (progressData.activeData != null) {
+      dataMap = progressData.activeData!;
       step = dataMap["step"];
       trainingPeriod = dataMap["trainingPeriod"];
       text = TextSpan(
@@ -45,8 +45,8 @@ class WelcomeSheet extends StatelessWidget {
           ),
         ],
       );
-    } else if (progressData.getWaitingData() != null) {
-      dataMap = progressData.getWaitingData()!;
+    } else if (progressData.waitingData != null) {
+      dataMap = progressData.waitingData!;
       step = dataMap["step"];
       text = TextSpan(
         children: [

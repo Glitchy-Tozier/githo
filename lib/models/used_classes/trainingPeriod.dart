@@ -80,7 +80,7 @@ class TrainingPeriod {
 
   void activate() {
     this.status = "active";
-    this.trainings[0].status = "active";
+    this.trainings[0].status = "current";
   }
 
   void reset() {

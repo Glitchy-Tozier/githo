@@ -131,7 +131,7 @@ class StepClass {
     }
   }
 
-  Map<String, dynamic>? getActiveData() {
+  Map<String, dynamic>? get activeData {
     Map<String, dynamic>? result;
     for (final trainingPeriod in this.trainingPeriods) {
       if (trainingPeriod.status == "active") {
@@ -146,7 +146,7 @@ class StepClass {
     return result;
   }
 
-  Map<String, dynamic>? getWaitingData() {
+  Map<String, dynamic>? get waitingData {
     for (final trainingPeriod in this.trainingPeriods) {
       if (trainingPeriod.status == "waiting for start") {
         final Map<String, dynamic> result = {};

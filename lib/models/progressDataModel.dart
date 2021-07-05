@@ -88,10 +88,10 @@ class ProgressData {
     return trainingCount;
   }
 
-  bool _inNewTraining() {
+  bool get _inNewTraining {
     final bool inNewTraining;
 
-    Map<String, dynamic>? activeMap = getActiveData();
+    Map<String, dynamic>? activeMap = this.activeData;
     if (activeMap == null) {
       inNewTraining = true;
     } else {
@@ -101,7 +101,7 @@ class ProgressData {
       final Training currentTraining = _getDataByDate(now)!["training"];
 
       if (activeTraining != currentTraining) {
-        inNewTraining = inNewTraining = true;
+        inNewTraining = true;
       } else {
         inNewTraining = false;
       }
@@ -120,18 +120,18 @@ class ProgressData {
     return trainingsPassed;
   }
 
-  Map<String, dynamic>? getActiveData() {
+  Map<String, dynamic>? get activeData {
     for (final StepClass step in this.steps) {
-      final Map<String, dynamic>? tempResult = step.getActiveData();
+      final Map<String, dynamic>? tempResult = step.activeData;
       if (tempResult != null) {
         return tempResult;
       }
     }
   }
 
-  Map<String, dynamic>? getWaitingData() {
+  Map<String, dynamic>? get waitingData {
     for (final StepClass step in this.steps) {
-      final Map<String, dynamic>? tempResult = step.getWaitingData();
+      final Map<String, dynamic>? tempResult = step.waitingData;
       if (tempResult != null) {
         return tempResult;
       }
@@ -199,7 +199,7 @@ class ProgressData {
         1; // Always reset one additional period to make sure we actually move backwards in time.
 
     while (true) {
-      StepClass currentStep = this.steps[currentStepIdx];
+      final StepClass currentStep = this.steps[currentStepIdx];
       remainingRegressions = currentStep.regressPeriods(remainingRegressions);
 
       if (remainingRegressions > 0 && currentStepIdx > 0) {
@@ -225,7 +225,7 @@ class ProgressData {
   }
 
   void _analyzePassedTime() {
-    final Map<String, dynamic> lastActiveMap = getActiveData()!;
+    final Map<String, dynamic> lastActiveMap = this.activeData!;
 
     // Analyze the last training
     final Training lastActiveTraining = lastActiveMap["training"];
@@ -277,8 +277,8 @@ class ProgressData {
   bool updateTime() {
     final bool somethingChanged;
 
-    if (this._hasStarted && _inNewTraining()) {
-      if (getActiveData() == null) {
+    if (this._hasStarted && this._inNewTraining) {
+      if (this.activeData == null) {
         // If this is the first training we ever arrive in
 
         _activateStartingPeriod();

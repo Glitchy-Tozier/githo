@@ -239,7 +239,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   final ProgressData progressData = snapshot.data!;
                   if (progressData.isActive) {
                     final Map<String, dynamic>? activeMap =
-                        progressData.getActiveData();
+                        progressData.activeData;
 
                     final IconData icon;
                     final Function onClickFunc;
@@ -249,7 +249,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                       onClickFunc = () {
                         final Map<String, dynamic> waitingMap =
-                            progressData.getWaitingData()!;
+                            progressData.waitingData!;
 
                         final Training training = waitingMap["training"];
                         final StepClass step = waitingMap["step"];

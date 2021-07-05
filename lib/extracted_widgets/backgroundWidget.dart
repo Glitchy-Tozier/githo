@@ -15,8 +15,8 @@ class BackgroundWidget extends StatelessWidget {
         // Background
         Container(
           decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/pixabayColorGradient.jpg"),
+            image: const DecorationImage(
+              image: const AssetImage("assets/pixabayColorGradient.jpg"),
               fit: BoxFit.cover,
             ),
           ),
