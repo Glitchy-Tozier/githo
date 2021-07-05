@@ -217,8 +217,8 @@ class PeriodListView extends StatelessWidget {
           TrainingCard(
             key: key,
             horizontalMargin: cardMarginRL,
-            width: cardWidth,
-            height: cardHeight,
+            cardWidth: cardWidth,
+            cardHeight: cardHeight,
             child: child,
             onTap: onTap,
             color: color,
@@ -227,15 +227,34 @@ class PeriodListView extends StatelessWidget {
       }
     }
 
-    return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
-      scrollDirection: Axis.horizontal,
-      padding: EdgeInsets.symmetric(
-        horizontal: StyleData.screenPaddingValue - cardMarginRL,
-      ),
-      child: Row(
-        children: listViewChildren,
-      ),
+    final ScrollPhysics physics = const BouncingScrollPhysics();
+    final Axis scrollDirection = Axis.horizontal;
+    final EdgeInsetsGeometry padding = EdgeInsets.symmetric(
+      horizontal: StyleData.screenPaddingValue - cardMarginRL,
     );
+
+    if (trainingPeriod.status == "active") {
+      // If the trainingPeriod is active, prevent lazyloading (to enable automatic scrolling)
+      return SingleChildScrollView(
+        physics: physics,
+        scrollDirection: scrollDirection,
+        padding: padding,
+        child: Row(
+          children: listViewChildren,
+        ),
+      );
+    } else {
+      // If the trainingPeriod is not active, lazyloading should be used for performance reasons.
+      final TrainingCard firstCard = listViewChildren.first as TrainingCard;
+      return SizedBox(
+        height: firstCard.height,
+        child: ListView(
+          physics: physics,
+          scrollDirection: scrollDirection,
+          padding: padding,
+          children: listViewChildren,
+        ),
+      );
+    }
   }
 }

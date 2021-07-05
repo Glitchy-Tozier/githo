@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (DataShortcut.testing) {
         TimeHelper.instance.setTime(DateTime.now());
       }
-      _scrollToActiveTraining(delay: 0);
+      _scrollToActiveTraining(delay: 1);
     });
   }
 

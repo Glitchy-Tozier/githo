@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class TrainingCard extends StatelessWidget {
   final double horizontalMargin;
-  final double width;
-  final double height;
+  final double cardWidth;
+  final double cardHeight;
   final Widget child;
   final Function? onTap;
   final Color color;
@@ -14,16 +14,16 @@ class TrainingCard extends StatelessWidget {
 
   const TrainingCard({
     required this.horizontalMargin,
-    required this.width,
-    required this.height,
+    required this.cardWidth,
+    required this.cardHeight,
     required this.child,
     required this.onTap,
     required this.color,
     Key? key,
   }) : super(key: key);
 
-  double getHeight() {
-    final double height = this.height + this.topMargin + this.bottomMargin;
+  double get height {
+    final double height = this.cardHeight + this.topMargin + this.bottomMargin;
     return height;
   }
 
@@ -38,8 +38,8 @@ class TrainingCard extends StatelessWidget {
           left: horizontalMargin,
         ),
         child: Container(
-          width: this.width,
-          height: this.height,
+          width: this.cardWidth,
+          height: this.cardHeight,
           child: Material(
             color: this.color,
             child: InkWell(
