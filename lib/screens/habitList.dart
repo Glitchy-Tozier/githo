@@ -100,6 +100,15 @@ class _HabitListState extends State<HabitList> {
                           if (i < orderedHabitPlans.length) {
                             final HabitPlan habitPlan = orderedHabitPlans[i];
 
+                            final Color color;
+                            if (habitPlan.fullyCompleted) {
+                              color = Colors.amberAccent;
+                            } else if (habitPlan.isActive) {
+                              color = Colors.green;
+                            } else {
+                              color = Theme.of(context).buttonColor;
+                            }
+
                             return ButtonListItem(
                               text: habitPlan.goal,
                               onPressed: () {
@@ -113,9 +122,7 @@ class _HabitListState extends State<HabitList> {
                                   ),
                                 );
                               },
-                              color: habitPlan.isActive
-                                  ? Colors.green
-                                  : Theme.of(context).buttonColor,
+                              color: color,
                             );
                           } else {
                             // On the last loop, add the ScreenEndingSpacer.
