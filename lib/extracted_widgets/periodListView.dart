@@ -80,7 +80,7 @@ class PeriodListView extends StatelessWidget {
                   headingString: "Waiting for training to start",
                   textSpan: TextSpan(
                     children: [
-                      TextSpan(
+                      const TextSpan(
                         text: "Starting in ",
                         style: StyleData.textStyle,
                       ),
@@ -145,7 +145,10 @@ class PeriodListView extends StatelessWidget {
             child = Text(
               "Start training",
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: textSize, color: Colors.white),
+              style: TextStyle(
+                fontSize: textSize,
+                color: Colors.white,
+              ),
             );
             final Function onConfirmation = () {
               training.activate();
@@ -206,8 +209,8 @@ class PeriodListView extends StatelessWidget {
           GradinentTrainingCard(
             key: key,
             horizontalMargin: cardMarginRL,
-            width: cardWidth,
-            height: cardHeight,
+            cardWidth: cardWidth,
+            cardHeight: cardHeight,
             child: child,
             onTap: onTap,
           ),

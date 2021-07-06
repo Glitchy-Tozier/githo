@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class GradinentTrainingCard extends StatelessWidget {
   final double horizontalMargin;
-  final double width;
-  final double height;
+  final double cardWidth;
+  final double cardHeight;
   final Widget child;
   final Function? onTap;
 
@@ -13,15 +13,15 @@ class GradinentTrainingCard extends StatelessWidget {
 
   const GradinentTrainingCard({
     required this.horizontalMargin,
-    required this.width,
-    required this.height,
+    required this.cardWidth,
+    required this.cardHeight,
     required this.child,
     required this.onTap,
     Key? key,
   }) : super(key: key);
 
-  double getHeight() {
-    final double height = this.height + this.topMargin + this.bottomMargin;
+  double get height {
+    final double height = this.cardHeight + this.topMargin + this.bottomMargin;
     return height;
   }
 
@@ -38,8 +38,8 @@ class GradinentTrainingCard extends StatelessWidget {
         child: Material(
           color: Colors.transparent,
           child: Container(
-            width: this.width,
-            height: this.height,
+            width: this.cardWidth,
+            height: this.cardHeight,
             child: Material(
               color: Colors.transparent,
               child: InkWell(

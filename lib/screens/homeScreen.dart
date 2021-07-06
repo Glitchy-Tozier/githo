@@ -83,7 +83,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (progressData.isActive == false) {
                   initialLoad = false;
                   // If connection is done but no habitPlan is active:
-                  double screenHeight = MediaQuery.of(context).size.height;
+                  final double screenHeight =
+                      MediaQuery.of(context).size.height;
                   return Container(
                     padding: EdgeInsets.only(
                       top: screenHeight * 0.25,
@@ -123,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   return ListView(
                     padding: const EdgeInsets.symmetric(horizontal: 0),
-                    physics: BouncingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,
                     children: <Widget>[
                       Padding(
@@ -170,7 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
             }
             // While loading, do this:
             return Center(
-              child: CircularProgressIndicator(),
+              child: const CircularProgressIndicator(),
             );
           },
         ),
@@ -188,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Colors.white,
               ),
               backgroundColor: Colors.orange,
-              heroTag: null, //"settingsHero",
+              heroTag: null,
               onPressed: () {
                 Navigator.push(
                   context,
@@ -229,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   }
                 }
-                return SizedBox();
+                return const SizedBox();
               },
             ),
             FutureBuilder(
@@ -266,7 +267,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             headingString: "Waiting for training to start",
                             textSpan: TextSpan(
                               children: [
-                                TextSpan(
+                                const TextSpan(
                                   text: "Starting in ",
                                   style: StyleData.textStyle,
                                 ),
@@ -334,7 +335,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   }
                 }
-                return SizedBox();
+                return const SizedBox();
               },
             ),
           ],

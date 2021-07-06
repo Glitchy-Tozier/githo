@@ -43,11 +43,11 @@ class _HabitListState extends State<HabitList> {
     });
   }
 
-  List<HabitPlan> _orderHabitPlans(List<HabitPlan> habitPlanList) {
+  List<HabitPlan> _orderHabitPlans(final List<HabitPlan> habitPlanList) {
     // Order the habitPlans in a way that displays the most cecently edited ones at the top
     habitPlanList.sort((a, b) {
-      String dateStringA = a.lastChanged.toString();
-      String dateStringB = b.lastChanged.toString();
+      final String dateStringA = a.lastChanged.toString();
+      final String dateStringB = b.lastChanged.toString();
       return dateStringB.compareTo(dateStringA);
     });
     return habitPlanList;
@@ -62,7 +62,7 @@ class _HabitListState extends State<HabitList> {
           builder: (context, AsyncSnapshot<List<HabitPlan>> snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.hasData) {
-                List<HabitPlan> habitPlanList = snapshot.data!;
+                final List<HabitPlan> habitPlanList = snapshot.data!;
 
                 if (habitPlanList.length == 0) {
                   // If there are no habit plans
@@ -84,7 +84,7 @@ class _HabitListState extends State<HabitList> {
                         subTitle: "Click on a habit-plan to look at it.",
                       ),
                     ),
-                    FatDivider(),
+                    const FatDivider(),
                   ]);
 
                   final List<HabitPlan> orderedHabitPlans =
@@ -94,7 +94,7 @@ class _HabitListState extends State<HabitList> {
                     Expanded(
                       child: ListView.builder(
                         padding: StyleData.screenPadding,
-                        physics: BouncingScrollPhysics(),
+                        physics: const BouncingScrollPhysics(),
                         itemCount: orderedHabitPlans.length + 1,
                         itemBuilder: (BuildContext buildContex, int i) {
                           if (i < orderedHabitPlans.length) {

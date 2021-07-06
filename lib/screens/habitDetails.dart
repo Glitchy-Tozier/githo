@@ -250,7 +250,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
             }
             // Default return (while loading, for example)
             return Center(
-              child: CircularProgressIndicator(),
+              child: const CircularProgressIndicator(),
             );
           },
         ),
