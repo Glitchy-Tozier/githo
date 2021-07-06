@@ -178,6 +178,29 @@ class DatabaseHelper {
     return habitPlanList;
   }
 
+  Future<HabitPlan?> getHabitPlan(final int id) async {
+    final Database db = await this._getDb;
+
+    final List<Map<String, Object?>> resultsMap;
+    resultsMap = await db.query(
+      habitPlansTable,
+      where: "$colId = ?",
+      whereArgs: [id],
+    );
+
+    if (resultsMap.length > 1) {
+      print(
+          "Something went wrong in getActiveHabitPlan(). Multiple Steps are active.");
+    }
+
+    if (resultsMap.length != 0) {
+      // A hacky solution to null-issues
+      final HabitPlan habitPlan = HabitPlan.fromMap(resultsMap[0]);
+
+      return habitPlan;
+    }
+  }
+
   Future<List<HabitPlan>> getActiveHabitPlan() async {
     final Database db = await this._getDb;
 

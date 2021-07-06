@@ -104,14 +104,19 @@ class ProgressData {
       inNewTraining = true;
     } else {
       final DateTime now = TimeHelper.instance.getTime;
+      final Map<String, dynamic>? currentMap = _getDataByDate(now);
+      if (currentMap != null) {
+        final Training activeTraining = activeMap["training"];
+        final Training currentTraining = currentMap["training"];
 
-      final Training activeTraining = activeMap["training"];
-      final Training currentTraining = _getDataByDate(now)!["training"];
-
-      if (activeTraining != currentTraining) {
-        inNewTraining = true;
+        if (activeTraining != currentTraining) {
+          inNewTraining = true;
+        } else {
+          inNewTraining = false;
+        }
       } else {
-        inNewTraining = false;
+        // If we've run out of trainings, act as if we are in a new training
+        inNewTraining = true;
       }
     }
     return inNewTraining;
@@ -232,6 +237,16 @@ class ProgressData {
     }
   }
 
+  _completeHabitPlan() async {
+    final HabitPlan? habitPlan =
+        await DatabaseHelper.instance.getHabitPlan(this.habitPlanId);
+
+    if (habitPlan != null) {
+      habitPlan.fullyCompleted = true;
+      DatabaseHelper.instance.updateHabitPlan(habitPlan);
+    }
+  }
+
   void _analyzePassedTime() {
     final Map<String, dynamic> lastActiveMap = this.activeData!;
 
@@ -261,9 +276,16 @@ class ProgressData {
       print("failedPeriods: $failedPeriods");
       _setNewStartingDate();
 
-      if (failedPeriods < 0) {
+      final TrainingPeriod lastPeriod = this.steps.last.trainingPeriods.last;
+      if (failedPeriods < 0 && lastActivePeriod != lastPeriod) {
+        // lastActivePeriod != lastPeriod makes sure that we don't get an OutOfIndex-error when successfully completing the last trainingPeriod
         lastActivePeriod.status = "completed";
       } else {
+        if (lastActivePeriod == lastPeriod) {
+          this.fullyCompleted = true;
+          _completeHabitPlan();
+        }
+
         final Map<String, int> nextPeriodPosition;
         nextPeriodPosition = _resetPeriodValues(failedPeriods, lastActiveMap);
         _setTrainingDates(nextPeriodPosition);
