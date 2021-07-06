@@ -4,6 +4,7 @@ class DefaultHabitPlans {
   static final List<HabitPlan> habitPlanList = [
     HabitPlan(
       isActive: false,
+      fullyCompleted: false,
       goal: "Consistently go jogging",
       requiredReps: 1,
       steps: const <String>[
@@ -24,6 +25,7 @@ class DefaultHabitPlans {
     ),
     HabitPlan(
       isActive: false,
+      fullyCompleted: false,
       goal: "Talk to anybody, anytime",
       requiredReps: 2,
       steps: const <String>[
@@ -48,6 +50,7 @@ class DefaultHabitPlans {
     // THIS IS ONLY TO HELP WITH DEBUGGING AND TESTING. ALL NORMAL HABITPLANS GO ABOVE!
     HabitPlan(
       isActive: false,
+      fullyCompleted: false,
       goal: "Testing without errors",
       requiredReps: 1,
       steps: const <String>[
@@ -68,6 +71,7 @@ class DefaultHabitPlans {
     ),
     HabitPlan(
       isActive: false,
+      fullyCompleted: false,
       goal: "Testing without (t)errors",
       requiredReps: 3,
       steps: const <String>[

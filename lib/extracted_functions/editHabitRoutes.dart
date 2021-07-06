@@ -12,6 +12,7 @@ void addNewHabit(
 ) {
   HabitPlan habitPlan = HabitPlan(
     isActive: false,
+    fullyCompleted: false,
     // TextFormFields:
     goal: "",
     requiredReps: 1,
@@ -24,7 +25,7 @@ void addNewHabit(
     lastChanged: DateTime.now(),
   );
 
-  void _onSaved(HabitPlan habitPlan) async {
+  void _onSaved(final HabitPlan habitPlan) async {
     await DatabaseHelper.instance.insertHabitPlan(habitPlan);
     updatePrevScreens();
   }

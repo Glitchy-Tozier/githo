@@ -16,9 +16,14 @@ class DatabaseHelper {
 
   DatabaseHelper._instance();
 
+  static const String dbVersionTable = "dbVersionTable";
+  static const String colVersion = "version";
+  static const int version = 1;
+
   static const String habitPlansTable = "habitPlansTable";
   static const String colId = "id";
-  static const String colIsActive = "isActive";
+  static const String colHabitIsActive = "isActive";
+  static const String colHabitFullyCompleted = "fullyCompleted";
   static const String colGoal = "goal";
   static const String colRequiredReps = "requiredReps";
   static const String colSteps = "steps";
@@ -28,7 +33,9 @@ class DatabaseHelper {
   static const String colRequiredTrainingPeriods = "requiredTrainingPeriods";
   static const String colLastChanged = "lastChanged";
 
+  static const String colHabitPlanId = "habitPlanId";
   static const String colProgIsActive = "isActive";
+  static const String colProgFullyCompleted = "fullyCompleted";
   static const String progressDataTable = "progressDataTable";
   static const String colLastActiveDate = "lastActiveDate";
   static const String colCurrentStartingDate = "currentStartingDate";
@@ -64,12 +71,25 @@ class DatabaseHelper {
   }
 
   void _createDb(Database db, int version) async {
+    String commandString;
+
+    // Initalize the database-version
+    commandString = "";
+    commandString += "CREATE TABLE $dbVersionTable";
+    commandString += "($colVersion INTEGER)";
+    await db.execute(commandString);
+    db.insert(
+      dbVersionTable,
+      {"$colVersion": version},
+    );
+
     // Initialize habitPlan-table
-    String commandString = "";
+    commandString = "";
     commandString += "CREATE TABLE $habitPlansTable";
     commandString += "(";
     commandString += "$colId INTEGER PRIMARY KEY AUTOINCREMENT, ";
-    commandString += "$colIsActive INTEGER, ";
+    commandString += "$colHabitIsActive INTEGER, ";
+    commandString += "$colHabitFullyCompleted INTEGER, ";
     commandString += "$colGoal TEXT, ";
     commandString += "$colRequiredReps INTEGER, ";
     commandString += "$colSteps TEXT, ";
@@ -105,7 +125,9 @@ class DatabaseHelper {
     commandString = "";
     commandString += "CREATE TABLE $progressDataTable";
     commandString += "(";
+    commandString += "$colHabitPlanId INTEGER, ";
     commandString += "$colProgIsActive INTEGER, ";
+    commandString += "$colProgFullyCompleted INTEGER, ";
     commandString += "$colLastActiveDate TEXT, ";
     commandString += "$colCurrentStartingDate TEXT, ";
     commandString += "$colProgGoal TEXT, ";
@@ -128,11 +150,12 @@ class DatabaseHelper {
     await db.execute(commandString);
 
     db.insert(
-        // Initialize default values
-        settingsDataTable,
-        SettingsData(
-          paused: false,
-        ).toMap());
+      // Initialize default values
+      settingsDataTable,
+      SettingsData(
+        paused: false,
+      ).toMap(),
+    );
   }
 
   Future<List<Map<String, dynamic>>> getDataMapList(String tableName) async {
@@ -161,7 +184,7 @@ class DatabaseHelper {
     final List<Map<String, Object?>> resultsMap;
     resultsMap = await db.query(
       habitPlansTable,
-      where: "$colIsActive = ?",
+      where: "$colHabitIsActive = ?",
       whereArgs: [1],
     );
 

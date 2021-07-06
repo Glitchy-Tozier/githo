@@ -55,7 +55,7 @@ class TrainingPeriod {
   });
 
   void setChildrenDates(DateTime startingDate) {
-    for (final training in this.trainings) {
+    for (final Training training in this.trainings) {
       training.setDates(startingDate);
       startingDate =
           startingDate.add(Duration(hours: training.durationInHours));
@@ -65,7 +65,7 @@ class TrainingPeriod {
   Map<String, dynamic>? getDataByDate(DateTime date) {
     Map<String, dynamic>? result;
 
-    for (final training in this.trainings) {
+    for (final Training training in this.trainings) {
       if ((training.startingDate.isAtSameMomentAs(date) ||
               training.startingDate.isBefore(date)) &&
           training.endingDate.isAfter(date)) {
@@ -105,7 +105,7 @@ class TrainingPeriod {
   Map<String, dynamic>? getActiveData() {
     Map<String, dynamic>? result;
 
-    for (final training in this.trainings) {
+    for (final Training training in this.trainings) {
       if (training.status == "current" ||
           training.status == "active" ||
           training.status == "done") {
@@ -176,7 +176,7 @@ class TrainingPeriod {
   }
 
   factory TrainingPeriod.fromMap(Map<String, dynamic> map) {
-    List<Training> jsonToList(String json) {
+    List<Training> jsonToList(final String json) {
       final List<dynamic> dynamicList = jsonDecode(json);
       final List<Training> stepList = [];
 

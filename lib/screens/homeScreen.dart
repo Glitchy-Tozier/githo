@@ -85,13 +85,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   // If connection is done but no habitPlan is active:
                   final double screenHeight =
                       MediaQuery.of(context).size.height;
-                  return Container(
+                  return Padding(
                     padding: EdgeInsets.only(
                       top: screenHeight * 0.25,
                       right: StyleData.screenPaddingValue,
                       left: StyleData.screenPaddingValue,
                     ),
-                    width: double.infinity,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -155,8 +154,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 // If connection is done but there was an error:
                 print(snapshot.error);
-                return Center(
+                return Padding(
+                  padding: StyleData.screenPadding,
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Heading(
                           "There was an error connecting to the database."),

@@ -12,14 +12,18 @@ import 'package:githo/models/used_classes/training.dart';
 import 'package:githo/models/used_classes/trainingPeriod.dart';
 
 class ProgressData {
+  int habitPlanId;
   bool isActive;
+  bool fullyCompleted;
   DateTime currentStartingDate;
   String goal;
   List<StepClass> steps;
 
   // Constructors
   ProgressData({
+    required this.habitPlanId,
     required this.isActive,
+    required this.fullyCompleted,
     required this.currentStartingDate,
     required this.goal,
     required this.steps,
@@ -27,7 +31,9 @@ class ProgressData {
 
   factory ProgressData.emptyData() {
     return ProgressData(
+      habitPlanId: 123456789,
       isActive: false,
+      fullyCompleted: false,
       currentStartingDate: TimeHelper.instance.getTime,
       goal: "",
       steps: const [],
@@ -39,7 +45,9 @@ class ProgressData {
     required final DateTime startingDate,
     final int startingStepNr = 1,
   }) {
+    this.habitPlanId = habitPlan.id!;
     this.isActive = true;
+    this.fullyCompleted = habitPlan.fullyCompleted;
     this.currentStartingDate = startingDate;
     this.goal = habitPlan.goal;
     this.steps = [];
@@ -307,7 +315,9 @@ class ProgressData {
       mapList.add(step.toMap());
     }
 
+    map["habitPlanId"] = habitPlanId;
     map["isActive"] = isActive.boolToInt();
+    map["fullyCompleted"] = fullyCompleted.boolToInt();
     map["currentStartingDate"] = currentStartingDate.toString();
     map["goal"] = goal;
     map["steps"] = jsonEncode(mapList);
@@ -315,7 +325,7 @@ class ProgressData {
   }
 
   factory ProgressData.fromMap(final Map<String, dynamic> map) {
-    List<StepClass> jsonToStepList(String json) {
+    List<StepClass> jsonToStepList(final String json) {
       final List<dynamic> dynamicList = jsonDecode(json);
       final List<StepClass> stepList = <StepClass>[];
 
@@ -327,7 +337,9 @@ class ProgressData {
     }
 
     return ProgressData(
+      habitPlanId: map["habitPlanId"],
       isActive: (map["isActive"] as int).intToBool(),
+      fullyCompleted: (map["fullyCompleted"] as int).intToBool(),
       currentStartingDate: DateTime.parse(map["currentStartingDate"]),
       goal: map["goal"],
       steps: jsonToStepList(map["steps"]),

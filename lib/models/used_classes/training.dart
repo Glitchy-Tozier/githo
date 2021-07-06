@@ -47,7 +47,7 @@ class Training {
       return false;
   }
 
-  void setDates(DateTime startingDate) {
+  void setDates(final DateTime startingDate) {
     this.startingDate = startingDate;
     this.endingDate = startingDate.add(
       Duration(hours: this.durationInHours),

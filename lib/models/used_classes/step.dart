@@ -115,7 +115,7 @@ class StepClass {
 
   Map<String, dynamic>? getDataByDate(final DateTime date) {
     Map<String, dynamic>? map;
-    for (final trainingPeriod in this.trainingPeriods) {
+    for (final TrainingPeriod trainingPeriod in this.trainingPeriods) {
       map = trainingPeriod.getDataByDate(date);
       if (map != null) {
         map["step"] = this;
@@ -147,7 +147,7 @@ class StepClass {
   }
 
   Map<String, dynamic>? get waitingData {
-    for (final trainingPeriod in this.trainingPeriods) {
+    for (final TrainingPeriod trainingPeriod in this.trainingPeriods) {
       if (trainingPeriod.status == "waiting for start") {
         final Map<String, dynamic> result = {};
         result["step"] = this;
@@ -159,7 +159,7 @@ class StepClass {
   }
 
   void activateStartingPeriod() {
-    for (final trainingPeriod in this.trainingPeriods) {
+    for (final TrainingPeriod trainingPeriod in this.trainingPeriods) {
       if (trainingPeriod.status == "waiting for start") {
         trainingPeriod.activate();
       }
@@ -182,7 +182,7 @@ class StepClass {
   }
 
   factory StepClass.fromMap(Map<String, dynamic> map) {
-    List<TrainingPeriod> jsonToList(String json) {
+    List<TrainingPeriod> jsonToList(final String json) {
       final List<dynamic> dynamicList = jsonDecode(json);
       final List<TrainingPeriod> stepList = [];
 

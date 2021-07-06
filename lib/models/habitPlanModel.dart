@@ -4,6 +4,7 @@ import 'package:githo/extracted_functions/typeExtentions.dart';
 class HabitPlan {
   int? id;
   bool isActive;
+  bool fullyCompleted;
   String goal;
   int requiredReps;
   List<String> steps;
@@ -15,6 +16,7 @@ class HabitPlan {
 
   HabitPlan({
     required this.isActive,
+    required this.fullyCompleted,
     required this.goal,
     required this.requiredReps,
     required this.steps,
@@ -28,6 +30,7 @@ class HabitPlan {
   HabitPlan.withId({
     required this.id,
     required this.isActive,
+    required this.fullyCompleted,
     required this.goal,
     required this.requiredReps,
     required this.steps,
@@ -45,6 +48,7 @@ class HabitPlan {
     }
 
     map["isActive"] = isActive.boolToInt();
+    map["fullyCompleted"] = fullyCompleted.boolToInt();
     map["goal"] = goal;
     map["requiredReps"] = requiredReps;
     map["steps"] = jsonEncode(steps);
@@ -58,19 +62,20 @@ class HabitPlan {
   }
 
   factory HabitPlan.fromMap(final Map<String, dynamic> map) {
-    List<String> jsonToStringList(String json) {
+    List<String> jsonToStringList(final String json) {
       final List<dynamic> dynamicList = jsonDecode(json);
       final List<String> stringList = [];
 
-      dynamicList.forEach((element) {
+      for (final dynamic element in dynamicList) {
         stringList.add(element);
-      });
+      }
       return stringList;
     }
 
     return HabitPlan.withId(
       id: map["id"],
       isActive: (map["isActive"] as int).intToBool(),
+      fullyCompleted: (map["fullyCompleted"] as int).intToBool(),
       goal: map["goal"],
       requiredReps: map["requiredReps"],
       steps: jsonToStringList(map["steps"]),
