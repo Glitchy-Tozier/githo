@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:githo/extracted_data/fullDatabaseImport.dart';
 import 'package:githo/extracted_data/styleData.dart';
 import 'package:githo/helpers/databaseHelper.dart';
 import 'package:githo/models/habitPlanModel.dart';
+import 'package:githo/models/progressDataModel.dart';
 
 class ConfirmDeletion extends StatelessWidget {
   final HabitPlan habitPlan;

@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 
 import 'package:githo/extracted_data/dataShortcut.dart';
-import 'package:githo/extracted_data/fullDatabaseImport.dart';
 import 'package:githo/extracted_data/styleData.dart';
-
 import 'package:githo/extracted_functions/editHabitRoutes.dart';
+
 import 'package:githo/extracted_widgets/activationFAB.dart';
 import 'package:githo/extracted_widgets/alert_dialogs/confirmEdit.dart';
 import 'package:githo/extracted_widgets/backgroundWidget.dart';
-
 import 'package:githo/extracted_widgets/bulletPoint.dart';
 import 'package:githo/extracted_widgets/customListTile.dart';
 import 'package:githo/extracted_widgets/alert_dialogs/confirmDeletion.dart';
 import 'package:githo/extracted_widgets/dividers/fatDivider.dart';
 import 'package:githo/extracted_widgets/headings.dart';
 import 'package:githo/extracted_widgets/screenEndingSpacer.dart';
+
+import 'package:githo/helpers/databaseHelper.dart';
+import 'package:githo/models/habitPlanModel.dart';
+import 'package:githo/models/progressDataModel.dart';
 
 class SingleHabitDisplay extends StatefulWidget {
   final Function updateFunction;

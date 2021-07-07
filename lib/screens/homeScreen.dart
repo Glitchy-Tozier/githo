@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+
+import 'package:githo/extracted_data/dataShortcut.dart';
+import 'package:githo/extracted_data/styleData.dart';
 import 'package:githo/extracted_functions/getDurationDiff.dart';
+
 import 'package:githo/extracted_widgets/alert_dialogs/confirmTrainingStart.dart';
 import 'package:githo/extracted_widgets/alert_dialogs/trainingDone.dart';
 import 'package:githo/extracted_widgets/backgroundWidget.dart';
 import 'package:githo/extracted_widgets/bottom_sheets/textSheet.dart';
 import 'package:githo/extracted_widgets/bottom_sheets/welcomeSheet.dart';
+import 'package:githo/extracted_widgets/headings.dart';
 import 'package:githo/extracted_widgets/screenEndingSpacer.dart';
 import 'package:githo/extracted_widgets/stepToDo.dart';
 
+import 'package:githo/helpers/databaseHelper.dart';
 import 'package:githo/helpers/timeHelper.dart';
-import 'package:githo/extracted_data/dataShortcut.dart';
-import 'package:githo/extracted_data/fullDatabaseImport.dart';
-import 'package:githo/extracted_data/styleData.dart';
-
-import 'package:githo/extracted_widgets/headings.dart';
+import 'package:githo/models/progressDataModel.dart';
 import 'package:githo/models/used_classes/step.dart';
 import 'package:githo/models/used_classes/training.dart';
 

@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:githo/extracted_data/dataShortcut.dart';
-import 'package:githo/extracted_data/fullDatabaseImport.dart';
 import 'package:githo/helpers/timeHelper.dart';
+import 'package:githo/models/habitPlanModel.dart';
 import 'package:githo/models/used_classes/training.dart';
 
 class TrainingPeriod {

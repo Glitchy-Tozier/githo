@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:githo/extracted_data/fullDatabaseImport.dart';
+
 import 'package:githo/extracted_widgets/alert_dialogs/confirmActivationChange.dart';
 import 'package:githo/extracted_widgets/alert_dialogs/confirmStartingTime.dart';
+import 'package:githo/helpers/databaseHelper.dart';
+import 'package:githo/models/habitPlanModel.dart';
+import 'package:githo/models/progressDataModel.dart';
 
 class ActivationFAB extends StatelessWidget {
   final HabitPlan habitPlan;
