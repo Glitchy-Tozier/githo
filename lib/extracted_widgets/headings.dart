@@ -59,7 +59,7 @@ class Heading extends StatelessWidget {
       child: Text(
         _text,
         style: const TextStyle(
-          fontSize: 35,
+          fontSize: 30,
           fontWeight: FontWeight.bold,
           color: Colors.black,
         ),
