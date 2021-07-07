@@ -66,9 +66,9 @@ class _HabitListState extends State<HabitList> {
 
                 if (habitPlanList.length == 0) {
                   // If there are no habit plans
-                  return Padding(
+                  return const Padding(
                     padding: StyleData.screenPadding,
-                    child: const ScreenTitle(
+                    child: ScreenTitle(
                       title: "List of habits",
                       subTitle: "Please add a habit plan.",
                     ),
@@ -76,16 +76,18 @@ class _HabitListState extends State<HabitList> {
                 } else {
                   // If there are habit plans
                   final List<Widget> columnItems = [];
-                  columnItems.addAll([
-                    Padding(
-                      padding: StyleData.screenPadding,
-                      child: const ScreenTitle(
-                        title: "List of habits",
-                        subTitle: "Click on a habit-plan to look at it.",
+                  columnItems.addAll(
+                    const <Widget>[
+                      Padding(
+                        padding: StyleData.screenPadding,
+                        child: ScreenTitle(
+                          title: "List of habits",
+                          subTitle: "Click on a habit-plan to look at it.",
+                        ),
                       ),
-                    ),
-                    const FatDivider(),
-                  ]);
+                      FatDivider(),
+                    ],
+                  );
 
                   final List<HabitPlan> orderedHabitPlans =
                       _orderHabitPlans(habitPlanList);

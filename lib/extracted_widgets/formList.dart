@@ -53,7 +53,7 @@ class _FormListState extends State<FormList> {
 
   void _updateScores() {
     this.listLength = _inputFields.length;
-    this.inputValues = new List.generate(this.listLength - 1, (index) => "");
+    this.inputValues = List.generate(this.listLength - 1, (index) => "");
   }
 
   Widget _textFormField(
@@ -124,7 +124,7 @@ class _FormListState extends State<FormList> {
         ...this._inputFields,
         const Text(
           "⋮",
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
             color: Colors.black,

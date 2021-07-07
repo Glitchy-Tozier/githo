@@ -11,7 +11,7 @@ class TrainingDoneAlert extends StatelessWidget {
       "Yay",
       "Nice job, me",
     ];
-    final Random random = new Random();
+    final Random random = Random();
     final String buttonString =
         buttonStrings[random.nextInt(buttonStrings.length)];
 

@@ -238,14 +238,16 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
                 );
               } else if (snapshot.hasError) {
                 // If something went wrong with the database
-                return Column(children: [
-                  const Heading(
-                      "There was an error connecting to the database."),
-                  Text(
-                    snapshot.error.toString(),
-                    style: StyleData.textStyle,
-                  ),
-                ]);
+                return Column(
+                  children: [
+                    const Heading(
+                        "There was an error connecting to the database."),
+                    Text(
+                      snapshot.error.toString(),
+                      style: StyleData.textStyle,
+                    ),
+                  ],
+                );
               }
             }
             // Default return (while loading, for example)

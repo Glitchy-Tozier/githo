@@ -17,8 +17,8 @@ class TextSheet extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.only(
-          topLeft: const Radius.circular(40),
-          topRight: const Radius.circular(40),
+          topLeft: Radius.circular(40),
+          topRight: Radius.circular(40),
         ),
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -38,9 +38,9 @@ class TextSheet extends StatelessWidget {
           left: StyleData.screenPaddingValue,
         ),
         decoration: const BoxDecoration(
-          borderRadius: const BorderRadius.only(
-            topLeft: const Radius.circular(40),
-            topRight: const Radius.circular(40),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(40),
+            topRight: Radius.circular(40),
           ),
           color: Colors.white70,
         ),

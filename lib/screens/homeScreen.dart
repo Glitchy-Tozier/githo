@@ -93,9 +93,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Heading("No habit-plan is active."),
-                        const Text(
+                      children: const <Widget>[
+                        Heading("No habit-plan is active."),
+                        Text(
                           "Click on the settings-icon to add or activate your habit-plan",
                           style: StyleData.textStyle,
                         ),

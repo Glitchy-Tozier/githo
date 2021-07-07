@@ -55,7 +55,7 @@ class StepToDo extends StatelessWidget {
                         const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
                     child: const Text(
                       "Info",
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 30,
                         color: Colors.black,
                       ),
