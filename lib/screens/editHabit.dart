@@ -110,6 +110,7 @@ class _EditHabitState extends State<EditHabit> {
                         validator: (input) =>
                             checkIfEmpty(input.toString().trim(), "your goal"),
                         initialValue: habitPlan.goal,
+                        textInputAction: TextInputAction.next,
                         onSaved: (input) =>
                             habitPlan.goal = input.toString().trim(),
                       ),
@@ -138,6 +139,7 @@ class _EditHabitState extends State<EditHabit> {
                               "It has to be at least one rep a $currentTimeUnit",
                         ),
                         initialValue: habitPlan.requiredReps.toString(),
+                        textInputAction: TextInputAction.next,
                         onSaved: (input) => habitPlan.requiredReps =
                             int.parse(input.toString().trim()),
                       ),

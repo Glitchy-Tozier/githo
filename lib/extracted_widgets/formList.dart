@@ -104,6 +104,7 @@ class _FormListState extends State<FormList> {
               });
             }
           },
+          textInputAction: TextInputAction.next,
           onSaved: (input) {
             if (fieldNr != this.listLength) {
               // Only do this if the current TextFormField is not the last (empty) TextFormField
