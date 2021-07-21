@@ -100,7 +100,7 @@ class _HabitListState extends State<HabitList> {
                       child: ListView.builder(
                         padding: StyleData.screenPadding,
                         physics: const BouncingScrollPhysics(),
-                        itemCount: orderedHabitPlans.length + 1,
+                        itemCount: orderedHabitPlans.length,
                         itemBuilder: (BuildContext buildContex, int i) {
                           final HabitPlan habitPlan = orderedHabitPlans[i];
 
