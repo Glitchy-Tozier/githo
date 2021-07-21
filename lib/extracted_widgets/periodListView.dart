@@ -236,7 +236,9 @@ class PeriodListView extends StatelessWidget {
       horizontal: StyleData.screenPaddingValue - cardMarginRL,
     );
 
-    if (trainingPeriod.status == "active") {
+    final bool preventLazyLoading = trainingPeriod.status == "active" ||
+        trainingPeriod.status == "waiting for start";
+    if (preventLazyLoading) {
       // If the trainingPeriod is active, prevent lazyloading (to enable automatic scrolling)
       return SingleChildScrollView(
         physics: physics,
