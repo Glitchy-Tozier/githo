@@ -18,16 +18,19 @@ import 'package:githo/extracted_widgets/sliderTitle.dart';
 import 'package:githo/models/habitPlanModel.dart';
 
 class EditHabit extends StatefulWidget {
+  final String title;
   final HabitPlan habitPlan;
   final Function onSavedFunction;
 
   const EditHabit({
+    required this.title,
     required this.habitPlan,
     required this.onSavedFunction,
   });
 
   @override
   _EditHabitState createState() => _EditHabitState(
+        title: title,
         habitPlan: habitPlan,
         onSavedFunction: onSavedFunction,
       );
@@ -35,10 +38,12 @@ class EditHabit extends StatefulWidget {
 
 class _EditHabitState extends State<EditHabit> {
   final _formKey = GlobalKey<FormState>();
+  final String title;
   final HabitPlan habitPlan;
   final Function onSavedFunction;
 
   _EditHabitState({
+    required this.title,
     required this.habitPlan,
     required this.onSavedFunction,
   });
@@ -59,21 +64,22 @@ class _EditHabitState extends State<EditHabit> {
 
   @override
   Widget build(BuildContext context) {
-    int trainingTimeIndex = habitPlan.trainingTimeIndex.toInt();
-    String currentTimeUnit = _timeFrames[trainingTimeIndex];
-    String currentAdjTimeUnit = _adjTimeFrames[trainingTimeIndex];
+    final int trainingTimeIndex = habitPlan.trainingTimeIndex.toInt();
+    final String currentTimeUnit = _timeFrames[trainingTimeIndex];
+    final String currentAdjTimeUnit = _adjTimeFrames[trainingTimeIndex];
 
-    String currentTimeFrame = _timeFrames[trainingTimeIndex + 1];
-    double currentMaxTrainings = _maxTrainings[trainingTimeIndex].toDouble();
+    final String currentTimeFrame = _timeFrames[trainingTimeIndex + 1];
+    final double currentMaxTrainings =
+        _maxTrainings[trainingTimeIndex].toDouble();
 
-    String firstSliderArticle;
+    final String firstSliderArticle;
     if (trainingTimeIndex == 0) {
       firstSliderArticle = "an";
     } else {
       firstSliderArticle = "a";
     }
 
-    String thirdSliderText;
+    final String thirdSliderText;
     if (habitPlan.requiredTrainingPeriods == 1) {
       thirdSliderText = " is";
     } else {
@@ -89,9 +95,9 @@ class _EditHabitState extends State<EditHabit> {
             physics: const BouncingScrollPhysics(),
             shrinkWrap: true,
             children: <Widget>[
-              const Padding(
+              Padding(
                 padding: StyleData.screenPadding,
-                child: ScreenTitle(title: "Edit Habit-Plan"),
+                child: ScreenTitle(title: this.title),
               ),
               const FatDivider(),
               Form(

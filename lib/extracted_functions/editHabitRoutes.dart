@@ -34,6 +34,7 @@ void addNewHabit(
     context,
     MaterialPageRoute(
       builder: (context) => EditHabit(
+        title: "Add Habit-Plan",
         habitPlan: habitPlan,
         onSavedFunction: _onSaved,
       ),
@@ -65,6 +66,7 @@ void editHabit(
     context,
     MaterialPageRoute(
       builder: (context) => EditHabit(
+        title: "Edit Habit-Plan",
         habitPlan: habitPlan,
         onSavedFunction: _onSaved,
       ),
