@@ -239,7 +239,7 @@ class PeriodListView extends StatelessWidget {
     final bool preventLazyLoading = trainingPeriod.status == "active" ||
         trainingPeriod.status == "waiting for start";
     if (preventLazyLoading) {
-      // If the trainingPeriod is active, prevent lazyloading (to enable automatic scrolling)
+      // If the trainingPeriod is active or will shortly be active, prevent lazyloading (to enable automatic scrolling).
       return SingleChildScrollView(
         physics: physics,
         scrollDirection: scrollDirection,
@@ -249,7 +249,7 @@ class PeriodListView extends StatelessWidget {
         ),
       );
     } else {
-      // If the trainingPeriod is not active, lazyloading should be used for performance reasons.
+      // If the trainingPeriod is not active, lazyloading should be used (for performance reasons).
       final TrainingCard firstCard = listViewChildren.first as TrainingCard;
       return SizedBox(
         height: firstCard.height,

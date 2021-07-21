@@ -105,26 +105,6 @@ class StepToDo extends StatelessWidget {
                   ),
                 ),
               );
-
-              /* showDialog(
-                context: context,
-                builder: (BuildContext buildContext) {
-                  return TextDialog(
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("Step ${step.number}"),
-                        Text(
-                          step.status,
-                          style: TextStyle(color: statusColor),
-                        )
-                      ],
-                    ),
-                    text: "To-do: ${this.step.text}",
-                    buttonColor: stepColor,
-                  );
-                },
-              ); */
             },
           ),
         ),

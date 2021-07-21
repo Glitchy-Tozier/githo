@@ -14,9 +14,7 @@ import 'package:githo/extracted_widgets/dividers/fatDivider.dart';
 import 'package:githo/extracted_widgets/headings.dart';
 import 'package:githo/extracted_widgets/screenEndingSpacer.dart';
 
-import 'package:githo/helpers/databaseHelper.dart';
 import 'package:githo/models/habitPlanModel.dart';
-import 'package:githo/models/progressDataModel.dart';
 
 class SingleHabitDisplay extends StatefulWidget {
   final Function updateFunction;
@@ -37,8 +35,6 @@ class SingleHabitDisplay extends StatefulWidget {
 class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
   final Function updatePrevScreens;
   HabitPlan habitPlan;
-  Future<ProgressData> _progressData =
-      DatabaseHelper.instance.getProgressData();
 
   _SingleHabitDisplayState({
     required this.updatePrevScreens,
@@ -117,20 +113,12 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
     return widgetList;
   }
 
-  Table _getStepTable(ProgressData progressData) {
+  Table _getStepTable() {
     final List<TableRow> tableRowList = [];
     final steps = this.habitPlan.steps;
-    //final int currentStepIndex = getCurrentStepIndex(habitPlan, progressData);
 
     for (int i = 0; i < steps.length; i++) {
       final int stepNr = i + 1;
-
-      final TextStyle textStyle;
-      /* if ((i == currentStepIndex) && (habitPlan.isActive)) {
-        textStyle = StyleData.boldTextStyle;
-      } else { */
-      textStyle = StyleData.textStyle;
-      //}
 
       tableRowList.add(
         TableRow(
@@ -140,14 +128,14 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
               child: Text(
                 stepNr.toString(),
                 textAlign: TextAlign.center,
-                style: textStyle,
+                style: StyleData.textStyle,
               ),
             ),
             Padding(
               padding: EdgeInsets.only(left: 10, top: StyleData.listRowSpacing),
               child: Text(
                 "${steps[i]}",
-                style: textStyle,
+                style: StyleData.textStyle,
               ),
             ),
           ],
@@ -194,66 +182,40 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
 
     return Scaffold(
       body: BackgroundWidget(
-        child: FutureBuilder(
-          future: _progressData,
-          builder: (context, AsyncSnapshot<ProgressData> snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasData) {
-                ProgressData progressData = snapshot.data!;
-                return ListView(
-                  padding: const EdgeInsets.symmetric(horizontal: 0),
-                  physics: const BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  children: [
-                    Padding(
-                      padding: StyleData.screenPadding,
-                      child: ScreenTitle(habitPlan.goal),
-                    ),
-                    const FatDivider(),
-                    Padding(
-                      padding: StyleData.screenPadding,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Heading("Rules"),
-                          ..._getRuleWidgets(),
-                        ],
-                      ),
-                    ),
-                    ...commentSection,
-                    const FatDivider(),
-                    Padding(
-                      padding: StyleData.screenPadding,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Heading("Steps"),
-                          _getStepTable(progressData),
-                        ],
-                      ),
-                    ),
-                    ScreenEndingSpacer()
-                  ],
-                );
-              } else if (snapshot.hasError) {
-                // If something went wrong with the database
-                return Column(
-                  children: [
-                    const Heading(
-                        "There was an error connecting to the database."),
-                    Text(
-                      snapshot.error.toString(),
-                      style: StyleData.textStyle,
-                    ),
-                  ],
-                );
-              }
-            }
-            // Default return (while loading, for example)
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          },
+        child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 0),
+          physics: const BouncingScrollPhysics(),
+          shrinkWrap: true,
+          children: [
+            Padding(
+              padding: StyleData.screenPadding,
+              child: ScreenTitle(habitPlan.goal),
+            ),
+            const FatDivider(),
+            Padding(
+              padding: StyleData.screenPadding,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Heading("Rules"),
+                  ..._getRuleWidgets(),
+                ],
+              ),
+            ),
+            ...commentSection,
+            const FatDivider(),
+            Padding(
+              padding: StyleData.screenPadding,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Heading("Steps"),
+                  _getStepTable(),
+                ],
+              ),
+            ),
+            ScreenEndingSpacer()
+          ],
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
