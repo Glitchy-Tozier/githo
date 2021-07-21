@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
     ]);
 
     return MaterialApp(
-      title: "GITHO - Get Into The Habit Of…",
+      title: "Githo - Get Into The Habit Of…",
       theme: ThemeData(
         primarySwatch: Colors.pink,
       ),
