@@ -207,10 +207,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
                   children: [
                     Padding(
                       padding: StyleData.screenPadding,
-                      child: ScreenTitle(
-                        title: habitPlan.goal,
-                        //subTitle: getStatusString(progressData),
-                      ),
+                      child: ScreenTitle(habitPlan.goal),
                     ),
                     const FatDivider(),
                     Padding(
@@ -253,8 +250,8 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
               }
             }
             // Default return (while loading, for example)
-            return Center(
-              child: const CircularProgressIndicator(),
+            return const Center(
+              child: CircularProgressIndicator(),
             );
           },
         ),

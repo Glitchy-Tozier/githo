@@ -64,32 +64,34 @@ class _HabitListState extends State<HabitList> {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.hasData) {
                 final List<HabitPlan> habitPlanList = snapshot.data!;
+                final List<Widget> columnItems = [];
+
+                columnItems.addAll(
+                  const <Widget>[
+                    Padding(
+                      padding: StyleData.screenPadding,
+                      child: ScreenTitle("List of habits"),
+                    ),
+                    FatDivider(),
+                  ],
+                );
 
                 if (habitPlanList.length == 0) {
                   // If there are no habit plans
-                  return const Padding(
-                    padding: StyleData.screenPadding,
-                    child: ScreenTitle(
-                      title: "List of habits",
-                      subTitle: "Please add a habit plan.",
+                  columnItems.add(
+                    Expanded(
+                      child: Container(
+                        padding: StyleData.screenPadding,
+                        alignment: Alignment.center,
+                        child: const Text(
+                          "Add a new habit-plan by clicking on the plus-icon.",
+                          style: StyleData.textStyle,
+                        ),
+                      ),
                     ),
                   );
                 } else {
-                  // If there are habit plans
-                  final List<Widget> columnItems = [];
-                  columnItems.addAll(
-                    const <Widget>[
-                      Padding(
-                        padding: StyleData.screenPadding,
-                        child: ScreenTitle(
-                          title: "List of habits",
-                          subTitle: "Click on a habit-plan to look at it.",
-                        ),
-                      ),
-                      FatDivider(),
-                    ],
-                  );
-
+                  // If habit plans were found in the database
                   final List<HabitPlan> orderedHabitPlans =
                       _orderHabitPlans(habitPlanList);
 
@@ -100,46 +102,44 @@ class _HabitListState extends State<HabitList> {
                         physics: const BouncingScrollPhysics(),
                         itemCount: orderedHabitPlans.length + 1,
                         itemBuilder: (BuildContext buildContex, int i) {
-                          if (i < orderedHabitPlans.length) {
-                            final HabitPlan habitPlan = orderedHabitPlans[i];
+                          final HabitPlan habitPlan = orderedHabitPlans[i];
 
-                            final Color color;
-                            if (habitPlan.fullyCompleted) {
-                              color = Colors.amberAccent;
-                            } else if (habitPlan.isActive) {
-                              color = Colors.green;
-                            } else {
-                              color = Theme.of(context).buttonColor;
-                            }
-
-                            return ButtonListItem(
-                              text: habitPlan.goal,
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => SingleHabitDisplay(
-                                      updateFunction: _updateLoadedScreens,
-                                      habitPlan: habitPlan,
-                                    ),
-                                  ),
-                                );
-                              },
-                              color: color,
-                            );
+                          final Color color;
+                          if (habitPlan.fullyCompleted) {
+                            color = Colors.amberAccent;
+                          } else if (habitPlan.isActive) {
+                            color = Colors.green;
                           } else {
-                            // On the last loop, add the ScreenEndingSpacer.
-                            return ScreenEndingSpacer();
+                            color = Theme.of(context).buttonColor;
                           }
+
+                          return ButtonListItem(
+                            text: habitPlan.goal,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SingleHabitDisplay(
+                                    updateFunction: _updateLoadedScreens,
+                                    habitPlan: habitPlan,
+                                  ),
+                                ),
+                              );
+                            },
+                            color: color,
+                          );
                         },
                       ),
                     ),
                   );
-                  return Column(
-                    children: columnItems,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                  );
                 }
+                columnItems.add(
+                  ScreenEndingSpacer(),
+                );
+                return Column(
+                  children: columnItems,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                );
               } else if (snapshot.hasError) {
                 // If something went wrong with the database
                 print(snapshot.error);
@@ -160,8 +160,8 @@ class _HabitListState extends State<HabitList> {
               }
             }
             // While loading, do this:
-            return Center(
-              child: const CircularProgressIndicator(),
+            return const Center(
+              child: CircularProgressIndicator(),
             );
           },
         ),

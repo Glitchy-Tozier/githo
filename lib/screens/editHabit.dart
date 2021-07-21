@@ -97,7 +97,7 @@ class _EditHabitState extends State<EditHabit> {
             children: <Widget>[
               Padding(
                 padding: StyleData.screenPadding,
-                child: ScreenTitle(title: this.title),
+                child: ScreenTitle(this.title),
               ),
               const FatDivider(),
               Form(

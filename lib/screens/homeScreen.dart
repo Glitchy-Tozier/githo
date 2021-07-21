@@ -130,9 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: <Widget>[
                       Padding(
                         padding: StyleData.screenPadding,
-                        child: ScreenTitle(
-                          title: progressData.goal,
-                        ),
+                        child: ScreenTitle(progressData.goal),
                       ),
                       Column(
                         // This column exists to make sure all trainings are being cached. (= to disable lazyloading)
@@ -174,8 +172,8 @@ class _HomeScreenState extends State<HomeScreen> {
               }
             }
             // While loading, do this:
-            return Center(
-              child: const CircularProgressIndicator(),
+            return const Center(
+              child: CircularProgressIndicator(),
             );
           },
         ),
