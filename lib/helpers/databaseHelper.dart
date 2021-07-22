@@ -71,7 +71,7 @@ class DatabaseHelper {
     return habitPlanDb;
   }
 
-  void _createDb(Database db, int version) async {
+  void _createDb(final Database db, final int version) async {
     String commandString;
 
     // Initalize the database-version
@@ -161,7 +161,8 @@ class DatabaseHelper {
     );
   }
 
-  Future<List<Map<String, dynamic>>> getDataMapList(String tableName) async {
+  Future<List<Map<String, dynamic>>> getDataMapList(
+      final String tableName) async {
     final Database db = await this._getDb;
 
     final List<Map<String, dynamic>> result = await db.query(tableName);
@@ -236,7 +237,7 @@ class DatabaseHelper {
     return result;
   }
 
-  Future<int> updateHabitPlan(HabitPlan habitPlan) async {
+  Future<int> updateHabitPlan(final HabitPlan habitPlan) async {
     final Database db = await this._getDb;
     final int result = await db.update(
       habitPlansTable,
@@ -247,7 +248,7 @@ class DatabaseHelper {
     return result;
   }
 
-  Future<int> deleteHabitPlan(int id) async {
+  Future<int> deleteHabitPlan(final int id) async {
     final Database db = await this._getDb;
     final int result = await db.delete(
       habitPlansTable,
@@ -266,7 +267,7 @@ class DatabaseHelper {
     return result;
   }
 
-  Future<int> updateProgressData(ProgressData progressData) async {
+  Future<int> updateProgressData(final ProgressData progressData) async {
     final Database db = await this._getDb;
     final int result = await db.update(
       progressDataTable,
@@ -284,7 +285,7 @@ class DatabaseHelper {
     return result;
   }
 
-  Future<int> updateSettings(Settings settings) async {
+  Future<int> updateSettings(final Settings settings) async {
     final Database db = await this._getDb;
     final int result = await db.update(
       settingsTable,

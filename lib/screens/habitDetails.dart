@@ -152,7 +152,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
     );
   }
 
-  void _updateLoadedScreens(HabitPlan changedHabitPlan) {
+  void _updateLoadedScreens(final HabitPlan changedHabitPlan) {
     setState(() {
       this.habitPlan = changedHabitPlan;
       updatePrevScreens();

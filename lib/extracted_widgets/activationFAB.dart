@@ -20,10 +20,8 @@ class ActivationFAB extends StatelessWidget {
         this.habitPlan.isActive = false;
         await DatabaseHelper.instance.updateHabitPlan(this.habitPlan);
 
-        // Update progressData
-        ProgressData progressData =
-            await DatabaseHelper.instance.getProgressData();
-        progressData = ProgressData.emptyData();
+        // Clear progressData
+        final ProgressData progressData = ProgressData.emptyData();
         await DatabaseHelper.instance.updateProgressData(progressData);
 
         // Update previous screens and close screen

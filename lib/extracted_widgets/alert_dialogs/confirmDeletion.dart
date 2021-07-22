@@ -57,13 +57,11 @@ class ConfirmDeletion extends StatelessWidget {
               onPressed: () async {
                 DatabaseHelper.instance.deleteHabitPlan(habitPlan.id!);
 
-                ProgressData progressData =
-                    await DatabaseHelper.instance.getProgressData();
-                progressData = ProgressData.emptyData();
+                final ProgressData progressData = ProgressData.emptyData();
                 DatabaseHelper.instance.updateProgressData(progressData);
 
-                updateFunction();
                 Navigator.pop(context);
+                updateFunction();
                 Navigator.pop(context);
               },
             ),

@@ -35,10 +35,10 @@ class _FormListState extends State<FormList> {
   final Function exportValues;
 
   _FormListState(
-    String name,
+    final String name,
     this.canBeEmpty,
     this.exportValues,
-    List<String> initValues,
+    final List<String> initValues,
   ) {
     // Generate the TextFormFields
     for (int i = 0; i < initValues.length + 1; i++) {

@@ -10,7 +10,7 @@ void addNewHabit(
   BuildContext context,
   final Function updatePrevScreens,
 ) {
-  HabitPlan habitPlan = HabitPlan(
+  final HabitPlan habitPlan = HabitPlan(
     isActive: false,
     fullyCompleted: false,
     // TextFormFields:

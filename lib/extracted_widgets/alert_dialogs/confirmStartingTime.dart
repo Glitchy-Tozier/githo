@@ -71,7 +71,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
   }
 
   void _updateDataBase(
-    HabitPlan habitPlan,
+    final HabitPlan habitPlan,
     final DateTime startingDate,
     final int startingStep,
   ) async {
@@ -79,13 +79,14 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
     final List<HabitPlan> activeHabitPlanList =
         await DatabaseHelper.instance.getActiveHabitPlan();
     if (activeHabitPlanList.length > 0) {
-      HabitPlan oldHabitPlan = activeHabitPlanList[0];
+      final HabitPlan oldHabitPlan = activeHabitPlanList[0];
       oldHabitPlan.isActive = false;
       await DatabaseHelper.instance.updateHabitPlan(oldHabitPlan);
     }
 
     // Update (and reset) older progressData
-    ProgressData progressData = await DatabaseHelper.instance.getProgressData();
+    final ProgressData progressData =
+        await DatabaseHelper.instance.getProgressData();
     progressData.adaptToHabitPlan(
       habitPlan: habitPlan,
       startingDate: startingDate,
