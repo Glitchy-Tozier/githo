@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:githo/extracted_data/styleData.dart';
 import 'package:githo/extracted_widgets/backgroundWidget.dart';
+import 'package:githo/extracted_widgets/borderedImage.dart';
 import 'package:githo/helpers/databaseHelper.dart';
 import 'package:githo/models/settingsModel.dart';
 import 'package:githo/screens/homeScreen.dart';
@@ -94,37 +95,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           ),
         ),
       ],
-    );
-  }
-}
-
-class BorderedImage extends StatelessWidget {
-  final String name;
-  final double width;
-
-  const BorderedImage(
-    this.name, {
-    this.width = double.infinity,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      //borderRadius: BorderRadius.circular(20),
-      width: width,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(20)),
-        color: Colors.white,
-        border: Border.all(
-          color: Colors.white,
-          width: 7,
-        ),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(15)),
-        child: Image.asset(name),
-      ),
     );
   }
 }
