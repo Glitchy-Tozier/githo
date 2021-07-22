@@ -6,7 +6,10 @@ import 'package:githo/extracted_data/styleData.dart';
 class BackgroundWidget extends StatelessWidget {
   final Widget child;
 
-  const BackgroundWidget({required this.child, Key? key}) : super(key: key);
+  const BackgroundWidget({
+    this.child = const SizedBox(),
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

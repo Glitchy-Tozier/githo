@@ -8,7 +8,7 @@ import 'package:githo/extracted_data/defaultHabitPlans.dart';
 
 import 'package:githo/models/habitPlanModel.dart';
 import 'package:githo/models/progressDataModel.dart';
-import 'package:githo/models/settingsDataModel.dart';
+import 'package:githo/models/settingsModel.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._instance();
@@ -42,7 +42,8 @@ class DatabaseHelper {
   static const String colProgGoal = "goal";
   static const String colProgSteps = "steps";
 
-  static const String settingsDataTable = "settingsDataTable";
+  static const String settingsTable = "settingsTable";
+  static const String colShowIntroduction = "showIntroduction";
   static const String colPaused = "paused";
 
   Future get _getDb async {
@@ -143,16 +144,18 @@ class DatabaseHelper {
 
     // Initialize settings-table
     commandString = "";
-    commandString += "CREATE TABLE $settingsDataTable";
+    commandString += "CREATE TABLE $settingsTable";
     commandString += "(";
+    commandString += "$colShowIntroduction INTEGER, ";
     commandString += "$colPaused INTEGER";
     commandString += ")";
     await db.execute(commandString);
 
     db.insert(
       // Initialize default values
-      settingsDataTable,
-      SettingsData(
+      settingsTable,
+      Settings(
+        showIntroduction: true,
         paused: false,
       ).toMap(),
     );
@@ -272,20 +275,20 @@ class DatabaseHelper {
     return result;
   }
 
-  Future<SettingsData> getSettingsData() async {
+  Future<Settings> getSettings() async {
     final List<Map<String, Object?>> queryResultList =
-        await getDataMapList(settingsDataTable);
+        await getDataMapList(settingsTable);
     final Map<String, Object?> queryResult = queryResultList[0];
 
-    final SettingsData result = SettingsData.fromMap(queryResult);
+    final Settings result = Settings.fromMap(queryResult);
     return result;
   }
 
-  Future<int> updateSettingsData(SettingsData settingsData) async {
+  Future<int> updateSettings(Settings settings) async {
     final Database db = await this._getDb;
     final int result = await db.update(
-      progressDataTable,
-      settingsData.toMap(),
+      settingsTable,
+      settings.toMap(),
     );
     return result;
   }

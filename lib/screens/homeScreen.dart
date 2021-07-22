@@ -42,9 +42,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void _reloadScreen() {
     setState(() {
       _progressData = DatabaseHelper.instance.getProgressData();
-      if (DataShortcut.testing) {
-        TimeHelper.instance.setTime(DateTime.now());
-      }
       _scrollToActiveTraining(delay: 1);
     });
   }

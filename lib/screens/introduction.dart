@@ -1,0 +1,117 @@
+import 'package:flutter/material.dart';
+import 'package:githo/extracted_data/styleData.dart';
+import 'package:githo/extracted_widgets/backgroundWidget.dart';
+import 'package:githo/helpers/databaseHelper.dart';
+import 'package:githo/models/settingsModel.dart';
+import 'package:githo/screens/homeScreen.dart';
+import 'package:introduction_screen/introduction_screen.dart';
+
+class OnBoardingScreen extends StatefulWidget {
+  @override
+  _OnBoardingScreenState createState() => _OnBoardingScreenState();
+}
+
+class _OnBoardingScreenState extends State<OnBoardingScreen> {
+  final introKey = GlobalKey<IntroductionScreenState>();
+
+  Widget styleImage(final String name, {final double width = double.infinity}) {
+    return Container(
+      //borderRadius: BorderRadius.circular(20),
+      width: width,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+        color: Colors.white,
+        border: Border.all(
+          color: Colors.white,
+          width: 7,
+        ),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+        child: Image.asset(
+          name,
+          width: double.infinity,
+          fit: BoxFit.fill,
+        ),
+      ),
+    );
+  }
+
+  void _onIntroEnd(BuildContext context) async {
+    // Make sure the introduction-screen doesn't get shown again
+    final Settings settings = await DatabaseHelper.instance.getSettings();
+    settings.showIntroduction = false;
+    DatabaseHelper.instance.updateSettings(settings);
+
+    // Navigate to the homescreen
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => HomeScreen()),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    const PageDecoration pageDecoration = const PageDecoration(
+      titleTextStyle: TextStyle(fontSize: 28.0, fontWeight: FontWeight.w700),
+      bodyTextStyle: StyleData.textStyle,
+      titlePadding: EdgeInsets.symmetric(
+        vertical: 20,
+        horizontal: StyleData.screenPaddingValue,
+      ),
+      descriptionPadding: StyleData.screenPadding,
+      imagePadding: EdgeInsets.only(
+        top: 70,
+        right: StyleData.screenPaddingValue,
+        left: StyleData.screenPaddingValue,
+      ),
+      imageFlex: 0,
+    );
+
+    return Stack(
+      children: [
+        BackgroundWidget(),
+        IntroductionScreen(
+          key: introKey,
+          globalBackgroundColor: Colors.transparent,
+          pages: [
+            PageViewModel(
+              title: "Githo – Get Into The Habit Of…",
+              body: "Aquire an new habit, one step at a time",
+              image: styleImage('assets/launcher/icon.png', width: 90),
+              decoration: pageDecoration,
+            ),
+            PageViewModel(
+              title: "Define gradual steps",
+              body: "Move closer and closer towards your goal",
+              image: styleImage(
+                  "assets/introduction_screen_images/defineSteps.png"),
+              decoration: pageDecoration,
+            ),
+            PageViewModel(
+              title: "Advance",
+              body: "Complete trainings to advance to the next step",
+              image:
+                  styleImage("assets/introduction_screen_images/training.png"),
+              decoration: pageDecoration,
+            ),
+          ],
+          onDone: () => _onIntroEnd(context),
+          next: const Icon(Icons.arrow_forward),
+          done:
+              const Text('Done', style: TextStyle(fontWeight: FontWeight.w600)),
+          curve: Curves.fastLinearToSlowEaseIn,
+          controlsMargin: const EdgeInsets.all(16),
+          dotsDecorator: DotsDecorator(
+            size: const Size(10.0, 10.0),
+            color: Colors.black,
+            activeColor: Theme.of(context).primaryColor,
+            activeSize: const Size(22.0, 10.0),
+            activeShape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(25.0)),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}

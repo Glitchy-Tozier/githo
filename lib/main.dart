@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:githo/extracted_widgets/firstScreen.dart';
 import 'package:githo/extracted_functions/adaptDatabaseToOS.dart';
-import 'package:githo/screens/homeScreen.dart';
 
 void main() {
   adaptDatabaseToOS();
@@ -10,7 +10,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  // This widget is the root of the application.
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.pink,
       ),
-      home: HomeScreen(),
+      home: FirstScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
