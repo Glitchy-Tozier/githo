@@ -14,29 +14,6 @@ class OnBoardingScreen extends StatefulWidget {
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
   final introKey = GlobalKey<IntroductionScreenState>();
 
-  Widget styleImage(final String name, {final double width = double.infinity}) {
-    return Container(
-      //borderRadius: BorderRadius.circular(20),
-      width: width,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(20)),
-        color: Colors.white,
-        border: Border.all(
-          color: Colors.white,
-          width: 7,
-        ),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(15)),
-        child: Image.asset(
-          name,
-          width: double.infinity,
-          fit: BoxFit.fill,
-        ),
-      ),
-    );
-  }
-
   void _onIntroEnd(BuildContext context) async {
     // Make sure the introduction-screen doesn't get shown again
     final Settings settings = await DatabaseHelper.instance.getSettings();
@@ -52,7 +29,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   @override
   Widget build(BuildContext context) {
     const PageDecoration pageDecoration = const PageDecoration(
-      titleTextStyle: TextStyle(fontSize: 28.0, fontWeight: FontWeight.w700),
+      titleTextStyle: TextStyle(
+        fontSize: 28.0,
+        fontWeight: FontWeight.w700,
+      ),
       bodyTextStyle: StyleData.textStyle,
       titlePadding: EdgeInsets.symmetric(
         vertical: 20,
@@ -77,28 +57,30 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             PageViewModel(
               title: "Githo – Get Into The Habit Of…",
               body: "Aquire an new habit, one step at a time",
-              image: styleImage('assets/launcher/icon.png', width: 90),
+              image: const BorderedImage('assets/launcher/icon.png', width: 90),
               decoration: pageDecoration,
             ),
             PageViewModel(
               title: "Define gradual steps",
               body: "Move closer and closer towards your goal",
-              image: styleImage(
+              image: const BorderedImage(
                   "assets/introduction_screen_images/defineSteps.png"),
               decoration: pageDecoration,
             ),
             PageViewModel(
               title: "Advance",
               body: "Complete trainings to advance to the next step",
-              image:
-                  styleImage("assets/introduction_screen_images/training.png"),
+              image: const BorderedImage(
+                  "assets/introduction_screen_images/training.png"),
               decoration: pageDecoration,
             ),
           ],
           onDone: () => _onIntroEnd(context),
           next: const Icon(Icons.arrow_forward),
-          done:
-              const Text('Done', style: TextStyle(fontWeight: FontWeight.w600)),
+          done: const Text(
+            'Done',
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
           curve: Curves.fastLinearToSlowEaseIn,
           controlsMargin: const EdgeInsets.all(16),
           dotsDecorator: DotsDecorator(
@@ -112,6 +94,37 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class BorderedImage extends StatelessWidget {
+  final String name;
+  final double width;
+
+  const BorderedImage(
+    this.name, {
+    this.width = double.infinity,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      //borderRadius: BorderRadius.circular(20),
+      width: width,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+        color: Colors.white,
+        border: Border.all(
+          color: Colors.white,
+          width: 7,
+        ),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+        child: Image.asset(name),
+      ),
     );
   }
 }
