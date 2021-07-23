@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:githo/extracted_data/styleData.dart';
 
 import 'package:githo/extracted_widgets/alert_dialogs/confirmActivationChange.dart';
 import 'package:githo/extracted_widgets/alert_dialogs/confirmStartingTime.dart';
 import 'package:githo/helpers/databaseHelper.dart';
 import 'package:githo/models/habitPlanModel.dart';
 import 'package:githo/models/progressDataModel.dart';
+import 'package:githo/screens/homeScreen.dart';
 
 class ActivationFAB extends StatelessWidget {
   final HabitPlan habitPlan;
@@ -15,7 +17,7 @@ class ActivationFAB extends StatelessWidget {
   void onClickFunc(BuildContext context) async {
     if (habitPlan.isActive == true) {
       // If the viewed habetPlan was active to begin with, disable it.
-      void onConfirmation() async {
+      void deactivateHabitPlan() async {
         // Update habitPlan
         this.habitPlan.isActive = false;
         await DatabaseHelper.instance.updateHabitPlan(this.habitPlan);
@@ -32,29 +34,82 @@ class ActivationFAB extends StatelessWidget {
         context: context,
         builder: (BuildContext buildContext) => ConfirmActivationChange(
           title: "Confirm Deactivation",
-          confirmationFunc: onConfirmation,
+          content: const Text(
+            "All previous progress will be lost.",
+            style: StyleData.textStyle,
+          ),
+          confirmationFunc: deactivateHabitPlan,
         ),
       );
     } else {
       // If the viewed habitPlan wasn't active, activate it.
 
-      void onConfirmation() async {
+      void showStrartingTimePicker() async {
+        void popToHome(final HabitPlan habitPlan) {
+          // Move to homescreen
+          // For some reason, this also results in the homescreen updating itself automatically.
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) {
+                return HomeScreen();
+              },
+              settings: const RouteSettings(
+                name: '/home',
+              ),
+            ),
+          );
+        }
+
         showDialog(
           context: context,
           builder: (BuildContext buildContext) => ConfirmStartingTime(
             habitPlan,
-            updateFunction,
+            popToHome,
           ),
         );
       }
 
-      showDialog(
-        context: context,
-        builder: (BuildContext buildContext) => ConfirmActivationChange(
-          title: "Confirm Activation",
-          confirmationFunc: onConfirmation,
-        ),
-      );
+      final ProgressData progressData =
+          await DatabaseHelper.instance.getProgressData();
+
+      if (progressData.isActive) {
+        showDialog(
+          context: context,
+          builder: (BuildContext buildContext) => ConfirmActivationChange(
+            title: "Confirm Activation",
+            content: RichText(
+              text: TextSpan(
+                children: [
+                  const TextSpan(
+                    text: "Your previous habit-plan ",
+                    style: StyleData.textStyle,
+                  ),
+                  TextSpan(
+                    text: "(Habit: ${progressData.goal})",
+                    style: StyleData.boldTextStyle,
+                  ),
+                  const TextSpan(
+                    text: " will be ",
+                    style: StyleData.textStyle,
+                  ),
+                  const TextSpan(
+                    text: "deactivated",
+                    style: StyleData.boldTextStyle,
+                  ),
+                  const TextSpan(
+                    text: ".",
+                    style: StyleData.textStyle,
+                  ),
+                ],
+              ),
+            ),
+            confirmationFunc: showStrartingTimePicker,
+          ),
+        );
+      } else {
+        // If no challenge is active, there is no need to display a warning popup -> go straight to the starting-time-dialouge.
+        showStrartingTimePicker();
+      }
     }
   }
 

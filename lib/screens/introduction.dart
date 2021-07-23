@@ -50,7 +50,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
     return Stack(
       children: [
-        BackgroundWidget(),
+        const BackgroundWidget(),
         IntroductionScreen(
           key: introKey,
           globalBackgroundColor: Colors.transparent,
@@ -63,7 +63,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             ),
             PageViewModel(
               title: "Define gradual steps",
-              body: "Move closer and closer towards your goal",
+              body: "Move closer towards your final habit",
               image: const BorderedImage(
                   "assets/introduction_screen_images/defineSteps.png"),
               decoration: pageDecoration,

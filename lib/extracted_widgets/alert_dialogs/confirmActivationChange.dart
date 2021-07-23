@@ -3,10 +3,12 @@ import 'package:githo/extracted_data/styleData.dart';
 
 class ConfirmActivationChange extends StatelessWidget {
   final String title;
+  final Widget content;
   final Function confirmationFunc;
 
   const ConfirmActivationChange({
     required this.title,
+    required this.content,
     required this.confirmationFunc,
   });
 
@@ -17,10 +19,7 @@ class ConfirmActivationChange extends StatelessWidget {
         title,
         style: StyleData.textStyle,
       ),
-      content: const Text(
-        "All previous progress will be lost.",
-        style: StyleData.textStyle,
-      ),
+      content: content,
       actions: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
