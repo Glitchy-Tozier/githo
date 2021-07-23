@@ -89,15 +89,7 @@ class ActivationFAB extends StatelessWidget {
                     style: StyleData.boldTextStyle,
                   ),
                   const TextSpan(
-                    text: " will be ",
-                    style: StyleData.textStyle,
-                  ),
-                  const TextSpan(
-                    text: "deactivated",
-                    style: StyleData.boldTextStyle,
-                  ),
-                  const TextSpan(
-                    text: ".",
+                    text: " will be deactivated.",
                     style: StyleData.textStyle,
                   ),
                 ],

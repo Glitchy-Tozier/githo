@@ -37,6 +37,7 @@ class StepToDo extends StatelessWidget {
       FatDivider(
         color: stepColor,
       ),
+      // The following monstrosity is the title.
       Padding(
         padding: StyleData.screenPadding * 0.75,
         child: Material(

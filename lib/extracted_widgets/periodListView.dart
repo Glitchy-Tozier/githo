@@ -29,6 +29,7 @@ class PeriodListView extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Widget> listViewChildren = [];
     double cardMarginRL = 6;
+    int activeTrainingIndex = 9876543210;
 
     for (int i = 0; i < trainingPeriod.trainings.length; i++) {
       final Training training = trainingPeriod.trainings[i];
@@ -104,7 +105,6 @@ class PeriodListView extends StatelessWidget {
           child = const Icon(Icons.lock_clock);
         }
       } else if (trainingPeriod.status == "active") {
-        textSize *= 1.3;
         cardWidth *= 1.3;
         cardHeight *= 1.3;
         cardMarginRL *= 1.3;
@@ -114,7 +114,7 @@ class PeriodListView extends StatelessWidget {
             child = Text(
               "${training.doneReps}/${training.requiredReps}",
               style: TextStyle(
-                fontSize: textSize * 1.3,
+                fontSize: textSize * 1.3 * 1.3,
                 color: Colors.black,
               ),
             );
@@ -123,7 +123,7 @@ class PeriodListView extends StatelessWidget {
             child = Text(
               "${training.doneReps}/${training.requiredReps}",
               style: TextStyle(
-                fontSize: textSize * 1.3,
+                fontSize: textSize * 1.3 * 1.3,
                 color: Colors.black,
               ),
             );
@@ -132,12 +132,14 @@ class PeriodListView extends StatelessWidget {
             child = Text(
               "Skipped",
               style: TextStyle(
-                fontSize: textSize * 0.9,
+                fontSize: textSize * 0.9 * 1.3,
                 color: Colors.black,
               ),
             );
           }
         } else if (training.isNow) {
+          activeTrainingIndex = i;
+
           key = globalKey;
           cardWidth *= 1.3;
           cardHeight *= 1.3;
@@ -146,7 +148,7 @@ class PeriodListView extends StatelessWidget {
               "Start training",
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: textSize,
+                fontSize: textSize * 1.3,
                 color: Colors.white,
               ),
             );
@@ -196,7 +198,21 @@ class PeriodListView extends StatelessWidget {
             }
           }
         } else {
-          child = const Icon(Icons.lock_clock);
+          if (i == activeTrainingIndex + 1) {
+            final String remainingTime = getDurationDiff(
+              DateTime.now(),
+              training.startingDate,
+            );
+            child = Text(
+              "Starting in\n$remainingTime",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: textSize,
+              ),
+            );
+          } else {
+            child = const Icon(Icons.lock_clock);
+          }
           color = Colors.orange;
         }
       } else {
