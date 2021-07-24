@@ -65,7 +65,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               title: "Define gradual steps",
               body: "Move closer towards your final habit",
               image: const BorderedImage(
-                  "assets/introduction_screen_images/defineSteps.png"),
+                  "assets/introduction_screen_images/defineSteps.jpeg"),
               decoration: pageDecoration,
             ),
             PageViewModel(
