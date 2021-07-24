@@ -70,7 +70,7 @@ class _HabitListState extends State<HabitList> {
                   const <Widget>[
                     Padding(
                       padding: StyleData.screenPadding,
-                      child: ScreenTitle("List of habits"),
+                      child: ScreenTitle("Habits"),
                     ),
                     FatDivider(),
                   ],
@@ -114,7 +114,7 @@ class _HabitListState extends State<HabitList> {
                           }
 
                           return ButtonListItem(
-                            text: habitPlan.goal,
+                            text: habitPlan.habit,
                             onPressed: () {
                               Navigator.push(
                                 context,

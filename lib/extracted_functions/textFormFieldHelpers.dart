@@ -16,7 +16,7 @@ InputDecoration inputDecoration(final String text) {
 String? checkIfEmpty(final String? input, final String variableText) {
   // Check if the TextFormField is empty.
   if (input!.trim().isEmpty) {
-    return "Please fill out $variableText";
+    return "Please fill in $variableText";
   } else {
     return null;
   }

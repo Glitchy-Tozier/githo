@@ -107,18 +107,20 @@ class _EditHabitState extends State<EditHabit> {
                   children: <Widget>[
                     const Padding(
                       padding: StyleData.screenPadding,
-                      child: Heading("Goal"),
+                      child: Heading("Final habit"),
                     ),
                     Padding(
                       padding: StyleData.screenPadding,
                       child: TextFormField(
-                        decoration: inputDecoration("Your goal"),
-                        validator: (input) =>
-                            checkIfEmpty(input.toString().trim(), "your goal"),
-                        initialValue: habitPlan.goal,
+                        decoration: inputDecoration("The final habit"),
+                        validator: (input) => checkIfEmpty(
+                          input.toString().trim(),
+                          "your final habit",
+                        ),
+                        initialValue: habitPlan.habit,
                         textInputAction: TextInputAction.next,
                         onSaved: (input) =>
-                            habitPlan.goal = input.toString().trim(),
+                            habitPlan.habit = input.toString().trim(),
                       ),
                     ),
                     const ThinDivider(),
@@ -155,7 +157,7 @@ class _EditHabitState extends State<EditHabit> {
                     // Create the step-form-fields
                     const Padding(
                       padding: StyleData.screenPadding,
-                      child: Heading("Steps towards your goal"),
+                      child: Heading("Steps towards the habit"),
                     ),
                     Padding(
                       padding: StyleData.screenPadding,

@@ -5,7 +5,7 @@ class DefaultHabitPlans {
     HabitPlan(
       isActive: false,
       fullyCompleted: false,
-      goal: "Consistently go jogging",
+      habit: "Consistently go jogging",
       requiredReps: 1,
       steps: const <String>[
         "Dress up and step outside on the street. Then go back and do whatever you want to do.",
@@ -26,7 +26,7 @@ class DefaultHabitPlans {
     HabitPlan(
       isActive: false,
       fullyCompleted: false,
-      goal: "Talk to anybody, anytime",
+      habit: "Talk to anybody, anytime",
       requiredReps: 2,
       steps: const <String>[
         "Make eye-contact with a stranger (no matter how short)",
@@ -51,7 +51,7 @@ class DefaultHabitPlans {
     HabitPlan(
       isActive: false,
       fullyCompleted: false,
-      goal: "Testing without errors",
+      habit: "Testing without errors",
       requiredReps: 1,
       steps: const <String>[
         "This is step oneeey",
@@ -72,7 +72,7 @@ class DefaultHabitPlans {
     HabitPlan(
       isActive: false,
       fullyCompleted: false,
-      goal: "Testing without (t)errors",
+      habit: "Testing without (t)errors",
       requiredReps: 3,
       steps: const <String>[
         "This is step oneeey",

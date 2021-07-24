@@ -36,6 +36,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
 
+    if (DataShortcut.testing) {
+      TimeHelper.instance.setTime(DateTime.now());
+    }
     _reloadScreen();
   }
 
@@ -95,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: const <Widget>[
                         Heading("No habit-plan is active."),
                         Text(
-                          "Click on the settings-icon to add or activate your habit-plan",
+                          "Click on the orange button to add or activate your habit-plan",
                           style: StyleData.textStyle,
                         ),
                       ],
@@ -103,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 } else {
                   // If connection is done and there is an active habitPlan:
-                  final bool somethingChanged = progressData.updateTime();
+                  final bool somethingChanged = progressData.updateSelf();
                   if (somethingChanged) {
                     _scrollToActiveTraining();
 
@@ -127,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: <Widget>[
                       Padding(
                         padding: StyleData.screenPadding,
-                        child: ScreenTitle(progressData.goal),
+                        child: ScreenTitle(progressData.habit),
                       ),
                       Column(
                         // This column exists to make sure all trainings are being cached. (= to disable lazyloading)
@@ -182,9 +185,9 @@ class _HomeScreenState extends State<HomeScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             FloatingActionButton(
-              tooltip: "Go to settings",
+              tooltip: "View habit-plans",
               child: const Icon(
-                Icons.settings,
+                Icons.list,
                 color: Colors.white,
               ),
               backgroundColor: Colors.orange,

@@ -18,6 +18,7 @@ class _FirstScreenState extends State<FirstScreen> {
   @override
   void initState() {
     super.initState();
+
     // Necessary if progressData is being created from scratch.
     if (DataShortcut.testing) {
       TimeHelper.instance.setTime(DateTime.now());

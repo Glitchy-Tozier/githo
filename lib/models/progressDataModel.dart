@@ -16,7 +16,7 @@ class ProgressData {
   bool isActive;
   bool fullyCompleted;
   DateTime currentStartingDate;
-  String goal;
+  String habit;
   List<StepClass> steps;
 
   // Constructors
@@ -25,7 +25,7 @@ class ProgressData {
     required this.isActive,
     required this.fullyCompleted,
     required this.currentStartingDate,
-    required this.goal,
+    required this.habit,
     required this.steps,
   });
 
@@ -35,7 +35,7 @@ class ProgressData {
       isActive: false,
       fullyCompleted: false,
       currentStartingDate: TimeHelper.instance.getTime,
-      goal: "",
+      habit: "",
       steps: const [],
     );
   }
@@ -49,7 +49,7 @@ class ProgressData {
     this.isActive = true;
     this.fullyCompleted = habitPlan.fullyCompleted;
     this.currentStartingDate = startingDate;
-    this.goal = habitPlan.goal;
+    this.habit = habitPlan.habit;
     this.steps = [];
     for (int i = 0; i < habitPlan.steps.length; i++) {
       this.steps.add(
@@ -163,7 +163,7 @@ class ProgressData {
         Duration(hours: this.trainingPeriodDurationInHours);
 
     while ((this.currentStartingDate.add(periodDuration)).isBefore(now)) {
-      print("Moved date by one week.");
+      print("Moved date one trainingPeriod.");
       this.currentStartingDate = this.currentStartingDate.add(periodDuration);
     }
   }
@@ -200,7 +200,7 @@ class ProgressData {
     }
   }
 
-  Map<String, int> _resetPeriodValues(
+  Map<String, int> _penalizeFailure(
     final int failedPeriods,
     final Map<String, dynamic> lastActiveMap,
   ) {
@@ -221,18 +221,19 @@ class ProgressData {
       } else {
         // If this was the last loop, return the current trainingPeriod's position
 
-        final int newStartingStepIdx = currentStepIdx;
-        final int newStartingPeriodIdx;
+        final int newCurrentStepIdx = currentStepIdx;
+        final int newCurrentPeriodIdx;
         if (previouslyActivePeriodIdx == 0) {
-          newStartingPeriodIdx = 0;
+          newCurrentPeriodIdx = 0;
         } else {
-          newStartingPeriodIdx = previouslyActivePeriodIdx - failedPeriods;
+          newCurrentPeriodIdx = previouslyActivePeriodIdx - failedPeriods;
         }
 
-        return {
-          "step": newStartingStepIdx,
-          "trainingPeriod": newStartingPeriodIdx,
+        final Map<String, int> newCurrentPosition = {
+          "step": newCurrentStepIdx,
+          "trainingPeriod": newCurrentPeriodIdx,
         };
+        return newCurrentPosition;
       }
     }
   }
@@ -287,13 +288,13 @@ class ProgressData {
         }
 
         final Map<String, int> nextPeriodPosition;
-        nextPeriodPosition = _resetPeriodValues(failedPeriods, lastActiveMap);
+        nextPeriodPosition = _penalizeFailure(failedPeriods, lastActiveMap);
         _setTrainingDates(nextPeriodPosition);
       }
     }
   }
 
-  void _moveToCurrentTraining() {
+  void _activateCurrentTraining() {
     final Map<String, dynamic> currentData =
         _getDataByDate(TimeHelper.instance.getTime)!;
 
@@ -304,20 +305,21 @@ class ProgressData {
     currentPeriod.status = "active";
   }
 
-  bool updateTime() {
+  bool updateSelf() {
     final bool somethingChanged;
 
     if (this._hasStarted && this._inNewTraining) {
       if (this.activeData == null) {
         // If this is the first training we ever arrive in
-
         _activateStartingPeriod();
       }
+
       // Analyze what happened since last time opening the app
       _analyzePassedTime();
 
       // Activate the next Training/TrainingPeriod
-      _moveToCurrentTraining();
+      _activateCurrentTraining();
+
       // Save all changes
       DatabaseHelper.instance.updateProgressData(this);
 
@@ -341,7 +343,7 @@ class ProgressData {
     map["isActive"] = isActive.boolToInt();
     map["fullyCompleted"] = fullyCompleted.boolToInt();
     map["currentStartingDate"] = currentStartingDate.toString();
-    map["goal"] = goal;
+    map["goal"] = habit;
     map["steps"] = jsonEncode(mapList);
     return map;
   }
@@ -363,7 +365,7 @@ class ProgressData {
       isActive: (map["isActive"] as int).intToBool(),
       fullyCompleted: (map["fullyCompleted"] as int).intToBool(),
       currentStartingDate: DateTime.parse(map["currentStartingDate"]),
-      goal: map["goal"],
+      habit: map["goal"],
       steps: jsonToStepList(map["steps"]),
     );
   }

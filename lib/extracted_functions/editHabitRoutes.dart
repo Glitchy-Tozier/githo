@@ -14,7 +14,7 @@ void addNewHabit(
     isActive: false,
     fullyCompleted: false,
     // TextFormFields:
-    goal: "",
+    habit: "",
     requiredReps: 1,
     steps: <String>[""],
     comments: <String>[""],

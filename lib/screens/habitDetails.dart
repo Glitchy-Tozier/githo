@@ -66,7 +66,9 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
 
     final requiredReps = this.habitPlan.requiredReps;
     final int trainingTimeIndex = this.habitPlan.trainingTimeIndex.toInt();
-    final String timeFrame = DataShortcut.timeFrames[trainingTimeIndex];
+    final String trainingTimeFrame = DataShortcut.timeFrames[trainingTimeIndex];
+    final String periodTimeFrame =
+        DataShortcut.timeFrames[trainingTimeIndex + 1];
     final String timeString;
     if (requiredReps == 1) {
       timeString = "once";
@@ -78,7 +80,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
     widgetList.addAll([
       CustomListTile(
           leadingWidget: BulletPoint(),
-          title: "Perform $timeString a $timeFrame"),
+          title: "Perform $timeString a $trainingTimeFrame"),
       const SizedBox(
         height: StyleData.listRowSpacing,
       ),
@@ -91,7 +93,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
       CustomListTile(
           leadingWidget: BulletPoint(),
           title:
-              "$currentReps out of $maxReps ${timeFrame}s must be successful in order to advance"),
+              "$currentReps out of $maxReps ${trainingTimeFrame}s must be successful in order to advance"),
       SizedBox(
         height: StyleData.listRowSpacing,
       ),
@@ -99,12 +101,12 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
 
     final int requiredTrainingPeriods =
         this.habitPlan.requiredTrainingPeriods.toInt();
-    final String weekEnder = (requiredTrainingPeriods == 1) ? " is" : "s are";
+    final String periodEnder = (requiredTrainingPeriods == 1) ? " is" : "s are";
     widgetList.addAll([
       CustomListTile(
           leadingWidget: BulletPoint(),
           title:
-              "$requiredTrainingPeriods successful week$weekEnder required to progress to the next step"),
+              "$requiredTrainingPeriods successful $periodTimeFrame$periodEnder required to progress to the next step"),
       const SizedBox(
         height: StyleData.listRowSpacing,
       ),
@@ -189,7 +191,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
           children: [
             Padding(
               padding: StyleData.screenPadding,
-              child: ScreenTitle(habitPlan.goal),
+              child: ScreenTitle(habitPlan.habit),
             ),
             const FatDivider(),
             Padding(

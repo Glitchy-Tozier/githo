@@ -85,7 +85,7 @@ class ActivationFAB extends StatelessWidget {
                     style: StyleData.textStyle,
                   ),
                   TextSpan(
-                    text: "(Habit: ${progressData.goal})",
+                    text: "(Habit: ${progressData.habit})",
                     style: StyleData.boldTextStyle,
                   ),
                   const TextSpan(

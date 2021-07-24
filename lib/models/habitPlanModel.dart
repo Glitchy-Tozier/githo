@@ -5,7 +5,7 @@ class HabitPlan {
   int? id;
   bool isActive;
   bool fullyCompleted;
-  String goal;
+  String habit;
   int requiredReps;
   List<String> steps;
   List<String> comments;
@@ -17,7 +17,7 @@ class HabitPlan {
   HabitPlan({
     required this.isActive,
     required this.fullyCompleted,
-    required this.goal,
+    required this.habit,
     required this.requiredReps,
     required this.steps,
     required this.comments,
@@ -31,7 +31,7 @@ class HabitPlan {
     required this.id,
     required this.isActive,
     required this.fullyCompleted,
-    required this.goal,
+    required this.habit,
     required this.requiredReps,
     required this.steps,
     required this.comments,
@@ -49,7 +49,7 @@ class HabitPlan {
 
     map["isActive"] = isActive.boolToInt();
     map["fullyCompleted"] = fullyCompleted.boolToInt();
-    map["goal"] = goal;
+    map["goal"] = habit;
     map["requiredReps"] = requiredReps;
     map["steps"] = jsonEncode(steps);
     map["comments"] = jsonEncode(comments);
@@ -76,7 +76,7 @@ class HabitPlan {
       id: map["id"],
       isActive: (map["isActive"] as int).intToBool(),
       fullyCompleted: (map["fullyCompleted"] as int).intToBool(),
-      goal: map["goal"],
+      habit: map["goal"],
       requiredReps: map["requiredReps"],
       steps: jsonToStringList(map["steps"]),
       comments: jsonToStringList(map["comments"]),

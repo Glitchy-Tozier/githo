@@ -6,8 +6,8 @@ import 'package:githo/models/habitPlanModel.dart';
 import 'package:githo/models/used_classes/trainingPeriod.dart';
 
 class StepClass {
-  late int index; // first: int 0
-  late int number; // first: int 1
+  late int index;
+  late int number; // = index + 1
   late String text;
   late int durationInHours;
   late List<TrainingPeriod> trainingPeriods;
