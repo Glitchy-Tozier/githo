@@ -55,7 +55,7 @@ class DatabaseHelper {
 
   Future<Database> _initDb() async {
     final Directory dir = await getApplicationDocumentsDirectory();
-    final String path = dir.path + "/HabitPlanDatabase.db";
+    final String path = dir.path + "/githoDatabase.db";
 
     var habitPlanDb;
     try {

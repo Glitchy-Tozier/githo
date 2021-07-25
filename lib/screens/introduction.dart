@@ -78,9 +78,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           ],
           onDone: () => _onIntroEnd(context),
           next: const Icon(Icons.arrow_forward),
-          done: const Text(
+          done: Text(
             'Done',
-            style: TextStyle(fontWeight: FontWeight.w600),
+            style: coloredBoldTextStyle(Theme.of(context).primaryColor),
           ),
           curve: Curves.fastLinearToSlowEaseIn,
           controlsMargin: const EdgeInsets.all(16),
