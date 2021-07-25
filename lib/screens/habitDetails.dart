@@ -227,6 +227,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             FloatingActionButton(
+              tooltip: "Delete habit-plan",
               child: const Icon(
                 Icons.delete,
                 color: Colors.white,
@@ -252,6 +253,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
               },
             ),
             FloatingActionButton(
+              tooltip: "Edit",
               child: const Icon(
                 Icons.edit,
                 color: Colors.white,

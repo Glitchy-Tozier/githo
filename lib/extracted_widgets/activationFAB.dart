@@ -99,6 +99,13 @@ class ActivationFAB extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String tooltip;
+    if (habitPlan.isActive == true) {
+      tooltip = "Deactivate habit-plan";
+    } else {
+      tooltip = "Activate habit-plan";
+    }
+
     final Icon child;
     if (habitPlan.isActive == true) {
       child = const Icon(
@@ -120,6 +127,7 @@ class ActivationFAB extends StatelessWidget {
     }
 
     return FloatingActionButton(
+      tooltip: tooltip,
       child: child,
       backgroundColor: color,
       onPressed: () => onClickFunc(context),

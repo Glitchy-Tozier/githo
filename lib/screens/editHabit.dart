@@ -284,6 +284,7 @@ class _EditHabitState extends State<EditHabit> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        tooltip: "Save",
         backgroundColor: Colors.green,
         child: const Icon(
           Icons.save,
