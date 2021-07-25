@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:githo/extracted_data/dataShortcut.dart';
 
 import 'package:githo/extracted_widgets/firstScreen.dart';
 import 'package:githo/extracted_functions/adaptDatabaseToOS.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.pink,
       ),
       home: FirstScreen(),
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: DataShortcut.testing,
     );
   }
 }

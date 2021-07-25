@@ -30,5 +30,5 @@ class DataShortcut {
     24 * 7 * 4,
   ];
 
-  static const testing = true;
+  static const bool testing = false;
 }
