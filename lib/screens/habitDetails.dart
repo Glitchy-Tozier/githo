@@ -253,7 +253,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
               },
             ),
             FloatingActionButton(
-              tooltip: "Edit",
+              tooltip: "Edit habit-plan",
               child: const Icon(
                 Icons.edit,
                 color: Colors.white,
