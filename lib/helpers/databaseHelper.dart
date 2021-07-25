@@ -11,10 +11,10 @@ import 'package:githo/models/progressDataModel.dart';
 import 'package:githo/models/settingsModel.dart';
 
 class DatabaseHelper {
-  static final DatabaseHelper instance = DatabaseHelper._instance();
+  static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
   static Database? _db;
 
-  DatabaseHelper._instance();
+  DatabaseHelper._privateConstructor();
 
   static const String dbVersionTable = "dbVersionTable";
   static const String colVersion = "version";

@@ -2,10 +2,10 @@ import 'package:githo/extracted_data/dataShortcut.dart';
 import 'package:githo/models/progressDataModel.dart';
 
 class TimeHelper {
-  static final TimeHelper instance = TimeHelper._instance();
+  static final TimeHelper instance = TimeHelper._privateConstructor();
   static late DateTime _testingTime;
 
-  TimeHelper._instance();
+  TimeHelper._privateConstructor();
 
   void setTime(final DateTime dateTime) {
     _testingTime = dateTime;
