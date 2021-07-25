@@ -6,7 +6,6 @@ import 'package:githo/extracted_widgets/alert_dialogs/confirmStartingTime.dart';
 import 'package:githo/helpers/databaseHelper.dart';
 import 'package:githo/models/habitPlanModel.dart';
 import 'package:githo/models/progressDataModel.dart';
-import 'package:githo/screens/homeScreen.dart';
 
 class ActivationFAB extends StatelessWidget {
   final HabitPlan habitPlan;
@@ -27,7 +26,7 @@ class ActivationFAB extends StatelessWidget {
         await DatabaseHelper.instance.updateProgressData(progressData);
 
         // Update previous screens and close screen
-        updateFunction(habitPlan);
+        updateFunction(this.habitPlan);
       }
 
       showDialog(
@@ -46,18 +45,11 @@ class ActivationFAB extends StatelessWidget {
 
       void showStrartingTimePicker() async {
         void popToHome(final HabitPlan habitPlan) {
+          // Update homescreen
+          updateFunction(habitPlan);
           // Move to homescreen
-          // For some reason, this also results in the homescreen updating itself automatically.
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) {
-                return HomeScreen();
-              },
-              settings: const RouteSettings(
-                name: '/home',
-              ),
-            ),
-          );
+          Navigator.pop(context);
+          Navigator.pop(context);
         }
 
         showDialog(
