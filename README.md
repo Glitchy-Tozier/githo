@@ -7,12 +7,12 @@ Aquiring habits that stick can be difficult. Githo helps you by letting you grad
 ## Example:
 ### Final Habit:
 Go jogging every morning
-## Steps:
+### Steps:
 Every morning...
-**Week 1:** Just step outside on the street, then return home.
-**Week 2:** Take a short walk.
-**Week 3:** Take a longer walk 
-**Week 4:** Take a longer walk and add short jogging-segments into the mix
-**Week 5:** Go jogging
+1. Week: Just step outside on the street, then return home.
+2. Week: Take a short walk.
+3. Week: Take a longer walk 
+4. Week: Take a longer walk and add short jogging-segments into the mix
+5. Week: Go jogging
 
-Such a gradual acquisition **reduces the physical/mental strain** and **helps you create a routine way arriving at the actual habit, strengthening it**.
+Such a gradual acquisition **reduces the physical/mental strain** and **helps you create a routine long before arriving at the final habit**.
