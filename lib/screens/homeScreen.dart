@@ -248,7 +248,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     final Function onClickFunc;
 
                     if (activeMap == null) {
-                      icon = Icons.timelapse;
+                      icon = Icons.lock_clock;
 
                       onClickFunc = () {
                         final Map<String, dynamic> waitingMap =
@@ -323,7 +323,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       };
                     }
                     return FloatingActionButton(
-                      tooltip: "Mark step as done",
+                      tooltip: "Mark training as done",
                       backgroundColor: Colors.green,
                       child: Icon(
                         icon,
