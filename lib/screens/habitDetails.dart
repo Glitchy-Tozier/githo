@@ -69,18 +69,24 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
     final String trainingTimeFrame = DataShortcut.timeFrames[trainingTimeIndex];
     final String periodTimeFrame =
         DataShortcut.timeFrames[trainingTimeIndex + 1];
-    final String timeString;
+    final String amountString;
     if (requiredReps == 1) {
-      timeString = "once";
+      amountString = "once";
     } else if (requiredReps == 2) {
-      timeString = "twice";
+      amountString = "twice";
     } else {
-      timeString = "$requiredReps times";
+      amountString = "$requiredReps times";
+    }
+    final String timeFrameStr;
+    if (trainingTimeFrame == "hour") {
+      timeFrameStr = "an $trainingTimeFrame";
+    } else {
+      timeFrameStr = "a $trainingTimeFrame";
     }
     widgetList.addAll([
       CustomListTile(
           leadingWidget: BulletPoint(),
-          title: "Perform $timeString a $trainingTimeFrame"),
+          title: "Perform $amountString $timeFrameStr"),
       const SizedBox(
         height: StyleData.listRowSpacing,
       ),
