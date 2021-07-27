@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 import 'package:githo/extracted_data/dataShortcut.dart';
 import 'package:githo/extracted_data/styleData.dart';
@@ -18,6 +19,7 @@ import 'package:githo/helpers/timeHelper.dart';
 import 'package:githo/models/progressDataModel.dart';
 import 'package:githo/models/used_classes/step.dart';
 import 'package:githo/models/used_classes/training.dart';
+import 'package:githo/screens/appInfo.dart';
 
 import 'package:githo/screens/habitList.dart';
 
@@ -184,24 +186,54 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            FloatingActionButton(
-              tooltip: "View habit-plans",
-              child: const Icon(
-                Icons.list,
-                color: Colors.white,
-              ),
+            SpeedDial(
               backgroundColor: Colors.orange,
-              heroTag: null,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HabitList(
-                      updateFunction: _reloadScreen,
-                    ),
-                  ),
-                );
-              },
+              icon: Icons.settings,
+              activeIcon: Icons.close,
+              spacing: 4,
+              spaceBetweenChildren: 4,
+
+              /// If false, backgroundOverlay will not be rendered.
+              renderOverlay: true,
+              overlayColor: Colors.black,
+              overlayOpacity: 0.5,
+
+              tooltip: 'Show options',
+              heroTag: 'speed-dial-hero-tag',
+              isOpenOnStart: false,
+              animationSpeed: 200,
+              switchLabelPosition: true,
+              // childMargin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              children: [
+                SpeedDialChild(
+                  child: const Icon(Icons.info),
+                  label: 'About',
+                  labelStyle: StyleData.textStyle,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AppInfo(),
+                      ),
+                    );
+                  },
+                ),
+                SpeedDialChild(
+                  child: const Icon(Icons.list),
+                  label: 'List of Habits',
+                  labelStyle: StyleData.textStyle,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HabitList(
+                          updateFunction: _reloadScreen,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
             FutureBuilder(
               future: this._progressData,
