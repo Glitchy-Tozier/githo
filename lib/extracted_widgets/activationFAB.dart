@@ -25,7 +25,7 @@ class ActivationFAB extends StatelessWidget {
         final ProgressData progressData = ProgressData.emptyData();
         await DatabaseHelper.instance.updateProgressData(progressData);
 
-        // Update previous screens and close screen
+        // Update previous screens
         updateFunction(this.habitPlan);
       }
 
@@ -34,10 +34,13 @@ class ActivationFAB extends StatelessWidget {
         builder: (BuildContext buildContext) => ConfirmActivationChange(
           title: "Confirm Deactivation",
           content: const Text(
-            "All previous progress will be lost.",
+            "All progress will be lost.",
             style: StyleData.textStyle,
           ),
-          confirmationFunc: deactivateHabitPlan,
+          confirmationFunc: () {
+            deactivateHabitPlan();
+            Navigator.pop(context); // Pop habit-details
+          },
         ),
       );
     } else {
@@ -48,6 +51,7 @@ class ActivationFAB extends StatelessWidget {
           // Update homescreen
           updateFunction(habitPlan);
           // Move to homescreen
+          Navigator.pop(context); // Pop habit-details
           Navigator.pop(context); // Pop habit-list
         }
 

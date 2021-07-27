@@ -55,7 +55,6 @@ class ConfirmActivationChange extends StatelessWidget {
               ),
               onPressed: () {
                 Navigator.pop(context); // Pop dialog
-                Navigator.pop(context); // Pop habit-details-screen
                 confirmationFunc();
               },
             ),

@@ -68,7 +68,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
     return DateFormat("EEEE, dd.MM.yyyy").format(dateTime);
   }
 
-  void _updateDataBase(
+  Future<HabitPlan> _updateDataBase(
     final HabitPlan habitPlan,
     final DateTime startingDate,
     final int startingStep,
@@ -97,7 +97,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
     habitPlan.lastChanged = DateTime.now();
     await DatabaseHelper.instance.updateHabitPlan(habitPlan);
 
-    this.updateFunction(habitPlan);
+    return habitPlan;
   }
 
   @override
@@ -219,16 +219,18 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
               ),
-              onPressed: () {
+              onPressed: () async {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
 
-                  Navigator.pop(context);
-                  _updateDataBase(
+                  Navigator.pop(context); // Pop dialog
+
+                  final HabitPlan updatedHabitPlan = await _updateDataBase(
                     this.habitPlan,
                     this.startingDate,
                     this.startingStep,
                   );
+                  this.updateFunction(updatedHabitPlan);
                 }
               },
             ),
