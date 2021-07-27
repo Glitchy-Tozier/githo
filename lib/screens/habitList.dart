@@ -100,42 +100,42 @@ class _HabitListState extends State<HabitList> {
                       child: ListView.builder(
                         padding: StyleData.screenPadding,
                         physics: const BouncingScrollPhysics(),
-                        itemCount: orderedHabitPlans.length,
+                        shrinkWrap: true,
+                        itemCount: orderedHabitPlans.length + 1,
                         itemBuilder: (BuildContext buildContex, int i) {
-                          final HabitPlan habitPlan = orderedHabitPlans[i];
-
-                          final Color color;
-                          if (habitPlan.fullyCompleted) {
-                            color = Colors.amberAccent;
-                          } else if (habitPlan.isActive) {
-                            color = Colors.green;
-                          } else {
-                            color = Theme.of(context).buttonColor;
-                          }
-
-                          return ButtonListItem(
-                            text: habitPlan.habit,
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SingleHabitDisplay(
-                                    updateFunction: _updateLoadedScreens,
-                                    habitPlan: habitPlan,
+                          if (i < orderedHabitPlans.length) {
+                            final HabitPlan habitPlan = orderedHabitPlans[i];
+                            final Color color;
+                            if (habitPlan.fullyCompleted) {
+                              color = Colors.amberAccent;
+                            } else if (habitPlan.isActive) {
+                              color = Colors.green;
+                            } else {
+                              color = Theme.of(context).buttonColor;
+                            }
+                            return ButtonListItem(
+                              text: habitPlan.habit,
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SingleHabitDisplay(
+                                      updateFunction: _updateLoadedScreens,
+                                      habitPlan: habitPlan,
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
-                            color: color,
-                          );
+                                );
+                              },
+                              color: color,
+                            );
+                          } else {
+                            return ScreenEndingSpacer();
+                          }
                         },
                       ),
                     ),
                   );
                 }
-                columnItems.add(
-                  ScreenEndingSpacer(),
-                );
                 return Column(
                   children: columnItems,
                   mainAxisAlignment: MainAxisAlignment.start,
