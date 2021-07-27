@@ -36,14 +36,14 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
   @override
   void initState() {
     super.initState();
-    this.startingDate = _getDefaultStartingTime(this.habitPlan);
+    this.startingDate = _getDefaultStartingTime();
   }
 
-  DateTime _getDefaultStartingTime(final HabitPlan habitPlan) {
+  DateTime _getDefaultStartingTime() {
     final DateTime now = DateTime.now();
     final DateTime startingDate;
 
-    switch (habitPlan.trainingTimeIndex) {
+    switch (this.habitPlan.trainingTimeIndex) {
       case 0:
         // start on the next day, 0am
         startingDate = DateTime(
@@ -68,8 +68,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
     return DateFormat("EEEE, dd.MM.yyyy").format(dateTime);
   }
 
-  Future<HabitPlan> _updateDataBase(
-    final HabitPlan habitPlan,
+  void _updateDataBase(
     final DateTime startingDate,
     final int startingStep,
   ) async {
@@ -86,18 +85,16 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
     final ProgressData progressData =
         await DatabaseHelper.instance.getProgressData();
     progressData.adaptToHabitPlan(
-      habitPlan: habitPlan,
+      habitPlan: this.habitPlan,
       startingDate: startingDate,
       startingStepNr: startingStep,
     );
     await DatabaseHelper.instance.updateProgressData(progressData);
 
     // Update the plan you're looking at to be active
-    habitPlan.isActive = true;
-    habitPlan.lastChanged = DateTime.now();
-    await DatabaseHelper.instance.updateHabitPlan(habitPlan);
-
-    return habitPlan;
+    this.habitPlan.isActive = true;
+    this.habitPlan.lastChanged = DateTime.now();
+    await DatabaseHelper.instance.updateHabitPlan(this.habitPlan);
   }
 
   @override
@@ -159,7 +156,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
                       },
                     ),
                     const SizedBox(height: 10),
-                    (habitPlan.steps.length > 1)
+                    (this.habitPlan.steps.length > 1)
                         ? TextFormField(
                             initialValue: "1",
                             textAlign: TextAlign.end,
@@ -170,10 +167,10 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
                             decoration: inputDecoration("Starting step"),
                             validator: (input) => validateNumberField(
                               input: input,
-                              maxInput: habitPlan.steps.length,
+                              maxInput: this.habitPlan.steps.length,
                               variableText: "the starting step",
                               onEmptyText:
-                                  "Please insert a number between 1 and ${habitPlan.steps.length}",
+                                  "Please insert a number between 1 and ${this.habitPlan.steps.length}",
                             ),
                             onSaved: (input) => this.startingStep =
                                 int.parse(input.toString().trim()),
@@ -225,12 +222,11 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
 
                   Navigator.pop(context); // Pop dialog
 
-                  final HabitPlan updatedHabitPlan = await _updateDataBase(
-                    this.habitPlan,
+                  _updateDataBase(
                     this.startingDate,
                     this.startingStep,
                   );
-                  this.updateFunction(updatedHabitPlan);
+                  this.updateFunction(this.habitPlan);
                 }
               },
             ),
