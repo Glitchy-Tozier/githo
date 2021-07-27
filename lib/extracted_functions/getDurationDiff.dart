@@ -8,7 +8,7 @@ String getDurationDiff(final DateTime dateTime1, final DateTime dateTime2) {
   } else if (difference.inHours >= 1) {
     return "${difference.inHours} h";
   } else if (difference.inMinutes >= 1) {
-    return "${difference.inDays} min";
+    return "${difference.inMinutes} min";
   } else {
     return "${difference.inSeconds} s";
   }

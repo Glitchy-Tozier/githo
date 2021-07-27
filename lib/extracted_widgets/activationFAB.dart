@@ -48,7 +48,6 @@ class ActivationFAB extends StatelessWidget {
           // Update homescreen
           updateFunction(habitPlan);
           // Move to homescreen
-          Navigator.pop(context); // Pop habit-details
           Navigator.pop(context); // Pop habit-list
         }
 

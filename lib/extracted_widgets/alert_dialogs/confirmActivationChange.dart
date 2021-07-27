@@ -54,7 +54,8 @@ class ConfirmActivationChange extends StatelessWidget {
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
               ),
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.pop(context); // Pop dialog
+                Navigator.pop(context); // Pop habit-details-screen
                 confirmationFunc();
               },
             ),
