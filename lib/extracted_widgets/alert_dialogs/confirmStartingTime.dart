@@ -26,13 +26,11 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
   _ConfirmStartingTimeState(this.habitPlan, this.updateFunction);
 
   final _formKey = GlobalKey<FormState>();
-  bool _expandSettings = false;
 
-  late DateTime startingDate;
   String startingPeriod = "The first training";
+  late DateTime startingDate;
   late String startingDateString;
   final TextEditingController dateController = TextEditingController();
-
   int startingStep = 1;
 
   @override
@@ -118,63 +116,51 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                "The first training will start at $startingDateString",
-                style: StyleData.textStyle,
+              RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "$startingPeriod will ",
+                      style: StyleData.textStyle,
+                    ),
+                    TextSpan(
+                      text: "start on $startingDateString",
+                      style: StyleData.boldTextStyle,
+                    ),
+                  ],
+                ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Form(
                 key: _formKey,
-                child: ExpansionPanelList(
-                  //expandedHeaderPadding: EdgeInsets.all(0),
-                  elevation: 0,
-                  expansionCallback: (int index, bool isExpanded) {
-                    setState(() {
-                      _expandSettings = !_expandSettings;
-                    });
-                  },
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    ExpansionPanel(
-                      headerBuilder: (BuildContext context, bool isExpanded) {
-                        return ListTile(
-                          title: Text(
-                            "Extended Settings",
-                            textAlign: TextAlign.left,
-                            style: StyleData.textStyle,
-                          ),
+                    TextFormField(
+                      controller: this.dateController,
+                      decoration: inputDecoration("Starting date"),
+                      readOnly: true,
+                      onTap: () {
+                        final DateTime now = DateTime.now();
+                        showDatePicker(
+                          context: context,
+                          firstDate: DateTime.now().subtract(Duration(days: 6)),
+                          initialDate: this.startingDate,
+                          lastDate: DateTime(now.year + 2000),
+                        ).then(
+                          (newStartingDate) {
+                            if (newStartingDate != null) {
+                              setState(() {
+                                this.startingDate = newStartingDate;
+                              });
+                            }
+                          },
                         );
                       },
-                      canTapOnHeader: true,
-                      isExpanded: _expandSettings,
-                      body: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SizedBox(height: 4),
-                          TextFormField(
-                            controller: this.dateController,
-                            decoration: inputDecoration("Starting date"),
-                            readOnly: true,
-                            onTap: () {
-                              final DateTime now = DateTime.now();
-                              showDatePicker(
-                                context: context,
-                                firstDate:
-                                    DateTime(now.year, now.month, now.day),
-                                initialDate: this.startingDate,
-                                lastDate: DateTime(now.year + 2000),
-                              ).then(
-                                (newStartingDate) {
-                                  if (newStartingDate != null) {
-                                    setState(() {
-                                      this.startingDate = newStartingDate;
-                                    });
-                                  }
-                                },
-                              );
-                            },
-                          ),
-                          SizedBox(height: 10),
-                          TextFormField(
+                    ),
+                    const SizedBox(height: 10),
+                    (habitPlan.steps.length > 1)
+                        ? TextFormField(
                             initialValue: "1",
                             textAlign: TextAlign.end,
                             keyboardType: TextInputType.number,
@@ -189,12 +175,10 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
                               onEmptyText:
                                   "Please insert a number between 1 and ${habitPlan.steps.length}",
                             ),
-                            onSaved: (input) => startingStep =
+                            onSaved: (input) => this.startingStep =
                                 int.parse(input.toString().trim()),
-                          ),
-                        ],
-                      ),
-                    ),
+                          )
+                        : const SizedBox(),
                   ],
                 ),
               ),
