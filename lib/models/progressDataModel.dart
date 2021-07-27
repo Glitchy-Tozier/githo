@@ -238,7 +238,7 @@ class ProgressData {
     }
   }
 
-  _completeHabitPlan() async {
+  void _completeHabitPlan() async {
     final HabitPlan? habitPlan =
         await DatabaseHelper.instance.getHabitPlan(this.habitPlanId);
 
@@ -278,15 +278,17 @@ class ProgressData {
       _setNewStartingDate();
 
       final TrainingPeriod lastPeriod = this.steps.last.trainingPeriods.last;
-      if (failedPeriods < 0 && lastActivePeriod != lastPeriod) {
-        // lastActivePeriod != lastPeriod makes sure that we don't get an OutOfIndex-error when successfully completing the last trainingPeriod
+
+      if (lastActivePeriod.wasSuccessful) {
         lastActivePeriod.status = "completed";
-      } else {
+
         if (lastActivePeriod == lastPeriod) {
           this.fullyCompleted = true;
           _completeHabitPlan();
         }
+      }
 
+      if (failedPeriods >= 0 || lastActivePeriod == lastPeriod) {
         final Map<String, int> nextPeriodPosition;
         nextPeriodPosition = _penalizeFailure(failedPeriods, lastActiveMap);
         _setTrainingDates(nextPeriodPosition);
