@@ -25,9 +25,10 @@ void addNewHabit(
     lastChanged: DateTime.now(),
   );
 
-  void _onSaved(final HabitPlan habitPlan) async {
-    await DatabaseHelper.instance.insertHabitPlan(habitPlan);
-    updatePrevScreens();
+  void _onSaved(final HabitPlan habitPlan) {
+    DatabaseHelper.instance.insertHabitPlan(habitPlan).then(
+          (_) => updatePrevScreens(),
+        );
   }
 
   Navigator.push(

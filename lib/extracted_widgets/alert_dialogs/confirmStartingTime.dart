@@ -78,7 +78,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
     if (activeHabitPlanList.length > 0) {
       final HabitPlan oldHabitPlan = activeHabitPlanList[0];
       oldHabitPlan.isActive = false;
-      await DatabaseHelper.instance.updateHabitPlan(oldHabitPlan);
+      DatabaseHelper.instance.updateHabitPlan(oldHabitPlan);
     }
 
     // Update (and reset) older progressData
@@ -89,12 +89,12 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
       startingDate: startingDate,
       startingStepNr: startingStep,
     );
-    await DatabaseHelper.instance.updateProgressData(progressData);
+    DatabaseHelper.instance.updateProgressData(progressData);
 
     // Update the plan you're looking at to be active
     this.habitPlan.isActive = true;
     this.habitPlan.lastChanged = DateTime.now();
-    await DatabaseHelper.instance.updateHabitPlan(this.habitPlan);
+    DatabaseHelper.instance.updateHabitPlan(this.habitPlan);
   }
 
   @override
@@ -216,7 +216,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
               ),
-              onPressed: () async {
+              onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
 

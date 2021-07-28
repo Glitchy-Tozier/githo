@@ -55,14 +55,15 @@ class ConfirmDeletion extends StatelessWidget {
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
               ),
               onPressed: () async {
-                DatabaseHelper.instance.deleteHabitPlan(habitPlan.id!);
-
                 final ProgressData progressData = ProgressData.emptyData();
                 DatabaseHelper.instance.updateProgressData(progressData);
 
-                Navigator.pop(context);
+                await DatabaseHelper.instance.deleteHabitPlan(habitPlan.id!);
+
                 updateFunction();
-                Navigator.pop(context);
+
+                Navigator.pop(context); // Pop dialog
+                Navigator.pop(context); // Pop habit-details-screen
               },
             ),
           ],

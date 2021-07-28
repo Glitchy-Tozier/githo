@@ -46,7 +46,7 @@ class ActivationFAB extends StatelessWidget {
     } else {
       // If the viewed habitPlan wasn't active, activate it.
 
-      void showStrartingTimePicker() async {
+      void showStrartingTimePicker() {
         void popToHome(final HabitPlan habitPlan) {
           // Update homescreen
           updateFunction(habitPlan);
