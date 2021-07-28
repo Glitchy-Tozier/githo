@@ -69,7 +69,7 @@ class _FormListState extends State<FormList> {
         TextFormField(
           initialValue: value,
           decoration: inputDecoration(fieldName),
-          maxLength: 150,
+          maxLength: 140,
           validator: (input) {
             if (canBeEmpty == true) {
               // Use This validation if the fields are optional

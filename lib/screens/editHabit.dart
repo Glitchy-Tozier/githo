@@ -113,7 +113,7 @@ class _EditHabitState extends State<EditHabit> {
                       padding: StyleData.screenPadding,
                       child: TextFormField(
                         decoration: inputDecoration("The final habit"),
-                        maxLength: 50,
+                        maxLength: 40,
                         validator: (input) => checkIfEmpty(
                           input.toString().trim(),
                           "your final habit",
