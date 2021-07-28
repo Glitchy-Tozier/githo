@@ -81,6 +81,11 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
       DatabaseHelper.instance.updateHabitPlan(oldHabitPlan);
     }
 
+    // Update the plan you're looking at to be active
+    this.habitPlan.isActive = true;
+    this.habitPlan.lastChanged = DateTime.now();
+    DatabaseHelper.instance.updateHabitPlan(this.habitPlan);
+
     // Update (and reset) older progressData
     final ProgressData progressData =
         await DatabaseHelper.instance.getProgressData();
@@ -89,12 +94,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
       startingDate: startingDate,
       startingStepNr: startingStep,
     );
-    DatabaseHelper.instance.updateProgressData(progressData);
-
-    // Update the plan you're looking at to be active
-    this.habitPlan.isActive = true;
-    this.habitPlan.lastChanged = DateTime.now();
-    DatabaseHelper.instance.updateHabitPlan(this.habitPlan);
+    await DatabaseHelper.instance.updateProgressData(progressData);
   }
 
   @override
