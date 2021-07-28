@@ -255,7 +255,6 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
               updateFunction: (final HabitPlan changedHabitPlan) {
                 updatePrevScreens();
                 this.habitPlan = changedHabitPlan;
-                setState(() {});
               },
             ),
             FloatingActionButton(

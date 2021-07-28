@@ -68,7 +68,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
     return DateFormat("EEEE, dd.MM.yyyy").format(dateTime);
   }
 
-  void _updateDataBase(
+  Future<void> _updateDataBase(
     final DateTime startingDate,
     final int startingStep,
   ) async {
@@ -225,8 +225,9 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
                   _updateDataBase(
                     this.startingDate,
                     this.startingStep,
+                  ).then(
+                    (_) => this.updateFunction(this.habitPlan),
                   );
-                  this.updateFunction(this.habitPlan);
                 }
               },
             ),
