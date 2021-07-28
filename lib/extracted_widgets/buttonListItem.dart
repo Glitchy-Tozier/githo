@@ -19,6 +19,8 @@ class ButtonListItem extends StatelessWidget {
       child: ElevatedButton(
         child: Text(
           text,
+          maxLines: 3,
+          overflow: TextOverflow.ellipsis,
           style: coloredTextStyle(Colors.black),
         ),
         style: ButtonStyle(

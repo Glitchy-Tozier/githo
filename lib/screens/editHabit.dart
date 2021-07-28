@@ -113,6 +113,7 @@ class _EditHabitState extends State<EditHabit> {
                       padding: StyleData.screenPadding,
                       child: TextFormField(
                         decoration: inputDecoration("The final habit"),
+                        maxLength: 50,
                         validator: (input) => checkIfEmpty(
                           input.toString().trim(),
                           "your final habit",
@@ -141,7 +142,7 @@ class _EditHabitState extends State<EditHabit> {
                         decoration: inputDecoration("Nr of required actions"),
                         validator: (input) => validateNumberField(
                           input: input,
-                          maxInput: 1000,
+                          maxInput: 100,
                           variableText: "the required repetitions",
                           onEmptyText:
                               "It has to be at least one rep a $currentTimeUnit",
