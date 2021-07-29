@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:githo/extracted_data/styleData.dart';
+import 'package:githo/extracted_functions/formatDate.dart';
 import 'package:githo/extracted_functions/getDurationDiff.dart';
 
 import 'package:githo/extracted_widgets/bottom_sheets/textSheet.dart';
@@ -35,7 +36,7 @@ class PeriodListView extends StatelessWidget {
       final Training training = trainingPeriod.trainings[i];
 
       GlobalKey? key;
-      double textSize = 25;
+      const double textSize = 25;
       double cardWidth = 100;
       double cardHeight = 70;
       cardMarginRL = 6;
@@ -54,24 +55,21 @@ class PeriodListView extends StatelessWidget {
           color = Colors.grey.shade400;
         }
       } else if (trainingPeriod.status == "waiting for start") {
-        textSize *= 0.9;
-        cardWidth *= 1.3;
-        cardHeight *= 1.3;
-        cardMarginRL *= 1.3;
-
         color = Colors.orange;
         if (i == 0) {
           key = globalKey;
+          cardWidth *= 1.3;
+          cardHeight *= 1.3;
 
           final String remainingTime = getDurationDiff(
             DateTime.now(),
             training.startingDate,
           );
           child = Text(
-            "Starting in\n$remainingTime",
+            "$remainingTime remaining",
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: textSize,
+              fontSize: textSize * 0.9,
             ),
           );
           onTap = () => showModalBottomSheet(
@@ -86,7 +84,15 @@ class PeriodListView extends StatelessWidget {
                         style: StyleData.textStyle,
                       ),
                       TextSpan(
-                        text: "$remainingTime.\n\nTo-do: ",
+                        text: "$remainingTime\n",
+                        style: StyleData.boldTextStyle,
+                      ),
+                      TextSpan(
+                        text: "(On ${formatDate(training.startingDate)})\n\n",
+                        style: StyleData.textStyle,
+                      ),
+                      const TextSpan(
+                        text: "To-do: ",
                         style: StyleData.boldTextStyle,
                       ),
                       TextSpan(
@@ -114,7 +120,7 @@ class PeriodListView extends StatelessWidget {
             child = Text(
               "${training.doneReps}/${training.requiredReps}",
               style: TextStyle(
-                fontSize: textSize * 1.3 * 1.3,
+                fontSize: textSize * 1.3,
                 color: Colors.black,
               ),
             );
@@ -123,7 +129,7 @@ class PeriodListView extends StatelessWidget {
             child = Text(
               "${training.doneReps}/${training.requiredReps}",
               style: TextStyle(
-                fontSize: textSize * 1.3 * 1.3,
+                fontSize: textSize * 1.3,
                 color: Colors.black,
               ),
             );
@@ -132,7 +138,7 @@ class PeriodListView extends StatelessWidget {
             child = Text(
               "Skipped",
               style: TextStyle(
-                fontSize: textSize * 0.9 * 1.3,
+                fontSize: textSize,
                 color: Colors.black,
               ),
             );
@@ -172,7 +178,7 @@ class PeriodListView extends StatelessWidget {
             child = Text(
               "${training.doneReps}/${training.requiredReps}",
               style: TextStyle(
-                fontSize: textSize * 1.3,
+                fontSize: textSize * 1.3 * 1.3,
                 color: Colors.black,
               ),
             );
@@ -204,7 +210,7 @@ class PeriodListView extends StatelessWidget {
               training.startingDate,
             );
             child = Text(
-              "Starting in\n$remainingTime",
+              "$remainingTime remaining",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: textSize,

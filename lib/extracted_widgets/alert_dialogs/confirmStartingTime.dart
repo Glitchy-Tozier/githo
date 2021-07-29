@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:githo/extracted_data/styleData.dart';
+import 'package:githo/extracted_functions/formatDate.dart';
 import 'package:githo/extracted_functions/textFormFieldHelpers.dart';
 import 'package:githo/helpers/databaseHelper.dart';
 import 'package:githo/models/habitPlanModel.dart';
 import 'package:githo/models/progressDataModel.dart';
-
-import 'package:intl/intl.dart';
 
 class ConfirmStartingTime extends StatefulWidget {
   final HabitPlan habitPlan;
@@ -64,10 +63,6 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
     return startingDate;
   }
 
-  String _formatDate(final DateTime dateTime) {
-    return DateFormat("EEEE, dd.MM.yyyy").format(dateTime);
-  }
-
   Future<void> _updateDataBase(
     final DateTime startingDate,
     final int startingStep,
@@ -99,7 +94,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
 
   @override
   Widget build(BuildContext context) {
-    this.startingDateString = _formatDate(startingDate);
+    this.startingDateString = formatDate(startingDate);
     this.dateController.text = startingDateString;
 
     return AlertDialog(
