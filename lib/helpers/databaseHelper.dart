@@ -46,11 +46,11 @@ class DatabaseHelper {
   static const String colShowIntroduction = "showIntroduction";
   static const String colPaused = "paused";
 
-  Future get _getDb async {
+  Future<Database> get _getDb async {
     if (_db == null) {
       _db = await _initDb();
     }
-    return _db;
+    return _db!;
   }
 
   Future<Database> _initDb() async {

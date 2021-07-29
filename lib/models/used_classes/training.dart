@@ -32,7 +32,7 @@ class Training {
   });
 
   bool get isNow {
-    final DateTime now = TimeHelper.instance.getTime;
+    final DateTime now = TimeHelper.instance.currentTime;
     if (now.isAfter(this.startingDate) && now.isBefore(this.endingDate))
       return true;
     else
@@ -40,7 +40,7 @@ class Training {
   }
 
   bool get hasPassed {
-    final DateTime now = TimeHelper.instance.getTime;
+    final DateTime now = TimeHelper.instance.currentTime;
     if (now.isAfter(this.endingDate))
       return true;
     else

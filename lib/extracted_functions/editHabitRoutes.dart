@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:githo/helpers/databaseHelper.dart';
+import 'package:githo/helpers/timeHelper.dart';
 import 'package:githo/models/habitPlanModel.dart';
 import 'package:githo/models/progressDataModel.dart';
 import 'package:githo/screens/editHabit.dart';
@@ -10,6 +11,8 @@ void addNewHabit(
   BuildContext context,
   final Function updatePrevScreens,
 ) {
+  final DateTime now = TimeHelper.instance.currentTime;
+
   final HabitPlan habitPlan = HabitPlan(
     isActive: false,
     fullyCompleted: false,
@@ -22,7 +25,7 @@ void addNewHabit(
     trainingTimeIndex: 1,
     requiredTrainings: 5,
     requiredTrainingPeriods: 1,
-    lastChanged: DateTime.now(),
+    lastChanged: now,
   );
 
   void _onSaved(final HabitPlan habitPlan) {
@@ -50,7 +53,8 @@ void editHabit(
   final HabitPlan habitPlan,
 ) {
   void _onSaved(final HabitPlan habitPlan) {
-    habitPlan.lastChanged = DateTime.now();
+    final DateTime now = TimeHelper.instance.currentTime;
+    habitPlan.lastChanged = now;
 
     // IF the habitPlan was active, disable it to make sure nothing gets messed up by changing its values.
     if (habitPlan.isActive) {

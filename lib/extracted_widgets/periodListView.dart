@@ -10,6 +10,7 @@ import 'package:githo/extracted_widgets/gradientTrainingCard.dart';
 import 'package:githo/extracted_widgets/alert_dialogs/confirmTrainingStart.dart';
 import 'package:githo/extracted_widgets/alert_dialogs/trainingDone.dart';
 import 'package:githo/extracted_widgets/trainingCard.dart';
+import 'package:githo/helpers/timeHelper.dart';
 
 import 'package:githo/models/used_classes/training.dart';
 import 'package:githo/models/used_classes/trainingPeriod.dart';
@@ -62,8 +63,9 @@ class PeriodListView extends StatelessWidget {
           cardWidth *= 1.3;
           cardHeight *= 1.3;
 
+          final DateTime now = TimeHelper.instance.currentTime;
           final String remainingTime = getDurationDiff(
-            DateTime.now(),
+            now,
             training.startingDate,
           );
           child = Text(
@@ -206,8 +208,9 @@ class PeriodListView extends StatelessWidget {
           }
         } else {
           if (i == activeTrainingIndex + 1) {
+            final DateTime now = TimeHelper.instance.currentTime;
             final String remainingTime = getDurationDiff(
-              DateTime.now(),
+              now,
               training.startingDate,
             );
             child = Text(

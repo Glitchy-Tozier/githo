@@ -45,7 +45,7 @@ class StepClass {
   });
 
   bool get isActive {
-    final DateTime now = TimeHelper.instance.getTime;
+    final DateTime now = TimeHelper.instance.currentTime;
     final Map<String, dynamic>? activeMap = getDataByDate(now);
 
     if (activeMap == null) {

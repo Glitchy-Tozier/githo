@@ -34,7 +34,7 @@ class ProgressData {
       habitPlanId: 123456789,
       isActive: false,
       fullyCompleted: false,
-      currentStartingDate: TimeHelper.instance.getTime,
+      currentStartingDate: DateTime(0),
       habit: "",
       steps: const [],
     );
@@ -72,7 +72,9 @@ class ProgressData {
 
   // Regularly used functions
   bool get _hasStarted {
-    return (TimeHelper.instance.getTime.isAfter(this.currentStartingDate));
+    final DateTime now = TimeHelper.instance.currentTime;
+    final bool hasStarted = now.isAfter(this.currentStartingDate);
+    return hasStarted;
   }
 
   int get stepDurationInHours {
@@ -103,7 +105,7 @@ class ProgressData {
     if (activeMap == null) {
       inNewTraining = true;
     } else {
-      final DateTime now = TimeHelper.instance.getTime;
+      final DateTime now = TimeHelper.instance.currentTime;
       final Map<String, dynamic>? currentMap = _getDataByDate(now);
       if (currentMap != null) {
         final Training activeTraining = activeMap["training"];
@@ -158,7 +160,7 @@ class ProgressData {
   }
 
   void _setNewStartingDate() {
-    final DateTime now = TimeHelper.instance.getTime;
+    final DateTime now = TimeHelper.instance.currentTime;
     final Duration periodDuration =
         Duration(hours: this.trainingPeriodDurationInHours);
 
@@ -257,7 +259,7 @@ class ProgressData {
 
     // Analyze the passed trainingPeriods
     // Calculate the number of trainingPeriods passed. For dayly trainings, that would be how many weeks have passed.
-    final DateTime now = TimeHelper.instance.getTime;
+    final DateTime now = TimeHelper.instance.currentTime;
     final int passedTrainingPeriods = _getPassedTrainingPeriods(
       startingDate: this.currentStartingDate,
       endingDate: now,
@@ -299,8 +301,8 @@ class ProgressData {
   }
 
   void _activateCurrentTraining() {
-    final Map<String, dynamic> currentData =
-        _getDataByDate(TimeHelper.instance.getTime)!;
+    final DateTime now = TimeHelper.instance.currentTime;
+    final Map<String, dynamic> currentData = _getDataByDate(now)!;
 
     final Training currentTraining = currentData["training"];
     currentTraining.status = "current";

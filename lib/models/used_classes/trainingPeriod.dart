@@ -144,9 +144,11 @@ class TrainingPeriod {
   }
 
   int get remainingTrainings {
+    // Count how many trainings come after the current one
     int remainingTrainings = 0;
     for (final Training training in this.trainings) {
-      if (training.endingDate.isAfter(TimeHelper.instance.getTime)) {
+      final DateTime now = TimeHelper.instance.currentTime;
+      if (training.endingDate.isAfter(now)) {
         remainingTrainings++;
       }
     }
@@ -159,7 +161,7 @@ class TrainingPeriod {
 
   void markIfPassed() {
     final Training lastTraining = this.trainings.last;
-    final DateTime now = TimeHelper.instance.getTime;
+    final DateTime now = TimeHelper.instance.currentTime;
     if (lastTraining.endingDate.isBefore(now)) {
       setResult();
     }

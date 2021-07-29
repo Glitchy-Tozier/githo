@@ -37,10 +37,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-
-    if (DataShortcut.testing) {
-      TimeHelper.instance.setTime(DateTime.now());
-    }
     _reloadScreen();
   }
 
@@ -250,7 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           TimeHelper.instance.timeTravel(progressData);
 
                           print("Start ${progressData.currentStartingDate}");
-                          print("Now   ${TimeHelper.instance.getTime}\n");
+                          print("Now   ${TimeHelper.instance.currentTime}\n");
 
                           setState(() {});
                         },
@@ -258,7 +254,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           TimeHelper.instance.superTimeTravel(progressData);
 
                           print("Start ${progressData.currentStartingDate}");
-                          print("Now   ${TimeHelper.instance.getTime}\n");
+                          print("Now   ${TimeHelper.instance.currentTime}\n");
                         },
                       ),
                     );
@@ -290,8 +286,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         final StepClass step = waitingMap["step"];
                         final String stepDescription = step.text;
 
+                        final DateTime now = TimeHelper.instance.currentTime;
                         final String remainingTime = getDurationDiff(
-                          DateTime.now(),
+                          now,
                           training.startingDate,
                         );
                         showModalBottomSheet(

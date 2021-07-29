@@ -5,6 +5,7 @@ import 'package:githo/extracted_data/styleData.dart';
 import 'package:githo/extracted_functions/formatDate.dart';
 import 'package:githo/extracted_functions/textFormFieldHelpers.dart';
 import 'package:githo/helpers/databaseHelper.dart';
+import 'package:githo/helpers/timeHelper.dart';
 import 'package:githo/models/habitPlanModel.dart';
 import 'package:githo/models/progressDataModel.dart';
 
@@ -39,7 +40,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
   }
 
   DateTime _getDefaultStartingTime() {
-    final DateTime now = DateTime.now();
+    final DateTime now = TimeHelper.instance.currentTime;
     final DateTime startingDate;
 
     switch (this.habitPlan.trainingTimeIndex) {
@@ -77,8 +78,9 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
     }
 
     // Update the plan you're looking at to be active
+    final DateTime now = TimeHelper.instance.currentTime;
     this.habitPlan.isActive = true;
-    this.habitPlan.lastChanged = DateTime.now();
+    this.habitPlan.lastChanged = now;
     DatabaseHelper.instance.updateHabitPlan(this.habitPlan);
 
     // Update (and reset) older progressData
@@ -133,10 +135,10 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
                       decoration: inputDecoration("Starting date"),
                       readOnly: true,
                       onTap: () {
-                        final DateTime now = DateTime.now();
+                        final DateTime now = TimeHelper.instance.currentTime;
                         showDatePicker(
                           context: context,
-                          firstDate: DateTime.now().subtract(Duration(days: 6)),
+                          firstDate: now.subtract(Duration(days: 6)),
                           initialDate: this.startingDate,
                           lastDate: DateTime(now.year + 2000),
                         ).then(

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:githo/extracted_data/dataShortcut.dart';
 import 'package:githo/extracted_widgets/backgroundWidget.dart';
 import 'package:githo/helpers/databaseHelper.dart';
-import 'package:githo/helpers/timeHelper.dart';
 import 'package:githo/models/settingsModel.dart';
 import 'package:githo/screens/homeScreen.dart';
 import 'package:githo/screens/introduction.dart';
@@ -15,16 +13,6 @@ class FirstScreen extends StatefulWidget {
 }
 
 class _FirstScreenState extends State<FirstScreen> {
-  @override
-  void initState() {
-    super.initState();
-
-    // Necessary if progressData is being created from scratch.
-    if (DataShortcut.testing) {
-      TimeHelper.instance.setTime(DateTime.now());
-    }
-  }
-
   Future<Widget> getFirstScreen() async {
     final Settings settings = await DatabaseHelper.instance.getSettings();
 
