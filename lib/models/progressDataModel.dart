@@ -279,13 +279,9 @@ class ProgressData {
 
       final TrainingPeriod lastPeriod = this.steps.last.trainingPeriods.last;
 
-      if (lastActivePeriod.wasSuccessful) {
-        lastActivePeriod.status = "completed";
-
-        if (lastActivePeriod == lastPeriod) {
-          this.fullyCompleted = true;
-          _completeHabitPlan();
-        }
+      if (lastActivePeriod.wasSuccessful && lastActivePeriod == lastPeriod) {
+        this.fullyCompleted = true;
+        _completeHabitPlan();
       }
 
       if (failedPeriods >= 0 || lastActivePeriod == lastPeriod) {
@@ -293,6 +289,12 @@ class ProgressData {
         nextPeriodPosition = _penalizeFailure(failedPeriods, lastActiveMap);
         _setTrainingDates(nextPeriodPosition);
       }
+    }
+  }
+
+  void _completePassedPeriods() {
+    for (final StepClass step in this.steps) {
+      step.markPassedPeriods();
     }
   }
 
@@ -329,6 +331,10 @@ class ProgressData {
     } else {
       somethingChanged = false;
     }
+
+    // Set the passed trainings' status to "complete"
+    _completePassedPeriods();
+
     return somethingChanged;
   }
 

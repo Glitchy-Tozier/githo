@@ -19,6 +19,7 @@ class PeriodListView extends StatelessWidget {
   final String stepDescription;
   final Function updateFunction;
   final GlobalKey globalKey;
+
   const PeriodListView({
     required this.trainingPeriod,
     required this.stepDescription,

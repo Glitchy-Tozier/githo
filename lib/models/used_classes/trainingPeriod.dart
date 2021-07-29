@@ -157,6 +157,14 @@ class TrainingPeriod {
     this.status = "completed";
   }
 
+  void markIfPassed() {
+    final Training lastTraining = this.trainings.last;
+    final DateTime now = TimeHelper.instance.getTime;
+    if (lastTraining.endingDate.isBefore(now)) {
+      setResult();
+    }
+  }
+
   Map<String, dynamic> toMap() {
     final List<Map<String, dynamic>> trainingMapList = [];
 

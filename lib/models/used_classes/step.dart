@@ -158,6 +158,12 @@ class StepClass {
     }
   }
 
+  void markPassedPeriods() {
+    for (final TrainingPeriod trainingPeriod in this.trainingPeriods) {
+      trainingPeriod.markIfPassed();
+    }
+  }
+
   void activateStartingPeriod() {
     for (final TrainingPeriod trainingPeriod in this.trainingPeriods) {
       if (trainingPeriod.status == "waiting for start") {
