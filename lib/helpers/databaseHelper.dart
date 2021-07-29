@@ -14,7 +14,7 @@ class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
   static Database? _db;
 
-  DatabaseHelper._privateConstructor();
+  const DatabaseHelper._privateConstructor();
 
   static const String dbVersionTable = "dbVersionTable";
   static const String colVersion = "version";

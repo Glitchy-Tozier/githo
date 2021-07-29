@@ -3,15 +3,12 @@ import 'package:flutter/material.dart';
 
 import 'package:githo/extracted_data/styleData.dart';
 import 'package:githo/extracted_functions/formatDate.dart';
-import 'package:githo/extracted_functions/getDurationDiff.dart';
-
-import 'package:githo/extracted_widgets/bottom_sheets/textSheet.dart';
-import 'package:githo/extracted_widgets/gradientTrainingCard.dart';
 import 'package:githo/extracted_widgets/alert_dialogs/confirmTrainingStart.dart';
 import 'package:githo/extracted_widgets/alert_dialogs/trainingDone.dart';
-import 'package:githo/extracted_widgets/trainingCard.dart';
-import 'package:githo/helpers/timeHelper.dart';
-
+import 'package:githo/extracted_widgets/bottom_sheets/textSheet.dart';
+import 'package:githo/extracted_widgets/training_cards/countdownCard.dart';
+import 'package:githo/extracted_widgets/training_cards/gradientTrainingCard.dart';
+import 'package:githo/extracted_widgets/training_cards/trainingCard.dart';
 import 'package:githo/models/used_classes/training.dart';
 import 'package:githo/models/used_classes/trainingPeriod.dart';
 
@@ -34,8 +31,8 @@ class PeriodListView extends StatelessWidget {
     double cardMarginRL = 6;
     int activeTrainingIndex = 9876543210;
 
-    for (int i = 0; i < trainingPeriod.trainings.length; i++) {
-      final Training training = trainingPeriod.trainings[i];
+    for (int i = 0; i < this.trainingPeriod.trainings.length; i++) {
+      final Training training = this.trainingPeriod.trainings[i];
 
       GlobalKey? key;
       const double textSize = 25;
@@ -47,7 +44,7 @@ class PeriodListView extends StatelessWidget {
       Function? onTap; // Usually Null
       final Color color;
 
-      if (trainingPeriod.status == "completed") {
+      if (this.trainingPeriod.status == "completed") {
         child = const Icon(Icons.check_rounded);
         if (training.status == "successful") {
           color = Colors.green;
@@ -56,26 +53,13 @@ class PeriodListView extends StatelessWidget {
         } else {
           color = Colors.grey.shade400;
         }
-      } else if (trainingPeriod.status == "waiting for start") {
+      } else if (this.trainingPeriod.status == "waiting for start") {
         color = Colors.orange;
         if (i == 0) {
-          key = globalKey;
+          key = this.globalKey;
           cardWidth *= 1.3;
           cardHeight *= 1.3;
-
-          final DateTime now = TimeHelper.instance.currentTime;
-          final String remainingTime = getDurationDiff(
-            now,
-            training.startingDate,
-          );
-          child = Text(
-            "$remainingTime remaining",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: textSize * 0.9,
-            ),
-          );
-          onTap = () => showModalBottomSheet(
+          onTap = (final String remainingTime) => showModalBottomSheet(
                 context: context,
                 backgroundColor: Colors.transparent,
                 builder: (context) => TextSheet(
@@ -99,21 +83,31 @@ class PeriodListView extends StatelessWidget {
                         style: StyleData.boldTextStyle,
                       ),
                       TextSpan(
-                        text: stepDescription,
+                        text: this.stepDescription,
                         style: StyleData.textStyle,
                       ),
                     ],
                   ),
                 ),
               );
-          Timer(
-            const Duration(seconds: 1),
-            () => updateFunction(),
+          listViewChildren.add(
+            CountdownCard(
+              key: key,
+              horizontalMargin: cardMarginRL,
+              cardWidth: cardWidth,
+              cardHeight: cardHeight,
+              startingDate: training.startingDate,
+              textSize: textSize,
+              updatePrevScreens: updateFunction,
+              onTap: onTap,
+              color: color,
+            ),
           );
+          continue;
         } else {
           child = const Icon(Icons.lock_clock);
         }
-      } else if (trainingPeriod.status == "active") {
+      } else if (this.trainingPeriod.status == "active") {
         cardWidth *= 1.3;
         cardHeight *= 1.3;
         cardMarginRL *= 1.3;
@@ -149,7 +143,7 @@ class PeriodListView extends StatelessWidget {
         } else if (training.isNow) {
           activeTrainingIndex = i;
 
-          key = globalKey;
+          key = this.globalKey;
           cardWidth *= 1.3;
           cardHeight *= 1.3;
           if (training.status == "current") {
@@ -163,7 +157,7 @@ class PeriodListView extends StatelessWidget {
             );
             final Function onConfirmation = () {
               training.activate();
-              updateFunction();
+              this.updateFunction();
             };
             onTap = () => showDialog(
                   context: context,
@@ -176,7 +170,17 @@ class PeriodListView extends StatelessWidget {
                     );
                   },
                 );
-            color = Colors.orange; // Doesn't do anything.
+            listViewChildren.add(
+              GradinentTrainingCard(
+                key: key,
+                horizontalMargin: cardMarginRL,
+                cardWidth: cardWidth,
+                cardHeight: cardHeight,
+                child: child,
+                onTap: onTap,
+              ),
+            );
+            continue;
           } else {
             child = Text(
               "${training.doneReps}/${training.requiredReps}",
@@ -187,7 +191,7 @@ class PeriodListView extends StatelessWidget {
             );
             onTap = () {
               training.incrementReps();
-              updateFunction();
+              this.updateFunction();
               if (training.doneReps == training.requiredReps) {
                 Timer(
                   const Duration(milliseconds: 700),
@@ -207,53 +211,42 @@ class PeriodListView extends StatelessWidget {
             }
           }
         } else {
+          color = Colors.orange;
           if (i == activeTrainingIndex + 1) {
-            final DateTime now = TimeHelper.instance.currentTime;
-            final String remainingTime = getDurationDiff(
-              now,
-              training.startingDate,
-            );
-            child = Text(
-              "$remainingTime remaining",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: textSize,
+            listViewChildren.add(
+              CountdownCard(
+                key: key,
+                horizontalMargin: cardMarginRL,
+                cardWidth: cardWidth,
+                cardHeight: cardHeight,
+                startingDate: training.startingDate,
+                textSize: textSize,
+                updatePrevScreens: updateFunction,
+                onTap: onTap,
+                color: color,
               ),
             );
+            continue;
           } else {
             child = const Icon(Icons.lock_clock);
           }
-          color = Colors.orange;
         }
       } else {
         child = const Icon(Icons.lock);
         color = Colors.grey.shade300;
       }
 
-      if (training.isNow && training.status == "current") {
-        listViewChildren.add(
-          GradinentTrainingCard(
-            key: key,
-            horizontalMargin: cardMarginRL,
-            cardWidth: cardWidth,
-            cardHeight: cardHeight,
-            child: child,
-            onTap: onTap,
-          ),
-        );
-      } else {
-        listViewChildren.add(
-          TrainingCard(
-            key: key,
-            horizontalMargin: cardMarginRL,
-            cardWidth: cardWidth,
-            cardHeight: cardHeight,
-            child: child,
-            onTap: onTap,
-            color: color,
-          ),
-        );
-      }
+      listViewChildren.add(
+        TrainingCard(
+          key: key,
+          horizontalMargin: cardMarginRL,
+          cardWidth: cardWidth,
+          cardHeight: cardHeight,
+          child: child,
+          onTap: onTap,
+          color: color,
+        ),
+      );
     }
 
     final ScrollPhysics physics = const BouncingScrollPhysics();
@@ -262,9 +255,10 @@ class PeriodListView extends StatelessWidget {
       horizontal: StyleData.screenPaddingValue - cardMarginRL,
     );
 
-    final bool preventLazyLoading = trainingPeriod.status == "active" ||
-        trainingPeriod.status == "waiting for start";
-    if (preventLazyLoading) {
+    final bool activeOrWaiting = this.trainingPeriod.status == "active" ||
+        this.trainingPeriod.status == "waiting for start";
+
+    if (activeOrWaiting) {
       // If the trainingPeriod is active or will shortly be active, prevent lazyloading (to enable automatic scrolling).
       return SingleChildScrollView(
         physics: physics,
