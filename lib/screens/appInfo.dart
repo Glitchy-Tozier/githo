@@ -10,7 +10,8 @@ import 'package:githo/extracted_widgets/borderedImage.dart';
 import 'package:githo/extracted_widgets/headings.dart';
 
 class AppInfo extends StatelessWidget {
-  // Contains licensces and important links.
+  // Contains licences and important links.
+
   @override
   Widget build(BuildContext context) {
     final Future<PackageInfo> futurePackageInfo = PackageInfo.fromPlatform();

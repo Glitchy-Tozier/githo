@@ -23,8 +23,7 @@ class StepToDo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> columnChildren =
-        []; // What will be the returned contents
+    final List<Widget> colChildren = []; // What will be the returned contents
 
     final Color stepColor;
     switch (step.status) {
@@ -37,7 +36,7 @@ class StepToDo extends StatelessWidget {
       default:
         stepColor = Colors.grey.shade300;
     }
-    columnChildren.addAll([
+    colChildren.addAll([
       FatDivider(
         color: stepColor,
       ),
@@ -122,12 +121,12 @@ class StepToDo extends StatelessWidget {
       if (step.trainingPeriods.length > 1) {
         // Add a divider
         if (i > 0) {
-          columnChildren.add(
+          colChildren.add(
             ThinDivider(color: stepColor),
           );
         }
 
-        columnChildren.add(
+        colChildren.add(
           Padding(
             padding: StyleData.screenPadding,
             child: Text(
@@ -141,7 +140,7 @@ class StepToDo extends StatelessWidget {
         );
       }
 
-      columnChildren.add(
+      colChildren.add(
         PeriodListView(
           trainingPeriod: trainingPeriod,
           stepDescription: this.step.text,
@@ -153,7 +152,7 @@ class StepToDo extends StatelessWidget {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: columnChildren,
+      children: colChildren,
     );
   }
 }

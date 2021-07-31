@@ -53,7 +53,7 @@ class ProgressData {
     this.steps = [];
     for (int i = 0; i < habitPlan.steps.length; i++) {
       this.steps.add(
-            StepData(
+            StepData.fromHabitPlan(
               stepIndex: i,
               habitPlan: habitPlan,
             ),

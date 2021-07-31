@@ -11,7 +11,8 @@ class Training {
   DateTime endingDate = DateTime(246);
   String status = "";
 
-  Training({required int trainingIndex, required HabitPlan habitPlan}) {
+  Training.fromHabitPlan(
+      {required int trainingIndex, required HabitPlan habitPlan}) {
     this.number = trainingIndex + 1;
 
     final int trainingTimeIndex = habitPlan.trainingTimeIndex;
@@ -21,7 +22,7 @@ class Training {
     this.requiredReps = habitPlan.requiredReps;
   }
 
-  Training.withDirectValues({
+  Training({
     required this.number,
     required this.durationInHours,
     required this.doneReps,
@@ -102,7 +103,7 @@ class Training {
   }
 
   factory Training.fromMap(Map<String, dynamic> map) {
-    return Training.withDirectValues(
+    return Training(
       number: map["number"],
       durationInHours: map["durationInHours"],
       doneReps: map["doneReps"],

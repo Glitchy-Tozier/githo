@@ -14,6 +14,7 @@ import 'package:githo/screens/habitDetails.dart';
 
 class HabitList extends StatefulWidget {
   // List all habit-plans
+
   final Function updateFunction;
   const HabitList({required this.updateFunction});
 

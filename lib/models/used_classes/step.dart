@@ -12,7 +12,8 @@ class StepData {
   late int durationInHours;
   late List<TrainingPeriod> trainingPeriods;
 
-  StepData({required int stepIndex, required HabitPlan habitPlan}) {
+  StepData.fromHabitPlan(
+      {required int stepIndex, required HabitPlan habitPlan}) {
     this.index = stepIndex;
     this.number = stepIndex + 1;
     this.text = habitPlan.steps[stepIndex];
@@ -29,14 +30,15 @@ class StepData {
     for (int i = 0; i < habitPlan.requiredTrainingPeriods; i++) {
       final int trainingPeriodIndex = stepIndex * trainingPeriodCount + i;
       this.trainingPeriods.add(
-            TrainingPeriod(
+            TrainingPeriod.fromHabitPlan(
               trainingPeriodIndex: trainingPeriodIndex,
               habitPlan: habitPlan,
             ),
           );
     }
   }
-  StepData.withDirectValues({
+
+  StepData({
     required this.index,
     required this.number,
     required this.text,
@@ -199,7 +201,7 @@ class StepData {
       return stepList;
     }
 
-    return StepData.withDirectValues(
+    return StepData(
       index: map["index"],
       number: map["number"],
       text: map["text"],

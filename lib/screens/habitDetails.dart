@@ -17,7 +17,8 @@ import 'package:githo/extracted_widgets/screenEndingSpacer.dart';
 import 'package:githo/models/habitPlanModel.dart';
 
 class SingleHabitDisplay extends StatefulWidget {
-  // Display the details (final habit, rules, steps, comments) for one single habit-plan.
+  // Display the details of one single habit-plan. (final habit, rules, steps, comments)
+
   final Function updateFunction;
   final HabitPlan habitPlan;
 

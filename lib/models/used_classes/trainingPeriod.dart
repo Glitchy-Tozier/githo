@@ -14,7 +14,7 @@ class TrainingPeriod {
   String status = "";
   late List<Training> trainings;
 
-  TrainingPeriod({
+  TrainingPeriod.fromHabitPlan({
     required int trainingPeriodIndex,
     required HabitPlan habitPlan,
   }) {
@@ -36,7 +36,7 @@ class TrainingPeriod {
     for (int i = 0; i < trainingCount; i++) {
       final int trainingIndex = trainingPeriodIndex * trainingCount + i;
       this.trainings.add(
-            Training(
+            Training.fromHabitPlan(
               trainingIndex: trainingIndex,
               habitPlan: habitPlan,
             ),
@@ -44,7 +44,7 @@ class TrainingPeriod {
     }
   }
 
-  TrainingPeriod.withDirectValues({
+  TrainingPeriod({
     required this.index,
     required this.number,
     required this.durationInHours,
@@ -197,7 +197,7 @@ class TrainingPeriod {
       return stepList;
     }
 
-    return TrainingPeriod.withDirectValues(
+    return TrainingPeriod(
       index: map["index"],
       number: map["number"],
       durationInHours: map["durationInHours"],
