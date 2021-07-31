@@ -241,20 +241,23 @@ class _HomeScreenState extends State<HomeScreen> {
                     return SizedBox(
                       height: 55,
                       width: 150,
-                      child: InkWell(
-                        splashColor: Colors.purple,
-                        onTap: () {
-                          TimeHelper.instance.timeTravel(progressData);
+                      child: Material(
+                        color: Colors.cyan.withOpacity(0.5),
+                        child: InkWell(
+                          splashColor: Colors.purple,
+                          onTap: () {
+                            TimeHelper.instance.timeTravel(progressData);
 
-                          print("Start ${progressData.currentStartingDate}");
-                          print("Now   ${TimeHelper.instance.currentTime}\n");
-                        },
-                        onLongPress: () {
-                          TimeHelper.instance.superTimeTravel(progressData);
+                            print("Start ${progressData.currentStartingDate}");
+                            print("Now   ${TimeHelper.instance.currentTime}\n");
+                          },
+                          onLongPress: () {
+                            TimeHelper.instance.superTimeTravel(progressData);
 
-                          print("Start ${progressData.currentStartingDate}");
-                          print("Now   ${TimeHelper.instance.currentTime}\n");
-                        },
+                            print("Start ${progressData.currentStartingDate}");
+                            print("Now   ${TimeHelper.instance.currentTime}\n");
+                          },
+                        ),
                       ),
                     );
                   }
