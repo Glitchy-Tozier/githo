@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ScreenTitle extends StatelessWidget {
+  // Defines what screen-titles look like.
+
   final String _text;
   const ScreenTitle(this._text);
 
@@ -22,6 +24,8 @@ class ScreenTitle extends StatelessWidget {
 }
 
 class Heading extends StatelessWidget {
+  // Defines what headings look like.
+
   final String _text;
   const Heading(this._text);
 

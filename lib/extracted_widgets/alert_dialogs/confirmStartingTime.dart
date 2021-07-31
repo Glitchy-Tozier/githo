@@ -10,14 +10,21 @@ import 'package:githo/models/habitPlanModel.dart';
 import 'package:githo/models/progressDataModel.dart';
 
 class ConfirmStartingTime extends StatefulWidget {
-  final HabitPlan habitPlan;
-  final Function updateFunction;
+  // Returns a dialog that lets the user choose
+  // 1. when his journey will start
+  // 2. what step it should start with
 
-  const ConfirmStartingTime(this.habitPlan, this.updateFunction);
+  final HabitPlan habitPlan;
+  final Function onConfirmation;
+
+  const ConfirmStartingTime({
+    required this.habitPlan,
+    required this.onConfirmation,
+  });
 
   @override
   _ConfirmStartingTimeState createState() =>
-      _ConfirmStartingTimeState(this.habitPlan, this.updateFunction);
+      _ConfirmStartingTimeState(this.habitPlan, this.onConfirmation);
 }
 
 class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {

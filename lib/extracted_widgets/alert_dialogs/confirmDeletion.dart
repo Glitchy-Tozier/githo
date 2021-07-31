@@ -5,10 +5,16 @@ import 'package:githo/models/habitPlanModel.dart';
 import 'package:githo/models/progressDataModel.dart';
 
 class ConfirmDeletion extends StatelessWidget {
-  final HabitPlan habitPlan;
-  final Function updateFunction;
+  // Returns a dialog that asks "Do you really want to delete the habit-plan?"
+  // If the user says yes, the habit-plan is deleted.
 
-  const ConfirmDeletion(this.habitPlan, this.updateFunction);
+  final HabitPlan habitPlan;
+  final Function onConfirmation;
+
+  const ConfirmDeletion({
+    required this.habitPlan,
+    required this.onConfirmation,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +66,7 @@ class ConfirmDeletion extends StatelessWidget {
 
                 await DatabaseHelper.instance.deleteHabitPlan(habitPlan.id!);
 
-                updateFunction();
+                onConfirmation();
 
                 Navigator.pop(context); // Pop dialog
                 Navigator.pop(context); // Pop habit-details-screen

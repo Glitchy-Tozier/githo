@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 class BorderedImage extends StatelessWidget {
-  final String name;
+  // Loads an image, wraps a pretty border around it, and returns it.
+
+  final String location;
   final double width;
 
   const BorderedImage(
-    this.name, {
+    this.location, {
     this.width = double.infinity,
     Key? key,
   }) : super(key: key);
@@ -13,10 +15,9 @@ class BorderedImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      //borderRadius: BorderRadius.circular(20),
       width: width,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(20)),
+        borderRadius: const BorderRadius.all(Radius.circular(20)),
         color: Colors.white,
         border: Border.all(
           color: Colors.white,
@@ -24,8 +25,8 @@ class BorderedImage extends StatelessWidget {
         ),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(15)),
-        child: Image.asset(name),
+        borderRadius: const BorderRadius.all(Radius.circular(15)),
+        child: Image.asset(location),
       ),
     );
   }

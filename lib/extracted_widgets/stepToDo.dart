@@ -12,7 +12,10 @@ import 'package:githo/models/used_classes/step.dart';
 import 'package:githo/models/used_classes/trainingPeriod.dart';
 
 class StepToDo extends StatelessWidget {
-  final StepClass step;
+  // Create the section for a whole step (Step 1 for example).
+  // Used in the HomeScreen.
+
+  final StepData step;
   final Function updateFunction;
   final GlobalKey globalKey;
 
@@ -20,7 +23,8 @@ class StepToDo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> periodWidgets = []; // What will be the returned contents
+    final List<Widget> columnChildren =
+        []; // What will be the returned contents
 
     final Color stepColor;
     switch (step.status) {
@@ -33,7 +37,7 @@ class StepToDo extends StatelessWidget {
       default:
         stepColor = Colors.grey.shade300;
     }
-    periodWidgets.addAll([
+    columnChildren.addAll([
       FatDivider(
         color: stepColor,
       ),
@@ -85,8 +89,8 @@ class StepToDo extends StatelessWidget {
                 context: context,
                 backgroundColor: Colors.transparent,
                 builder: (context) => TextSheet(
-                  headingString: "Step ${step.number}",
-                  textSpan: TextSpan(
+                  title: "Step ${step.number}",
+                  text: TextSpan(
                     children: [
                       const TextSpan(
                         text: "Status: ",
@@ -118,12 +122,12 @@ class StepToDo extends StatelessWidget {
       if (step.trainingPeriods.length > 1) {
         // Add a divider
         if (i > 0) {
-          periodWidgets.add(
+          columnChildren.add(
             ThinDivider(color: stepColor),
           );
         }
 
-        periodWidgets.add(
+        columnChildren.add(
           Padding(
             padding: StyleData.screenPadding,
             child: Text(
@@ -137,7 +141,7 @@ class StepToDo extends StatelessWidget {
         );
       }
 
-      periodWidgets.add(
+      columnChildren.add(
         PeriodListView(
           trainingPeriod: trainingPeriod,
           stepDescription: this.step.text,
@@ -149,7 +153,7 @@ class StepToDo extends StatelessWidget {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: periodWidgets,
+      children: columnChildren,
     );
   }
 }

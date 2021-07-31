@@ -3,12 +3,14 @@ import 'package:githo/extracted_data/styleData.dart';
 import 'package:githo/extracted_widgets/headings.dart';
 
 class TextSheet extends StatelessWidget {
-  final String headingString;
-  final TextSpan textSpan;
+  // Returns a bottom-sheet containing the input title and text(span).
+
+  final String title;
+  final TextSpan text;
 
   const TextSheet({
-    required this.headingString,
-    required this.textSpan,
+    required this.title,
+    required this.text,
     Key? key,
   }) : super(key: key);
 
@@ -31,7 +33,6 @@ class TextSheet extends StatelessWidget {
         ),
       ),
       child: Container(
-        //height: 400,
         padding: const EdgeInsets.only(
           right: StyleData.screenPaddingValue,
           bottom: 30,
@@ -58,11 +59,11 @@ class TextSheet extends StatelessWidget {
                 color: Colors.pink,
               ),
             ),
-            Heading(headingString),
+            Heading(title),
             RichText(
               overflow: TextOverflow.ellipsis,
               maxLines: 8,
-              text: textSpan,
+              text: text,
             ),
           ],
         ),

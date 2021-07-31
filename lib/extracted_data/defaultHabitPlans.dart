@@ -1,6 +1,8 @@
 import 'package:githo/models/habitPlanModel.dart';
 
 class DefaultHabitPlans {
+  // Defines the habit-plans that will be available when first starting the app
+
   static final List<HabitPlan> habitPlanList = [
     HabitPlan(
       isActive: false,

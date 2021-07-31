@@ -8,10 +8,16 @@ import 'package:githo/models/habitPlanModel.dart';
 import 'package:githo/models/progressDataModel.dart';
 
 class ActivationFAB extends StatelessWidget {
+  // The middle FloatingActionButton in the habitDetals.dart-sreen.
+  // It's used to activate/deactivate the viewed habit.
+
   final HabitPlan habitPlan;
   final Function updateFunction;
 
-  const ActivationFAB({required this.habitPlan, required this.updateFunction});
+  const ActivationFAB({
+    required this.habitPlan,
+    required this.updateFunction,
+  });
 
   void onClickFunc(BuildContext context) async {
     if (habitPlan.isActive == true) {
@@ -37,7 +43,7 @@ class ActivationFAB extends StatelessWidget {
             "All progress will be lost.",
             style: StyleData.textStyle,
           ),
-          confirmationFunc: () {
+          onConfirmation: () {
             deactivateHabitPlan();
             Navigator.pop(context); // Pop habit-details
           },
@@ -58,8 +64,8 @@ class ActivationFAB extends StatelessWidget {
         showDialog(
           context: context,
           builder: (BuildContext buildContext) => ConfirmStartingTime(
-            habitPlan,
-            popToHome,
+            habitPlan: habitPlan,
+            onConfirmation: popToHome,
           ),
         );
       }
@@ -90,7 +96,7 @@ class ActivationFAB extends StatelessWidget {
                 ],
               ),
             ),
-            confirmationFunc: showStrartingTimePicker,
+            onConfirmation: showStrartingTimePicker,
           ),
         );
       } else {

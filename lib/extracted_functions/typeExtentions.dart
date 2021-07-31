@@ -1,11 +1,15 @@
 extension StringExtension on String {
-  // Capitalizes the first letter of a st ring.
+  // Capitalizes the first letter of a string.
+
   String capitalize() {
     return "${this[0].toUpperCase()}${this.substring(1)}";
   }
 }
 
 extension BoolExtension on bool {
+  // Returns 1 if true
+  // Returns 0 if false
+
   int boolToInt() {
     if (this == true) {
       return 1;
@@ -16,7 +20,9 @@ extension BoolExtension on bool {
 }
 
 extension IntExtension on int {
-  // Return false if input == 1. Otherwise return true.
+  // Return false if the int is 0.
+  // Otherwise return true.
+
   bool intToBool() {
     if (this == 0) {
       return false;

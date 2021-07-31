@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:githo/extracted_functions/textFormFieldHelpers.dart';
 
 class FormList extends StatefulWidget {
+  // Creates a column of TextFormFields that grow in numbers when filled out.
+
   final String fieldName;
   final bool canBeEmpty;
   final Function valuesGetter;
   final List<String> inputList;
 
-  FormList({
+  const FormList({
     required this.fieldName,
     required this.canBeEmpty,
     required this.valuesGetter,

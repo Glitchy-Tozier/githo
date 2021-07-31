@@ -18,6 +18,8 @@ import 'package:githo/extracted_widgets/sliderTitle.dart';
 import 'package:githo/models/habitPlanModel.dart';
 
 class EditHabit extends StatefulWidget {
+  // Edit the values of the input habit-plan.
+
   final String title;
   final HabitPlan habitPlan;
   final Function onSavedFunction;
@@ -140,9 +142,10 @@ class _EditHabitState extends State<EditHabit> {
                           FilteringTextInputFormatter.digitsOnly
                         ],
                         decoration: inputDecoration("Nr of required actions"),
+                        maxLength: 2,
                         validator: (input) => validateNumberField(
                           input: input,
-                          maxInput: 100,
+                          maxInput: 99,
                           variableText: "the required repetitions",
                           onEmptyText:
                               "It has to be at least one rep a $currentTimeUnit",

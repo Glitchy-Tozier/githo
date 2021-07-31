@@ -17,7 +17,7 @@ class ProgressData {
   bool fullyCompleted;
   DateTime currentStartingDate;
   String habit;
-  List<StepClass> steps;
+  List<StepData> steps;
 
   // Constructors
   ProgressData({
@@ -53,7 +53,7 @@ class ProgressData {
     this.steps = [];
     for (int i = 0; i < habitPlan.steps.length; i++) {
       this.steps.add(
-            StepClass(
+            StepData(
               stepIndex: i,
               habitPlan: habitPlan,
             ),
@@ -136,7 +136,7 @@ class ProgressData {
   }
 
   Map<String, dynamic>? get activeData {
-    for (final StepClass step in this.steps) {
+    for (final StepData step in this.steps) {
       final Map<String, dynamic>? tempResult = step.activeData;
       if (tempResult != null) {
         return tempResult;
@@ -145,7 +145,7 @@ class ProgressData {
   }
 
   Map<String, dynamic>? get waitingData {
-    for (final StepClass step in this.steps) {
+    for (final StepData step in this.steps) {
       final Map<String, dynamic>? tempResult = step.waitingData;
       if (tempResult != null) {
         return tempResult;
@@ -154,7 +154,7 @@ class ProgressData {
   }
 
   void _activateStartingPeriod() {
-    for (final StepClass step in this.steps) {
+    for (final StepData step in this.steps) {
       step.activateStartingPeriod();
     }
   }
@@ -182,7 +182,7 @@ class ProgressData {
     DateTime workingDate = this.currentStartingDate;
 
     for (int i = startingStepIdx; i < this.steps.length; i++) {
-      final StepClass step = this.steps[i];
+      final StepData step = this.steps[i];
 
       if (i == startingStepIdx) {
         workingDate = step.setChildrenDates(workingDate, startingPeriodIdx);
@@ -194,7 +194,7 @@ class ProgressData {
 
   Map<String, dynamic>? _getDataByDate(final DateTime date) {
     Map<String, dynamic>? map;
-    for (final StepClass step in this.steps) {
+    for (final StepData step in this.steps) {
       map = step.getDataByDate(date);
       if (map != null) {
         return map;
@@ -209,12 +209,12 @@ class ProgressData {
     final int previouslyActivePeriodIdx =
         (lastActiveMap["trainingPeriod"] as TrainingPeriod).index;
 
-    int currentStepIdx = (lastActiveMap["step"] as StepClass).index;
+    int currentStepIdx = (lastActiveMap["step"] as StepData).index;
     int remainingRegressions = failedPeriods +
         1; // Always reset one additional period to make sure we actually move backwards in time.
 
     while (true) {
-      final StepClass currentStep = this.steps[currentStepIdx];
+      final StepData currentStep = this.steps[currentStepIdx];
       remainingRegressions = currentStep.regressPeriods(remainingRegressions);
 
       if (remainingRegressions > 0 && currentStepIdx > 0) {
@@ -295,7 +295,7 @@ class ProgressData {
   }
 
   void _completePassedPeriods() {
-    for (final StepClass step in this.steps) {
+    for (final StepData step in this.steps) {
       step.markPassedPeriods();
     }
   }
@@ -345,7 +345,7 @@ class ProgressData {
     final map = Map<String, dynamic>();
 
     final List<Map> mapList = [];
-    for (final StepClass step in this.steps) {
+    for (final StepData step in this.steps) {
       mapList.add(step.toMap());
     }
 
@@ -359,12 +359,12 @@ class ProgressData {
   }
 
   factory ProgressData.fromMap(final Map<String, dynamic> map) {
-    List<StepClass> jsonToStepList(final String json) {
+    List<StepData> jsonToStepList(final String json) {
       final List<dynamic> dynamicList = jsonDecode(json);
-      final List<StepClass> stepList = <StepClass>[];
+      final List<StepData> stepList = <StepData>[];
 
       for (final dynamic stepMap in dynamicList) {
-        stepList.add(StepClass.fromMap(stepMap));
+        stepList.add(StepData.fromMap(stepMap));
       }
 
       return stepList;

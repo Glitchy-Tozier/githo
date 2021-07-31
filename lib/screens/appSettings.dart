@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/* import 'package:flutter/material.dart';
 
 class AppSettings extends StatelessWidget {
   @override
@@ -28,3 +28,4 @@ class AppSettings extends StatelessWidget {
     );
   }
 }
+ */

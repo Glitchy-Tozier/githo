@@ -3,16 +3,18 @@ import 'package:githo/extracted_data/styleData.dart';
 import 'package:githo/models/used_classes/training.dart';
 
 class ConfirmTrainingStart extends StatelessWidget {
+  // Returns a dialog that lets the user confirm that he really wants to start the current training.
+
   final String title;
-  final String trainingDescription;
+  final String toDo;
   final Training training;
-  final Function confirmationFunc;
+  final Function onConfirmation;
 
   const ConfirmTrainingStart({
     required this.title,
-    required this.trainingDescription,
+    required this.toDo,
     required this.training,
-    required this.confirmationFunc,
+    required this.onConfirmation,
   });
 
   @override
@@ -30,7 +32,7 @@ class ConfirmTrainingStart extends StatelessWidget {
         style: StyleData.textStyle,
       ),
       content: Text(
-        "To-Do: $trainingDescription\n\nReps: $amountString",
+        "To-Do: $toDo\n\nReps: $amountString",
         style: StyleData.textStyle,
       ),
       actions: <Widget>[
@@ -68,7 +70,7 @@ class ConfirmTrainingStart extends StatelessWidget {
               ),
               onPressed: () {
                 Navigator.pop(context);
-                confirmationFunc();
+                onConfirmation();
               },
             ),
           ],

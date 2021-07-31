@@ -7,13 +7,8 @@ import 'package:githo/models/settingsModel.dart';
 import 'package:githo/screens/homeScreen.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
-class OnBoardingScreen extends StatefulWidget {
-  @override
-  _OnBoardingScreenState createState() => _OnBoardingScreenState();
-}
-
-class _OnBoardingScreenState extends State<OnBoardingScreen> {
-  final introKey = GlobalKey<IntroductionScreenState>();
+class OnBoardingScreen extends StatelessWidget {
+  // The introduction-screen that explains how this app works.
 
   void _onIntroEnd(BuildContext context) async {
     // Make sure the introduction-screen doesn't get shown again
@@ -52,7 +47,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       children: [
         const BackgroundWidget(),
         IntroductionScreen(
-          key: introKey,
           globalBackgroundColor: Colors.transparent,
           pages: [
             PageViewModel(

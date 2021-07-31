@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:githo/extracted_data/styleData.dart';
 
 class ConfirmEdit extends StatelessWidget {
-  final Function confirmationFunc;
+  // Returns a dialog that asks "Do you really want to edit the habit-plan?"
 
-  const ConfirmEdit({required this.confirmationFunc});
+  final Function onConfirmation;
+  const ConfirmEdit({required this.onConfirmation});
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +53,7 @@ class ConfirmEdit extends StatelessWidget {
               ),
               onPressed: () {
                 Navigator.pop(context);
-                confirmationFunc();
+                onConfirmation();
               },
             ),
           ],

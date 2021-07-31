@@ -5,14 +5,11 @@ import 'package:githo/models/settingsModel.dart';
 import 'package:githo/screens/homeScreen.dart';
 import 'package:githo/screens/introduction.dart';
 
-class FirstScreen extends StatefulWidget {
-  const FirstScreen({Key? key}) : super(key: key);
+class FirstScreen extends StatelessWidget {
+  // Return the apropriate first screen:
+  // If the app is started for the first time: OnBoardingScreen();
+  // Else: the normal HomeScreen();
 
-  @override
-  _FirstScreenState createState() => _FirstScreenState();
-}
-
-class _FirstScreenState extends State<FirstScreen> {
   Future<Widget> getFirstScreen() async {
     final Settings settings = await DatabaseHelper.instance.getSettings();
 

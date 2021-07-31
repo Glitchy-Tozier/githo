@@ -46,7 +46,7 @@ void addNewHabit(
   );
 }
 
-// Sent an existing habitPlan to the editHabit-screen and edit it
+// Send an existing habitPlan to the editHabit-screen and edit it there
 void editHabit(
   BuildContext context,
   final Function updatePrevScreens,

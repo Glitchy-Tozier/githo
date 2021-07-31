@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class TrainingCard extends StatelessWidget {
+  // Returns the default training-card.
+
   final double horizontalMargin;
   final double cardWidth;
   final double cardHeight;

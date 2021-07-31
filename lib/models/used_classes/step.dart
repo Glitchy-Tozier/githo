@@ -5,14 +5,14 @@ import 'package:githo/helpers/timeHelper.dart';
 import 'package:githo/models/habitPlanModel.dart';
 import 'package:githo/models/used_classes/trainingPeriod.dart';
 
-class StepClass {
+class StepData {
   late int index;
   late int number; // = index + 1
   late String text;
   late int durationInHours;
   late List<TrainingPeriod> trainingPeriods;
 
-  StepClass({required int stepIndex, required HabitPlan habitPlan}) {
+  StepData({required int stepIndex, required HabitPlan habitPlan}) {
     this.index = stepIndex;
     this.number = stepIndex + 1;
     this.text = habitPlan.steps[stepIndex];
@@ -36,7 +36,7 @@ class StepClass {
           );
     }
   }
-  StepClass.withDirectValues({
+  StepData.withDirectValues({
     required this.index,
     required this.number,
     required this.text,
@@ -187,7 +187,7 @@ class StepClass {
     return map;
   }
 
-  factory StepClass.fromMap(Map<String, dynamic> map) {
+  factory StepData.fromMap(Map<String, dynamic> map) {
     List<TrainingPeriod> jsonToList(final String json) {
       final List<dynamic> dynamicList = jsonDecode(json);
       final List<TrainingPeriod> stepList = [];
@@ -199,7 +199,7 @@ class StepClass {
       return stepList;
     }
 
-    return StepClass.withDirectValues(
+    return StepData.withDirectValues(
       index: map["index"],
       number: map["number"],
       text: map["text"],

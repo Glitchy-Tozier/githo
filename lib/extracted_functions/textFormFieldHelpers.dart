@@ -28,6 +28,7 @@ String? validateNumberField({
   required final String variableText,
   required final String onEmptyText,
 }) {
+  // Validation function for all number-input-TextFields
   final String? emptycheck =
       checkIfEmpty(input.toString().trim(), variableText);
   if (emptycheck != null) {

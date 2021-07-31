@@ -13,6 +13,8 @@ import 'package:githo/models/used_classes/training.dart';
 import 'package:githo/models/used_classes/trainingPeriod.dart';
 
 class PeriodListView extends StatelessWidget {
+  // Creates one of those horizontal training-listViews in the homescreen.
+
   final TrainingPeriod trainingPeriod;
   final String stepDescription;
   final Function updateFunction;
@@ -63,8 +65,8 @@ class PeriodListView extends StatelessWidget {
                 context: context,
                 backgroundColor: Colors.transparent,
                 builder: (context) => TextSheet(
-                  headingString: "Waiting for training to start",
-                  textSpan: TextSpan(
+                  title: "Waiting for training to start",
+                  text: TextSpan(
                     children: [
                       const TextSpan(
                         text: "Starting in ",
@@ -164,9 +166,9 @@ class PeriodListView extends StatelessWidget {
                   builder: (BuildContext buildContext) {
                     return ConfirmTrainingStart(
                       title: "Confirm Activation",
-                      trainingDescription: this.stepDescription,
+                      toDo: this.stepDescription,
                       training: training,
-                      confirmationFunc: onConfirmation,
+                      onConfirmation: onConfirmation,
                     );
                   },
                 );

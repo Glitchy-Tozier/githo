@@ -1,4 +1,6 @@
 class DataShortcut {
+  // Contains some useful, regularly used values.
+
   static const List<String> timeFrames = [
     "hour",
     "day",

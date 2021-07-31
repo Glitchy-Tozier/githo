@@ -1,4 +1,6 @@
 String getDurationDiff(final DateTime dateTime1, final DateTime dateTime2) {
+  // Returns a String that describes the time difference between two DateTimes.
+
   final Duration difference = dateTime2.difference(dateTime1);
   final int amount;
   final String timeString;

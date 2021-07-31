@@ -2,6 +2,8 @@ import 'package:githo/extracted_data/dataShortcut.dart';
 import 'package:githo/models/progressDataModel.dart';
 
 class TimeHelper {
+  // Used intstead of DateTime.now() to help with debugging.
+
   static final TimeHelper instance = TimeHelper._privateConstructor();
   static Duration _timeToAdd = Duration.zero;
 

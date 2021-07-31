@@ -17,6 +17,7 @@ import 'package:githo/extracted_widgets/screenEndingSpacer.dart';
 import 'package:githo/models/habitPlanModel.dart';
 
 class SingleHabitDisplay extends StatefulWidget {
+  // Display the details (final habit, rules, steps, comments) for one single habit-plan.
   final Function updateFunction;
   final HabitPlan habitPlan;
 
@@ -49,7 +50,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
       widgetList.add(
         CustomListTile(
           leadingWidget: BulletPoint(),
-          title: comment.toString(),
+          title: comment,
         ),
       );
       widgetList.add(
@@ -243,8 +244,8 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
                 showDialog(
                   context: context,
                   builder: (BuildContext buildContext) => ConfirmDeletion(
-                    habitPlan,
-                    updatePrevScreens,
+                    habitPlan: habitPlan,
+                    onConfirmation: updatePrevScreens,
                   ),
                 );
               },
@@ -269,7 +270,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
                   showDialog(
                     context: context,
                     builder: (BuildContext buildContext) => ConfirmEdit(
-                      confirmationFunc: () => editHabit(
+                      onConfirmation: () => editHabit(
                         context,
                         _updateLoadedScreens,
                         this.habitPlan,

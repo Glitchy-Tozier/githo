@@ -24,6 +24,7 @@ import 'package:githo/screens/appInfo.dart';
 import 'package:githo/screens/habitList.dart';
 
 class HomeScreen extends StatefulWidget {
+  // The regular home-screen, containing the to-do's.
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -134,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         // This column exists to make sure all trainings are being cached. (= to disable lazyloading)
                         children: [
                           ...List.generate(progressData.steps.length, (i) {
-                            final StepClass step = progressData.steps[i];
+                            final StepData step = progressData.steps[i];
                             return StepToDo(
                               globalKey,
                               step,
@@ -281,7 +282,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             progressData.waitingData!;
 
                         final Training training = waitingMap["training"];
-                        final StepClass step = waitingMap["step"];
+                        final StepData step = waitingMap["step"];
                         final String stepDescription = step.text;
 
                         final DateTime now = TimeHelper.instance.currentTime;
@@ -293,8 +294,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           context: context,
                           backgroundColor: Colors.transparent,
                           builder: (context) => TextSheet(
-                            headingString: "Waiting for training to start",
-                            textSpan: TextSpan(
+                            title: "Waiting for training to start",
+                            text: TextSpan(
                               children: [
                                 const TextSpan(
                                   text: "Starting in ",
@@ -318,16 +319,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
                       onClickFunc = () {
                         final Training activeTraining = activeMap["training"];
-                        final StepClass activeStep = activeMap["step"];
+                        final StepData activeStep = activeMap["step"];
                         if (activeTraining.status == "current") {
                           showDialog(
                             context: context,
                             builder: (BuildContext buildContext) {
                               return ConfirmTrainingStart(
                                 title: "Confirm Activation",
-                                trainingDescription: activeStep.text,
+                                toDo: activeStep.text,
                                 training: activeTraining,
-                                confirmationFunc: () {
+                                onConfirmation: () {
                                   activeTraining.activate();
                                   _updateDbAndScreen();
                                 },

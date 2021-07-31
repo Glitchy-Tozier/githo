@@ -11,6 +11,8 @@ import 'package:githo/models/progressDataModel.dart';
 import 'package:githo/models/settingsModel.dart';
 
 class DatabaseHelper {
+  // Used for interacting with the database.
+
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
   static Database? _db;
 

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:githo/extracted_data/styleData.dart';
 
 class TrainingDoneAlert extends StatelessWidget {
+  // Notifies the user of his success.
+
   @override
   Widget build(BuildContext context) {
     const List<String> buttonStrings = [

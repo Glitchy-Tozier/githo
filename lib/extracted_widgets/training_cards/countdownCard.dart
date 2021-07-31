@@ -5,6 +5,8 @@ import 'package:githo/extracted_functions/getDurationDiff.dart';
 import 'package:githo/helpers/timeHelper.dart';
 
 class CountdownCard extends StatefulWidget {
+  // Returns a training-card that displays a countdown for the training-start.
+
   final double horizontalMargin;
   final double cardWidth;
   final double cardHeight;
