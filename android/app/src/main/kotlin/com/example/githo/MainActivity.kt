@@ -1,4 +1,4 @@
-package com.example.githo
+package com.florianthaler.githo
 
 import io.flutter.embedding.android.FlutterActivity
 
