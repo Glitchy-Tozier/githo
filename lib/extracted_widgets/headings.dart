@@ -29,18 +29,17 @@ class Heading extends StatelessWidget {
   final String _text;
   const Heading(this._text);
 
+  static const TextStyle style = TextStyle(
+    fontSize: 30,
+    fontWeight: FontWeight.bold,
+    color: Colors.black,
+  );
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Text(
-        _text,
-        style: const TextStyle(
-          fontSize: 30,
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-        ),
-      ),
+      child: Text(_text, style: style),
     );
   }
 }

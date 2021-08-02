@@ -63,8 +63,9 @@ class OnBoardingScreen extends StatelessWidget {
               decoration: pageDecoration,
             ),
             PageViewModel(
-              title: "Advance",
-              body: "Complete trainings to advance to the next step",
+              title: "Build strong habits",
+              body:
+                  "Consistently succeed in trainings to advance to the next step.\n\nIf a step is too difficult, repeat the one before it.",
               image: const BorderedImage(
                   "assets/introduction_screen_images/training.png"),
               decoration: pageDecoration,
@@ -73,17 +74,17 @@ class OnBoardingScreen extends StatelessWidget {
           onDone: () => _onIntroEnd(context),
           next: const Icon(Icons.arrow_forward),
           done: Text(
-            'Done',
+            'Start',
             style: coloredBoldTextStyle(Theme.of(context).primaryColor),
           ),
           curve: Curves.fastLinearToSlowEaseIn,
           controlsMargin: const EdgeInsets.all(16),
-          dotsDecorator: DotsDecorator(
-            size: const Size(10.0, 10.0),
+          dotsDecorator: const DotsDecorator(
+            size: Size(10.0, 10.0),
             color: Colors.black,
-            activeColor: Theme.of(context).primaryColor,
-            activeSize: const Size(22.0, 10.0),
-            activeShape: const RoundedRectangleBorder(
+            activeColor: Colors.pink,
+            activeSize: Size(22.0, 10.0),
+            activeShape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(25.0)),
             ),
           ),
