@@ -20,7 +20,7 @@ import 'package:githo/models/progressDataModel.dart';
 import 'package:githo/models/used_classes/step.dart';
 import 'package:githo/models/used_classes/training.dart';
 
-import 'package:githo/screens/appInfo.dart';
+import 'package:githo/screens/about.dart';
 import 'package:githo/screens/habitList.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -210,7 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AppInfo(),
+                        builder: (context) => About(),
                       ),
                     );
                   },

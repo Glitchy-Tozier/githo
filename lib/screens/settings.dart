@@ -1,6 +1,6 @@
 /* import 'package:flutter/material.dart';
 
-class AppSettings extends StatelessWidget {
+class Settings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

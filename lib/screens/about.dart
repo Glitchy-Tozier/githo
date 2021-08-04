@@ -9,8 +9,8 @@ import 'package:githo/extracted_widgets/backgroundWidget.dart';
 import 'package:githo/extracted_widgets/borderedImage.dart';
 import 'package:githo/extracted_widgets/headings.dart';
 
-class AppInfo extends StatelessWidget {
-  // Contains licences and important links.
+class About extends StatelessWidget {
+  // Contains licenses and important links.
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +68,7 @@ class AppInfo extends StatelessWidget {
                         },
                       ),
                       ButtonListItem(
-                        text: "Licences",
+                        text: "Licenses",
                         color: Theme.of(context).buttonColor,
                         onPressed: () {
                           showLicensePage(
