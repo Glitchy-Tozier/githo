@@ -30,7 +30,7 @@ class Heading extends StatelessWidget {
   const Heading(this._text);
 
   static const TextStyle style = TextStyle(
-    fontSize: 30,
+    fontSize: 26,
     fontWeight: FontWeight.bold,
     color: Colors.black,
   );
