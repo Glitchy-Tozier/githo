@@ -19,17 +19,16 @@ class HabitList extends StatefulWidget {
   const HabitList({required this.updateFunction});
 
   @override
-  _HabitListState createState() =>
-      _HabitListState(updatePrevScreens: updateFunction);
+  _HabitListState createState() => _HabitListState(updateFunction);
 }
 
 class _HabitListState extends State<HabitList> {
   final Function updatePrevScreens;
   late Future<List<HabitPlan>> _habitPlanListFuture;
 
-  _HabitListState({
-    required this.updatePrevScreens,
-  });
+  _HabitListState(
+    this.updatePrevScreens,
+  );
 
   @override
   void initState() {

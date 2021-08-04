@@ -32,9 +32,9 @@ class EditHabit extends StatefulWidget {
 
   @override
   _EditHabitState createState() => _EditHabitState(
-        title: title,
-        habitPlan: habitPlan,
-        onSavedFunction: onSavedFunction,
+        title,
+        habitPlan,
+        onSavedFunction,
       );
 }
 
@@ -44,11 +44,11 @@ class _EditHabitState extends State<EditHabit> {
   final HabitPlan habitPlan;
   final Function onSavedFunction;
 
-  _EditHabitState({
-    required this.title,
-    required this.habitPlan,
-    required this.onSavedFunction,
-  });
+  _EditHabitState(
+    this.title,
+    this.habitPlan,
+    this.onSavedFunction,
+  );
 
   // Text used to describe the slider-values
   final List<String> _timeFrames = DataShortcut.timeFrames;

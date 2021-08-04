@@ -29,8 +29,8 @@ class SingleHabitDisplay extends StatefulWidget {
 
   @override
   _SingleHabitDisplayState createState() => _SingleHabitDisplayState(
-        updatePrevScreens: this.updateFunction,
-        habitPlan: this.habitPlan,
+        this.updateFunction,
+        this.habitPlan,
       );
 }
 
@@ -38,10 +38,10 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
   final Function updatePrevScreens;
   HabitPlan habitPlan;
 
-  _SingleHabitDisplayState({
-    required this.updatePrevScreens,
-    required this.habitPlan,
-  });
+  _SingleHabitDisplayState(
+    this.updatePrevScreens,
+    this.habitPlan,
+  );
 
   List<Widget> _getCommentWidgets() {
     final List<Widget> widgetList = [];
