@@ -21,10 +21,10 @@ Every morning...
 4. Week: Take a longer walk and add short jogging-segments into the mix
 5. Week: Go jogging
 
-## Lisense
+## License
 ```
 Githo – An app that helps you form long-lasting habits, one step at a time.
-Copyright (C) <year>  <name of author>
+Copyright (C) 2021  Florian Thaler
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
