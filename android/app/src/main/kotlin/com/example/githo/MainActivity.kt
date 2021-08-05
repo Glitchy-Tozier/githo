@@ -1,4 +1,4 @@
-package com.florianthaler.githo
+package fun.glitchy.githo
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -39,7 +39,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.florianthaler.githo"
+        applicationId "fun.glitchy.githo"
         minSdkVersion 16
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
