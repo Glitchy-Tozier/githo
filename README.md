@@ -2,7 +2,7 @@
 
 ***G**et **I**nto **T**he **H**abit **O**f… An app that helps you form long-lasting habits, one step at a time.*
 
-<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" height="75">
+<!--<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" height="75">-->
 
 Acquiring habits that stick can be difficult. Githo helps you by letting you gradually advance, instead of going from 0 to 100%. This principle borrows ideas from exposure therapy.
 
