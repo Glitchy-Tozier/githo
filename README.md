@@ -24,7 +24,7 @@ Every morning...
 ## License
 ```
 Githo – An app that helps you form long-lasting habits, one step at a time.
-Copyright (C) 2021  Florian Thaler
+Copyright (C) 2021 Florian Thaler
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
