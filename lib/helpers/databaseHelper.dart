@@ -1,3 +1,21 @@
+/* 
+ * Githo – An app that helps you form long-lasting habits, one step at a time.
+ * Copyright (C) 2021 Florian Thaler
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
@@ -156,7 +174,7 @@ class DatabaseHelper {
     db.insert(
       // Initialize default values
       settingsTable,
-      Settings(
+      SettingsData(
         showIntroduction: true,
         paused: false,
       ).toMap(),
@@ -278,16 +296,16 @@ class DatabaseHelper {
     return result;
   }
 
-  Future<Settings> getSettings() async {
+  Future<SettingsData> getSettings() async {
     final List<Map<String, Object?>> queryResultList =
         await getDataMapList(settingsTable);
     final Map<String, Object?> queryResult = queryResultList[0];
 
-    final Settings result = Settings.fromMap(queryResult);
+    final SettingsData result = SettingsData.fromMap(queryResult);
     return result;
   }
 
-  Future<int> updateSettings(final Settings settings) async {
+  Future<int> updateSettings(final SettingsData settings) async {
     final Database db = await this._getDb;
     final int result = await db.update(
       settingsTable,
