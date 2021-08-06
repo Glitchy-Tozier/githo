@@ -193,9 +193,15 @@ class _EditHabitState extends State<EditHabit> {
                     const ThinDivider(),
 
                     // Create the form-fields for your personal comments
-                    const Padding(
+                    Padding(
                       padding: StyleData.screenPadding,
-                      child: Heading("Comments"),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: const <Widget>[
+                          Heading("Comments"),
+                          Text("(Optional)", style: StyleData.textStyle),
+                        ],
+                      ),
                     ),
                     Padding(
                       padding: StyleData.screenPadding,
@@ -234,8 +240,8 @@ class _EditHabitState extends State<EditHabit> {
                             // Set the correct value for THIS slider
                             habitPlan.trainingTimeIndex = value.toInt();
                             // Correct the Value for the NEXT slider
-                            int newTimeIndex = value.toInt();
-                            double newMaxTrainings =
+                            final int newTimeIndex = value.toInt();
+                            final double newMaxTrainings =
                                 _maxTrainings[newTimeIndex].toDouble();
                             habitPlan.requiredTrainings =
                                 (newMaxTrainings * 0.9).floor();
