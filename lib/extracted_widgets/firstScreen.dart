@@ -26,7 +26,7 @@ import 'package:githo/screens/introduction.dart';
 class FirstScreen extends StatelessWidget {
   // Return the apropriate first screen:
   // If the app is started for the first time: OnBoardingScreen();
-  // Else: the normal HomeScreen();
+  // Else: HomeScreen();
 
   Future<Widget> getFirstScreen() async {
     final SettingsData settings = await DatabaseHelper.instance.getSettings();
