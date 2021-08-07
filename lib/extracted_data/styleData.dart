@@ -33,17 +33,12 @@ class StyleData {
     fontSize: 16,
     color: Colors.black,
   );
+  static const TextStyle whiteTextStyle =
+      TextStyle(fontSize: 16, color: Colors.white);
   static const TextStyle boldTextStyle = TextStyle(
     fontSize: 16,
     color: Colors.black,
     fontWeight: FontWeight.bold,
-  );
-}
-
-TextStyle coloredTextStyle(final Color color) {
-  return TextStyle(
-    fontSize: 16,
-    color: color,
   );
 }
 

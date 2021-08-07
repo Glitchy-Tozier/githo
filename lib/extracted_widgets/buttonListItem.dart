@@ -41,7 +41,7 @@ class ButtonListItem extends StatelessWidget {
           text,
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
-          style: coloredTextStyle(Colors.black),
+          style: StyleData.textStyle,
         ),
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(color),

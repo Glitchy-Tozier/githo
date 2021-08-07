@@ -62,9 +62,9 @@ class ConfirmTrainingStart extends StatelessWidget {
                 Icons.cancel,
                 color: Colors.white,
               ),
-              label: Text(
+              label: const Text(
                 "Cancel",
-                style: coloredTextStyle(Colors.white),
+                style: StyleData.whiteTextStyle,
               ),
               style: ButtonStyle(
                 backgroundColor:
@@ -79,9 +79,9 @@ class ConfirmTrainingStart extends StatelessWidget {
                 Icons.check_circle,
                 color: Colors.white,
               ),
-              label: Text(
+              label: const Text(
                 "Start",
-                style: coloredTextStyle(Colors.white),
+                style: StyleData.whiteTextStyle,
               ),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.green),

@@ -48,7 +48,7 @@ extension IntExtension on int {
       return true;
     } else {
       print(
-          "intToBool-extension: ERROR: Int was not 1 or 0.\n'''true''' was returned.");
+          "intToBool-extension: WARNING: Int was not 1 or 0.\n'''true''' was returned.");
       return true;
     }
   }

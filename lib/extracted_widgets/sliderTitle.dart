@@ -30,9 +30,9 @@ class SliderTitle extends StatelessWidget {
     final List<TextSpan> textSpanList = [];
 
     // Style the spans according to the input
-    textDataPairs.forEach((textSpanData) {
-      String style = textSpanData[0];
-      String text = textSpanData[1];
+    for (final List<String> textDataPair in textDataPairs) {
+      String style = textDataPair[0];
+      String text = textDataPair[1];
       if (style == "normal") {
         textSpanList.add(
           TextSpan(
@@ -57,7 +57,7 @@ class SliderTitle extends StatelessWidget {
       } else {
         print("(SliderTitle:) That style was not yet implemented.");
       }
-    });
+    }
 
     // Build/return widgets
     return SizedBox(

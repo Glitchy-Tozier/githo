@@ -45,9 +45,9 @@ class ConfirmEdit extends StatelessWidget {
                 Icons.cancel,
                 color: Colors.white,
               ),
-              label: Text(
+              label: const Text(
                 "Cancel",
-                style: coloredTextStyle(Colors.white),
+                style: StyleData.whiteTextStyle,
               ),
               style: ButtonStyle(
                 backgroundColor:
@@ -62,9 +62,9 @@ class ConfirmEdit extends StatelessWidget {
                 Icons.edit,
                 color: Colors.white,
               ),
-              label: Text(
+              label: const Text(
                 "Edit",
-                style: coloredTextStyle(Colors.white),
+                style: StyleData.whiteTextStyle,
               ),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.green),

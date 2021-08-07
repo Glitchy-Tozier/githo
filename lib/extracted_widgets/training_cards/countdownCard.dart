@@ -90,6 +90,7 @@ class _CountdownCardState extends State<CountdownCard> {
   void initState() {
     super.initState();
 
+    // The timer is used to manage the countdown
     timer = Timer.periodic(
       const Duration(seconds: 1),
       (_) {
@@ -160,7 +161,7 @@ class _CountdownCardState extends State<CountdownCard> {
               borderRadius: BorderRadius.circular(borderRadius),
             ),
             borderRadius: BorderRadius.circular(borderRadius),
-            elevation: 5,
+            elevation: 6,
           ),
         ),
       ),

@@ -74,11 +74,11 @@ class _EditHabitState extends State<EditHabit> {
   final List<int> _maxTrainings = DataShortcut.maxTrainings;
 
   // Function for receiving the onSaved-values from formList.dart
-  void _getStepValues(List<String> valueList) {
+  void _getStepValues(final List<String> valueList) {
     this.habitPlan.steps = valueList;
   }
 
-  void _getCommentValues(List<String> valueList) {
+  void _getCommentValues(final List<String> valueList) {
     this.habitPlan.comments = valueList;
   }
 
@@ -134,7 +134,7 @@ class _EditHabitState extends State<EditHabit> {
                       child: TextFormField(
                         decoration: inputDecoration("The final habit"),
                         maxLength: 40,
-                        validator: (input) => checkIfEmpty(
+                        validator: (input) => complainIfEmpty(
                           input.toString().trim(),
                           "your final habit",
                         ),
@@ -235,7 +235,7 @@ class _EditHabitState extends State<EditHabit> {
                         max: (_timeFrames.length - 2)
                             .toDouble(), // -2 BECAUSE -1: .length return a value that is 1 too large AND -1: I want exclude the last value.
                         divisions: _timeFrames.length - 2,
-                        onChanged: (double value) {
+                        onChanged: (final double value) {
                           setState(() {
                             // Set the correct value for THIS slider
                             habitPlan.trainingTimeIndex = value.toInt();
@@ -268,7 +268,7 @@ class _EditHabitState extends State<EditHabit> {
                         min: 1,
                         max: currentMaxTrainings,
                         divisions: currentMaxTrainings.toInt() - 1,
-                        onChanged: (double value) {
+                        onChanged: (final double value) {
                           setState(() {
                             habitPlan.requiredTrainings = value.toInt();
                           });
@@ -296,7 +296,7 @@ class _EditHabitState extends State<EditHabit> {
                         min: 1,
                         max: 10,
                         divisions: 9,
-                        onChanged: (double value) {
+                        onChanged: (final double value) {
                           setState(() {
                             habitPlan.requiredTrainingPeriods = value.toInt();
                           });

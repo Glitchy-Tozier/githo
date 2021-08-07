@@ -193,9 +193,10 @@ class StepData {
   }
 
   Map<String, dynamic> toMap() {
-    final List<Map<String, dynamic>> trainingPeriodList = [];
-    for (int i = 0; i < this.trainingPeriods.length; i++) {
-      trainingPeriodList.add(this.trainingPeriods[i].toMap());
+    final List<Map<String, dynamic>> trainingPeriodMapList = [];
+
+    for (final TrainingPeriod trainingPeriod in this.trainingPeriods) {
+      trainingPeriodMapList.add(trainingPeriod.toMap());
     }
 
     final Map<String, dynamic> map = {};
@@ -203,20 +204,20 @@ class StepData {
     map["number"] = this.number;
     map["text"] = this.text;
     map["durationInHours"] = this.durationInHours;
-    map["trainingPeriods"] = jsonEncode(trainingPeriodList);
+    map["trainingPeriods"] = jsonEncode(trainingPeriodMapList);
     return map;
   }
 
   factory StepData.fromMap(Map<String, dynamic> map) {
     List<TrainingPeriod> jsonToList(final String json) {
       final List<dynamic> dynamicList = jsonDecode(json);
-      final List<TrainingPeriod> stepList = [];
+      final List<TrainingPeriod> trainingPeriods = [];
 
       for (final dynamic periodMap in dynamicList) {
-        stepList.add(TrainingPeriod.fromMap(periodMap));
+        trainingPeriods.add(TrainingPeriod.fromMap(periodMap));
       }
 
-      return stepList;
+      return trainingPeriods;
     }
 
     return StepData(

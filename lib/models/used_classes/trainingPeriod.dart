@@ -188,8 +188,8 @@ class TrainingPeriod {
   Map<String, dynamic> toMap() {
     final List<Map<String, dynamic>> trainingMapList = [];
 
-    for (int i = 0; i < this.trainings.length; i++) {
-      trainingMapList.add(this.trainings[i].toMap());
+    for (final Training training in this.trainings) {
+      trainingMapList.add(training.toMap());
     }
 
     final Map<String, dynamic> map = {};
@@ -203,16 +203,16 @@ class TrainingPeriod {
     return map;
   }
 
-  factory TrainingPeriod.fromMap(Map<String, dynamic> map) {
+  factory TrainingPeriod.fromMap(final Map<String, dynamic> map) {
     List<Training> jsonToList(final String json) {
       final List<dynamic> dynamicList = jsonDecode(json);
-      final List<Training> stepList = [];
+      final List<Training> trainings = [];
 
-      for (final dynamic periodMap in dynamicList) {
-        stepList.add(Training.fromMap(periodMap));
+      for (final dynamic trainingMap in dynamicList) {
+        trainings.add(Training.fromMap(trainingMap));
       }
 
-      return stepList;
+      return trainings;
     }
 
     return TrainingPeriod(

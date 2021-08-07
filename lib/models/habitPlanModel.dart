@@ -60,11 +60,11 @@ class HabitPlan {
   });
 
   Map<String, dynamic> toMap() {
-    final map = Map<String, dynamic>();
+    final Map<String, dynamic> map = {};
+
     if (id != null) {
       map["id"] = id;
     }
-
     map["isActive"] = isActive.boolToInt();
     map["fullyCompleted"] = fullyCompleted.boolToInt();
     map["goal"] = habit;

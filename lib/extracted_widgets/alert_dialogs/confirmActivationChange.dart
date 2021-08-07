@@ -49,9 +49,9 @@ class ConfirmActivationChange extends StatelessWidget {
                 Icons.cancel,
                 color: Colors.white,
               ),
-              label: Text(
+              label: const Text(
                 "Cancel",
-                style: coloredTextStyle(Colors.white),
+                style: StyleData.whiteTextStyle,
               ),
               style: ButtonStyle(
                 backgroundColor:
@@ -66,9 +66,9 @@ class ConfirmActivationChange extends StatelessWidget {
                 Icons.check_circle,
                 color: Colors.white,
               ),
-              label: Text(
+              label: const Text(
                 "Confirm",
-                style: coloredTextStyle(Colors.white),
+                style: StyleData.whiteTextStyle,
               ),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.green),

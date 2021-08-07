@@ -37,8 +37,8 @@ void addNewHabit(
     // TextFormFields:
     habit: "",
     requiredReps: 1,
-    steps: <String>[""],
-    comments: <String>[""],
+    steps: const <String>[""],
+    comments: const <String>[""],
     // Sliders:
     trainingTimeIndex: 1,
     requiredTrainings: 5,

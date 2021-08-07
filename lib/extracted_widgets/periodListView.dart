@@ -136,7 +136,7 @@ class PeriodListView extends StatelessWidget {
             color = Colors.green;
             child = Text(
               "${training.doneReps}/${training.requiredReps}",
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: textSize * 1.3,
                 color: Colors.black,
               ),
@@ -145,14 +145,14 @@ class PeriodListView extends StatelessWidget {
             color = Colors.red;
             child = Text(
               "${training.doneReps}/${training.requiredReps}",
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: textSize * 1.3,
                 color: Colors.black,
               ),
             );
           } else {
             color = Colors.grey.shade400;
-            child = Text(
+            child = const Text(
               "Skipped",
               style: TextStyle(
                 fontSize: textSize,
@@ -167,7 +167,7 @@ class PeriodListView extends StatelessWidget {
           cardWidth *= 1.3;
           cardHeight *= 1.3;
           if (training.status == "current") {
-            child = Text(
+            child = const Text(
               "Start training",
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -204,7 +204,7 @@ class PeriodListView extends StatelessWidget {
           } else {
             child = Text(
               "${training.doneReps}/${training.requiredReps}",
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: textSize * 1.3 * 1.3,
                 color: Colors.black,
               ),

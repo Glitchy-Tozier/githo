@@ -54,9 +54,9 @@ class ConfirmDeletion extends StatelessWidget {
                 Icons.cancel,
                 color: Colors.white,
               ),
-              label: Text(
+              label: const Text(
                 "Cancel",
-                style: coloredTextStyle(Colors.white),
+                style: StyleData.whiteTextStyle,
               ),
               style: ButtonStyle(
                 backgroundColor:
@@ -71,9 +71,9 @@ class ConfirmDeletion extends StatelessWidget {
                 Icons.delete,
                 color: Colors.white,
               ),
-              label: Text(
+              label: const Text(
                 "Delete",
-                style: coloredTextStyle(Colors.white),
+                style: StyleData.whiteTextStyle,
               ),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.red),

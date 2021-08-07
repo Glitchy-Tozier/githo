@@ -45,7 +45,7 @@ class TrainingDoneAlert extends StatelessWidget {
         ElevatedButton(
           child: Text(
             buttonString,
-            style: coloredTextStyle(Colors.white),
+            style: StyleData.whiteTextStyle,
           ),
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(Colors.green),

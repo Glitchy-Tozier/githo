@@ -28,11 +28,11 @@ void adaptDatabaseToOS() {
 
   if (Platform.isWindows) {
     print(
-        "\n~~~~~~~~~~~~~~~~~~~~~~~~~~\nDetected Windows\n~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        "\n~~~~~~~~~~~~~~~~~~~~~~~~~~\nDetected Windows\n-> Adapted Database\n~~~~~~~~~~~~~~~~~~~~~~~~~~");
     _needsSpecialSQfliteTreatment = true;
   } else if (Platform.isLinux) {
     print(
-        "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~\nDetected Linux\n~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~\nDetected Linux\n-> Adapted Database\n~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     _needsSpecialSQfliteTreatment = true;
   } else {
     print(

@@ -49,12 +49,8 @@ class FirstScreen extends StatelessWidget {
             return firstScreen;
           }
         }
-        // While loading, do this:
-        return const BackgroundWidget(
-          child: Center(
-            child: CircularProgressIndicator(),
-          ),
-        );
+        // While loading, return this:
+        return const BackgroundWidget();
       },
     );
   }

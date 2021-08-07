@@ -108,7 +108,7 @@ class Training {
   }
 
   Map<String, dynamic> toMap() {
-    Map<String, dynamic> map = {};
+    final Map<String, dynamic> map = {};
 
     map["number"] = this.number;
     map["durationInHours"] = this.durationInHours;
@@ -120,7 +120,7 @@ class Training {
     return map;
   }
 
-  factory Training.fromMap(Map<String, dynamic> map) {
+  factory Training.fromMap(final Map<String, dynamic> map) {
     return Training(
       number: map["number"],
       durationInHours: map["durationInHours"],

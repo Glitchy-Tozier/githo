@@ -95,7 +95,7 @@ class _FormListState extends State<FormList> {
               // Use This validation if the fields are optional
               if ((fieldNr != this.listLength) &&
                   (this.listLength > this._iniLength)) {
-                return checkIfEmpty(
+                return complainIfEmpty(
                   input.toString().trim(),
                   fieldName,
                 );
@@ -103,7 +103,7 @@ class _FormListState extends State<FormList> {
             } else {
               // Use this validation if at least one field NEEDS to be filled out.
               if (fieldNr != this.listLength) {
-                return checkIfEmpty(
+                return complainIfEmpty(
                   input.toString().trim(),
                   fieldName,
                 );

@@ -360,32 +360,32 @@ class ProgressData {
 
   // Functions for interacting with the database
   Map<String, dynamic> toMap() {
-    final map = Map<String, dynamic>();
+    final List<Map> stepMapList = [];
 
-    final List<Map> mapList = [];
     for (final StepData step in this.steps) {
-      mapList.add(step.toMap());
+      stepMapList.add(step.toMap());
     }
 
+    final Map<String, dynamic> map = {};
     map["habitPlanId"] = habitPlanId;
     map["isActive"] = isActive.boolToInt();
     map["fullyCompleted"] = fullyCompleted.boolToInt();
     map["currentStartingDate"] = currentStartingDate.toString();
     map["goal"] = habit;
-    map["steps"] = jsonEncode(mapList);
+    map["steps"] = jsonEncode(stepMapList);
     return map;
   }
 
   factory ProgressData.fromMap(final Map<String, dynamic> map) {
     List<StepData> jsonToStepList(final String json) {
       final List<dynamic> dynamicList = jsonDecode(json);
-      final List<StepData> stepList = <StepData>[];
+      final List<StepData> steps = [];
 
       for (final dynamic stepMap in dynamicList) {
-        stepList.add(StepData.fromMap(stepMap));
+        steps.add(StepData.fromMap(stepMap));
       }
 
-      return stepList;
+      return steps;
     }
 
     return ProgressData(

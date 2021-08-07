@@ -31,7 +31,7 @@ InputDecoration inputDecoration(final String text) {
   );
 }
 
-String? checkIfEmpty(final String? input, final String variableText) {
+String? complainIfEmpty(final String? input, final String variableText) {
   // Check if the TextFormField is empty.
   if (input!.trim().isEmpty) {
     return "Please fill in $variableText";
@@ -48,7 +48,7 @@ String? validateNumberField({
 }) {
   // Validation function for all number-input-TextFields
   final String? emptycheck =
-      checkIfEmpty(input.toString().trim(), variableText);
+      complainIfEmpty(input.toString().trim(), variableText);
   if (emptycheck != null) {
     return emptycheck;
   }

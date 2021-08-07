@@ -28,7 +28,7 @@ class SettingsData {
   });
 
   Map<String, dynamic> toMap() {
-    final map = Map<String, dynamic>();
+    final Map<String, dynamic> map = {};
     map["showIntroduction"] = showIntroduction.boolToInt();
     map["paused"] = paused.boolToInt();
     return map;
