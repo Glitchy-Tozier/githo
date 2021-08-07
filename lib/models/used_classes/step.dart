@@ -209,7 +209,7 @@ class StepData {
   }
 
   factory StepData.fromMap(Map<String, dynamic> map) {
-    List<TrainingPeriod> jsonToList(final String json) {
+    List<TrainingPeriod> jsonToPeriodList(final String json) {
       final List<dynamic> dynamicList = jsonDecode(json);
       final List<TrainingPeriod> trainingPeriods = [];
 
@@ -225,7 +225,7 @@ class StepData {
       number: map["number"],
       text: map["text"],
       durationInHours: map["durationInHours"],
-      trainingPeriods: jsonToList(map["trainingPeriods"]),
+      trainingPeriods: jsonToPeriodList(map["trainingPeriods"]),
     );
   }
 }

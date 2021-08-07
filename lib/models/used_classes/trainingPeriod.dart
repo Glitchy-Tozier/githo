@@ -204,7 +204,7 @@ class TrainingPeriod {
   }
 
   factory TrainingPeriod.fromMap(final Map<String, dynamic> map) {
-    List<Training> jsonToList(final String json) {
+    List<Training> jsonToTrainingList(final String json) {
       final List<dynamic> dynamicList = jsonDecode(json);
       final List<Training> trainings = [];
 
@@ -222,7 +222,7 @@ class TrainingPeriod {
       durationText: map["durationText"],
       requiredTrainings: map["requiredTrainings"],
       status: map["status"],
-      trainings: jsonToList(map["trainings"]),
+      trainings: jsonToTrainingList(map["trainings"]),
     );
   }
 }
