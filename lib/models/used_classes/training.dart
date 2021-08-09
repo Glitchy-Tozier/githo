@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:githo/extracted_data/dataShortcut.dart';
+import 'package:githo/config/dataShortcut.dart';
 import 'package:githo/helpers/timeHelper.dart';
 import 'package:githo/models/habitPlanModel.dart';
 

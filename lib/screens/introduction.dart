@@ -17,10 +17,10 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:githo/extracted_data/styleData.dart';
-import 'package:githo/extracted_widgets/backgroundWidget.dart';
-import 'package:githo/extracted_widgets/borderedImage.dart';
-import 'package:githo/helpers/databaseHelper.dart';
+import 'package:githo/config/styleData.dart';
+import 'package:githo/widgets/backgroundWidget.dart';
+import 'package:githo/widgets/borderedImage.dart';
+import 'package:githo/database/databaseHelper.dart';
 import 'package:githo/models/settingsModel.dart';
 import 'package:githo/screens/homeScreen.dart';
 import 'package:introduction_screen/introduction_screen.dart';

@@ -19,20 +19,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
-import 'package:githo/extracted_data/dataShortcut.dart';
-import 'package:githo/extracted_data/styleData.dart';
-import 'package:githo/extracted_functions/getDurationDiff.dart';
+import 'package:githo/config/dataShortcut.dart';
+import 'package:githo/config/styleData.dart';
+import 'package:githo/helpers/getDurationDiff.dart';
 
-import 'package:githo/extracted_widgets/alert_dialogs/confirmTrainingStart.dart';
-import 'package:githo/extracted_widgets/alert_dialogs/trainingDone.dart';
-import 'package:githo/extracted_widgets/backgroundWidget.dart';
-import 'package:githo/extracted_widgets/bottom_sheets/textSheet.dart';
-import 'package:githo/extracted_widgets/bottom_sheets/welcomeSheet.dart';
-import 'package:githo/extracted_data/allHeadings.dart';
-import 'package:githo/extracted_widgets/screenEndingSpacer.dart';
-import 'package:githo/extracted_widgets/stepToDo.dart';
+import 'package:githo/widgets/alert_dialogs/confirmTrainingStart.dart';
+import 'package:githo/widgets/alert_dialogs/trainingDone.dart';
+import 'package:githo/widgets/backgroundWidget.dart';
+import 'package:githo/widgets/bottom_sheets/textSheet.dart';
+import 'package:githo/widgets/bottom_sheets/welcomeSheet.dart';
+import 'package:githo/widgets/headings/screenTitle.dart';
+import 'package:githo/widgets/headings/heading.dart';
+import 'package:githo/widgets/screenEndingSpacer.dart';
+import 'package:githo/widgets/stepToDo.dart';
 
-import 'package:githo/helpers/databaseHelper.dart';
+import 'package:githo/database/databaseHelper.dart';
 import 'package:githo/helpers/timeHelper.dart';
 import 'package:githo/models/progressDataModel.dart';
 import 'package:githo/models/used_classes/step.dart';

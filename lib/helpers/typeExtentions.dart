@@ -16,32 +16,36 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:githo/helpers/typeExtentions.dart';
-
-/// A model for how the user's settings are stored.
-
-class SettingsData {
-  bool showIntroduction;
-  bool paused;
-
-  SettingsData({
-    required this.showIntroduction,
-    required this.paused,
-  });
-
-  /// Converts the [SettingsData] into a Map.
-  Map<String, dynamic> toMap() {
-    final Map<String, dynamic> map = {};
-    map["showIntroduction"] = showIntroduction.toInt();
-    map["paused"] = paused.toInt();
-    return map;
+extension StringExtension on String {
+  /// Capitalizes the first letter of a string.
+  String capitalize() {
+    return "${this[0].toUpperCase()}${this.substring(1)}";
   }
+}
 
-  /// Converts a Map into [SettingsData].
-  factory SettingsData.fromMap(final Map<String, dynamic> map) {
-    return SettingsData(
-      showIntroduction: (map["showIntroduction"] as int).toBool(),
-      paused: (map["paused"] as int).toBool(),
-    );
+extension BoolExtension on bool {
+  /// Returns 1 if true; Returns 0 if false.
+  int toInt() {
+    if (this == true) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+}
+
+extension IntExtension on int {
+  /// Returns false if the int is 0.
+  /// Otherwise returns true.
+  bool toBool() {
+    if (this == 0) {
+      return false;
+    } else if (this == 1) {
+      return true;
+    } else {
+      print(
+          "intToBool-extension: WARNING: Int was not 1 or 0.\n'''true''' was returned.");
+      return true;
+    }
   }
 }

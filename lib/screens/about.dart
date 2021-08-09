@@ -17,15 +17,15 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:githo/extracted_widgets/buttonListItem.dart';
+import 'package:githo/widgets/buttonListItem.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:githo/extracted_data/styleData.dart';
-import 'package:githo/extracted_widgets/backgroundWidget.dart';
+import 'package:githo/config/styleData.dart';
+import 'package:githo/widgets/backgroundWidget.dart';
 
-import 'package:githo/extracted_widgets/borderedImage.dart';
-import 'package:githo/extracted_data/allHeadings.dart';
+import 'package:githo/widgets/borderedImage.dart';
+import 'package:githo/widgets/headings/heading.dart';
 
 /// Contains licenses and important links.
 

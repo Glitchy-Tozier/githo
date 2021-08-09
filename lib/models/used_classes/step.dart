@@ -18,7 +18,7 @@
 
 import 'dart:convert';
 
-import 'package:githo/extracted_data/dataShortcut.dart';
+import 'package:githo/config/dataShortcut.dart';
 import 'package:githo/models/habitPlanModel.dart';
 import 'package:githo/models/used_classes/trainingPeriod.dart';
 

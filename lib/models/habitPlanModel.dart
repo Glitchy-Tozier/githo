@@ -17,7 +17,8 @@
  */
 
 import 'dart:convert';
-import 'package:githo/extracted_functions/typeExtentions.dart';
+import 'package:githo/helpers/typeExtentions.dart';
+import 'package:githo/helpers/timeHelper.dart';
 
 /// The model for what a habit-plan consists of.
 
@@ -61,6 +62,25 @@ class HabitPlan {
     required this.lastChanged,
   });
 
+  static HabitPlan getEmptyHabitPlan() {
+    final DateTime now = TimeHelper.instance.currentTime;
+
+    return HabitPlan(
+      isActive: false,
+      fullyCompleted: false,
+      // TextFormFields:
+      habit: "",
+      requiredReps: 1,
+      steps: const <String>[""],
+      comments: const <String>[""],
+      // Sliders:
+      trainingTimeIndex: 1,
+      requiredTrainings: 5,
+      requiredTrainingPeriods: 1,
+      lastChanged: now,
+    );
+  }
+
   /// Converts the [HabitPlan] into a Map.
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> map = {};
@@ -68,8 +88,8 @@ class HabitPlan {
     if (id != null) {
       map["id"] = id;
     }
-    map["isActive"] = isActive.boolToInt();
-    map["fullyCompleted"] = fullyCompleted.boolToInt();
+    map["isActive"] = isActive.toInt();
+    map["fullyCompleted"] = fullyCompleted.toInt();
     map["goal"] = habit;
     map["requiredReps"] = requiredReps;
     map["steps"] = jsonEncode(steps);
@@ -96,8 +116,8 @@ class HabitPlan {
 
     return HabitPlan.withId(
       id: map["id"],
-      isActive: (map["isActive"] as int).intToBool(),
-      fullyCompleted: (map["fullyCompleted"] as int).intToBool(),
+      isActive: (map["isActive"] as int).toBool(),
+      fullyCompleted: (map["fullyCompleted"] as int).toBool(),
       habit: map["goal"],
       requiredReps: map["requiredReps"],
       steps: jsonToStringList(map["steps"]),

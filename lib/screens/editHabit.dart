@@ -19,19 +19,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:githo/extracted_data/dataShortcut.dart';
-import 'package:githo/extracted_data/styleData.dart';
+import 'package:githo/config/dataShortcut.dart';
+import 'package:githo/config/styleData.dart';
 
-import 'package:githo/extracted_functions/textFormFieldHelpers.dart';
-import 'package:githo/extracted_functions/typeExtentions.dart';
-import 'package:githo/extracted_widgets/backgroundWidget.dart';
-import 'package:githo/extracted_widgets/dividers/fatDivider.dart';
-import 'package:githo/extracted_widgets/dividers/thinDivider.dart';
+import 'package:githo/helpers/textFormFieldvalidation.dart';
+import 'package:githo/helpers/typeExtentions.dart';
+import 'package:githo/widgets/backgroundWidget.dart';
+import 'package:githo/widgets/dividers/fatDivider.dart';
+import 'package:githo/widgets/dividers/thinDivider.dart';
 
-import 'package:githo/extracted_widgets/formList.dart';
-import 'package:githo/extracted_data/allHeadings.dart';
-import 'package:githo/extracted_widgets/screenEndingSpacer.dart';
-import 'package:githo/extracted_widgets/sliderTitle.dart';
+import 'package:githo/widgets/formList.dart';
+import 'package:githo/widgets/headings/screenTitle.dart';
+import 'package:githo/widgets/headings/heading.dart';
+import 'package:githo/widgets/screenEndingSpacer.dart';
+import 'package:githo/widgets/sliderTitle.dart';
 
 import 'package:githo/models/habitPlanModel.dart';
 

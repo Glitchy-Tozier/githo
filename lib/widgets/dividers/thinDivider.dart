@@ -17,34 +17,20 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:githo/config/dataShortcut.dart';
+import 'package:githo/config/styleData.dart';
 
-import 'package:githo/widgets/firstScreen.dart';
-import 'package:githo/database/adaptDatabaseToOS.dart';
+class ThinDivider extends StatelessWidget {
+  final Color color;
 
-void main() {
-  adaptDatabaseToOS();
-  runApp(MyApp());
-}
+  /// Creates a thin divider.
+  const ThinDivider({this.color = Colors.black54});
 
-/// This widget is the root of the application.
-class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Disables screen-rotation to prevent some layots getting too large.
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-
-    return MaterialApp(
-      title: "Githo - Get Into The Habit Of…",
-      theme: ThemeData(
-        primarySwatch: Colors.pink,
-      ),
-      home: FirstScreen(),
-      debugShowCheckedModeBanner: DataShortcut.testing,
+    return Divider(
+      color: this.color,
+      indent: StyleData.screenPaddingValue * 0.5,
+      endIndent: StyleData.screenPaddingValue * 0.5,
     );
   }
 }

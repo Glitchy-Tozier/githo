@@ -17,34 +17,31 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:githo/config/dataShortcut.dart';
+import 'package:githo/config/styleData.dart';
 
-import 'package:githo/widgets/firstScreen.dart';
-import 'package:githo/database/adaptDatabaseToOS.dart';
+class CustomListTile extends StatelessWidget {
+  final Widget leadingWidget;
+  final String title;
 
-void main() {
-  adaptDatabaseToOS();
-  runApp(MyApp());
-}
+  /// A list-item used in the habitDetails.dart-screen.
+  const CustomListTile({
+    required this.leadingWidget,
+    required this.title,
+  });
 
-/// This widget is the root of the application.
-class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Disables screen-rotation to prevent some layots getting too large.
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-
-    return MaterialApp(
-      title: "Githo - Get Into The Habit Of…",
-      theme: ThemeData(
-        primarySwatch: Colors.pink,
-      ),
-      home: FirstScreen(),
-      debugShowCheckedModeBanner: DataShortcut.testing,
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        leadingWidget,
+        Flexible(
+          child: Text(
+            title,
+            style: StyleData.textStyle,
+          ),
+        ),
+      ],
     );
   }
 }

@@ -18,14 +18,15 @@
 
 import 'package:flutter/material.dart';
 
-import 'package:githo/extracted_data/styleData.dart';
-import 'package:githo/extracted_functions/editHabitRoutes.dart';
-import 'package:githo/extracted_widgets/backgroundWidget.dart';
-import 'package:githo/extracted_widgets/buttonListItem.dart';
-import 'package:githo/extracted_widgets/dividers/fatDivider.dart';
-import 'package:githo/extracted_data/allHeadings.dart';
-import 'package:githo/extracted_widgets/screenEndingSpacer.dart';
-import 'package:githo/helpers/databaseHelper.dart';
+import 'package:githo/config/styleData.dart';
+import 'package:githo/helpers/editHabitRoutes.dart';
+import 'package:githo/widgets/backgroundWidget.dart';
+import 'package:githo/widgets/buttonListItem.dart';
+import 'package:githo/widgets/dividers/fatDivider.dart';
+import 'package:githo/widgets/headings/screenTitle.dart';
+import 'package:githo/widgets/headings/heading.dart';
+import 'package:githo/widgets/screenEndingSpacer.dart';
+import 'package:githo/database/databaseHelper.dart';
 import 'package:githo/models/habitPlanModel.dart';
 
 import 'package:githo/screens/habitDetails.dart';

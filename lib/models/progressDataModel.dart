@@ -18,9 +18,9 @@
 
 import 'dart:convert';
 
-import 'package:githo/extracted_functions/typeExtentions.dart';
+import 'package:githo/helpers/typeExtentions.dart';
 import 'package:githo/helpers/timeHelper.dart';
-import 'package:githo/helpers/databaseHelper.dart';
+import 'package:githo/database/databaseHelper.dart';
 import 'package:githo/models/habitPlanModel.dart';
 import 'package:githo/models/used_classes/step.dart';
 import 'package:githo/models/used_classes/training.dart';
@@ -398,8 +398,8 @@ class ProgressData {
 
     final Map<String, dynamic> map = {};
     map["habitPlanId"] = habitPlanId;
-    map["isActive"] = isActive.boolToInt();
-    map["fullyCompleted"] = fullyCompleted.boolToInt();
+    map["isActive"] = isActive.toInt();
+    map["fullyCompleted"] = fullyCompleted.toInt();
     map["currentStartingDate"] = currentStartingDate.toString();
     map["goal"] = habit;
     map["steps"] = jsonEncode(stepMapList);
@@ -422,8 +422,8 @@ class ProgressData {
 
     return ProgressData(
       habitPlanId: map["habitPlanId"],
-      isActive: (map["isActive"] as int).intToBool(),
-      fullyCompleted: (map["fullyCompleted"] as int).intToBool(),
+      isActive: (map["isActive"] as int).toBool(),
+      fullyCompleted: (map["fullyCompleted"] as int).toBool(),
       currentStartingDate: DateTime.parse(map["currentStartingDate"]),
       habit: map["goal"],
       steps: jsonToStepList(map["steps"]),
