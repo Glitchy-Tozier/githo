@@ -50,22 +50,25 @@ String? validateNumberField({
   required final String? input,
   required final int maxInput,
   required final String toFillIn,
-  required final String onEmptyText,
+  required final String textIfZero,
 }) {
   final String? complaint = complainIfEmpty(
     input: input,
     toFillIn: toFillIn,
   );
   if (complaint != null) {
+    // If the TextField is empty:
     return complaint;
-  }
-
-  final int intput = int.parse(input.toString().trim()); // I'm so funny!
-  if (intput > maxInput) {
-    return "Must be between 1 and $maxInput";
-  } else if (intput == 0) {
-    return onEmptyText;
   } else {
-    return null;
+    // If the TextField contains a value, see if it's valid.
+    final int intput = int.parse(input.toString().trim()); // I'm so funny!
+
+    if (intput > maxInput) {
+      return "Must be between 1 and $maxInput";
+    } else if (intput == 0) {
+      return textIfZero;
+    } else {
+      return null;
+    }
   }
 }

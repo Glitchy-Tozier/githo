@@ -165,7 +165,7 @@ class _EditHabitState extends State<EditHabit> {
                           input: input,
                           maxInput: 99,
                           toFillIn: "the required repetitions",
-                          onEmptyText:
+                          textIfZero:
                               "It has to be at least one rep a $currentTimeUnit",
                         ),
                         initialValue: habitPlan.requiredReps.toString(),

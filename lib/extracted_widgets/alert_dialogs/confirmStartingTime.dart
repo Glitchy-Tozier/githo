@@ -132,78 +132,76 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
       ),
       content: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: "$startingPeriod will ",
-                      style: StyleData.textStyle,
-                    ),
-                    TextSpan(
-                      text: "start on $startingDateString",
-                      style: StyleData.boldTextStyle,
-                    ),
-                  ],
-                ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: "$startingPeriod will ",
+                    style: StyleData.textStyle,
+                  ),
+                  TextSpan(
+                    text: "start on $startingDateString",
+                    style: StyleData.boldTextStyle,
+                  ),
+                ],
               ),
-              const SizedBox(height: 20),
-              Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextFormField(
-                      controller: this.dateController,
-                      decoration: inputDecoration("Starting date"),
-                      readOnly: true,
-                      onTap: () {
-                        final DateTime now = TimeHelper.instance.currentTime;
-                        showDatePicker(
-                          context: context,
-                          firstDate: now.subtract(Duration(days: 6)),
-                          initialDate: this.startingDate,
-                          lastDate: DateTime(now.year + 2000),
-                        ).then(
-                          (newStartingDate) {
-                            if (newStartingDate != null) {
-                              setState(() {
-                                this.startingDate = newStartingDate;
-                              });
-                            }
-                          },
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 10),
-                    (this.habitPlan.steps.length > 1)
-                        ? TextFormField(
-                            initialValue: "1",
-                            textAlign: TextAlign.end,
-                            keyboardType: TextInputType.number,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly
-                            ],
-                            decoration: inputDecoration("Starting step"),
-                            validator: (input) => validateNumberField(
-                              input: input,
-                              maxInput: this.habitPlan.steps.length,
-                              toFillIn: "the starting step",
-                              onEmptyText:
-                                  "Please insert a number between 1 and ${this.habitPlan.steps.length}",
-                            ),
-                            onSaved: (input) => this.startingStep =
-                                int.parse(input.toString().trim()),
-                          )
-                        : const SizedBox(),
-                  ],
-                ),
+            ),
+            const SizedBox(height: 20),
+            Form(
+              key: _formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                    controller: this.dateController,
+                    decoration: inputDecoration("Starting date"),
+                    readOnly: true,
+                    onTap: () {
+                      final DateTime now = TimeHelper.instance.currentTime;
+                      showDatePicker(
+                        context: context,
+                        firstDate: now.subtract(Duration(days: 6)),
+                        initialDate: this.startingDate,
+                        lastDate: DateTime(now.year + 2000),
+                      ).then(
+                        (newStartingDate) {
+                          if (newStartingDate != null) {
+                            setState(() {
+                              this.startingDate = newStartingDate;
+                            });
+                          }
+                        },
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  (this.habitPlan.steps.length > 1)
+                      ? TextFormField(
+                          initialValue: "1",
+                          textAlign: TextAlign.end,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
+                          decoration: inputDecoration("Starting step"),
+                          validator: (input) => validateNumberField(
+                            input: input,
+                            maxInput: this.habitPlan.steps.length,
+                            toFillIn: "the starting step",
+                            textIfZero:
+                                "Fill in number between 1 and ${this.habitPlan.steps.length}",
+                          ),
+                          onSaved: (input) => this.startingStep =
+                              int.parse(input.toString().trim()),
+                        )
+                      : const SizedBox(),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
       actions: <Widget>[
