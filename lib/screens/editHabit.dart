@@ -84,11 +84,11 @@ class _EditHabitState extends State<EditHabit> {
 
   @override
   Widget build(BuildContext context) {
-    final int trainingTimeIndex = habitPlan.trainingTimeIndex.toInt();
-    final String currentTimeUnit = _timeFrames[trainingTimeIndex];
-    final String currentAdjTimeUnit = _adjTimeFrames[trainingTimeIndex];
+    final int trainingTimeIndex = habitPlan.trainingTimeIndex;
+    final String trainingTimeFrame = _timeFrames[trainingTimeIndex];
+    final String trainingAdjTimeFrame = _adjTimeFrames[trainingTimeIndex];
 
-    final String currentTimeFrame = _timeFrames[trainingTimeIndex + 1];
+    final String periodTimeFrame = _timeFrames[trainingTimeIndex + 1];
     final double currentMaxTrainings =
         _maxTrainings[trainingTimeIndex].toDouble();
 
@@ -149,7 +149,7 @@ class _EditHabitState extends State<EditHabit> {
                     Padding(
                       padding: StyleData.screenPadding,
                       child: Heading(
-                          "${currentAdjTimeUnit.capitalize()} action count"),
+                          "${trainingAdjTimeFrame.capitalize()} action count"),
                     ),
                     Padding(
                       padding: StyleData.screenPadding,
@@ -161,13 +161,21 @@ class _EditHabitState extends State<EditHabit> {
                         ],
                         decoration: inputDecoration("Nr of required actions"),
                         maxLength: 2,
-                        validator: (input) => validateNumberField(
-                          input: input,
-                          maxInput: 99,
-                          toFillIn: "the required repetitions",
-                          textIfZero:
-                              "It has to be at least one rep a $currentTimeUnit",
-                        ),
+                        validator: (input) {
+                          final String trainingWithArticle;
+                          if (trainingTimeFrame == "hour") {
+                            trainingWithArticle = "an $trainingTimeFrame";
+                          } else {
+                            trainingWithArticle = "a $trainingTimeFrame";
+                          }
+                          return validateNumberField(
+                            input: input,
+                            maxInput: 99,
+                            toFillIn: "the required repetitions",
+                            textIfZero:
+                                "It has to be at least one rep $trainingWithArticle",
+                          );
+                        },
                         initialValue: habitPlan.requiredReps.toString(),
                         textInputAction: TextInputAction.next,
                         onSaved: (input) => habitPlan.requiredReps =
@@ -223,7 +231,7 @@ class _EditHabitState extends State<EditHabit> {
                       padding: StyleData.screenPadding,
                       child: SliderTitle([
                         ["normal", "It will be $firstSliderArticle "],
-                        ["bold", "$currentAdjTimeUnit"],
+                        ["bold", "$trainingAdjTimeFrame"],
                         ["normal", " habit."],
                       ]),
                     ),
@@ -237,10 +245,12 @@ class _EditHabitState extends State<EditHabit> {
                         divisions: _timeFrames.length - 2,
                         onChanged: (final double value) {
                           setState(() {
-                            // Set the correct value for THIS slider
-                            habitPlan.trainingTimeIndex = value.toInt();
-                            // Correct the Value for the NEXT slider
                             final int newTimeIndex = value.toInt();
+
+                            // Set the correct value for THIS slider
+                            habitPlan.trainingTimeIndex = newTimeIndex;
+
+                            // Correct the Value for the NEXT slider
                             final double newMaxTrainings =
                                 _maxTrainings[newTimeIndex].toDouble();
                             habitPlan.requiredTrainings =
@@ -253,11 +263,11 @@ class _EditHabitState extends State<EditHabit> {
                     Padding(
                       padding: StyleData.screenPadding,
                       child: SliderTitle([
-                        ["normal", "Every $currentTimeFrame, "],
-                        ["bold", "${habitPlan.requiredTrainings.toInt()}"],
+                        ["normal", "Every $periodTimeFrame, "],
+                        ["bold", "${habitPlan.requiredTrainings}"],
                         [
                           "normal",
-                          " out of ${currentMaxTrainings.toInt()} ${currentTimeUnit}s must be successful."
+                          " out of ${currentMaxTrainings.toInt()} ${trainingTimeFrame}s must be successful."
                         ]
                       ]),
                     ),
@@ -279,13 +289,10 @@ class _EditHabitState extends State<EditHabit> {
                     Padding(
                       padding: StyleData.screenPadding,
                       child: SliderTitle([
-                        [
-                          "bold",
-                          "${habitPlan.requiredTrainingPeriods.toInt()}"
-                        ],
+                        ["bold", "${habitPlan.requiredTrainingPeriods}"],
                         [
                           "normal",
-                          " successful $currentTimeFrame$thirdSliderText required to advance to the next step."
+                          " successful $periodTimeFrame$thirdSliderText required to advance to the next step."
                         ]
                       ]),
                     ),
