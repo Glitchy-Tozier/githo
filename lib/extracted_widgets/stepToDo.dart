@@ -24,19 +24,18 @@ import 'package:githo/extracted_widgets/bottom_sheets/textSheet.dart';
 import 'package:githo/extracted_widgets/dividers/fatDivider.dart';
 import 'package:githo/extracted_widgets/dividers/thinDivider.dart';
 import 'package:githo/extracted_widgets/periodListView.dart';
-import 'package:githo/extracted_widgets/headings.dart';
+import 'package:githo/extracted_data/allHeadings.dart';
 
 import 'package:githo/models/used_classes/step.dart';
 import 'package:githo/models/used_classes/trainingPeriod.dart';
 
 class StepToDo extends StatelessWidget {
-  // Create the section for a whole step (Step 1 for example).
-  // Used in the HomeScreen.
-
   final StepData step;
   final Function updateFunction;
   final GlobalKey globalKey;
 
+  /// Create the section for a whole step (Step 1 for example).
+  /// Used in the [HomeScreen].
   const StepToDo(this.globalKey, this.step, this.updateFunction);
 
   @override

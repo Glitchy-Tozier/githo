@@ -23,11 +23,12 @@ import 'package:githo/models/settingsModel.dart';
 import 'package:githo/screens/homeScreen.dart';
 import 'package:githo/screens/introduction.dart';
 
-class FirstScreen extends StatelessWidget {
-  // Return the apropriate first screen:
-  // If the app is started for the first time: OnBoardingScreen();
-  // Else: HomeScreen();
+/// Return the apropriate first screen.
+///
+/// If the app is started for the first time: [OnBoardingScreen];
+/// Else: [HomeScreen];
 
+class FirstScreen extends StatelessWidget {
   Future<Widget> getFirstScreen() async {
     final SettingsData settings = await DatabaseHelper.instance.getSettings();
 

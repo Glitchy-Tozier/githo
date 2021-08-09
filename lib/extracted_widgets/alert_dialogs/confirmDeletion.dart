@@ -23,12 +23,11 @@ import 'package:githo/models/habitPlanModel.dart';
 import 'package:githo/models/progressDataModel.dart';
 
 class ConfirmDeletion extends StatelessWidget {
-  // Returns a dialog that asks "Do you really want to delete the habit-plan?"
-  // If the user says yes, the habit-plan is deleted.
-
   final HabitPlan habitPlan;
   final Function onConfirmation;
 
+  /// Returns a dialog that asks "Do you really want to delete the habit-plan?"
+  /// If the user says confirms, the habit-plan is deleted.
   const ConfirmDeletion({
     required this.habitPlan,
     required this.onConfirmation,

@@ -21,6 +21,8 @@ import 'package:githo/extracted_data/styleData.dart';
 
 class FatDivider extends StatelessWidget {
   final Color color;
+
+  /// Creates a thick divider.
   const FatDivider({this.color = Colors.black54});
 
   @override

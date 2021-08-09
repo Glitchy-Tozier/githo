@@ -19,8 +19,6 @@
 import 'package:flutter/material.dart';
 
 class TrainingCard extends StatelessWidget {
-  // Returns the default training-card.
-
   final double horizontalMargin;
   final double cardWidth;
   final double cardHeight;
@@ -32,6 +30,7 @@ class TrainingCard extends StatelessWidget {
   final double bottomMargin = 15;
   final double borderRadius = 7;
 
+  /// Returns the default training-card.
   const TrainingCard({
     required this.horizontalMargin,
     required this.cardWidth,

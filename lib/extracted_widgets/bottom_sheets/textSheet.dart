@@ -18,14 +18,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:githo/extracted_data/styleData.dart';
-import 'package:githo/extracted_widgets/headings.dart';
+import 'package:githo/extracted_data/allHeadings.dart';
 
 class TextSheet extends StatelessWidget {
-  // Returns a bottom-sheet containing the input title and text(span).
-
   final String title;
   final TextSpan text;
 
+  /// Returns a bottom-sheet containing the input title and text(span).
   const TextSheet({
     required this.title,
     required this.text,

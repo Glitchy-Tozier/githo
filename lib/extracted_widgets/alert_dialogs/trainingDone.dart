@@ -17,13 +17,12 @@
  */
 
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:githo/extracted_data/styleData.dart';
 
-class TrainingDoneAlert extends StatelessWidget {
-  // Notifies the user of his success.
+/// Notifies the user of his success.
 
+class TrainingDoneAlert extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const List<String> buttonStrings = [
@@ -40,7 +39,6 @@ class TrainingDoneAlert extends StatelessWidget {
         "Training completed!",
         style: StyleData.textStyle,
       ),
-      // content: Text(""),
       actions: <Widget>[
         ElevatedButton(
           child: Text(

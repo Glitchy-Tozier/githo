@@ -23,7 +23,7 @@ import 'package:githo/extracted_functions/editHabitRoutes.dart';
 import 'package:githo/extracted_widgets/backgroundWidget.dart';
 import 'package:githo/extracted_widgets/buttonListItem.dart';
 import 'package:githo/extracted_widgets/dividers/fatDivider.dart';
-import 'package:githo/extracted_widgets/headings.dart';
+import 'package:githo/extracted_data/allHeadings.dart';
 import 'package:githo/extracted_widgets/screenEndingSpacer.dart';
 import 'package:githo/helpers/databaseHelper.dart';
 import 'package:githo/models/habitPlanModel.dart';
@@ -31,9 +31,9 @@ import 'package:githo/models/habitPlanModel.dart';
 import 'package:githo/screens/habitDetails.dart';
 
 class HabitList extends StatefulWidget {
-  // List all habit-plans
-
   final Function updateFunction;
+
+  /// Lists all habit-plans
   const HabitList({required this.updateFunction});
 
   @override
@@ -54,6 +54,7 @@ class _HabitListState extends State<HabitList> {
     _habitPlanListFuture = DatabaseHelper.instance.getHabitPlanList();
   }
 
+  /// Reloads/updates all loaded screens.
   void _updateLoadedScreens() {
     setState(() {
       _habitPlanListFuture = DatabaseHelper.instance.getHabitPlanList();
@@ -61,8 +62,8 @@ class _HabitListState extends State<HabitList> {
     });
   }
 
+  /// Order the [habitPlanList] in a way that displays the most recently edited ones at the top.
   List<HabitPlan> _orderHabitPlans(final List<HabitPlan> habitPlanList) {
-    // Order the habitPlans in a way that displays the most cecently edited ones at the top
     habitPlanList.sort((a, b) {
       final String dateStringA = a.lastChanged.toString();
       final String dateStringB = b.lastChanged.toString();

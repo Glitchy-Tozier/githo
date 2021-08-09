@@ -20,12 +20,11 @@ import 'package:flutter/material.dart';
 import 'package:githo/extracted_data/styleData.dart';
 
 class ConfirmActivationChange extends StatelessWidget {
-  // Returns a dialog that asks "Do you really want to activate/deactivate the habit-plan?"
-
   final String title;
   final Widget content;
   final Function onConfirmation;
 
+  /// Returns a dialog that asks "Do you really want to activate/deactivate the habit-plan?"
   const ConfirmActivationChange({
     required this.title,
     required this.content,

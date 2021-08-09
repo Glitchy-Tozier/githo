@@ -19,11 +19,10 @@
 import 'package:flutter/material.dart';
 
 class BorderedImage extends StatelessWidget {
-  // Loads an image, wraps a pretty border around it, and returns it.
-
   final String location;
   final double width;
 
+  /// Loads an image, wraps a pretty border around it, and then returns it.
   const BorderedImage(
     this.location, {
     this.width = double.infinity,

@@ -19,8 +19,6 @@
 import 'package:flutter/material.dart';
 
 class GradinentTrainingCard extends StatelessWidget {
-  // Returns a beautiful training-card that is used for the current training if it hasn't been started yet.
-
   final double horizontalMargin;
   final double cardWidth;
   final double cardHeight;
@@ -31,6 +29,7 @@ class GradinentTrainingCard extends StatelessWidget {
   final double bottomMargin = 15;
   final double borderRadius = 7;
 
+  /// Returns a beautiful training-card that is used for the current training if it hasn't been started yet.
   const GradinentTrainingCard({
     required this.horizontalMargin,
     required this.cardWidth,

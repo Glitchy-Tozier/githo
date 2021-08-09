@@ -31,13 +31,12 @@ import 'package:githo/models/used_classes/training.dart';
 import 'package:githo/models/used_classes/trainingPeriod.dart';
 
 class PeriodListView extends StatelessWidget {
-  // Creates one of those horizontal training-listViews in the homescreen.
-
   final TrainingPeriod trainingPeriod;
   final String stepDescription;
   final Function updateFunction;
   final GlobalKey globalKey;
 
+  /// Creates one of those horizontal training-listViews made out of cards.
   const PeriodListView({
     required this.trainingPeriod,
     required this.stepDescription,
@@ -166,7 +165,7 @@ class PeriodListView extends StatelessWidget {
           key = this.globalKey;
           cardWidth *= 1.3;
           cardHeight *= 1.3;
-          if (training.status == "current") {
+          if (training.status == "ready") {
             child = const Text(
               "Start training",
               textAlign: TextAlign.center,

@@ -25,11 +25,11 @@ import 'package:githo/extracted_data/styleData.dart';
 import 'package:githo/extracted_widgets/backgroundWidget.dart';
 
 import 'package:githo/extracted_widgets/borderedImage.dart';
-import 'package:githo/extracted_widgets/headings.dart';
+import 'package:githo/extracted_data/allHeadings.dart';
+
+/// Contains licenses and important links.
 
 class About extends StatelessWidget {
-  // Contains licenses and important links.
-
   @override
   Widget build(BuildContext context) {
     final Future<PackageInfo> futurePackageInfo = PackageInfo.fromPlatform();

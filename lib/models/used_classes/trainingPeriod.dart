@@ -23,6 +23,12 @@ import 'package:githo/helpers/timeHelper.dart';
 import 'package:githo/models/habitPlanModel.dart';
 import 'package:githo/models/used_classes/training.dart';
 
+/// A group of [Training]s.
+///
+/// One or multiple [TrainingPeriods] can make up a step ([StepData]).
+///
+/// Example: For daily habits this would be a week.
+
 class TrainingPeriod {
   late int index;
   late int number;
@@ -32,6 +38,7 @@ class TrainingPeriod {
   String status = "";
   late List<Training> trainings;
 
+  /// Creates a [TrainingPeriod] from a [HabitPlan].
   TrainingPeriod.fromHabitPlan({
     required int trainingPeriodIndex,
     required HabitPlan habitPlan,
@@ -62,6 +69,7 @@ class TrainingPeriod {
     }
   }
 
+  /// Creates a [TrainingPeriod] by directly supplying its values.
   TrainingPeriod({
     required this.index,
     required this.number,
@@ -72,6 +80,9 @@ class TrainingPeriod {
     required this.trainings,
   });
 
+  /// Sets the dates of its [Training]-children.
+  ///
+  /// The first [training] starts at [startingDate].
   void setChildrenDates(DateTime startingDate) {
     for (final Training training in this.trainings) {
       training.setDates(startingDate);
@@ -80,27 +91,29 @@ class TrainingPeriod {
     }
   }
 
-  Map<String, dynamic>? getDataByDate(DateTime date) {
-    Map<String, dynamic>? result;
-
+  /// Returns [this] and the [training]-child if a [training] is found that is active  at [date].
+  Map<String, dynamic>? getDataByDate(final DateTime date) {
     for (final Training training in this.trainings) {
       if ((training.startingDate.isAtSameMomentAs(date) ||
               training.startingDate.isBefore(date)) &&
           training.endingDate.isAfter(date)) {
-        result = Map<String, dynamic>();
-        result["training"] = training;
-        result["trainingPeriod"] = this;
-        break;
+        final Map<String, dynamic> result = {
+          "training": training,
+          "trainingPeriod": this,
+        };
+        return result;
       }
     }
-    return result;
   }
 
-  void activate() {
+  /// Only used **ONCE**: The first time when the waiting-for-start-period needs to
+  /// become active for progressData._analyzePassedTime(); to not crash.
+  void initialActivation() {
     this.status = "active";
-    this.trainings[0].status = "current";
+    this.trainings[0].status = "ready";
   }
 
+  /// Reset [this.status] and all its [training]-children.
   void reset() {
     // Reset self
     this.status = "";
@@ -111,31 +124,29 @@ class TrainingPeriod {
     }
   }
 
-  void resetTrainingProgresses(int startingNumber) {
+  /// Reset the [training]-children that come after a certain training-number.
+  void resetProgressAfterNr(final int startingNumber) {
     for (final Training training in this.trainings) {
       if (training.number >= startingNumber) {
-        training.status = "";
-        training.doneReps = 0;
+        training.reset();
       }
     }
   }
 
-  Map<String, dynamic>? getActiveData() {
-    Map<String, dynamic>? result;
-
+  /// Returns [this] and the [training]-child if a [training] in [this] has a status indicating that it is current/active.
+  Map<String, dynamic>? get activeData {
     for (final Training training in this.trainings) {
-      if (training.status == "current" ||
-          training.status == "active" ||
-          training.status == "done") {
-        result = Map<String, dynamic>();
-        result["training"] = training;
-        result["trainingPeriod"] = this;
-        break;
+      if (training.isActive) {
+        final Map<String, dynamic> result = {
+          "training": training,
+          "trainingPeriod": this,
+        };
+        return result;
       }
     }
-    return result;
   }
 
+  /// Checks if enough [trainings] were successful for [this] to be successful.
   bool get wasSuccessful {
     final bool result;
     int successfulTrainings = 0;
@@ -149,8 +160,10 @@ class TrainingPeriod {
     return result;
   }
 
+  /// Returns how many [trainings] so far ware successful within this [TrainingPeriod].
+  ///
+  /// This includes the current day in it's calculation.
   int get successfulTrainings {
-    // This also counts the current day!!
     int successfulTrainings = 0;
 
     for (final Training training in this.trainings) {
@@ -161,8 +174,8 @@ class TrainingPeriod {
     return successfulTrainings;
   }
 
+  /// Counts how many trainings come after the current one.
   int get remainingTrainings {
-    // Count how many trainings come after the current one
     int remainingTrainings = 0;
     for (final Training training in this.trainings) {
       final DateTime now = TimeHelper.instance.currentTime;
@@ -173,18 +186,21 @@ class TrainingPeriod {
     return remainingTrainings;
   }
 
+  /// Sets the [status] of [this] to "completed".
   void setResult() {
     this.status = "completed";
   }
 
+  /// Checks if the [TrainingPeriod] is over. If so, it is marked accordingly.
   void markIfPassed() {
     final Training lastTraining = this.trainings.last;
     final DateTime now = TimeHelper.instance.currentTime;
     if (lastTraining.endingDate.isBefore(now)) {
-      setResult();
+      this.setResult();
     }
   }
 
+  /// Converts the [TrainingPeriod] into a Map.
   Map<String, dynamic> toMap() {
     final List<Map<String, dynamic>> trainingMapList = [];
 
@@ -203,13 +219,15 @@ class TrainingPeriod {
     return map;
   }
 
+  /// Converts a Map into a [TrainingPeriod].
   factory TrainingPeriod.fromMap(final Map<String, dynamic> map) {
     List<Training> jsonToTrainingList(final String json) {
       final List<dynamic> dynamicList = jsonDecode(json);
       final List<Training> trainings = [];
 
       for (final dynamic trainingMap in dynamicList) {
-        trainings.add(Training.fromMap(trainingMap));
+        final Training training = Training.fromMap(trainingMap);
+        trainings.add(training);
       }
 
       return trainings;

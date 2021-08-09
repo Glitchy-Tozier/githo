@@ -28,7 +28,7 @@ import 'package:githo/extracted_widgets/alert_dialogs/trainingDone.dart';
 import 'package:githo/extracted_widgets/backgroundWidget.dart';
 import 'package:githo/extracted_widgets/bottom_sheets/textSheet.dart';
 import 'package:githo/extracted_widgets/bottom_sheets/welcomeSheet.dart';
-import 'package:githo/extracted_widgets/headings.dart';
+import 'package:githo/extracted_data/allHeadings.dart';
 import 'package:githo/extracted_widgets/screenEndingSpacer.dart';
 import 'package:githo/extracted_widgets/stepToDo.dart';
 
@@ -41,8 +41,9 @@ import 'package:githo/models/used_classes/training.dart';
 import 'package:githo/screens/about.dart';
 import 'package:githo/screens/habitList.dart';
 
+/// The regular home-screen, containing the to-do's.
+
 class HomeScreen extends StatefulWidget {
-  // The regular home-screen, containing the to-do's.
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -66,13 +67,14 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  /// Reloads the screen and saves [_progressData] in the database.
   void _updateDbAndScreen() async {
     DatabaseHelper.instance.updateProgressData(await this._progressData);
     setState(() {});
   }
 
+  // Scrolls to the active training, if there is one.
   void _scrollToActiveTraining({final int delay = 0}) {
-    // Scroll to the active Training, if there is one.
     Future.delayed(
       Duration(seconds: delay),
       () {
@@ -264,12 +266,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: InkWell(
                           splashColor: Colors.purple,
                           onTap: () {
+                            // Move one training ahead in time.
                             TimeHelper.instance.timeTravel(progressData);
 
                             print("Start ${progressData.currentStartingDate}");
                             print("Now   ${TimeHelper.instance.currentTime}\n");
                           },
                           onLongPress: () {
+                            // Move one trainingPeriod ahead in time.
                             TimeHelper.instance.superTimeTravel(progressData);
 
                             print("Start ${progressData.currentStartingDate}");
@@ -296,6 +300,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     final Function onClickFunc;
 
                     if (activeMap == null) {
+                      // If the user is waiting for the first training to start.
                       icon = Icons.lock_clock;
 
                       onClickFunc = () {
@@ -336,30 +341,32 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       };
                     } else {
+                      // During normal use (= when some training is active).
                       icon = Icons.done;
 
                       onClickFunc = () {
-                        final Training activeTraining = activeMap["training"];
-                        final StepData activeStep = activeMap["step"];
-                        if (activeTraining.status == "current") {
+                        final Training currentTraining = activeMap["training"];
+                        final StepData currentStep = activeMap["step"];
+
+                        if (currentTraining.status == "ready") {
                           showDialog(
                             context: context,
                             builder: (BuildContext buildContext) {
                               return ConfirmTrainingStart(
                                 title: "Confirm Activation",
-                                toDo: activeStep.text,
-                                training: activeTraining,
+                                toDo: currentStep.text,
+                                training: currentTraining,
                                 onConfirmation: () {
-                                  activeTraining.activate();
+                                  currentTraining.activate();
                                   _updateDbAndScreen();
                                 },
                               );
                             },
                           );
                         } else {
-                          activeTraining.incrementReps();
-                          if (activeTraining.doneReps ==
-                              activeTraining.requiredReps) {
+                          currentTraining.incrementReps();
+                          if (currentTraining.doneReps ==
+                              currentTraining.requiredReps) {
                             showDialog(
                               context: context,
                               builder: (BuildContext buildContext) {

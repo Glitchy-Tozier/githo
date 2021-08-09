@@ -19,15 +19,14 @@
 import 'dart:convert';
 
 import 'package:githo/extracted_functions/typeExtentions.dart';
-
 import 'package:githo/helpers/timeHelper.dart';
 import 'package:githo/helpers/databaseHelper.dart';
-
 import 'package:githo/models/habitPlanModel.dart';
-
 import 'package:githo/models/used_classes/step.dart';
 import 'package:githo/models/used_classes/training.dart';
 import 'package:githo/models/used_classes/trainingPeriod.dart';
+
+/// The model for how progress is structured and tracked.
 
 class ProgressData {
   int habitPlanId;
@@ -37,7 +36,6 @@ class ProgressData {
   String habit;
   List<StepData> steps;
 
-  // Constructors
   ProgressData({
     required this.habitPlanId,
     required this.isActive,
@@ -47,6 +45,7 @@ class ProgressData {
     required this.steps,
   });
 
+  /// Creates dummy, inactive [ProgressData].
   factory ProgressData.emptyData() {
     return ProgressData(
       habitPlanId: 123456789,
@@ -58,6 +57,7 @@ class ProgressData {
     );
   }
 
+  /// Adapts [this] to a HabitPlan.
   void adaptToHabitPlan({
     required final HabitPlan habitPlan,
     required final DateTime startingDate,
@@ -86,36 +86,48 @@ class ProgressData {
       "trainingPeriod": 0,
     };
     _setTrainingDates(startingIdxData);
+
+    if (startingStepNr > 0) {
+      // Set the passed trainings' status to "completed"
+      _completePassedPeriods();
+    }
   }
 
   // Regularly used functions
+
+  /// Checks whether [this] has started or if it's still waiting for the [currentStartingDate].
   bool get _hasStarted {
     final DateTime now = TimeHelper.instance.currentTime;
     final bool hasStarted = now.isAfter(this.currentStartingDate);
     return hasStarted;
   }
 
+  /// Returns how many hours a step ([StepData]) lasts.
   int get stepDurationInHours {
     final int duration = this.steps[0].durationInHours;
     return duration;
   }
 
+  /// Returns how many hours a [TrainingPeriod] lasts.
   int get trainingPeriodDurationInHours {
     final int duration = this.steps[0].trainingPeriods[0].durationInHours;
     return duration;
   }
 
+  /// Returns how many hours a [Training] lasts.
   int get trainingDurationInHours {
     final int duration =
         this.steps[0].trainingPeriods[0].trainings[0].durationInHours;
     return duration;
   }
 
+  /// Returns how many [Training]s there are in each [TrainingPeriod].
   int get trainingsPerPeriod {
     final int trainingCount = this.steps[0].trainingPeriods[0].trainings.length;
     return trainingCount;
   }
 
+  /// Returns whether we're in a different [Training] than when we last checked.
   bool get _inNewTraining {
     final bool inNewTraining;
 
@@ -142,26 +154,29 @@ class ProgressData {
     return inNewTraining;
   }
 
+  /// Returns how many [TrainingPeriod]s have gone by since last opening the app.
   int _getPassedTrainingPeriods({
     required final DateTime startingDate,
     required final DateTime endingDate,
   }) {
-    final int hoursPassed = endingDate.difference(startingDate).inHours;
-    final int trainingsPassed =
-        (hoursPassed / this.trainingPeriodDurationInHours).floor();
+    final int passedHours = endingDate.difference(startingDate).inHours;
+    final int passedPeriods =
+        (passedHours / this.trainingPeriodDurationInHours).floor();
 
-    return trainingsPassed;
+    return passedPeriods;
   }
 
+  /// Returns the [StepData], the [TrainingPeriod], and the [Training] that currently are active.
   Map<String, dynamic>? get activeData {
     for (final StepData step in this.steps) {
-      final Map<String, dynamic>? tempResult = step.activeData;
-      if (tempResult != null) {
-        return tempResult;
+      final Map<String, dynamic>? activeData = step.activeData;
+      if (activeData != null) {
+        return activeData;
       }
     }
   }
 
+  /// Returns the [StepData], the [TrainingPeriod], and the [Training] that will start the whole training-process off.
   Map<String, dynamic>? get waitingData {
     for (final StepData step in this.steps) {
       final Map<String, dynamic>? tempResult = step.waitingData;
@@ -171,12 +186,14 @@ class ProgressData {
     }
   }
 
+  /// Performs the initial activation of the starting [TrainingPeriod].
   void _activateStartingPeriod() {
     for (final StepData step in this.steps) {
-      step.activateStartingPeriod();
+      step.activateWaitingPeriod();
     }
   }
 
+  /// Moves the [currentStartingDate] so that it's the starting Date for the current [TrainingPeriod].
   void _setNewStartingDate() {
     final DateTime now = TimeHelper.instance.currentTime;
     final Duration periodDuration =
@@ -188,6 +205,9 @@ class ProgressData {
     }
   }
 
+  /// This (re-)sets the dates for all trainings, the first one starting at [currentStartingDate].
+  ///
+  /// Define [startingIndexData] to start at a specified trainingPeriod. Without any arguments, all trainings will be re-dated.
   void _setTrainingDates(
       [final Map<String, int> startingIndexData = const {
         "step": 0,
@@ -210,6 +230,16 @@ class ProgressData {
     }
   }
 
+  /// Marks all [TrainingPeriod]s that have passed as being passed.
+  ///
+  /// Necessary if the user starts with something else than step 1.
+  void _completePassedPeriods() {
+    for (final StepData step in this.steps) {
+      step.markPassedPeriods();
+    }
+  }
+
+  /// Returns the [StepData], the [TrainingPeriod], and the [Training] that aling with on specific [date].
   Map<String, dynamic>? _getDataByDate(final DateTime date) {
     Map<String, dynamic>? map;
     for (final StepData step in this.steps) {
@@ -220,6 +250,9 @@ class ProgressData {
     }
   }
 
+  /// Resets a number of [TrainingPeriod]s ([remainingRegressions], derived from [failedPeriods]).
+  ///
+  /// Returns the position of the new current [TrainingPeriod].
   Map<String, int> _penalizeFailure(
     final int failedPeriods,
     final Map<String, dynamic> lastActiveMap,
@@ -258,6 +291,7 @@ class ProgressData {
     }
   }
 
+  /// Marks the [HabitPlan] that constructed this [ProgressData] as having been completed.
   void _completeHabitPlan() async {
     final HabitPlan? habitPlan =
         await DatabaseHelper.instance.getHabitPlan(this.habitPlanId);
@@ -268,7 +302,9 @@ class ProgressData {
     }
   }
 
-  void _analyzePassedTime() {
+  /// Analyzes the amount of time that has passed since last time opening the app.
+  /// Then adapts [ProgressData] accordingly.
+  void _adaptToPassedTime() {
     final Map<String, dynamic> lastActiveMap = this.activeData!;
 
     // Analyze the last training
@@ -312,18 +348,13 @@ class ProgressData {
     }
   }
 
-  void _completePassedPeriods() {
-    for (final StepData step in this.steps) {
-      step.markPassedPeriods();
-    }
-  }
-
+  /// Activate the next [Training] & [TrainingPeriod].
   void _activateCurrentTraining() {
     final DateTime now = TimeHelper.instance.currentTime;
     final Map<String, dynamic> currentData = _getDataByDate(now)!;
 
     final Training currentTraining = currentData["training"];
-    currentTraining.status = "current";
+    currentTraining.status = "ready";
 
     final TrainingPeriod currentPeriod = currentData["trainingPeriod"];
     currentPeriod.status = "active";
@@ -333,32 +364,31 @@ class ProgressData {
     final bool somethingChanged;
 
     if (this._hasStarted && this._inNewTraining) {
+      somethingChanged = true;
+
       if (this.activeData == null) {
         // If this is the first training we ever arrive in
-        _activateStartingPeriod();
+        _activateStartingPeriod(); // Necessary for _analyzePassedTime(); to not crash.
       }
 
       // Analyze what happened since last time opening the app
-      _analyzePassedTime();
+      _adaptToPassedTime();
 
       // Activate the next Training/TrainingPeriod
       _activateCurrentTraining();
 
       // Save all changes
       DatabaseHelper.instance.updateProgressData(this);
-
-      somethingChanged = true;
     } else {
       somethingChanged = false;
     }
-
-    // Set the passed trainings' status to "complete"
-    _completePassedPeriods();
 
     return somethingChanged;
   }
 
   // Functions for interacting with the database
+
+  /// Converts [this] into a Map.
   Map<String, dynamic> toMap() {
     final List<Map> stepMapList = [];
 
@@ -376,13 +406,15 @@ class ProgressData {
     return map;
   }
 
+  /// Converts a Map into [ProgressData].
   factory ProgressData.fromMap(final Map<String, dynamic> map) {
     List<StepData> jsonToStepList(final String json) {
       final List<dynamic> dynamicList = jsonDecode(json);
       final List<StepData> steps = [];
 
       for (final dynamic stepMap in dynamicList) {
-        steps.add(StepData.fromMap(stepMap));
+        final StepData step = StepData.fromMap(stepMap);
+        steps.add(step);
       }
 
       return steps;

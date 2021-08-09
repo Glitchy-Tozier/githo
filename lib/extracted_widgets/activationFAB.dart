@@ -26,12 +26,11 @@ import 'package:githo/models/habitPlanModel.dart';
 import 'package:githo/models/progressDataModel.dart';
 
 class ActivationFAB extends StatelessWidget {
-  // The middle FloatingActionButton in the habitDetals.dart-sreen.
-  // It's used to activate/deactivate the viewed habit.
-
   final HabitPlan habitPlan;
   final Function updateFunction;
 
+  /// The middle FloatingActionButton in the habitDetals.dart-screen.
+  /// It's used to activate/deactivate the viewed habit.
   const ActivationFAB({
     required this.habitPlan,
     required this.updateFunction,
@@ -39,7 +38,7 @@ class ActivationFAB extends StatelessWidget {
 
   void onClickFunc(BuildContext context) async {
     if (habitPlan.isActive == true) {
-      // If the viewed habetPlan was active to begin with, disable it.
+      // If the viewed habitPlan was active to begin with, disable it.
       void deactivateHabitPlan() async {
         // Update habitPlan
         this.habitPlan.isActive = false;

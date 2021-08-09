@@ -29,19 +29,18 @@ import 'package:githo/extracted_widgets/dividers/fatDivider.dart';
 import 'package:githo/extracted_widgets/dividers/thinDivider.dart';
 
 import 'package:githo/extracted_widgets/formList.dart';
-import 'package:githo/extracted_widgets/headings.dart';
+import 'package:githo/extracted_data/allHeadings.dart';
 import 'package:githo/extracted_widgets/screenEndingSpacer.dart';
 import 'package:githo/extracted_widgets/sliderTitle.dart';
 
 import 'package:githo/models/habitPlanModel.dart';
 
 class EditHabit extends StatefulWidget {
-  // Edit the values of the input habit-plan.
-
   final String title;
   final HabitPlan habitPlan;
   final Function onSavedFunction;
 
+  /// Edit the values of the input [HabitPlan].
   const EditHabit({
     required this.title,
     required this.habitPlan,
@@ -73,11 +72,12 @@ class _EditHabitState extends State<EditHabit> {
   final List<String> _adjTimeFrames = DataShortcut.adjectiveTimeFrames;
   final List<int> _maxTrainings = DataShortcut.maxTrainings;
 
-  // Function for receiving the onSaved-values from formList.dart
+  /// Used for receiving the onSaved-values from formList.dart
   void _getStepValues(final List<String> valueList) {
     this.habitPlan.steps = valueList;
   }
 
+  /// Used for receiving the onSaved-values from formList.dart
   void _getCommentValues(final List<String> valueList) {
     this.habitPlan.comments = valueList;
   }
@@ -135,8 +135,8 @@ class _EditHabitState extends State<EditHabit> {
                         decoration: inputDecoration("The final habit"),
                         maxLength: 40,
                         validator: (input) => complainIfEmpty(
-                          input.toString().trim(),
-                          "your final habit",
+                          input: input,
+                          toFillIn: "your final habit",
                         ),
                         initialValue: habitPlan.habit,
                         textInputAction: TextInputAction.next,
@@ -164,7 +164,7 @@ class _EditHabitState extends State<EditHabit> {
                         validator: (input) => validateNumberField(
                           input: input,
                           maxInput: 99,
-                          variableText: "the required repetitions",
+                          toFillIn: "the required repetitions",
                           onEmptyText:
                               "It has to be at least one rep a $currentTimeUnit",
                         ),

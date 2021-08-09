@@ -17,33 +17,26 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:githo/extracted_data/dataShortcut.dart';
 
-import 'package:githo/extracted_widgets/firstScreen.dart';
-import 'package:githo/extracted_functions/adaptDatabaseToOS.dart';
+/// Defines what headings look like.
 
-void main() {
-  adaptDatabaseToOS();
-  runApp(MyApp());
-}
+class Heading extends StatelessWidget {
+  final String _text;
 
-/// This widget is the root of the application.
-class MyApp extends StatelessWidget {
+  /// Returns a [Text]-Widget styled like a heading.
+  const Heading(this._text);
+
+  static const TextStyle style = TextStyle(
+    fontSize: 26,
+    fontWeight: FontWeight.bold,
+    color: Colors.black,
+  );
+
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-
-    return MaterialApp(
-      title: "Githo - Get Into The Habit Of…",
-      theme: ThemeData(
-        primarySwatch: Colors.pink,
-      ),
-      home: FirstScreen(),
-      debugShowCheckedModeBanner: DataShortcut.testing,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Text(_text, style: style),
     );
   }
 }

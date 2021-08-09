@@ -19,6 +19,8 @@
 import 'dart:convert';
 import 'package:githo/extracted_functions/typeExtentions.dart';
 
+/// The model for what a habit-plan consists of.
+
 class HabitPlan {
   int? id;
   bool isActive;
@@ -59,6 +61,7 @@ class HabitPlan {
     required this.lastChanged,
   });
 
+  /// Converts the [HabitPlan] into a Map.
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> map = {};
 
@@ -79,6 +82,7 @@ class HabitPlan {
     return map;
   }
 
+  /// Converts a Map into a [HabitPlan].
   factory HabitPlan.fromMap(final Map<String, dynamic> map) {
     List<String> jsonToStringList(final String json) {
       final List<dynamic> dynamicList = jsonDecode(json);

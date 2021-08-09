@@ -18,6 +18,8 @@
 
 import 'package:githo/extracted_functions/typeExtentions.dart';
 
+/// A model for how the user's settings are stored.
+
 class SettingsData {
   bool showIntroduction;
   bool paused;
@@ -27,6 +29,7 @@ class SettingsData {
     required this.paused,
   });
 
+  /// Converts the [SettingsData] into a Map.
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> map = {};
     map["showIntroduction"] = showIntroduction.boolToInt();
@@ -34,6 +37,7 @@ class SettingsData {
     return map;
   }
 
+  /// Converts a Map into [SettingsData].
   factory SettingsData.fromMap(final Map<String, dynamic> map) {
     return SettingsData(
       showIntroduction: (map["showIntroduction"] as int).intToBool(),

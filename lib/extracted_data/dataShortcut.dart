@@ -16,9 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/// Contains some useful, regularly used values.
 class DataShortcut {
-  // Contains some useful, regularly used values.
-
   static const List<String> timeFrames = [
     "hour",
     "day",
@@ -50,5 +49,6 @@ class DataShortcut {
     24 * 7 * 4,
   ];
 
+  /// Toggles the Debug-banner and activates testing-functionality.
   static const bool testing = false;
 }

@@ -16,21 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter/material.dart';
-import 'package:githo/extracted_data/styleData.dart';
+/// A useful shortcut to receive both the title- and the heading-widgets at once.
 
-class ThinDivider extends StatelessWidget {
-  final Color color;
-
-  /// Creates a thick divider.
-  const ThinDivider({this.color = Colors.black54});
-
-  @override
-  Widget build(BuildContext context) {
-    return Divider(
-      color: this.color,
-      indent: StyleData.screenPaddingValue * 0.5,
-      endIndent: StyleData.screenPaddingValue * 0.5,
-    );
-  }
-}
+export 'package:githo/extracted_widgets/screenTitle.dart';
+export 'package:githo/extracted_widgets/heading.dart';

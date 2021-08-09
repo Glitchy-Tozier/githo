@@ -19,10 +19,10 @@
 import 'package:flutter/material.dart';
 
 class SliderTitle extends StatelessWidget {
-  // Creates the titles for the sliders in the EditHabit.dart-screen.
-  // Specify how the sub-elements should look by using "normal" or "bold".
-
   final List<List<String>> textDataPairs;
+
+  /// Creates the titles for the sliders in the EditHabit.dart-screen.
+  /// Specify how the sub-elements should look by using ["normal", …] or ["bold", …].
   const SliderTitle(this.textDataPairs);
 
   @override

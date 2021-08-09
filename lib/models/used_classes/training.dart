@@ -20,6 +20,10 @@ import 'package:githo/extracted_data/dataShortcut.dart';
 import 'package:githo/helpers/timeHelper.dart';
 import 'package:githo/models/habitPlanModel.dart';
 
+/// One instance of you performing your habit.
+///
+/// Example: For daily habits, this would be a day.
+
 class Training {
   late int number;
   late int durationInHours;
@@ -29,6 +33,7 @@ class Training {
   DateTime endingDate = DateTime(246);
   String status = "";
 
+  /// Creates a [Training] from a [HabitPlan].
   Training.fromHabitPlan(
       {required int trainingIndex, required HabitPlan habitPlan}) {
     this.number = trainingIndex + 1;
@@ -40,6 +45,7 @@ class Training {
     this.requiredReps = habitPlan.requiredReps;
   }
 
+  /// Creates a [Training] by directly supplying its values.
   Training({
     required this.number,
     required this.durationInHours,
@@ -50,6 +56,15 @@ class Training {
     required this.status,
   });
 
+  /// Checks whether the training is active.
+  bool get isActive {
+    final bool isActive = this.status == "ready" ||
+        this.status == "started" ||
+        this.status == "done";
+    return isActive;
+  }
+
+  /// Checks whether the training aligns with the current DateTime.
   bool get isNow {
     final DateTime now = TimeHelper.instance.currentTime;
     if (now.isAfter(this.startingDate) && now.isBefore(this.endingDate))
@@ -58,6 +73,7 @@ class Training {
       return false;
   }
 
+  /// Checks whether the time-period for training has passed.
   bool get hasPassed {
     final DateTime now = TimeHelper.instance.currentTime;
     if (now.isAfter(this.endingDate))
@@ -66,6 +82,7 @@ class Training {
       return false;
   }
 
+  /// Sets [this.startingDate] and [this.endingDate] for the training.
   void setDates(final DateTime startingDate) {
     this.startingDate = startingDate;
     this.endingDate = startingDate.add(
@@ -73,6 +90,7 @@ class Training {
     );
   }
 
+  /// Increments the [doneReps] by 1. Then, if the trainig is successful, mark it accordingly.
   void incrementReps() {
     this.doneReps++;
     if (this.doneReps >= this.requiredReps) {
@@ -80,22 +98,23 @@ class Training {
     }
   }
 
+  /// Activates the training
   void activate() {
-    if (this.status == "current") {
-      this.status = "active";
-    }
+    this.status = "started";
   }
 
+  /// Resets the progress ([doneReps]) and the [status] of the training.
   void reset() {
     this.doneReps = 0;
     this.status = "";
   }
 
+  /// Check the outcome of the (passed) training and mark it accordingly.
   void setResult() {
-    if (this.status == "current") {
+    if (this.status == "ready") {
       // If the training never was started
       this.status = "ignored";
-    } else if (this.status == "active") {
+    } else if (this.status == "started") {
       // If the training was started but never successfully finished
       this.status = "unsuccessful";
     } else if (this.status == "done") {
@@ -107,6 +126,7 @@ class Training {
     }
   }
 
+  /// Converts the [Training] into a Map.
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> map = {};
 
@@ -120,6 +140,7 @@ class Training {
     return map;
   }
 
+  /// Converts a Map into a [Training].
   factory Training.fromMap(final Map<String, dynamic> map) {
     return Training(
       number: map["number"],

@@ -18,9 +18,8 @@
 
 import 'package:githo/models/habitPlanModel.dart';
 
+/// Defines the habit-plans that will be available when first starting the app.
 class DefaultHabitPlans {
-  // Defines the habit-plans that will be available when first starting the app
-
   static final List<HabitPlan> habitPlanList = [
     HabitPlan(
       isActive: false,
@@ -66,8 +65,9 @@ class DefaultHabitPlans {
     ),
   ];
 
+  /// THIS IS ONLY TO HELP WITH DEBUGGING AND TESTING.
+  // ALL NORMAL HABITPLANS GO ABOVE!
   static final List<HabitPlan> testingHabitPlanList = [
-    // THIS IS ONLY TO HELP WITH DEBUGGING AND TESTING. ALL NORMAL HABITPLANS GO ABOVE!
     HabitPlan(
       isActive: false,
       fullyCompleted: false,

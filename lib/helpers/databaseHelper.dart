@@ -28,9 +28,9 @@ import 'package:githo/models/habitPlanModel.dart';
 import 'package:githo/models/progressDataModel.dart';
 import 'package:githo/models/settingsModel.dart';
 
-class DatabaseHelper {
-  // Used for interacting with the database.
+/// Used for interacting with the database.
 
+class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
   static Database? _db;
 
@@ -66,6 +66,9 @@ class DatabaseHelper {
   static const String colShowIntroduction = "showIntroduction";
   static const String colPaused = "paused";
 
+  /// Returns the database.
+  ///
+  /// **Never** directly touch [_db].
   Future<Database> get _getDb async {
     if (_db == null) {
       _db = await _initDb();
@@ -73,6 +76,7 @@ class DatabaseHelper {
     return _db!;
   }
 
+  /// Load or newly create database.
   Future<Database> _initDb() async {
     final Directory dir = await getApplicationDocumentsDirectory();
     final String path = dir.path + "/githoDatabase.db";
@@ -91,6 +95,7 @@ class DatabaseHelper {
     return habitPlanDb;
   }
 
+  /// Create the database from scratch.
   void _createDb(final Database db, final int version) async {
     String commandString;
 
@@ -181,14 +186,19 @@ class DatabaseHelper {
     );
   }
 
+  /// Returns the items found in a table.
+  ///
+  /// It will always return a list.
   Future<List<Map<String, dynamic>>> getDataMapList(
-      final String tableName) async {
+    final String tableName,
+  ) async {
     final Database db = await this._getDb;
 
     final List<Map<String, dynamic>> result = await db.query(tableName);
     return result;
   }
 
+  /// Extracts all [HabitPlan]s from the database.
   Future<List<HabitPlan>> getHabitPlanList() async {
     final List<Map<String, dynamic>> habitPlanMapList =
         await getDataMapList(habitPlansTable);
@@ -202,6 +212,7 @@ class DatabaseHelper {
     return habitPlanList;
   }
 
+  /// Retuns the [HabitPlan] that matches with the [id].
   Future<HabitPlan?> getHabitPlan(final int id) async {
     final Database db = await this._getDb;
 
@@ -225,6 +236,7 @@ class DatabaseHelper {
     }
   }
 
+  /// Returns the HabitPlan that currently is active.
   Future<List<HabitPlan>> getActiveHabitPlan() async {
     final Database db = await this._getDb;
 
@@ -251,12 +263,14 @@ class DatabaseHelper {
     }
   }
 
+  /// Inserts a new [HabitPlan] into the database.
   Future<int> insertHabitPlan(final HabitPlan habitPlan) async {
     final Database db = await this._getDb;
     final int result = await db.insert(habitPlansTable, habitPlan.toMap());
     return result;
   }
 
+  /// Updates a [HabitPlan] in the database.
   Future<int> updateHabitPlan(final HabitPlan habitPlan) async {
     final Database db = await this._getDb;
     final int result = await db.update(
@@ -268,6 +282,7 @@ class DatabaseHelper {
     return result;
   }
 
+  /// Deletes a [HabitPlan] from the database.
   Future<int> deleteHabitPlan(final int id) async {
     final Database db = await this._getDb;
     final int result = await db.delete(
@@ -278,6 +293,7 @@ class DatabaseHelper {
     return result;
   }
 
+  /// Extracts [ProgressData] from the database and returns it.
   Future<ProgressData> getProgressData() async {
     final List<Map<String, Object?>> queryResultList =
         await getDataMapList(progressDataTable);
@@ -287,6 +303,7 @@ class DatabaseHelper {
     return result;
   }
 
+  /// Updates the [progressData] in the database.
   Future<int> updateProgressData(final ProgressData progressData) async {
     final Database db = await this._getDb;
     final int result = await db.update(
@@ -296,6 +313,7 @@ class DatabaseHelper {
     return result;
   }
 
+  /// Extracts [SettingsData] from the database and returns it.
   Future<SettingsData> getSettings() async {
     final List<Map<String, Object?>> queryResultList =
         await getDataMapList(settingsTable);
@@ -305,6 +323,7 @@ class DatabaseHelper {
     return result;
   }
 
+  /// Updates the [settings] in the database.
   Future<int> updateSettings(final SettingsData settings) async {
     final Database db = await this._getDb;
     final int result = await db.update(

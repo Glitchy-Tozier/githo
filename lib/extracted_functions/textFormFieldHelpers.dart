@@ -16,13 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'package:flutter/material.dart';
+
 // A few handy functions that were extracted to make the script more readable and controlable.
 // Only functions connected to TextFormFields can be found here!!
 
-import 'package:flutter/material.dart';
-
+/// Provides the basic styling for TextFormFields.
 InputDecoration inputDecoration(final String text) {
-  // Provide the basic Styling for TextFormFields.
   return InputDecoration(
     labelText: text,
     border: OutlineInputBorder(
@@ -31,26 +31,33 @@ InputDecoration inputDecoration(final String text) {
   );
 }
 
-String? complainIfEmpty(final String? input, final String variableText) {
-  // Check if the TextFormField is empty.
-  if (input!.trim().isEmpty) {
-    return "Please fill in $variableText";
+/// Checks if the [input] is empty.
+String? complainIfEmpty({
+  required final String? input,
+  required final String toFillIn,
+}) {
+  final String trimmedInput = input.toString().trim();
+
+  if (trimmedInput.isEmpty) {
+    return "Please fill in $toFillIn";
   } else {
     return null;
   }
 }
 
+/// The validation-function for all number-input-TextFields
 String? validateNumberField({
   required final String? input,
   required final int maxInput,
-  required final String variableText,
+  required final String toFillIn,
   required final String onEmptyText,
 }) {
-  // Validation function for all number-input-TextFields
-  final String? emptycheck =
-      complainIfEmpty(input.toString().trim(), variableText);
-  if (emptycheck != null) {
-    return emptycheck;
+  final String? complaint = complainIfEmpty(
+    input: input,
+    toFillIn: toFillIn,
+  );
+  if (complaint != null) {
+    return complaint;
   }
 
   final int intput = int.parse(input.toString().trim()); // I'm so funny!

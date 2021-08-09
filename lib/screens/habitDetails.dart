@@ -29,17 +29,22 @@ import 'package:githo/extracted_widgets/bulletPoint.dart';
 import 'package:githo/extracted_widgets/customListTile.dart';
 import 'package:githo/extracted_widgets/alert_dialogs/confirmDeletion.dart';
 import 'package:githo/extracted_widgets/dividers/fatDivider.dart';
-import 'package:githo/extracted_widgets/headings.dart';
+import 'package:githo/extracted_data/allHeadings.dart';
 import 'package:githo/extracted_widgets/screenEndingSpacer.dart';
 
 import 'package:githo/models/habitPlanModel.dart';
 
 class SingleHabitDisplay extends StatefulWidget {
-  // Display the details of one single habit-plan. (final habit, rules, steps, comments)
-
   final Function updateFunction;
   final HabitPlan habitPlan;
 
+  /// Displays the details of the [habitPlan].
+  ///
+  /// This includes…
+  /// - final habit,
+  /// - rules,
+  /// - comments,
+  /// - and steps.
   const SingleHabitDisplay({
     required this.updateFunction,
     required this.habitPlan,
@@ -61,6 +66,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
     this.habitPlan,
   );
 
+  /// Returns a list-item for each comment in the [habitPlan].
   List<Widget> _getCommentWidgets() {
     final List<Widget> widgetList = [];
 
@@ -81,6 +87,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
     return widgetList;
   }
 
+  /// Returns a list-item for each rule in the [habitPlan].
   List<Widget> _getRuleWidgets() {
     final List<Widget> widgetList = [];
 
@@ -141,6 +148,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
     return widgetList;
   }
 
+  /// Creates a table that looks like a list of the [steps] of the [habitPlan].
   Table _getStepTable() {
     final List<TableRow> tableRowList = [];
     final steps = this.habitPlan.steps;
@@ -180,6 +188,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
     );
   }
 
+  /// Reloads/updates all loaded screens.
   void _updateLoadedScreens(final HabitPlan changedHabitPlan) {
     setState(() {
       this.habitPlan = changedHabitPlan;

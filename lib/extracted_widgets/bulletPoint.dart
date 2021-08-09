@@ -19,10 +19,10 @@
 import 'package:flutter/material.dart';
 import 'package:githo/extracted_data/styleData.dart';
 
-class BulletPoint extends StatelessWidget {
-  // Returns a bullet-point
-  // Used on the habitDetails.dart-screen
+/// Returns a bullet-point
+/// Used on the habitDetails.dart-screen
 
+class BulletPoint extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Text(

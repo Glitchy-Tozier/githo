@@ -18,10 +18,14 @@
 
 import 'package:flutter/material.dart';
 
-class ScreenTitle extends StatelessWidget {
-  // Defines what screen-titles look like.
+/// Defines what screen-titles look like.
 
+class ScreenTitle extends StatelessWidget {
   final String _text;
+
+  /// Returns a [Text]-Widget styled like a title.
+  ///
+  /// This represents the highest unit of order.
   const ScreenTitle(this._text);
 
   @override
@@ -37,27 +41,6 @@ class ScreenTitle extends StatelessWidget {
           color: Colors.black,
         ),
       ),
-    );
-  }
-}
-
-class Heading extends StatelessWidget {
-  // Defines what headings look like.
-
-  final String _text;
-  const Heading(this._text);
-
-  static const TextStyle style = TextStyle(
-    fontSize: 26,
-    fontWeight: FontWeight.bold,
-    color: Colors.black,
-  );
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Text(_text, style: style),
     );
   }
 }

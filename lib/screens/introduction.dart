@@ -24,10 +24,9 @@ import 'package:githo/helpers/databaseHelper.dart';
 import 'package:githo/models/settingsModel.dart';
 import 'package:githo/screens/homeScreen.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+// The introduction-screen that explains how this app works.
 
 class OnBoardingScreen extends StatelessWidget {
-  // The introduction-screen that explains how this app works.
-
   void _onIntroEnd(BuildContext context) async {
     // Make sure the introduction-screen doesn't get shown again
     final SettingsData settings = await DatabaseHelper.instance.getSettings();

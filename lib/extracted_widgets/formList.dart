@@ -20,13 +20,12 @@ import 'package:flutter/material.dart';
 import 'package:githo/extracted_functions/textFormFieldHelpers.dart';
 
 class FormList extends StatefulWidget {
-  // Creates a column of TextFormFields that grow in numbers when filled out.
-
   final String fieldName;
   final bool canBeEmpty;
   final Function valuesGetter;
   final List<String> inputList;
 
+  /// Creates a column of TextFormFields that grow in numbers when filled out.
   const FormList({
     required this.fieldName,
     required this.canBeEmpty,
@@ -44,7 +43,6 @@ class FormList extends StatefulWidget {
 }
 
 class _FormListState extends State<FormList> {
-  // A function that sends back the values.
   final int _iniLength = 2;
 
   final List<Widget> _inputFields = [];
@@ -96,16 +94,16 @@ class _FormListState extends State<FormList> {
               if ((fieldNr != this.listLength) &&
                   (this.listLength > this._iniLength)) {
                 return complainIfEmpty(
-                  input.toString().trim(),
-                  fieldName,
+                  input: input,
+                  toFillIn: fieldName,
                 );
               }
             } else {
               // Use this validation if at least one field NEEDS to be filled out.
               if (fieldNr != this.listLength) {
                 return complainIfEmpty(
-                  input.toString().trim(),
-                  fieldName,
+                  input: input,
+                  toFillIn: fieldName,
                 );
               }
             }

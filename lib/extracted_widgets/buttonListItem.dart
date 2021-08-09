@@ -20,12 +20,11 @@ import 'package:flutter/material.dart';
 import 'package:githo/extracted_data/styleData.dart';
 
 class ButtonListItem extends StatelessWidget {
-  // The default list-item used in this application.
-
   final String text;
   final Color color;
   final Function onPressed;
 
+  /// The default list-item used in this application.
   const ButtonListItem({
     required this.text,
     required this.color,

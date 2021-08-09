@@ -21,13 +21,12 @@ import 'package:githo/extracted_data/styleData.dart';
 import 'package:githo/models/used_classes/training.dart';
 
 class ConfirmTrainingStart extends StatelessWidget {
-  // Returns a dialog that lets the user confirm that he really wants to start the current training.
-
   final String title;
   final String toDo;
   final Training training;
   final Function onConfirmation;
 
+  /// Returns a dialog that lets the user confirm that he really wants to start the current training.
   const ConfirmTrainingStart({
     required this.title,
     required this.toDo,

@@ -17,15 +17,13 @@
  */
 
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:githo/extracted_data/styleData.dart';
 
 class BackgroundWidget extends StatelessWidget {
-  // Returns a background and places the child in the foreground.
-
   final Widget child;
 
+  /// Returns a background and places the child in the foreground.
   const BackgroundWidget({
     this.child = const SizedBox(),
     Key? key,

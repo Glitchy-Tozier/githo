@@ -28,13 +28,12 @@ import 'package:githo/models/habitPlanModel.dart';
 import 'package:githo/models/progressDataModel.dart';
 
 class ConfirmStartingTime extends StatefulWidget {
-  // Returns a dialog that lets the user choose
-  // 1. when his journey will start
-  // 2. what step it should start with
-
   final HabitPlan habitPlan;
   final Function onConfirmation;
 
+  /// Returns a dialog that lets the user choose
+  /// 1. when his journey will start
+  /// 2. what step it should start with
   const ConfirmStartingTime({
     required this.habitPlan,
     required this.onConfirmation,
@@ -64,13 +63,14 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
     this.startingDate = _getDefaultStartingTime();
   }
 
+  /// Returns the default [DateTime] for the first trainig to start.
   DateTime _getDefaultStartingTime() {
     final DateTime now = TimeHelper.instance.currentTime;
     final DateTime startingDate;
 
     switch (this.habitPlan.trainingTimeIndex) {
       case 0:
-        // start on the next day, 0am
+        // If it's an hourly habit, start on the next day, 0am.
         startingDate = DateTime(
           now.year,
           now.month,
@@ -78,7 +78,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
         );
         break;
       default:
-        // start on the next week, monday, 0am
+        // Else start the next week, monday, 0am.
         startingDate = DateTime(
           now.year,
           now.month,
@@ -89,11 +89,12 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
     return startingDate;
   }
 
-  Future<void> _updateDataBase(
+  /// Adapts the database so that [habitPlan] is active.
+  Future<void> _startHabitPlan(
     final DateTime startingDate,
     final int startingStep,
   ) async {
-    // Mark the old plan as inactive
+    // Mark the old plan as inactive.
     final List<HabitPlan> activeHabitPlanList =
         await DatabaseHelper.instance.getActiveHabitPlan();
     if (activeHabitPlanList.length > 0) {
@@ -102,13 +103,13 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
       DatabaseHelper.instance.updateHabitPlan(oldHabitPlan);
     }
 
-    // Update the plan you're looking at to be active
+    // Update the plan you're looking at to be active.
     final DateTime now = TimeHelper.instance.currentTime;
     this.habitPlan.isActive = true;
     this.habitPlan.lastChanged = now;
     DatabaseHelper.instance.updateHabitPlan(this.habitPlan);
 
-    // Update (and reset) older progressData
+    // Adapt [ProgressData] to the [HabitPlan].
     final ProgressData progressData =
         await DatabaseHelper.instance.getProgressData();
     progressData.adaptToHabitPlan(
@@ -190,7 +191,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
                             validator: (input) => validateNumberField(
                               input: input,
                               maxInput: this.habitPlan.steps.length,
-                              variableText: "the starting step",
+                              toFillIn: "the starting step",
                               onEmptyText:
                                   "Please insert a number between 1 and ${this.habitPlan.steps.length}",
                             ),
@@ -244,7 +245,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
 
                   Navigator.pop(context); // Pop dialog
 
-                  _updateDataBase(
+                  _startHabitPlan(
                     this.startingDate,
                     this.startingStep,
                   ).then(

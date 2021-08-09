@@ -20,11 +20,10 @@ import 'package:flutter/material.dart';
 import 'package:githo/extracted_data/styleData.dart';
 
 class CustomListTile extends StatelessWidget {
-  // A list-item used in the habitDetails.dart-screen.
-
   final Widget leadingWidget;
   final String title;
 
+  /// A list-item used in the habitDetails.dart-screen.
   const CustomListTile({
     required this.leadingWidget,
     required this.title,

@@ -18,6 +18,10 @@
 
 import 'package:flutter/material.dart';
 
+/// A shortcut to all the styling-data.
+///
+/// Will probably eventually be replaced by themes.
+
 class StyleData {
   static const double screenPaddingValue = 35;
 
@@ -29,6 +33,7 @@ class StyleData {
 
   static const double listRowSpacing = 8;
 
+  /// The default [TextStyle].
   static const TextStyle textStyle = TextStyle(
     fontSize: 16,
     color: Colors.black,

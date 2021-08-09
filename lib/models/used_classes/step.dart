@@ -19,9 +19,10 @@
 import 'dart:convert';
 
 import 'package:githo/extracted_data/dataShortcut.dart';
-import 'package:githo/helpers/timeHelper.dart';
 import 'package:githo/models/habitPlanModel.dart';
 import 'package:githo/models/used_classes/trainingPeriod.dart';
+
+/// A step towards your goal.
 
 class StepData {
   late int index;
@@ -30,6 +31,7 @@ class StepData {
   late int durationInHours;
   late List<TrainingPeriod> trainingPeriods;
 
+  /// Creates a step ([StepData]) from a [HabitPlan].
   StepData.fromHabitPlan(
       {required int stepIndex, required HabitPlan habitPlan}) {
     this.index = stepIndex;
@@ -56,6 +58,7 @@ class StepData {
     }
   }
 
+  /// Creates a step ([StepData]) by directly supplying its values.
   StepData({
     required this.index,
     required this.number,
@@ -64,17 +67,9 @@ class StepData {
     required this.trainingPeriods,
   });
 
-  bool get isActive {
-    final DateTime now = TimeHelper.instance.currentTime;
-    final Map<String, dynamic>? activeMap = getDataByDate(now);
-
-    if (activeMap == null) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
+  /// Returns the status of the step.
+  ///
+  /// This value is derived from its children.
   String get status {
     int completedCount = 0;
     for (final TrainingPeriod trainingPeriod in this.trainingPeriods) {
@@ -91,6 +86,7 @@ class StepData {
     }
   }
 
+  /// Returns the index of the active [TrainingPeriod], if one is found.
   int? get _activePeriodIndex {
     for (int i = 0; i < this.trainingPeriods.length; i++) {
       final TrainingPeriod trainingPeriod = this.trainingPeriods[i];
@@ -101,21 +97,24 @@ class StepData {
     return this.trainingPeriods.length - 1;
   }
 
-  int regressPeriods(int periodRegressionCount) {
+  /// Resets [periodsToRegress] of the [trainingPeriods], then returns the remaining amount.
+  int regressPeriods(int periodsToRegress) {
     int activePeriodIndex = this._activePeriodIndex!;
 
-    while (periodRegressionCount > 0) {
+    while (periodsToRegress > 0) {
       this.trainingPeriods[activePeriodIndex].reset();
       if (activePeriodIndex == 0) {
-        return periodRegressionCount - 1;
+        final int remainingRegressions = periodsToRegress - 1;
+        return remainingRegressions;
       } else {
         activePeriodIndex--;
-        periodRegressionCount--;
+        periodsToRegress--;
       }
     }
     return 0;
   }
 
+  /// Sets the dates of the step's children, starting from [startingDate], starting with a specific [trainingPeriod].
   DateTime setChildrenDates(
     DateTime startingDate,
     final int startingPeriodIdx,
@@ -133,6 +132,7 @@ class StepData {
     return startingDate;
   }
 
+  /// Returns [this], the current trainingPeriod, and the current training, if they align with the specified [date].
   Map<String, dynamic>? getDataByDate(final DateTime date) {
     Map<String, dynamic>? map;
     for (final TrainingPeriod trainingPeriod in this.trainingPeriods) {
@@ -145,17 +145,19 @@ class StepData {
     return map;
   }
 
-  void resetChildrenProgresses(final int startingNumber) {
+  /// Resets the progress of the [TrainingPeriod]-children that come after a certain [startingNumber].
+  void resetProgressAfterNr(final int startingNumber) {
     for (final TrainingPeriod trainingPeriod in this.trainingPeriods) {
-      trainingPeriod.resetTrainingProgresses(startingNumber);
+      trainingPeriod.resetProgressAfterNr(startingNumber);
     }
   }
 
+  /// Returns [this], the active trainingPeriod, and the active training.
   Map<String, dynamic>? get activeData {
     Map<String, dynamic>? result;
     for (final trainingPeriod in this.trainingPeriods) {
       if (trainingPeriod.status == "active") {
-        Map<String, dynamic>? map = trainingPeriod.getActiveData();
+        Map<String, dynamic>? map = trainingPeriod.activeData;
         if (map != null) {
           result = map;
           result["step"] = this;
@@ -166,6 +168,7 @@ class StepData {
     return result;
   }
 
+  /// Returns [this] and the waiting trainingPeriod.
   Map<String, dynamic>? get waitingData {
     for (final TrainingPeriod trainingPeriod in this.trainingPeriods) {
       if (trainingPeriod.status == "waiting for start") {
@@ -178,20 +181,23 @@ class StepData {
     }
   }
 
+  /// Marks the passed [trainingPeriods].
   void markPassedPeriods() {
     for (final TrainingPeriod trainingPeriod in this.trainingPeriods) {
       trainingPeriod.markIfPassed();
     }
   }
 
-  void activateStartingPeriod() {
+  /// Performs the initial activation of the starting [trainingPeriod].
+  void activateWaitingPeriod() {
     for (final TrainingPeriod trainingPeriod in this.trainingPeriods) {
       if (trainingPeriod.status == "waiting for start") {
-        trainingPeriod.activate();
+        trainingPeriod.initialActivation();
       }
     }
   }
 
+  /// Converts the step ([StepData]) into a Map.
   Map<String, dynamic> toMap() {
     final List<Map<String, dynamic>> trainingPeriodMapList = [];
 
@@ -208,15 +214,16 @@ class StepData {
     return map;
   }
 
+  /// Converts a Map into a step ([StepData]).
   factory StepData.fromMap(Map<String, dynamic> map) {
     List<TrainingPeriod> jsonToPeriodList(final String json) {
       final List<dynamic> dynamicList = jsonDecode(json);
       final List<TrainingPeriod> trainingPeriods = [];
 
       for (final dynamic periodMap in dynamicList) {
-        trainingPeriods.add(TrainingPeriod.fromMap(periodMap));
+        final TrainingPeriod trainingPeriod = TrainingPeriod.fromMap(periodMap);
+        trainingPeriods.add(trainingPeriod);
       }
-
       return trainingPeriods;
     }
 

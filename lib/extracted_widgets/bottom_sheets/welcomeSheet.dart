@@ -24,10 +24,13 @@ import 'package:githo/models/used_classes/step.dart';
 import 'package:githo/models/used_classes/trainingPeriod.dart';
 
 class WelcomeSheet extends StatelessWidget {
-  // Returns a bottom sheet that welcomes the user and supplies the most relevant information.
-
   final ProgressData progressData;
-  const WelcomeSheet({required this.progressData, Key? key}) : super(key: key);
+
+  /// Returns a bottom sheet that welcomes the user and supplies the most relevant information.
+  const WelcomeSheet({
+    required this.progressData,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

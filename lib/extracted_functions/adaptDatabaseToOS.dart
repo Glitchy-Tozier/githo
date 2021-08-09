@@ -20,10 +20,10 @@ import 'dart:io';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-void adaptDatabaseToOS() {
-  // SQFlite doesn't work on Linux and Windows out of the box.
-  // To still be able to test there, this function was added.
+/// SQFlite doesn't work on Linux and Windows out of the box.
+/// To still be able to test there, this function was added.
 
+void adaptDatabaseToOS() {
   final bool _needsSpecialSQfliteTreatment;
 
   if (Platform.isWindows) {

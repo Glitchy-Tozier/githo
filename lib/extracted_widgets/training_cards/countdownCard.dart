@@ -23,8 +23,6 @@ import 'package:githo/extracted_functions/getDurationDiff.dart';
 import 'package:githo/helpers/timeHelper.dart';
 
 class CountdownCard extends StatefulWidget {
-  // Returns a training-card that displays a countdown for the training-start.
-
   final double horizontalMargin;
   final double cardWidth;
   final double cardHeight;
@@ -34,6 +32,7 @@ class CountdownCard extends StatefulWidget {
   final Function? onTap;
   final Color color;
 
+  /// Returns a training-card that displays a countdown for the training-start.
   const CountdownCard({
     required this.horizontalMargin,
     required this.cardWidth,
@@ -119,14 +118,8 @@ class _CountdownCardState extends State<CountdownCard> {
     return height;
   }
 
-  void _startTimer() {
-    // Refresh the necessary parts of the screen every second
-  }
-
   @override
   Widget build(BuildContext context) {
-    _startTimer();
-
     final DateTime now = TimeHelper.instance.currentTime;
     final String remainingTimeStr = getDurationDiff(
       now,

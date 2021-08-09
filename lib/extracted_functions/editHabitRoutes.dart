@@ -24,7 +24,7 @@ import 'package:githo/models/habitPlanModel.dart';
 import 'package:githo/models/progressDataModel.dart';
 import 'package:githo/screens/editHabit.dart';
 
-// Open the editHabit-screen and add a new habitPlan using whatever you type in
+/// Opens the editHabit-screen without any predefined values.
 void addNewHabit(
   BuildContext context,
   final Function updatePrevScreens,
@@ -64,7 +64,7 @@ void addNewHabit(
   );
 }
 
-// Send an existing habitPlan to the editHabit-screen and edit it there
+/// Sends an existing habitPlan to the editHabit-screen for you to edit it there.
 void editHabit(
   BuildContext context,
   final Function updatePrevScreens,
