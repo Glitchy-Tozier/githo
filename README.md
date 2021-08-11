@@ -10,6 +10,10 @@ Define the steps towards your final habit, then start with the first one. Advanc
 
 Such a gradual acquisition **reduces the physical/mental strain** and **helps you create a routine long before arriving at the final habit**.
 
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/com.florianthaler.githo/)
+
 ## Example of a Habit-Plan:
 ### Final Habit:
 Go jogging every morning
