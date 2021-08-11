@@ -43,23 +43,48 @@ class TrainingPeriod {
 
   /// Creates a [TrainingPeriod] from a [HabitPlan].
   TrainingPeriod.fromHabitPlan({
-    required int trainingPeriodIndex,
-    required HabitPlan habitPlan,
-  }) {
-    index = trainingPeriodIndex;
-    number = trainingPeriodIndex + 1;
+    required final int trainingPeriodIndex,
+    required final HabitPlan habitPlan,
+  })  : index = trainingPeriodIndex,
+        number = trainingPeriodIndex + 1,
+        durationInHours =
+            DataShortcut.periodDurationInHours[habitPlan.trainingTimeIndex],
+        durationText = DataShortcut.timeFrames[habitPlan.trainingTimeIndex],
+        requiredTrainings = habitPlan.requiredTrainings,
+        // Create all the TrainingPeriod-instances
+        trainings = _getTrainings(trainingPeriodIndex, habitPlan);
 
-    // Calculate the duration
+  /// Converts a Map into a [TrainingPeriod].
+  TrainingPeriod.fromMap(final Map<String, dynamic> map)
+      : index = map['index'] as int,
+        number = map['number'] as int,
+        durationInHours = map['durationInHours'] as int,
+        durationText = map['durationText'] as String,
+        requiredTrainings = map['requiredTrainings'] as int,
+        status = map['status'] as String,
+        trainings = _jsonToTrainingList(map['trainings'] as String);
+
+  final int index;
+  final int number;
+  final int durationInHours;
+  final String durationText;
+
+  /// The number of [Training]s that are required to successfully complete
+  /// this [TrainingPeriod].
+  final int requiredTrainings;
+  String status = '';
+  final List<Training> trainings;
+
+  /// Generates and returns the [List] of [Training]s that
+  /// form this [TrainingPeriod].
+  static List<Training> _getTrainings(
+    final int trainingPeriodIndex,
+    final HabitPlan habitPlan,
+  ) {
+    final List<Training> trainings = <Training>[];
     final int trainingTimeIndex = habitPlan.trainingTimeIndex;
-    durationInHours = DataShortcut.periodDurationInHours[trainingTimeIndex];
-    durationText = DataShortcut.timeFrames[trainingTimeIndex + 1];
-
-    // Get required trainings
-    requiredTrainings = habitPlan.requiredTrainings;
-
-    // Create all the TrainingPeriod-instances
     final int trainingCount = DataShortcut.maxTrainings[trainingTimeIndex];
-    trainings = <Training>[];
+
     for (int i = 0; i < trainingCount; i++) {
       final int trainingIndex = trainingPeriodIndex * trainingCount + i;
       trainings.add(
@@ -69,38 +94,20 @@ class TrainingPeriod {
         ),
       );
     }
+    return trainings;
   }
 
-  /// Converts a Map into a [TrainingPeriod].
-  TrainingPeriod.fromMap(final Map<String, dynamic> map) {
-    List<Training> jsonToTrainingList(final String json) {
-      final dynamic dynamicList = jsonDecode(json);
-      final List<Training> trainings = <Training>[];
+  /// Converts a [json]-like [String] into a list of [Training]s.
+  static List<Training> _jsonToTrainingList(final String json) {
+    final dynamic dynamicList = jsonDecode(json);
+    final List<Training> trainings = <Training>[];
 
-      for (final Map<String, dynamic> map in dynamicList) {
-        final Training training = Training.fromMap(map);
-        trainings.add(training);
-      }
-
-      return trainings;
+    for (final Map<String, dynamic> map in dynamicList) {
+      final Training training = Training.fromMap(map);
+      trainings.add(training);
     }
-
-    index = map['index'] as int;
-    number = map['number'] as int;
-    durationInHours = map['durationInHours'] as int;
-    durationText = map['durationText'] as String;
-    requiredTrainings = map['requiredTrainings'] as int;
-    status = map['status'] as String;
-    trainings = jsonToTrainingList(map['trainings'] as String);
+    return trainings;
   }
-
-  late int index;
-  late int number;
-  late int durationInHours;
-  late String durationText;
-  late int requiredTrainings;
-  String status = '';
-  late List<Training> trainings;
 
   /// Sets the dates of its [Training]-children.
   ///

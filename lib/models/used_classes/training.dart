@@ -29,39 +29,36 @@ class Training {
   Training({
     required this.number,
     required this.durationInHours,
-    required this.doneReps,
     required this.requiredReps,
+    required this.doneReps,
     required this.startingDate,
     required this.endingDate,
     required this.status,
   });
 
   /// Creates a [Training] from a [HabitPlan].
-  Training.fromHabitPlan(
-      {required int trainingIndex, required HabitPlan habitPlan}) {
-    number = trainingIndex + 1;
-
-    final int trainingTimeIndex = habitPlan.trainingTimeIndex;
-    durationInHours = DataShortcut.trainingDurationInHours[trainingTimeIndex];
-
-    requiredReps = habitPlan.requiredReps;
-  }
+  Training.fromHabitPlan({
+    required final int trainingIndex,
+    required final HabitPlan habitPlan,
+  })  : number = trainingIndex + 1,
+        durationInHours =
+            DataShortcut.trainingDurationInHours[habitPlan.trainingTimeIndex],
+        requiredReps = habitPlan.requiredReps;
 
   /// Converts a Map into a [Training].
-  Training.fromMap(final Map<String, dynamic> map) {
-    number = map['number'] as int;
-    durationInHours = map['durationInHours'] as int;
-    doneReps = map['doneReps'] as int;
-    requiredReps = map['requiredReps'] as int;
-    startingDate = DateTime.parse(map['startingDate'] as String);
-    endingDate = DateTime.parse(map['endingDate'] as String);
-    status = map['status'] as String;
-  }
+  Training.fromMap(final Map<String, dynamic> map)
+      : number = map['number'] as int,
+        durationInHours = map['durationInHours'] as int,
+        requiredReps = map['requiredReps'] as int,
+        doneReps = map['doneReps'] as int,
+        startingDate = DateTime.parse(map['startingDate'] as String),
+        endingDate = DateTime.parse(map['endingDate'] as String),
+        status = map['status'] as String;
 
-  late int number;
-  late int durationInHours;
+  final int number;
+  final int durationInHours;
+  final int requiredReps;
   int doneReps = 0;
-  late int requiredReps;
   DateTime startingDate = DateTime(135);
   DateTime endingDate = DateTime(246);
   String status = '';
@@ -143,8 +140,8 @@ class Training {
     final Map<String, dynamic> map = <String, dynamic>{
       'number': number,
       'durationInHours': durationInHours,
-      'doneReps': doneReps,
       'requiredReps': requiredReps,
+      'doneReps': doneReps,
       'startingDate': startingDate.toString(),
       'endingDate': endingDate.toString(),
       'status': status,

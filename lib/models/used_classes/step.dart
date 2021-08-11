@@ -35,21 +35,48 @@ class StepData {
   });
 
   /// Creates a step ([StepData]) from a [HabitPlan].
-  StepData.fromHabitPlan(
-      {required int stepIndex, required HabitPlan habitPlan}) {
-    index = stepIndex;
-    number = stepIndex + 1;
-    text = habitPlan.steps[stepIndex];
+  StepData.fromHabitPlan({
+    required final int stepIndex,
+    required final HabitPlan habitPlan,
+  })  : index = stepIndex,
+        number = stepIndex + 1,
+        text = habitPlan.steps[stepIndex],
+        durationInHours = _getDurationHours(habitPlan),
+        // Create all the TrainingPeriod-instances
+        trainingPeriods = _getTrainingPeriods(stepIndex, habitPlan);
 
-    // Calculate the duration
+  /// Converts a Map into a step ([StepData]).
+  StepData.fromMap(final Map<String, dynamic> map)
+      : index = map['index'] as int,
+        number = map['number'] as int,
+        text = map['text'] as String,
+        durationInHours = map['durationInHours'] as int,
+        trainingPeriods = _jsonToPeriodList(map['trainingPeriods'] as String);
+
+  final int index;
+  final int number; // = index + 1
+  final String text;
+  final int durationInHours;
+  final List<TrainingPeriod> trainingPeriods;
+
+  /// Calculates the step's duration and returns the number of hours.
+  static int _getDurationHours(final HabitPlan habitPlan) {
     final int trainingPeriodCount = habitPlan.requiredTrainingPeriods;
     final int trainingPeriodHours =
         DataShortcut.periodDurationInHours[habitPlan.trainingTimeIndex];
     final int stepHours = trainingPeriodHours * trainingPeriodCount;
-    durationInHours = stepHours;
+    return stepHours;
+  }
 
-    // Create all the TrainingPeriod-instances
-    trainingPeriods = <TrainingPeriod>[];
+  /// Generates and returns the [List] of [TrainingPeriod]s that
+  /// form this [StepData].
+  static List<TrainingPeriod> _getTrainingPeriods(
+    final int stepIndex,
+    final HabitPlan habitPlan,
+  ) {
+    final List<TrainingPeriod> trainingPeriods = <TrainingPeriod>[];
+    final int trainingPeriodCount = habitPlan.requiredTrainingPeriods;
+
     for (int i = 0; i < habitPlan.requiredTrainingPeriods; i++) {
       final int trainingPeriodIndex = stepIndex * trainingPeriodCount + i;
       trainingPeriods.add(
@@ -59,33 +86,20 @@ class StepData {
         ),
       );
     }
+    return trainingPeriods;
   }
 
-  /// Converts a Map into a step ([StepData]).
-  StepData.fromMap(final Map<String, dynamic> map) {
-    List<TrainingPeriod> jsonToPeriodList(final String json) {
-      final dynamic dynamicList = jsonDecode(json);
-      final List<TrainingPeriod> trainingPeriods = <TrainingPeriod>[];
+  /// Converts a [json]-like [String] into a list of [TrainingPeriod]s.
+  static List<TrainingPeriod> _jsonToPeriodList(final String json) {
+    final dynamic dynamicList = jsonDecode(json);
+    final List<TrainingPeriod> trainingPeriods = <TrainingPeriod>[];
 
-      for (final Map<String, dynamic> map in dynamicList) {
-        final TrainingPeriod trainingPeriod = TrainingPeriod.fromMap(map);
-        trainingPeriods.add(trainingPeriod);
-      }
-      return trainingPeriods;
+    for (final Map<String, dynamic> map in dynamicList) {
+      final TrainingPeriod trainingPeriod = TrainingPeriod.fromMap(map);
+      trainingPeriods.add(trainingPeriod);
     }
-
-    index = map['index'] as int;
-    number = map['number'] as int;
-    text = map['text'] as String;
-    durationInHours = map['durationInHours'] as int;
-    trainingPeriods = jsonToPeriodList(map['trainingPeriods'] as String);
+    return trainingPeriods;
   }
-
-  late int index;
-  late int number; // = index + 1
-  late String text;
-  late int durationInHours;
-  late List<TrainingPeriod> trainingPeriods;
 
   /// Returns the status of the step.
   ///
@@ -119,7 +133,7 @@ class StepData {
 
   /// Resets [periodsToRegress] of the [trainingPeriods],
   /// then returns the remaining amount.
-  int regressPeriods(int periodsToRegress) {
+  int regressPeriods(final int periodsToRegress) {
     int activePeriodIndex = _activePeriodIndex!;
     int remainingRegressions = periodsToRegress;
 
@@ -197,10 +211,11 @@ class StepData {
   Map<String, dynamic>? get waitingData {
     for (final TrainingPeriod trainingPeriod in trainingPeriods) {
       if (trainingPeriod.status == 'waiting for start') {
-        final Map<String, dynamic> result = <String, dynamic>{};
-        result['step'] = this;
-        result['trainingPeriod'] = trainingPeriod;
-        result['training'] = trainingPeriod.trainings[0];
+        final Map<String, dynamic> result = <String, dynamic>{
+          'step': this,
+          'trainingPeriod': trainingPeriod,
+          'training': trainingPeriod.trainings[0],
+        };
         return result;
       }
     }
@@ -231,12 +246,13 @@ class StepData {
       trainingPeriodMapList.add(trainingPeriod.toMap());
     }
 
-    final Map<String, dynamic> map = <String, dynamic>{};
-    map['index'] = index;
-    map['number'] = number;
-    map['text'] = text;
-    map['durationInHours'] = durationInHours;
-    map['trainingPeriods'] = jsonEncode(trainingPeriodMapList);
+    final Map<String, dynamic> map = <String, dynamic>{
+      'index': index,
+      'number': number,
+      'text': text,
+      'durationInHours': durationInHours,
+      'trainingPeriods': jsonEncode(trainingPeriodMapList),
+    };
     return map;
   }
 }

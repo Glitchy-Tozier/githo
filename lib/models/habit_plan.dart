@@ -34,7 +34,7 @@ class HabitPlan {
     required this.requiredTrainings,
     required this.requiredTrainingPeriods,
     required this.lastChanged,
-  });
+  }) : id = null;
 
   HabitPlan.withId({
     required this.id,
@@ -52,7 +52,8 @@ class HabitPlan {
 
   /// Returns the default empty [HabitPlan].
   HabitPlan.emptyHabitPlan()
-      : isActive = false,
+      : id = null,
+        isActive = false,
         fullyCompleted = false,
         // TextFormFields:
         habit = '',
@@ -79,7 +80,7 @@ class HabitPlan {
         requiredTrainingPeriods = map['requiredTrainingPeriods'] as int,
         lastChanged = DateTime.parse(map['lastChanged'] as String);
 
-  int? id;
+  final int? id;
   bool isActive;
   bool fullyCompleted;
   String habit;
