@@ -16,34 +16,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:githo/config/style_data.dart';
 
-class Settings extends StatelessWidget {
+/// Returns a bullet-point
+/// Used on the habitDetails.dart-screen
+
+class BulletPoint extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(children: <Widget>[
-        const Text(
-          'List of Habits',
-          style: TextStyle(fontSize: 25),
-        ),
-        Center(
-          child: Column(
-            children: <Widget>[
-              const Text('App Settings'),
-              ElevatedButton(
-                  child: const Text('Go to App Info'),
-                  onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      '/appInfo',
-                    );
-                  }),
-            ],
-          ),
-        ),
-      ]),
+    return const Text(
+      '•  ',
+      style: StyleData.boldTextStyle,
     );
   }
 }
- */

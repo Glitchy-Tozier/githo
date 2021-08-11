@@ -17,17 +17,17 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:githo/config/styleData.dart';
-import 'package:githo/widgets/backgroundWidget.dart';
-import 'package:githo/widgets/borderedImage.dart';
-import 'package:githo/database/databaseHelper.dart';
-import 'package:githo/models/settingsModel.dart';
-import 'package:githo/screens/homeScreen.dart';
+import 'package:githo/config/style_data.dart';
+import 'package:githo/widgets/background.dart';
+import 'package:githo/widgets/bordered_image.dart';
+import 'package:githo/database/database_helper.dart';
+import 'package:githo/models/settings_data.dart';
+import 'package:githo/screens/home_screen.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 // The introduction-screen that explains how this app works.
 
 class OnBoardingScreen extends StatelessWidget {
-  void _onIntroEnd(BuildContext context) async {
+  Future<void> _onIntroEnd(BuildContext context) async {
     // Make sure the introduction-screen doesn't get shown again
     final SettingsData settings = await DatabaseHelper.instance.getSettings();
     settings.showIntroduction = false;
@@ -35,13 +35,15 @@ class OnBoardingScreen extends StatelessWidget {
 
     // Navigate to the homescreen
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => HomeScreen()),
+      MaterialPageRoute<HomeScreen>(
+        builder: (_) => HomeScreen(),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    const PageDecoration pageDecoration = const PageDecoration(
+    const PageDecoration pageDecoration = PageDecoration(
       titleTextStyle: TextStyle(
         fontSize: 28.0,
         fontWeight: FontWeight.w700,
@@ -61,30 +63,31 @@ class OnBoardingScreen extends StatelessWidget {
     );
 
     return Stack(
-      children: [
-        const BackgroundWidget(),
+      children: <Widget>[
+        const Background(),
         IntroductionScreen(
           globalBackgroundColor: Colors.transparent,
-          pages: [
+          pages: <PageViewModel>[
             PageViewModel(
-              title: "Githo – Get Into The Habit Of…",
-              body: "Aquire an new habit, one step at a time",
+              title: 'Githo – Get Into The Habit Of…',
+              body: 'Aquire an new habit, one step at a time',
               image: const BorderedImage('assets/launcher/icon.png', width: 90),
               decoration: pageDecoration,
             ),
             PageViewModel(
-              title: "Define gradual steps",
-              body: "Move closer towards your final habit",
+              title: 'Define gradual steps',
+              body: 'Move closer towards your final habit',
               image: const BorderedImage(
-                  "assets/introduction_screen_images/defineSteps.jpeg"),
+                  'assets/introduction_screen_images/defineSteps.jpeg'),
               decoration: pageDecoration,
             ),
             PageViewModel(
-              title: "Build strong habits",
-              body:
-                  "Consistently succeed in trainings to advance to the next step.\n\nIf a step is too difficult, repeat the one before it.",
+              title: 'Build strong habits',
+              body: 'Consistently succeed in trainings to advance '
+                  'to the next step.\n\n'
+                  'If a step is too difficult, repeat the one before it.',
               image: const BorderedImage(
-                  "assets/introduction_screen_images/training.png"),
+                  'assets/introduction_screen_images/training.png'),
               decoration: pageDecoration,
             ),
           ],

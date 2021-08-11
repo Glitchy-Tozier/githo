@@ -16,34 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
-class Settings extends StatelessWidget {
+/// Returns a SizedBox of a prespecified height.
+/// Used to make sure the FloatingActionButtons can't cover up
+/// important contents at the bottom of the screen.
+
+class ScreenEndingSpacer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(children: <Widget>[
-        const Text(
-          'List of Habits',
-          style: TextStyle(fontSize: 25),
-        ),
-        Center(
-          child: Column(
-            children: <Widget>[
-              const Text('App Settings'),
-              ElevatedButton(
-                  child: const Text('Go to App Info'),
-                  onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      '/appInfo',
-                    );
-                  }),
-            ],
-          ),
-        ),
-      ]),
-    );
+    return const SizedBox(height: 85);
   }
 }
- */

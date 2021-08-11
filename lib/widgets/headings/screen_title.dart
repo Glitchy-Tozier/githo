@@ -16,34 +16,31 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
-class Settings extends StatelessWidget {
+/// Defines what screen-titles look like.
+
+class ScreenTitle extends StatelessWidget {
+  /// Returns a [Text]-Widget styled like a title.
+  ///
+  /// This represents the highest unit of order.
+  const ScreenTitle(this._text);
+
+  final String _text;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(children: <Widget>[
-        const Text(
-          'List of Habits',
-          style: TextStyle(fontSize: 25),
+    return Padding(
+      padding: const EdgeInsets.only(top: 70, bottom: 30),
+      child: Text(
+        _text,
+        textAlign: TextAlign.center,
+        style: const TextStyle(
+          fontSize: 35,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
         ),
-        Center(
-          child: Column(
-            children: <Widget>[
-              const Text('App Settings'),
-              ElevatedButton(
-                  child: const Text('Go to App Info'),
-                  onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      '/appInfo',
-                    );
-                  }),
-            ],
-          ),
-        ),
-      ]),
+      ),
     );
   }
 }
- */

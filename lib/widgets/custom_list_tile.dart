@@ -16,34 +16,32 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:githo/config/style_data.dart';
 
-class Settings extends StatelessWidget {
+class CustomListTile extends StatelessWidget {
+  /// A list-item used in the habitDetails.dart-screen.
+  const CustomListTile({
+    required this.leadingWidget,
+    required this.title,
+  });
+
+  final Widget leadingWidget;
+  final String title;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(children: <Widget>[
-        const Text(
-          'List of Habits',
-          style: TextStyle(fontSize: 25),
-        ),
-        Center(
-          child: Column(
-            children: <Widget>[
-              const Text('App Settings'),
-              ElevatedButton(
-                  child: const Text('Go to App Info'),
-                  onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      '/appInfo',
-                    );
-                  }),
-            ],
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        leadingWidget,
+        Flexible(
+          child: Text(
+            title,
+            style: StyleData.textStyle,
           ),
         ),
-      ]),
+      ],
     );
   }
 }
- */

@@ -16,34 +16,30 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* import 'package:flutter/material.dart';
+import 'package:githo/helpers/type_extentions.dart';
 
-class Settings extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(children: <Widget>[
-        const Text(
-          'List of Habits',
-          style: TextStyle(fontSize: 25),
-        ),
-        Center(
-          child: Column(
-            children: <Widget>[
-              const Text('App Settings'),
-              ElevatedButton(
-                  child: const Text('Go to App Info'),
-                  onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      '/appInfo',
-                    );
-                  }),
-            ],
-          ),
-        ),
-      ]),
-    );
+/// A model for how the user's settings are stored.
+
+class SettingsData {
+  SettingsData({
+    required this.showIntroduction,
+    required this.paused,
+  });
+
+  /// Converts a Map into [SettingsData].
+  SettingsData.fromMap(final Map<String, dynamic> map)
+      : showIntroduction = (map['showIntroduction'] as int).toBool(),
+        paused = (map['paused'] as int).toBool();
+
+  bool showIntroduction;
+  bool paused;
+
+  /// Converts the [SettingsData] into a Map.
+  Map<String, dynamic> toMap() {
+    final Map<String, dynamic> map = <String, dynamic>{
+      'showIntroduction': showIntroduction.toInt(),
+      'paused': paused.toInt(),
+    };
+    return map;
   }
 }
- */

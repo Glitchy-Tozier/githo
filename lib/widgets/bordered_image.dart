@@ -16,34 +16,35 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
-class Settings extends StatelessWidget {
+class BorderedImage extends StatelessWidget {
+  /// Loads an image, wraps a pretty border around it, and then returns it.
+  const BorderedImage(
+    this.location, {
+    this.width = double.infinity,
+    Key? key,
+  }) : super(key: key);
+
+  final String location;
+  final double width;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(children: <Widget>[
-        const Text(
-          'List of Habits',
-          style: TextStyle(fontSize: 25),
+    return Container(
+      width: width,
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(20)),
+        color: Colors.white,
+        border: Border.all(
+          color: Colors.white,
+          width: 7,
         ),
-        Center(
-          child: Column(
-            children: <Widget>[
-              const Text('App Settings'),
-              ElevatedButton(
-                  child: const Text('Go to App Info'),
-                  onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      '/appInfo',
-                    );
-                  }),
-            ],
-          ),
-        ),
-      ]),
+      ),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.all(Radius.circular(15)),
+        child: Image.asset(location),
+      ),
     );
   }
 }
- */

@@ -17,14 +17,14 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:githo/widgets/buttonListItem.dart';
+import 'package:githo/widgets/list_button.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:githo/config/styleData.dart';
-import 'package:githo/widgets/backgroundWidget.dart';
+import 'package:githo/config/style_data.dart';
+import 'package:githo/widgets/background.dart';
 
-import 'package:githo/widgets/borderedImage.dart';
+import 'package:githo/widgets/bordered_image.dart';
 import 'package:githo/widgets/headings/heading.dart';
 
 /// Contains licenses and important links.
@@ -35,11 +35,11 @@ class About extends StatelessWidget {
     final Future<PackageInfo> futurePackageInfo = PackageInfo.fromPlatform();
 
     return Scaffold(
-      body: BackgroundWidget(
+      body: Background(
         child: Container(
           alignment: Alignment.center,
           padding: StyleData.screenPadding,
-          child: FutureBuilder(
+          child: FutureBuilder<PackageInfo>(
             future: futurePackageInfo,
             builder:
                 (BuildContext context, AsyncSnapshot<PackageInfo> snapShot) {
@@ -48,45 +48,44 @@ class About extends StatelessWidget {
                   final PackageInfo packageInfo = snapShot.data!;
 
                   return Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
+                    children: <Widget>[
                       const SizedBox(height: 70),
                       const BorderedImage('assets/launcher/icon.png',
                           width: 90),
-                      const Heading("Githo"),
+                      const Heading('Githo'),
                       Text(
                         packageInfo.version,
                         style: StyleData.textStyle,
                       ),
-                      SizedBox(height: 20),
-                      ButtonListItem(
-                        text: "Source Code",
+                      const SizedBox(height: 20),
+                      ListButton(
+                        text: 'Source Code',
                         color: Theme.of(context).buttonColor,
                         onPressed: () async {
                           const String url =
-                              "https://github.com/Glitchy-Tozier/githo";
+                              'https://github.com/Glitchy-Tozier/githo';
                           if (await canLaunch(url)) {
                             launch(url);
                           } else {
-                            throw "Could not launch URL: $url";
+                            throw 'Could not launch URL: $url';
                           }
                         },
                       ),
-                      ButtonListItem(
-                        text: "Privacy Policy",
+                      ListButton(
+                        text: 'Privacy Policy',
                         color: Theme.of(context).buttonColor,
                         onPressed: () async {
                           const String url =
-                              "https://github.com/Glitchy-Tozier/githo/blob/main/privacyPolicy.md";
+                              'https://github.com/Glitchy-Tozier/githo/blob/main/privacyPolicy.md';
                           if (await canLaunch(url)) {
                             launch(url);
                           } else {
-                            throw "Could not launch URL: $url";
+                            throw 'Could not launch URL: $url';
                           }
                         },
                       ),
-                      ButtonListItem(
-                        text: "Licenses",
+                      ListButton(
+                        text: 'Licenses',
                         color: Theme.of(context).buttonColor,
                         onPressed: () {
                           showLicensePage(

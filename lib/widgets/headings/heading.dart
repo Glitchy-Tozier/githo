@@ -21,10 +21,10 @@ import 'package:flutter/material.dart';
 /// Defines what headings look like.
 
 class Heading extends StatelessWidget {
-  final String _text;
-
   /// Returns a [Text]-Widget that is styled like a heading.
   const Heading(this._text);
+
+  final String _text;
 
   static const TextStyle style = TextStyle(
     fontSize: 26,

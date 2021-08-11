@@ -16,34 +16,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* import 'package:flutter/material.dart';
+/// Returns a String that describes the time difference between two DateTimes.
 
-class Settings extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(children: <Widget>[
-        const Text(
-          'List of Habits',
-          style: TextStyle(fontSize: 25),
-        ),
-        Center(
-          child: Column(
-            children: <Widget>[
-              const Text('App Settings'),
-              ElevatedButton(
-                  child: const Text('Go to App Info'),
-                  onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      '/appInfo',
-                    );
-                  }),
-            ],
-          ),
-        ),
-      ]),
-    );
+String getDurationDiff(final DateTime dateTime1, final DateTime dateTime2) {
+  final Duration difference = dateTime2.difference(dateTime1);
+  final int amount;
+  final String timeString;
+
+  if (difference.inDays >= 1) {
+    amount = difference.inDays + 1;
+    timeString = '$amount days';
+  } else if (difference.inHours >= 1) {
+    amount = difference.inHours + 1;
+    timeString = '$amount h';
+  } else if (difference.inMinutes >= 1) {
+    amount = difference.inMinutes + 1;
+    timeString = '$amount min';
+  } else {
+    amount = difference.inSeconds + 1;
+    timeString = '$amount s';
   }
+  return timeString;
 }
- */

@@ -18,12 +18,24 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:githo/config/dataShortcut.dart';
+import 'package:githo/config/data_shortcut.dart';
 
-import 'package:githo/widgets/firstScreen.dart';
-import 'package:githo/database/adaptDatabaseToOS.dart';
+import 'package:githo/widgets/choose_first_screen.dart';
+import 'package:githo/database/adapt_database_to_os.dart';
 
 void main() {
+  print(
+    '''
+  hi
+  test
+what is wron??
+''',
+  );
+  print(
+    'hooooo'
+    'test'
+    'what is wron??',
+  );
   adaptDatabaseToOS();
   runApp(MyApp());
 }
@@ -33,13 +45,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Disables screen-rotation to prevent some layots getting too large.
-    SystemChrome.setPreferredOrientations([
+    SystemChrome.setPreferredOrientations(const <DeviceOrientation>[
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
 
     return MaterialApp(
-      title: "Githo - Get Into The Habit Of…",
+      title: 'Githo - Get Into The Habit Of…',
       theme: ThemeData(
         primarySwatch: Colors.pink,
       ),
