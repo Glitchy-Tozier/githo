@@ -6,31 +6,23 @@ Define the steps towards your final habit, then start with the first one. Advanc
 
 Such a gradual acquisition reduces the physical/mental strain and helps you create a routine long before arriving at the final habit.
 
-<b>Example of a Habit-Plan:</b>
-Final Habit:
-Go jogging every morning
-
-Steps:
-Every morning...
-<table>
-  <tr>
-    <th style="white-space: nowrap">Week 1:</th>
-    <td>Just step outside on the street, then return home.</td>
-  </tr>
-  <tr>
-    <th style="white-space: nowrap">Week 2:</th>
-    <td>Take a walk around your house/building.</td>
-  </tr>
-  <tr>
-    <th style="white-space: nowrap">Week 3:</th>
-    <td>Take a walk spanning 3-5 buildings.</td>
-  </tr>
-  <tr>
-    <th style="white-space: nowrap">Week 4:</th>
-    <td>Take a longer walk and add short jogging-segments into the mix.</td>
-  </tr>
-  <tr>
-    <th style="white-space: nowrap">Week 5:</th>
-    <td>Go jogging. Well done.</td>
-  </tr>
-</table>
+<strong>Example of a Habit-Plan:</strong>
+Final Habit: <i>Go jogging every morning</i>
+<strong>Steps:</strong> <i>Every morning...</i>
+<ul>
+  <li>
+    <b>Week 1:</b> Just step outside on the street, then return home.
+  </li>
+  <li>
+    <b>Week 2:</b> Take a walk around your house/building.
+  </li>
+  <li>
+    <b>Week 3:</b> Take a walk spanning 3-5 buildings.
+  </li>
+  <li>
+    <b>Week 4:</b> Take a longer walk and add short jogging-segments into the mix.
+  </li>
+  <li>
+    <b>Week 5:</b> Go jogging. Well done.
+  </li>
+</ul>
