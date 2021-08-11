@@ -179,10 +179,7 @@ class DatabaseHelper {
     db.insert(
       // Initialize default values
       _settingsTable,
-      SettingsData(
-        showIntroduction: true,
-        paused: false,
-      ).toMap(),
+      SettingsData.initialValues().toMap(),
     );
   }
 

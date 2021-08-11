@@ -31,6 +31,10 @@ class SettingsData {
       : showIntroduction = (map['showIntroduction'] as int).toBool(),
         paused = (map['paused'] as int).toBool();
 
+  SettingsData.initialValues()
+      : showIntroduction = true,
+        paused = false;
+
   bool showIntroduction;
   bool paused;
 
