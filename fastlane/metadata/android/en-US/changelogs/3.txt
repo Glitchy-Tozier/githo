@@ -1,0 +1,3 @@
+- Small usability improvements.
+- HUGE (but invisible) code-restructuring.
+- Improved icon and description in fastlane/metadata.
