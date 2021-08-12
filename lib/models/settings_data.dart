@@ -23,26 +23,20 @@ import 'package:githo/helpers/type_extentions.dart';
 class SettingsData {
   SettingsData({
     required this.showIntroduction,
-    required this.paused,
   });
 
   /// Converts a Map into [SettingsData].
   SettingsData.fromMap(final Map<String, dynamic> map)
-      : showIntroduction = (map['showIntroduction'] as int).toBool(),
-        paused = (map['paused'] as int).toBool();
+      : showIntroduction = (map['showIntroduction'] as int).toBool();
 
-  SettingsData.initialValues()
-      : showIntroduction = true,
-        paused = false;
+  SettingsData.initialValues() : showIntroduction = true;
 
   bool showIntroduction;
-  bool paused;
 
   /// Converts the [SettingsData] into a Map.
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> map = <String, dynamic>{
       'showIntroduction': showIntroduction.toInt(),
-      'paused': paused.toInt(),
     };
     return map;
   }

@@ -55,18 +55,16 @@ class DatabaseHelper {
   static const String _colRequiredTrainingPeriods = 'requiredTrainingPeriods';
   static const String _colLastChanged = 'lastChanged';
 
+  static const String _progressDataTable = 'progressDataTable';
   static const String _colHabitPlanId = 'habitPlanId';
   static const String _colProgIsActive = 'isActive';
   static const String _colProgFullyCompleted = 'fullyCompleted';
-  static const String _progressDataTable = 'progressDataTable';
-  static const String _colLastActiveDate = 'lastActiveDate';
   static const String _colCurrentStartingDate = 'currentStartingDate';
   static const String _colProgGoal = 'goal';
   static const String _colProgSteps = 'steps';
 
   static const String _settingsTable = 'settingsTable';
   static const String _colShowIntroduction = 'showIntroduction';
-  static const String _colPaused = 'paused';
 
   /// Returns the database.
   ///
@@ -154,7 +152,6 @@ class DatabaseHelper {
     commandString += '$_colHabitPlanId INTEGER, ';
     commandString += '$_colProgIsActive INTEGER, ';
     commandString += '$_colProgFullyCompleted INTEGER, ';
-    commandString += '$_colLastActiveDate TEXT, ';
     commandString += '$_colCurrentStartingDate TEXT, ';
     commandString += '$_colProgGoal TEXT, ';
     commandString += '$_colProgSteps TEXT';
@@ -171,8 +168,7 @@ class DatabaseHelper {
     commandString = '';
     commandString += 'CREATE TABLE $_settingsTable';
     commandString += '(';
-    commandString += '$_colShowIntroduction INTEGER, ';
-    commandString += '$_colPaused INTEGER';
+    commandString += '$_colShowIntroduction INTEGER';
     commandString += ')';
     await db.execute(commandString);
 
