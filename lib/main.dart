@@ -24,18 +24,6 @@ import 'package:githo/widgets/choose_first_screen.dart';
 import 'package:githo/database/adapt_database_to_os.dart';
 
 void main() {
-  print(
-    '''
-  hi
-  test
-what is wron??
-''',
-  );
-  print(
-    'hooooo'
-    'test'
-    'what is wron??',
-  );
   adaptDatabaseToOS();
   runApp(MyApp());
 }
