@@ -45,7 +45,7 @@ class ProgressData {
         fullyCompleted = false,
         currentStartingDate = DateTime(0),
         habit = '',
-        steps = const <StepData>[];
+        steps = <StepData>[];
 
   /// Converts a Map into [ProgressData].
   ProgressData.fromMap(final Map<String, dynamic> map)
