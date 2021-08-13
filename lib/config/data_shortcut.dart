@@ -49,6 +49,10 @@ class DataShortcut {
     24 * 7 * 4,
   ];
 
+  static const int maxHabitCharacters = 40;
+  static const int maxStepCharacters = 140;
+  static const int maxStepCount = 20;
+
   /// Toggles the Debug-banner and activates testing-functionality.
   static const bool testing = false;
 }

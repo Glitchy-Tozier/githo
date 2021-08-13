@@ -182,14 +182,14 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
                         FilteringTextInputFormatter.digitsOnly
                       ],
                       decoration: inputDecoration('Starting step'),
-                      validator: (String? input) => validateNumberField(
+                      validator: (final String? input) => validateNumberField(
                         input: input,
                         maxInput: widget.habitPlan.steps.length,
                         toFillIn: 'the starting step',
                         textIfZero: 'Fill in number between 1 and '
                             '${widget.habitPlan.steps.length}',
                       ),
-                      onSaved: (String? input) =>
+                      onSaved: (final String? input) =>
                           startingStep = int.parse(input.toString().trim()),
                     ),
                 ],

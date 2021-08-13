@@ -17,8 +17,10 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:githo/config/data_shortcut.dart';
 import 'package:githo/config/style_data.dart';
 import 'package:githo/helpers/text_form_field_validation.dart';
+import 'package:githo/helpers/type_extentions.dart';
 
 class FormList extends StatefulWidget {
   /// Creates a column of TextFormFields that grow in numbers when filled out.
@@ -39,55 +41,56 @@ class FormList extends StatefulWidget {
 }
 
 class _FormListState extends State<FormList> {
-  final int _iniLength = 2;
-  int listLength = 0;
-  final List<Widget> widgetList = <Widget>[];
-  List<String> inputValues = <String>[];
+  static const int minFormFieldCount = 2;
+
+  final List<Widget> formFields = <Widget>[];
+  final List<String> returnValues = List<String>.generate(
+    DataShortcut.maxStepCount,
+    (_) => '',
+  );
 
   @override
   void initState() {
     super.initState();
-    // Generate the TextFormFields
-    for (int i = 0; i < widget.initValues.length + 1; i++) {
-      if (i < widget.initValues.length) {
-        widgetList.add(
-          _textFormField(widget.fieldName, i, widget.initValues[i]),
-        );
-      } else {
-        widgetList.add(
-          _textFormField(widget.fieldName, i, ''),
-        );
-      }
+
+    final List<String> initialValues = widget.initValues;
+
+    if (initialValues.length < DataShortcut.maxStepCount) {
+      initialValues.add('');
     }
-    _updateScores();
+
+    // Generate the TextFormFields
+    for (int i = 0; i < initialValues.length; i++) {
+      formFields.add(
+        textFormField(widget.fieldName, i, initialValues[i]),
+      );
+    }
   }
 
-  void _updateScores() {
-    listLength = widgetList.length;
-    inputValues = List<String>.generate(
-      listLength - 1,
-      (final int index) => '',
-    );
-  }
-
-  Widget _textFormField(
+  Widget textFormField(
     final String name,
     final int index,
     final String value,
   ) {
     final int fieldNr = index + 1;
-    final String fieldName = '$name $fieldNr';
+    final String fieldName;
+    if (fieldNr < DataShortcut.maxStepCount) {
+      fieldName = '${name.capitalize()} $fieldNr';
+    } else {
+      fieldName = 'Final $name';
+    }
 
     return Column(
       children: <Widget>[
         TextFormField(
           initialValue: value,
           decoration: inputDecoration(fieldName),
-          maxLength: 140,
-          validator: (String? input) {
+          maxLength: DataShortcut.maxStepCharacters,
+          validator: (final String? input) {
             if (widget.canBeEmpty == true) {
-              // Use This validation if the fields are optional
-              if ((fieldNr != listLength) && (listLength > _iniLength)) {
+              // Use this validation if the fields are optional
+              if (formFields.length > minFormFieldCount &&
+                  fieldNr < formFields.length) {
                 return complainIfEmpty(
                   input: input,
                   toFillIn: fieldName,
@@ -96,7 +99,7 @@ class _FormListState extends State<FormList> {
             } else {
               // Use this validation if at least one field NEEDS to be
               // filled out.
-              if (fieldNr != listLength) {
+              if (fieldNr < formFields.length) {
                 return complainIfEmpty(
                   input: input,
                   toFillIn: fieldName,
@@ -104,37 +107,50 @@ class _FormListState extends State<FormList> {
               }
             }
           },
-          onChanged: (String? input) {
-            if (fieldNr == listLength) {
+          onChanged: (final String? input) {
+            if (fieldNr == formFields.length &&
+                fieldNr < DataShortcut.maxStepCount) {
               setState(() {
-                widgetList.add(_textFormField(name, index + 1, ''));
-                _updateScores();
+                formFields.add(textFormField(name, index + 1, ''));
               });
-            } else if (fieldNr == listLength - 1 && listLength > _iniLength) {
+            } else if (formFields.length > minFormFieldCount &&
+                fieldNr == formFields.length - 1) {
               final bool removeLast;
-              if (input == null) {
-                removeLast = true;
-              } else if (input.isEmpty) {
+              if (input == null || input.trim().isEmpty) {
                 removeLast = true;
               } else {
                 removeLast = false;
               }
               if (removeLast) {
                 setState(() {
-                  widgetList.removeLast();
-                  _updateScores();
+                  formFields.removeLast();
                 });
               }
             }
           },
           textInputAction: TextInputAction.next,
-          onSaved: (String? input) {
-            if (fieldNr != listLength) {
-              // Only do this if the current TextFormField is not
-              // the last (empty) TextFormField
-              inputValues[index] = input.toString().trim();
-              widget.valuesGetter(inputValues);
+          onSaved: (final String? input) {
+            final String trimmedInput = input.toString().trim();
+            if (fieldNr < formFields.length) {
+              // If this is not the last TextFormField.
+              returnValues[index] = trimmedInput;
+            } else {
+              // If this is the last one of the TextFormFields ([formFields]).
+              // Remove the values for all non-existent TextFormFields.
+              while (returnValues.length > formFields.length) {
+                returnValues.removeLast();
+              }
+              // Remove the value for the last TextFormField if it's empty.
+              // If it's not, also return it.
+              if (trimmedInput.isEmpty) {
+                returnValues.removeLast();
+              } else {
+                returnValues[index] = trimmedInput;
+              }
             }
+
+            // Send the results back to the EditHabit()-screen.
+            widget.valuesGetter(returnValues);
           },
         ),
         const SizedBox(height: 10),
@@ -146,15 +162,16 @@ class _FormListState extends State<FormList> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        ...widgetList,
-        const Text(
-          '⋮',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
+        ...formFields,
+        if (formFields.length < DataShortcut.maxStepCount)
+          const Text(
+            '⋮',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
           ),
-        ),
       ],
     );
   }

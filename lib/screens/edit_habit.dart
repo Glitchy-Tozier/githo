@@ -27,7 +27,6 @@ import 'package:githo/helpers/type_extentions.dart';
 import 'package:githo/widgets/background.dart';
 import 'package:githo/widgets/dividers/fat_divider.dart';
 import 'package:githo/widgets/dividers/thin_divider.dart';
-
 import 'package:githo/widgets/form_list.dart';
 import 'package:githo/widgets/headings/screen_title.dart';
 import 'package:githo/widgets/headings/heading.dart';
@@ -122,14 +121,14 @@ class _EditHabitState extends State<EditHabit> {
                       padding: StyleData.screenPadding,
                       child: TextFormField(
                         decoration: inputDecoration('The final habit'),
-                        maxLength: 40,
-                        validator: (String? input) => complainIfEmpty(
+                        maxLength: DataShortcut.maxHabitCharacters,
+                        validator: (final String? input) => complainIfEmpty(
                           input: input,
                           toFillIn: 'your final habit',
                         ),
                         initialValue: widget.habitPlan.habit,
                         textInputAction: TextInputAction.next,
-                        onSaved: (String? input) =>
+                        onSaved: (final String? input) =>
                             widget.habitPlan.habit = input.toString().trim(),
                       ),
                     ),
@@ -150,7 +149,7 @@ class _EditHabitState extends State<EditHabit> {
                         ],
                         decoration: inputDecoration('Nr of required actions'),
                         maxLength: 2,
-                        validator: (String? input) {
+                        validator: (final String? input) {
                           final String timeFrameArticle;
                           if (trainingTimeFrame == 'hour') {
                             timeFrameArticle = 'an';
@@ -167,7 +166,7 @@ class _EditHabitState extends State<EditHabit> {
                         },
                         initialValue: widget.habitPlan.requiredReps.toString(),
                         textInputAction: TextInputAction.next,
-                        onSaved: (String? input) => widget.habitPlan
+                        onSaved: (final String? input) => widget.habitPlan
                             .requiredReps = int.parse(input.toString().trim()),
                       ),
                     ),
@@ -181,7 +180,7 @@ class _EditHabitState extends State<EditHabit> {
                     Padding(
                       padding: StyleData.screenPadding,
                       child: FormList(
-                        fieldName: 'Step',
+                        fieldName: 'step',
                         canBeEmpty: false,
                         valuesGetter: _getStepValues,
                         initValues: widget.habitPlan.steps,
@@ -203,7 +202,7 @@ class _EditHabitState extends State<EditHabit> {
                     Padding(
                       padding: StyleData.screenPadding,
                       child: FormList(
-                        fieldName: 'Comment',
+                        fieldName: 'comment',
                         canBeEmpty: true,
                         valuesGetter: _getCommentValues,
                         initValues: widget.habitPlan.comments,
