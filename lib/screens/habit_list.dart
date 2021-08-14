@@ -99,9 +99,9 @@ class _HabitListState extends State<HabitList> {
                       child: Container(
                         padding: StyleData.screenPadding,
                         alignment: Alignment.center,
-                        child: const Text(
+                        child: Text(
                           'Add a new habit-plan by clicking on the plus-icon.',
-                          style: StyleData.textStyle,
+                          style: Theme.of(context).textTheme.bodyText2,
                         ),
                       ),
                     ),
@@ -168,7 +168,7 @@ class _HabitListState extends State<HabitList> {
                           'There was an error connecting to the database.'),
                       Text(
                         snapshot.error.toString(),
-                        style: StyleData.textStyle,
+                        style: Theme.of(context).textTheme.bodyText2,
                       ),
                     ],
                   ),
@@ -191,7 +191,6 @@ class _HabitListState extends State<HabitList> {
         heroTag: null,
         child: const Icon(
           Icons.add,
-          color: Colors.white,
         ),
       ),
     );

@@ -18,7 +18,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:githo/config/data_shortcut.dart';
-import 'package:githo/config/style_data.dart';
 import 'package:githo/helpers/text_form_field_validation.dart';
 import 'package:githo/helpers/type_extentions.dart';
 
@@ -84,7 +83,7 @@ class _FormListState extends State<FormList> {
       children: <Widget>[
         TextFormField(
           initialValue: value,
-          decoration: inputDecoration(fieldName),
+          decoration: InputDecoration(labelText: fieldName),
           maxLength: DataShortcut.maxStepCharacters,
           validator: (final String? input) {
             if (widget.canBeEmpty == true) {

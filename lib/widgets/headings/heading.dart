@@ -36,7 +36,10 @@ class Heading extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Text(_text, style: style),
+      child: Text(
+        _text,
+        style: Theme.of(context).textTheme.headline2,
+      ),
     );
   }
 }

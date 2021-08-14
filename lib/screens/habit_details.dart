@@ -172,7 +172,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
               child: Text(
                 stepNr.toString(),
                 textAlign: TextAlign.center,
-                style: StyleData.textStyle,
+                style: Theme.of(context).textTheme.bodyText2,
               ),
             ),
             Padding(
@@ -182,7 +182,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
               ),
               child: Text(
                 steps[i],
-                style: StyleData.textStyle,
+                style: Theme.of(context).textTheme.bodyText2,
               ),
             ),
           ],
@@ -286,7 +286,6 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
               heroTag: null,
               child: const Icon(
                 Icons.delete,
-                color: Colors.white,
               ),
             ),
             ActivationFAB(
@@ -322,7 +321,6 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
               heroTag: null,
               child: const Icon(
                 Icons.edit,
-                color: Colors.white,
               ),
             )
           ],

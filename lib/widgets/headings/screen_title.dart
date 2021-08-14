@@ -35,11 +35,7 @@ class ScreenTitle extends StatelessWidget {
       child: Text(
         _text,
         textAlign: TextAlign.center,
-        style: const TextStyle(
-          fontSize: 35,
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-        ),
+        style: Theme.of(context).textTheme.headline1,
       ),
     );
   }

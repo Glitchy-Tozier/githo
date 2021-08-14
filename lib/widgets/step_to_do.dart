@@ -83,19 +83,22 @@ class StepToDo extends StatelessWidget {
                   title: 'Step ${step.number}',
                   text: TextSpan(
                     children: <TextSpan>[
-                      const TextSpan(
+                      TextSpan(
                         text: 'Status: ',
-                        style: StyleData.textStyle,
+                        style: Theme.of(context).textTheme.bodyText2,
                       ),
                       TextSpan(
                         text: '${step.status}\n\n',
-                        style: coloredBoldTextStyle(statusColor),
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                              color: statusColor,
+                            ),
                       ),
-                      const TextSpan(
-                          text: 'To-do: ', style: StyleData.boldTextStyle),
+                      TextSpan(
+                          text: 'To-do: ',
+                          style: Theme.of(context).textTheme.bodyText1),
                       TextSpan(
                         text: step.text,
-                        style: StyleData.textStyle,
+                        style: Theme.of(context).textTheme.bodyText2,
                       ),
                     ],
                   ),

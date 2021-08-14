@@ -17,7 +17,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:githo/config/style_data.dart';
 
 class ConfirmActivationChange extends StatelessWidget {
   /// Returns a dialog that asks 'Do you really want to activate/deactivate the habit-plan?'
@@ -36,7 +35,7 @@ class ConfirmActivationChange extends StatelessWidget {
     return AlertDialog(
       title: Text(
         title,
-        style: StyleData.textStyle,
+        style: Theme.of(context).textTheme.bodyText2,
       ),
       content: content,
       actions: <Widget>[
@@ -46,11 +45,12 @@ class ConfirmActivationChange extends StatelessWidget {
             ElevatedButton.icon(
               icon: const Icon(
                 Icons.cancel,
-                color: Colors.white,
               ),
-              label: const Text(
+              label: Text(
                 'Cancel',
-                style: StyleData.whiteTextStyle,
+                style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                      color: Colors.white,
+                    ),
               ),
               style: ButtonStyle(
                 backgroundColor:
@@ -63,11 +63,12 @@ class ConfirmActivationChange extends StatelessWidget {
             ElevatedButton.icon(
               icon: const Icon(
                 Icons.check_circle,
-                color: Colors.white,
               ),
-              label: const Text(
+              label: Text(
                 'Confirm',
-                style: StyleData.whiteTextStyle,
+                style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                      color: Colors.white,
+                    ),
               ),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.green),

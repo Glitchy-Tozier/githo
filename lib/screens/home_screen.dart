@@ -116,12 +116,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const <Widget>[
-                        Heading('No habit-plan is active.'),
+                      children: <Widget>[
+                        const Heading('No habit-plan is active.'),
                         Text(
                           'Click on the orange button to '
                           'add or activate your habit-plan',
-                          style: StyleData.textStyle,
+                          style: Theme.of(context).textTheme.bodyText2,
                         ),
                       ],
                     ),
@@ -187,7 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           'There was an error connecting to the database.'),
                       Text(
                         snapshot.error.toString(),
-                        style: StyleData.textStyle,
+                        style: Theme.of(context).textTheme.bodyText2,
                       ),
                     ],
                   ),
@@ -229,7 +229,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 SpeedDialChild(
                   child: const Icon(Icons.info),
                   label: 'About',
-                  labelStyle: StyleData.textStyle,
+                  labelStyle: Theme.of(context).textTheme.bodyText2,
                   onTap: () {
                     Navigator.push(
                       context,
@@ -242,7 +242,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 SpeedDialChild(
                   child: const Icon(Icons.list),
                   label: 'List of Habits',
-                  labelStyle: StyleData.textStyle,
+                  labelStyle: Theme.of(context).textTheme.bodyText2,
                   onTap: () {
                     Navigator.push(
                       context,
@@ -330,17 +330,17 @@ class _HomeScreenState extends State<HomeScreen> {
                             title: 'Waiting for training to start',
                             text: TextSpan(
                               children: <TextSpan>[
-                                const TextSpan(
+                                TextSpan(
                                   text: 'Starting in ',
-                                  style: StyleData.textStyle,
+                                  style: Theme.of(context).textTheme.bodyText2,
                                 ),
                                 TextSpan(
                                   text: '$remainingTime.\n\nTo-do: ',
-                                  style: StyleData.boldTextStyle,
+                                  style: Theme.of(context).textTheme.bodyText1,
                                 ),
                                 TextSpan(
                                   text: stepDescription,
-                                  style: StyleData.textStyle,
+                                  style: Theme.of(context).textTheme.bodyText2,
                                 ),
                               ],
                             ),
@@ -397,7 +397,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                       child: Icon(
                         icon,
-                        color: Colors.white,
                       ),
                     );
                   }

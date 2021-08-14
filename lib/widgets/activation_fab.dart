@@ -17,7 +17,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:githo/config/style_data.dart';
 
 import 'package:githo/widgets/alert_dialogs/confirm_activation_change.dart';
 import 'package:githo/widgets/alert_dialogs/confirm_starting_time.dart';
@@ -56,9 +55,9 @@ class ActivationFAB extends StatelessWidget {
         context: context,
         builder: (BuildContext buildContext) => ConfirmActivationChange(
           title: 'Confirm Deactivation',
-          content: const Text(
+          content: Text(
             'All progress will be lost.',
-            style: StyleData.textStyle,
+            style: Theme.of(context).textTheme.bodyText2,
           ),
           onConfirmation: () {
             deactivateHabitPlan();
@@ -98,17 +97,17 @@ class ActivationFAB extends StatelessWidget {
             content: RichText(
               text: TextSpan(
                 children: <TextSpan>[
-                  const TextSpan(
+                  TextSpan(
                     text: 'Your previous habit-plan ',
-                    style: StyleData.textStyle,
+                    style: Theme.of(context).textTheme.bodyText2,
                   ),
                   TextSpan(
                     text: '(Habit: ${progressData.habit})',
-                    style: StyleData.boldTextStyle,
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
-                  const TextSpan(
+                  TextSpan(
                     text: ' will be deactivated.',
-                    style: StyleData.textStyle,
+                    style: Theme.of(context).textTheme.bodyText2,
                   ),
                 ],
               ),
@@ -137,12 +136,10 @@ class ActivationFAB extends StatelessWidget {
     if (habitPlan.isActive == true) {
       child = const Icon(
         Icons.star_outline,
-        color: Colors.white,
       );
     } else {
       child = const Icon(
         Icons.star,
-        color: Colors.white,
       );
     }
 

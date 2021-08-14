@@ -17,7 +17,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:githo/config/style_data.dart';
 
 class ConfirmEdit extends StatelessWidget {
   /// Returns a dialog that asks 'Do you really want to edit the habit-plan?'
@@ -28,15 +27,15 @@ class ConfirmEdit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text(
+      title: Text(
         'Confirm edit',
-        style: StyleData.textStyle,
+        style: Theme.of(context).textTheme.bodyText2,
       ),
-      content: const Text(
+      content: Text(
         'By changing something, all previous progress will be lost.\n'
         '\n'
         'You will need to re-activate the habit-plan after editing it.',
-        style: StyleData.textStyle,
+        style: Theme.of(context).textTheme.bodyText2,
       ),
       actions: <Widget>[
         Row(
@@ -45,11 +44,12 @@ class ConfirmEdit extends StatelessWidget {
             ElevatedButton.icon(
               icon: const Icon(
                 Icons.cancel,
-                color: Colors.white,
               ),
-              label: const Text(
+              label: Text(
                 'Cancel',
-                style: StyleData.whiteTextStyle,
+                style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                      color: Colors.white,
+                    ),
               ),
               style: ButtonStyle(
                 backgroundColor:
@@ -62,11 +62,12 @@ class ConfirmEdit extends StatelessWidget {
             ElevatedButton.icon(
               icon: const Icon(
                 Icons.edit,
-                color: Colors.white,
               ),
-              label: const Text(
+              label: Text(
                 'Edit',
-                style: StyleData.whiteTextStyle,
+                style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                      color: Colors.white,
+                    ),
               ),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.green),

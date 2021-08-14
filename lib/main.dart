@@ -18,8 +18,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:githo/config/data_shortcut.dart';
 
+import 'package:githo/config/app_theme.dart';
+import 'package:githo/config/data_shortcut.dart';
 import 'package:githo/widgets/choose_first_screen.dart';
 import 'package:githo/database/adapt_database_to_os.dart';
 
@@ -40,9 +41,7 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       title: 'Githo - Get Into The Habit Of…',
-      theme: ThemeData(
-        primarySwatch: Colors.pink,
-      ),
+      theme: AppTheme.lightTheme,
       home: FirstScreen(),
       debugShowCheckedModeBanner: DataShortcut.testing,
     );

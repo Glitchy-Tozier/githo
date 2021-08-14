@@ -43,18 +43,18 @@ class OnBoardingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const PageDecoration pageDecoration = PageDecoration(
-      titleTextStyle: TextStyle(
+    final PageDecoration pageDecoration = PageDecoration(
+      titleTextStyle: const TextStyle(
         fontSize: 28.0,
         fontWeight: FontWeight.w700,
       ),
-      bodyTextStyle: StyleData.textStyle,
-      titlePadding: EdgeInsets.symmetric(
+      bodyTextStyle: Theme.of(context).textTheme.bodyText2!,
+      titlePadding: const EdgeInsets.symmetric(
         vertical: 20,
         horizontal: StyleData.screenPaddingValue,
       ),
       descriptionPadding: StyleData.screenPadding,
-      imagePadding: EdgeInsets.only(
+      imagePadding: const EdgeInsets.only(
         top: 70,
         right: StyleData.screenPaddingValue,
         left: StyleData.screenPaddingValue,
@@ -95,7 +95,9 @@ class OnBoardingScreen extends StatelessWidget {
           next: const Icon(Icons.arrow_forward),
           done: Text(
             'Start',
-            style: coloredBoldTextStyle(Theme.of(context).primaryColor),
+            style: Theme.of(context).textTheme.headline3!.copyWith(
+                  color: Theme.of(context).primaryColor,
+                ),
           ),
           curve: Curves.fastLinearToSlowEaseIn,
           controlsMargin: const EdgeInsets.all(16),

@@ -85,25 +85,25 @@ class PeriodListView extends StatelessWidget {
                   title: 'Waiting for training to start',
                   text: TextSpan(
                     children: <TextSpan>[
-                      const TextSpan(
+                      TextSpan(
                         text: 'Starting in ',
-                        style: StyleData.textStyle,
+                        style: Theme.of(context).textTheme.bodyText2,
                       ),
                       TextSpan(
                         text: '$remainingTime\n',
-                        style: StyleData.boldTextStyle,
+                        style: Theme.of(context).textTheme.bodyText1,
                       ),
                       TextSpan(
                         text: '(On ${formatDate(training.startingDate)})\n\n',
-                        style: StyleData.textStyle,
+                        style: Theme.of(context).textTheme.bodyText2,
                       ),
-                      const TextSpan(
+                      TextSpan(
                         text: 'To-do: ',
-                        style: StyleData.boldTextStyle,
+                        style: Theme.of(context).textTheme.bodyText1,
                       ),
                       TextSpan(
                         text: stepDescription,
-                        style: StyleData.textStyle,
+                        style: Theme.of(context).textTheme.bodyText2,
                       ),
                     ],
                   ),

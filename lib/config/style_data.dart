@@ -32,35 +32,4 @@ class StyleData {
       EdgeInsets.symmetric(horizontal: 16);
 
   static const double listRowSpacing = 8;
-
-  /// The default [TextStyle].
-  static const TextStyle textStyle = TextStyle(
-    fontSize: 16,
-    color: Colors.black,
-  );
-  static const TextStyle whiteTextStyle =
-      TextStyle(fontSize: 16, color: Colors.white);
-  static const TextStyle boldTextStyle = TextStyle(
-    fontSize: 16,
-    color: Colors.black,
-    fontWeight: FontWeight.bold,
-  );
-}
-
-/// Provides the basic styling for TextFormFields.
-InputDecoration inputDecoration(final String text) {
-  return InputDecoration(
-    labelText: text,
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10),
-    ),
-  );
-}
-
-TextStyle coloredBoldTextStyle(final Color color) {
-  return TextStyle(
-    fontSize: 16,
-    fontWeight: FontWeight.bold,
-    color: color,
-  );
 }

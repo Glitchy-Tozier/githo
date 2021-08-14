@@ -17,7 +17,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:githo/config/style_data.dart';
 
 class CustomListTile extends StatelessWidget {
   /// A list-item used in the habitDetails.dart-screen.
@@ -38,7 +37,7 @@ class CustomListTile extends StatelessWidget {
         Flexible(
           child: Text(
             title,
-            style: StyleData.textStyle,
+            style: Theme.of(context).textTheme.bodyText2,
           ),
         ),
       ],

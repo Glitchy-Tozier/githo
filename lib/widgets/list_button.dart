@@ -17,7 +17,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:githo/config/style_data.dart';
 
 class ListButton extends StatelessWidget {
   /// The default list-item used in this application.
@@ -51,7 +50,7 @@ class ListButton extends StatelessWidget {
           text,
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
-          style: StyleData.textStyle,
+          style: Theme.of(context).textTheme.bodyText2,
         ),
       ),
     );

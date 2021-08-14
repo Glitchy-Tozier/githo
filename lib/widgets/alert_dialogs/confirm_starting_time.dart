@@ -19,7 +19,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:githo/config/style_data.dart';
 import 'package:githo/helpers/format_date.dart';
 import 'package:githo/helpers/text_form_field_validation.dart';
 import 'package:githo/database/database_helper.dart';
@@ -121,9 +120,9 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
     dateController.text = startingDateString;
 
     return AlertDialog(
-      title: const Text(
+      title: Text(
         'Confirm starting time',
-        style: StyleData.textStyle,
+        style: Theme.of(context).textTheme.bodyText2,
       ),
       content: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
@@ -135,11 +134,11 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
                 children: <TextSpan>[
                   TextSpan(
                     text: '$startingPeriod will ',
-                    style: StyleData.textStyle,
+                    style: Theme.of(context).textTheme.bodyText2,
                   ),
                   TextSpan(
                     text: 'start on $startingDateString',
-                    style: StyleData.boldTextStyle,
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ],
               ),
@@ -152,7 +151,9 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
                 children: <Widget>[
                   TextFormField(
                     controller: dateController,
-                    decoration: inputDecoration('Starting date'),
+                    decoration: const InputDecoration(
+                      labelText: 'Starting date',
+                    ),
                     readOnly: true,
                     onTap: () {
                       final DateTime now = TimeHelper.instance.currentTime;
@@ -181,7 +182,9 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
                       inputFormatters: <TextInputFormatter>[
                         FilteringTextInputFormatter.digitsOnly
                       ],
-                      decoration: inputDecoration('Starting step'),
+                      decoration: const InputDecoration(
+                        labelText: 'Starting step',
+                      ),
                       validator: (final String? input) => validateNumberField(
                         input: input,
                         maxInput: widget.habitPlan.steps.length,
@@ -205,11 +208,12 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
             ElevatedButton.icon(
               icon: const Icon(
                 Icons.cancel,
-                color: Colors.white,
               ),
-              label: const Text(
+              label: Text(
                 'Cancel',
-                style: StyleData.whiteTextStyle,
+                style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                      color: Colors.white,
+                    ),
               ),
               style: ButtonStyle(
                 backgroundColor:
@@ -222,11 +226,12 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
             ElevatedButton.icon(
               icon: const Icon(
                 Icons.check_circle,
-                color: Colors.white,
               ),
-              label: const Text(
+              label: Text(
                 'Start',
-                style: StyleData.whiteTextStyle,
+                style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                      color: Colors.white,
+                    ),
               ),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.green),

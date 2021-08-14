@@ -17,7 +17,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:githo/config/style_data.dart';
 import 'package:githo/widgets/bottom_sheets/text_sheet.dart';
 import 'package:githo/models/progress_data.dart';
 import 'package:githo/models/used_classes/step.dart';
@@ -46,26 +45,26 @@ class WelcomeSheet extends StatelessWidget {
       trainingPeriod = dataMap['trainingPeriod'] as TrainingPeriod;
       text = TextSpan(
         children: <TextSpan>[
-          const TextSpan(
+          TextSpan(
             text: 'In ',
-            style: StyleData.textStyle,
+            style: Theme.of(context).textTheme.bodyText2,
           ),
           TextSpan(
             text: 'Step ${step.number}\n\nTo-do',
-            style: StyleData.boldTextStyle,
+            style: Theme.of(context).textTheme.bodyText1,
           ),
           TextSpan(
             text: ': ${step.text}\n\n',
-            style: StyleData.textStyle,
+            style: Theme.of(context).textTheme.bodyText2,
           ),
           TextSpan(
             text: "This ${trainingPeriod.durationText}'s progress:",
-            style: StyleData.boldTextStyle,
+            style: Theme.of(context).textTheme.bodyText1,
           ),
           TextSpan(
             text: ' ${trainingPeriod.successfulTrainings} out of '
                 '${trainingPeriod.requiredTrainings} trainings completed',
-            style: StyleData.textStyle,
+            style: Theme.of(context).textTheme.bodyText2,
           ),
         ],
       );
@@ -76,15 +75,15 @@ class WelcomeSheet extends StatelessWidget {
         children: <TextSpan>[
           TextSpan(
             text: 'Waiting for step ${step.number} to start.\n\n',
-            style: StyleData.textStyle,
+            style: Theme.of(context).textTheme.bodyText2,
           ),
-          const TextSpan(
+          TextSpan(
             text: 'To-do',
-            style: StyleData.boldTextStyle,
+            style: Theme.of(context).textTheme.bodyText1,
           ),
           TextSpan(
             text: ': ${step.text}',
-            style: StyleData.textStyle,
+            style: Theme.of(context).textTheme.bodyText2,
           ),
         ],
       );

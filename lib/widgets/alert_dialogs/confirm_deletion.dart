@@ -17,7 +17,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:githo/config/style_data.dart';
 import 'package:githo/database/database_helper.dart';
 import 'package:githo/models/habit_plan.dart';
 import 'package:githo/models/progress_data.dart';
@@ -36,13 +35,13 @@ class ConfirmDeletion extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text(
+      title: Text(
         'Confirm deletion',
-        style: StyleData.textStyle,
+        style: Theme.of(context).textTheme.bodyText2,
       ),
-      content: const Text(
+      content: Text(
         'All previous progress will be lost.',
-        style: StyleData.textStyle,
+        style: Theme.of(context).textTheme.bodyText2,
       ),
       actions: <Widget>[
         Row(
@@ -51,11 +50,12 @@ class ConfirmDeletion extends StatelessWidget {
             ElevatedButton.icon(
               icon: const Icon(
                 Icons.cancel,
-                color: Colors.white,
               ),
-              label: const Text(
+              label: Text(
                 'Cancel',
-                style: StyleData.whiteTextStyle,
+                style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                      color: Colors.white,
+                    ),
               ),
               style: ButtonStyle(
                 backgroundColor:
@@ -68,11 +68,12 @@ class ConfirmDeletion extends StatelessWidget {
             ElevatedButton.icon(
               icon: const Icon(
                 Icons.delete,
-                color: Colors.white,
               ),
-              label: const Text(
+              label: Text(
                 'Delete',
-                style: StyleData.whiteTextStyle,
+                style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                      color: Colors.white,
+                    ),
               ),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.red),

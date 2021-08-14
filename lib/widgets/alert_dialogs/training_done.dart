@@ -18,7 +18,6 @@
 
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:githo/config/style_data.dart';
 
 /// Notifies the user of his success.
 
@@ -35,9 +34,9 @@ class TrainingDoneAlert extends StatelessWidget {
         buttonStrings[random.nextInt(buttonStrings.length)];
 
     return AlertDialog(
-      title: const Text(
+      title: Text(
         'Training completed!',
-        style: StyleData.textStyle,
+        style: Theme.of(context).textTheme.bodyText2,
       ),
       actions: <ElevatedButton>[
         ElevatedButton(
@@ -53,7 +52,9 @@ class TrainingDoneAlert extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
           child: Text(
             buttonString,
-            style: StyleData.whiteTextStyle,
+            style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                  color: Colors.white,
+                ),
           ),
         ),
       ],

@@ -31,7 +31,6 @@ import 'package:githo/widgets/form_list.dart';
 import 'package:githo/widgets/headings/screen_title.dart';
 import 'package:githo/widgets/headings/heading.dart';
 import 'package:githo/widgets/screen_ending_spacer.dart';
-import 'package:githo/widgets/slider_title.dart';
 
 import 'package:githo/models/habit_plan.dart';
 
@@ -120,7 +119,9 @@ class _EditHabitState extends State<EditHabit> {
                     Padding(
                       padding: StyleData.screenPadding,
                       child: TextFormField(
-                        decoration: inputDecoration('The final habit'),
+                        decoration: const InputDecoration(
+                          labelText: 'The final habit',
+                        ),
                         maxLength: DataShortcut.maxHabitCharacters,
                         validator: (final String? input) => complainIfEmpty(
                           input: input,
@@ -147,7 +148,9 @@ class _EditHabitState extends State<EditHabit> {
                         inputFormatters: <TextInputFormatter>[
                           FilteringTextInputFormatter.digitsOnly
                         ],
-                        decoration: inputDecoration('Nr of required actions'),
+                        decoration: const InputDecoration(
+                          labelText: 'Nr of required actions',
+                        ),
                         maxLength: 2,
                         validator: (final String? input) {
                           final String timeFrameArticle;
@@ -193,9 +196,10 @@ class _EditHabitState extends State<EditHabit> {
                       padding: StyleData.screenPadding,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const <Widget>[
-                          Heading('Comments'),
-                          Text('(Optional)', style: StyleData.textStyle),
+                        children: <Widget>[
+                          const Heading('Comments'),
+                          Text('(Optional)',
+                              style: Theme.of(context).textTheme.bodyText2),
                         ],
                       ),
                     ),
@@ -217,11 +221,28 @@ class _EditHabitState extends State<EditHabit> {
                     ),
                     Padding(
                       padding: StyleData.screenPadding,
-                      child: SliderTitle(<List<String>>[
-                        <String>['normal', 'It will be $firstSliderArticle '],
-                        <String>['bold', trainingAdjTimeFrame],
-                        const <String>['normal', ' habit.'],
-                      ]),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: 'It will be $firstSliderArticle ',
+                                style: Theme.of(context).textTheme.headline4,
+                              ),
+                              TextSpan(
+                                text: trainingAdjTimeFrame,
+                                style: Theme.of(context).textTheme.headline3,
+                              ),
+                              TextSpan(
+                                text: ' habit.',
+                                style: Theme.of(context).textTheme.headline4,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                     Padding(
                       padding: StyleData.screenPadding,
@@ -251,19 +272,29 @@ class _EditHabitState extends State<EditHabit> {
                     const ThinDivider(),
                     Padding(
                       padding: StyleData.screenPadding,
-                      child: SliderTitle(<List<String>>[
-                        <String>['normal', 'Every $periodTimeFrame, '],
-                        <String>[
-                          'bold',
-                          '${widget.habitPlan.requiredTrainings} '
-                        ],
-                        <String>[
-                          'normal',
-                          '''
-out of ${currentMaxTrainings.toInt()}
-${trainingTimeFrame}s must be successful.'''
-                        ]
-                      ]),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: 'Every $periodTimeFrame, ',
+                                style: Theme.of(context).textTheme.headline4,
+                              ),
+                              TextSpan(
+                                text: '${widget.habitPlan.requiredTrainings} ',
+                                style: Theme.of(context).textTheme.headline3,
+                              ),
+                              TextSpan(
+                                text: 'out of ${currentMaxTrainings.toInt()} '
+                                    '${trainingTimeFrame}s must be successful.',
+                                style: Theme.of(context).textTheme.headline4,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                     Padding(
                       padding: StyleData.screenPadding,
@@ -282,18 +313,27 @@ ${trainingTimeFrame}s must be successful.'''
                     const ThinDivider(),
                     Padding(
                       padding: StyleData.screenPadding,
-                      child: SliderTitle(<List<String>>[
-                        <String>[
-                          'bold',
-                          '${widget.habitPlan.requiredTrainingPeriods} '
-                        ],
-                        <String>[
-                          'normal',
-                          '''
-successful $periodTimeFrame$thirdSliderText required
-to advance to the next step.'''
-                        ]
-                      ]),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: widget.habitPlan.requiredTrainingPeriods
+                                    .toString(),
+                                style: Theme.of(context).textTheme.headline3,
+                              ),
+                              TextSpan(
+                                text: ' successful '
+                                    '$periodTimeFrame$thirdSliderText '
+                                    'required to advance to the next step.',
+                                style: Theme.of(context).textTheme.headline4,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                     Padding(
                       padding: StyleData.screenPadding,
@@ -331,7 +371,6 @@ to advance to the next step.'''
         },
         child: const Icon(
           Icons.save,
-          color: Colors.white,
         ),
       ),
     );

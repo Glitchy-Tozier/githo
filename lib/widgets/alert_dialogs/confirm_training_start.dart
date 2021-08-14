@@ -17,7 +17,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:githo/config/style_data.dart';
 import 'package:githo/models/used_classes/training.dart';
 
 class ConfirmTrainingStart extends StatelessWidget {
@@ -45,13 +44,13 @@ class ConfirmTrainingStart extends StatelessWidget {
     }
 
     return AlertDialog(
-      title: const Text(
+      title: Text(
         'Tackle the next training?',
-        style: StyleData.textStyle,
+        style: Theme.of(context).textTheme.bodyText2,
       ),
       content: Text(
         'To-Do: $toDo\n\nReps: $amountString',
-        style: StyleData.textStyle,
+        style: Theme.of(context).textTheme.bodyText2,
       ),
       actions: <Widget>[
         Row(
@@ -60,11 +59,12 @@ class ConfirmTrainingStart extends StatelessWidget {
             ElevatedButton.icon(
               icon: const Icon(
                 Icons.cancel,
-                color: Colors.white,
               ),
-              label: const Text(
+              label: Text(
                 'Cancel',
-                style: StyleData.whiteTextStyle,
+                style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                      color: Colors.white,
+                    ),
               ),
               style: ButtonStyle(
                 backgroundColor:
@@ -77,11 +77,12 @@ class ConfirmTrainingStart extends StatelessWidget {
             ElevatedButton.icon(
               icon: const Icon(
                 Icons.check_circle,
-                color: Colors.white,
               ),
-              label: const Text(
+              label: Text(
                 'Start',
-                style: StyleData.whiteTextStyle,
+                style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                      color: Colors.white,
+                    ),
               ),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
