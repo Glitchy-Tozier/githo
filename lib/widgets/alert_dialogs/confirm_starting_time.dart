@@ -120,9 +120,8 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
     dateController.text = startingDateString;
 
     return AlertDialog(
-      title: Text(
+      title: const Text(
         'Confirm starting time',
-        style: Theme.of(context).textTheme.bodyText2,
       ),
       content: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),

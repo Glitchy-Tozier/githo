@@ -27,15 +27,28 @@ class ConfirmEdit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(
-        'Confirm edit',
-        style: Theme.of(context).textTheme.bodyText2,
+      title: const Text(
+        'Edit current habit-plan?',
       ),
-      content: Text(
-        'By changing something, all previous progress will be lost.\n'
-        '\n'
-        'You will need to re-activate the habit-plan after editing it.',
-        style: Theme.of(context).textTheme.bodyText2,
+      content: RichText(
+        text: TextSpan(
+          children: <TextSpan>[
+            TextSpan(
+              text: 'By changing something, ',
+              style: Theme.of(context).textTheme.bodyText2,
+            ),
+            TextSpan(
+              text: 'all previous progress will be lost.\n',
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
+            TextSpan(
+              text: '\n'
+                  'You will need to re-activate the '
+                  'habit-plan after editing it.',
+              style: Theme.of(context).textTheme.bodyText2,
+            ),
+          ],
+        ),
       ),
       actions: <Widget>[
         Row(

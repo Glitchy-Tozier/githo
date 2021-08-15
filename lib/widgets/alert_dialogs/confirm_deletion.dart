@@ -35,9 +35,8 @@ class ConfirmDeletion extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(
+      title: const Text(
         'Confirm deletion',
-        style: Theme.of(context).textTheme.bodyText2,
       ),
       content: Text(
         'All previous progress will be lost.',

@@ -18,8 +18,8 @@
 
 import 'package:flutter/material.dart';
 
+/// Defines how the app looks.
 class AppTheme {
-  // static const TextStyle
   static final ThemeData lightTheme = ThemeData(
       primarySwatch: Colors.pink,
       backgroundColor: Colors.white70,

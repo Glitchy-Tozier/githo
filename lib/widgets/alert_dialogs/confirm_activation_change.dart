@@ -35,7 +35,6 @@ class ConfirmActivationChange extends StatelessWidget {
     return AlertDialog(
       title: Text(
         title,
-        style: Theme.of(context).textTheme.bodyText2,
       ),
       content: content,
       actions: <Widget>[

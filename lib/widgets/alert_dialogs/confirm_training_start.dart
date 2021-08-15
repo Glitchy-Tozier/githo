@@ -44,9 +44,8 @@ class ConfirmTrainingStart extends StatelessWidget {
     }
 
     return AlertDialog(
-      title: Text(
+      title: const Text(
         'Tackle the next training?',
-        style: Theme.of(context).textTheme.bodyText2,
       ),
       content: Text(
         'To-Do: $toDo\n\nReps: $amountString',

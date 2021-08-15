@@ -34,9 +34,8 @@ class TrainingDoneAlert extends StatelessWidget {
         buttonStrings[random.nextInt(buttonStrings.length)];
 
     return AlertDialog(
-      title: Text(
+      title: const Text(
         'Training completed!',
-        style: Theme.of(context).textTheme.bodyText2,
       ),
       actions: <ElevatedButton>[
         ElevatedButton(
