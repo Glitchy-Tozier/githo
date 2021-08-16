@@ -17,6 +17,7 @@
  */
 
 import 'dart:convert';
+import 'package:githo/database/database_helper.dart';
 import 'package:githo/helpers/type_extentions.dart';
 import 'package:githo/helpers/time_helper.dart';
 
@@ -130,11 +131,14 @@ class HabitPlan {
     // Get the map of the habitPlan.
     final Map<String, dynamic> map = toMap();
 
-    // Remove unneccessary parameters
+    // Remove unneccessary parameters.
     map.remove('id');
     map.remove('isActive');
     map.remove('fullyCompleted');
     map.remove('lastChanged');
+
+    // Add the database-version.
+    map['dbVersion'] = DatabaseHelper.version;
 
     // Convert the map into a String and return it.
     final String json = jsonEncode(map);

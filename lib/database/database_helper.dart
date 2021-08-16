@@ -39,8 +39,7 @@ class DatabaseHelper {
 
   static const String _dbVersionTable = 'dbVersionTable';
   static const String _colVersion = 'version';
-  // ignore: unused_field
-  static const int _version = 1;
+  static const int version = 1;
 
   static const String _habitPlansTable = 'habitPlansTable';
   static const String _colId = 'id';
