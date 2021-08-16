@@ -21,43 +21,44 @@ import 'package:flutter/material.dart';
 /// Defines how the app looks.
 class AppTheme {
   static final ThemeData lightTheme = ThemeData(
-      primarySwatch: Colors.pink,
-      backgroundColor: Colors.white70,
-      appBarTheme: AppBarTheme(
-        color: Colors.pink.shade400,
+    primarySwatch: Colors.pink,
+    backgroundColor: Colors.white70,
+    appBarTheme: AppBarTheme(
+      color: Colors.pink.shade400,
+    ),
+    textTheme: const TextTheme(
+      headline1: TextStyle(
+        fontSize: 35,
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
       ),
-      textTheme: const TextTheme(
-        headline1: TextStyle(
-          fontSize: 35,
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-        ),
-        headline2: TextStyle(
-          fontSize: 26,
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-        ),
-        headline3: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-        ),
-        headline4: TextStyle(
-          fontSize: 18,
-          color: Colors.black,
-        ),
-        bodyText1: TextStyle(
-          fontSize: 16,
-          color: Colors.black,
-        ),
-        bodyText2: TextStyle(
-          fontSize: 16,
-          color: Colors.black,
-        ),
+      headline2: TextStyle(
+        fontSize: 26,
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
       ),
-      inputDecorationTheme: InputDecorationTheme(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-      ));
+      headline3: TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
+      ),
+      headline4: TextStyle(
+        fontSize: 18,
+        color: Colors.black,
+      ),
+      bodyText1: TextStyle(
+        fontSize: 16,
+        color: Colors.black,
+      ),
+      bodyText2: TextStyle(
+        fontSize: 16,
+        color: Colors.black,
+      ),
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+    ),
+  );
 }

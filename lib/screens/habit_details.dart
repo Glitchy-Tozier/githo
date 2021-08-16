@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 import 'package:githo/config/data_shortcut.dart';
 import 'package:githo/config/style_data.dart';
@@ -34,6 +35,7 @@ import 'package:githo/widgets/headings/heading.dart';
 import 'package:githo/widgets/screen_ending_spacer.dart';
 
 import 'package:githo/models/habit_plan.dart';
+import 'package:share_plus/share_plus.dart';
 
 class SingleHabitDisplay extends StatefulWidget {
   /// Displays the details of the [habitPlan].
@@ -271,22 +273,84 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            FloatingActionButton(
-              tooltip: 'Delete habit-plan',
-              backgroundColor: Colors.red,
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext buildContext) => ConfirmDeletion(
-                    habitPlan: habitPlan,
-                    onConfirmation: widget.updateFunction,
+            SpeedDial(
+              backgroundColor: Colors.orange,
+              icon: Icons.settings,
+              activeIcon: Icons.close,
+              spacing: 4,
+              spaceBetweenChildren: 4,
+
+              /// If false, backgroundOverlay will not be rendered.
+              //renderOverlay: true,
+              overlayColor: Colors.black,
+              overlayOpacity: 0.5,
+
+              tooltip: 'Show options',
+              //isOpenOnStart: false,
+              animationSpeed: 200,
+              switchLabelPosition: true,
+              // childMargin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              children: <SpeedDialChild>[
+                SpeedDialChild(
+                  label: 'Delete',
+                  backgroundColor: Colors.red.shade900,
+                  labelStyle: Theme.of(context).textTheme.bodyText2,
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext buildContext) => ConfirmDeletion(
+                        habitPlan: habitPlan,
+                        onConfirmation: widget.updateFunction,
+                      ),
+                    );
+                  },
+                  child: const Icon(
+                    Icons.delete,
+                    color: Colors.white,
                   ),
-                );
-              },
-              heroTag: null,
-              child: const Icon(
-                Icons.delete,
-              ),
+                ),
+                SpeedDialChild(
+                  label: 'Share',
+                  backgroundColor: Colors.lightBlue,
+                  labelStyle: Theme.of(context).textTheme.bodyText2,
+                  onTap: () => Share.share(
+                    habitPlan.toShareJson(),
+                  ),
+                  child: const Icon(
+                    Icons.share,
+                    color: Colors.white,
+                  ),
+                ),
+                SpeedDialChild(
+                  label: 'Edit',
+                  backgroundColor: Colors.orangeAccent.shade700,
+                  labelStyle: Theme.of(context).textTheme.bodyText2,
+                  onTap: () {
+                    if (habitPlan.isActive) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext buildContext) => ConfirmEdit(
+                          onConfirmation: () => editHabit(
+                            context,
+                            _updateLoadedScreens,
+                            habitPlan,
+                          ),
+                        ),
+                      );
+                    } else {
+                      editHabit(
+                        context,
+                        _updateLoadedScreens,
+                        habitPlan,
+                      );
+                    }
+                  },
+                  child: const Icon(
+                    Icons.edit,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
             ),
             ActivationFAB(
               habitPlan: habitPlan,
@@ -295,34 +359,6 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
                 habitPlan = changedHabitPlan;
               },
             ),
-            FloatingActionButton(
-              tooltip: 'Edit habit-plan',
-              backgroundColor: Colors.orange,
-              onPressed: () {
-                if (habitPlan.isActive) {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext buildContext) => ConfirmEdit(
-                      onConfirmation: () => editHabit(
-                        context,
-                        _updateLoadedScreens,
-                        habitPlan,
-                      ),
-                    ),
-                  );
-                } else {
-                  editHabit(
-                    context,
-                    _updateLoadedScreens,
-                    habitPlan,
-                  );
-                }
-              },
-              heroTag: null,
-              child: const Icon(
-                Icons.edit,
-              ),
-            )
           ],
         ),
       ),

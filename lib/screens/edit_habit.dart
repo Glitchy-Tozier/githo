@@ -16,6 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -24,6 +26,7 @@ import 'package:githo/config/style_data.dart';
 
 import 'package:githo/helpers/text_form_field_validation.dart';
 import 'package:githo/helpers/type_extentions.dart';
+import 'package:githo/widgets/alert_dialogs/import_habit.dart';
 import 'package:githo/widgets/background.dart';
 import 'package:githo/widgets/dividers/fat_divider.dart';
 import 'package:githo/widgets/dividers/thin_divider.dart';
@@ -40,11 +43,13 @@ class EditHabit extends StatefulWidget {
     required this.title,
     required this.habitPlan,
     required this.onSavedFunction,
+    this.displayImportFAB = false,
   });
 
   final String title;
   final HabitPlan habitPlan;
   final Function onSavedFunction;
+  final bool displayImportFAB;
 
   @override
   _EditHabitState createState() => _EditHabitState();
@@ -52,6 +57,19 @@ class EditHabit extends StatefulWidget {
 
 class _EditHabitState extends State<EditHabit> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController habitController = TextEditingController();
+  final TextEditingController repsController = TextEditingController();
+  late List<String> steps;
+  late List<String> comments;
+
+  @override
+  void initState() {
+    super.initState();
+    habitController.text = widget.habitPlan.habit;
+    repsController.text = widget.habitPlan.requiredReps.toString();
+    steps = widget.habitPlan.steps;
+    comments = widget.habitPlan.comments;
+  }
 
   // Text used to describe the slider-values
   final List<String> _timeFrames = DataShortcut.timeFrames;
@@ -68,6 +86,30 @@ class _EditHabitState extends State<EditHabit> {
   /// Used for receiving the onSaved-values from formList.dart
   void _getCommentValues(final List<String> valueList) {
     widget.habitPlan.comments = valueList;
+  }
+
+  /// Converts a [json]-like [String] into a list of [String]s.
+  static List<String> _jsonToStringList(final String json) {
+    final dynamic dynamicList = jsonDecode(json);
+    final List<String> stringList = <String>[];
+
+    for (final String element in dynamicList) {
+      stringList.add(element);
+    }
+    return stringList;
+  }
+
+  void _updateTextFormFields(final String json) {
+    final Map<String, dynamic> map = jsonDecode(json) as Map<String, dynamic>;
+
+    habitController.text = map['goal'] as String;
+    repsController.text = (map['requiredReps'] as int).toString();
+    steps = _jsonToStringList(map['steps'] as String);
+    comments = _jsonToStringList(map['comments'] as String);
+    widget.habitPlan.trainingTimeIndex = map['trainingTimeIndex'] as int;
+    widget.habitPlan.requiredTrainings = map['requiredTrainings'] as int;
+    widget.habitPlan.requiredTrainingPeriods =
+        map['requiredTrainingPeriods'] as int;
   }
 
   @override
@@ -119,6 +161,7 @@ class _EditHabitState extends State<EditHabit> {
                     Padding(
                       padding: StyleData.screenPadding,
                       child: TextFormField(
+                        controller: habitController,
                         decoration: const InputDecoration(
                           labelText: 'The final habit',
                         ),
@@ -127,10 +170,18 @@ class _EditHabitState extends State<EditHabit> {
                           input: input,
                           toFillIn: 'your final habit',
                         ),
-                        initialValue: widget.habitPlan.habit,
                         textInputAction: TextInputAction.next,
-                        onSaved: (final String? input) =>
-                            widget.habitPlan.habit = input.toString().trim(),
+                        onSaved: (final String? input) {
+                          String correctedInput = input.toString().trim();
+                          if (correctedInput.length >
+                              DataShortcut.maxHabitCharacters) {
+                            correctedInput = correctedInput.substring(
+                              0,
+                              DataShortcut.maxHabitCharacters,
+                            );
+                          }
+                          widget.habitPlan.habit = correctedInput;
+                        },
                       ),
                     ),
                     const ThinDivider(),
@@ -143,6 +194,7 @@ class _EditHabitState extends State<EditHabit> {
                     Padding(
                       padding: StyleData.screenPadding,
                       child: TextFormField(
+                        controller: repsController,
                         textAlign: TextAlign.end,
                         keyboardType: TextInputType.number,
                         inputFormatters: <TextInputFormatter>[
@@ -167,7 +219,6 @@ class _EditHabitState extends State<EditHabit> {
                                 'rep $timeFrameArticle $trainingTimeFrame',
                           );
                         },
-                        initialValue: widget.habitPlan.requiredReps.toString(),
                         textInputAction: TextInputAction.next,
                         onSaved: (final String? input) => widget.habitPlan
                             .requiredReps = int.parse(input.toString().trim()),
@@ -186,7 +237,7 @@ class _EditHabitState extends State<EditHabit> {
                         fieldName: 'step',
                         canBeEmpty: false,
                         valuesGetter: _getStepValues,
-                        initValues: widget.habitPlan.steps,
+                        initValues: steps,
                       ),
                     ),
                     const ThinDivider(),
@@ -209,7 +260,7 @@ class _EditHabitState extends State<EditHabit> {
                         fieldName: 'comment',
                         canBeEmpty: true,
                         valuesGetter: _getCommentValues,
-                        initValues: widget.habitPlan.comments,
+                        initValues: comments,
                       ),
                     ),
 
@@ -359,18 +410,49 @@ class _EditHabitState extends State<EditHabit> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        tooltip: 'Save',
-        backgroundColor: Colors.green,
-        onPressed: () {
-          if (_formKey.currentState!.validate()) {
-            _formKey.currentState!.save();
-            widget.onSavedFunction(widget.habitPlan);
-            Navigator.pop(context);
-          }
-        },
-        child: const Icon(
-          Icons.save,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Padding(
+        padding: StyleData.floatingActionButtonPadding,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Visibility(
+              visible: widget.displayImportFAB,
+              child: FloatingActionButton(
+                backgroundColor: Colors.lightBlue,
+                tooltip: 'Import habit-plan.',
+                heroTag: null,
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext buildContext) => ImportHabit(
+                      onImport: (final String json) {
+                        setState(() {
+                          _updateTextFormFields(json);
+                        });
+                      },
+                    ),
+                  );
+                },
+                child: const Icon(Icons.download),
+              ),
+            ),
+            FloatingActionButton(
+              tooltip: 'Save',
+              backgroundColor: Colors.green,
+              heroTag: null,
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  _formKey.currentState!.save();
+                  widget.onSavedFunction(widget.habitPlan);
+                  Navigator.pop(context);
+                }
+              },
+              child: const Icon(
+                Icons.save,
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -58,8 +58,8 @@ class HabitPlan {
         // TextFormFields:
         habit = '',
         requiredReps = 1,
-        steps = <String>[''],
-        comments = <String>[''],
+        steps = <String>[],
+        comments = <String>[],
         // Sliders:
         trainingTimeIndex = 1,
         requiredTrainings = 5,
@@ -122,5 +122,22 @@ class HabitPlan {
     map['lastChanged'] = lastChanged.toString();
 
     return map;
+  }
+
+  /// Converts the [HabitPlan] into a [String] that is as short as possible
+  /// and can be converted into a map at a later point in time.
+  String toShareJson() {
+    // Get the map of the habitPlan.
+    final Map<String, dynamic> map = toMap();
+
+    // Remove unneccessary parameters
+    map.remove('id');
+    map.remove('isActive');
+    map.remove('fullyCompleted');
+    map.remove('lastChanged');
+
+    // Convert the map into a String and return it.
+    final String json = jsonEncode(map);
+    return json;
   }
 }

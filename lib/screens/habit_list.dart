@@ -185,10 +185,10 @@ class _HabitListState extends State<HabitList> {
       floatingActionButton: FloatingActionButton(
         tooltip: 'Add new habit-plan',
         backgroundColor: Colors.green,
+        heroTag: null,
         onPressed: () {
           addNewHabit(context, _updateLoadedScreens);
         },
-        heroTag: null,
         child: const Icon(
           Icons.add,
         ),

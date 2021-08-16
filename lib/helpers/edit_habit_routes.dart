@@ -44,6 +44,7 @@ void addNewHabit(
         title: 'Add Habit-Plan',
         habitPlan: habitPlan,
         onSavedFunction: _onSaved,
+        displayImportFAB: true,
       ),
     ),
   );

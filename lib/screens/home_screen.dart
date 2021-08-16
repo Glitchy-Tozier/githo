@@ -220,14 +220,13 @@ class _HomeScreenState extends State<HomeScreen> {
               overlayOpacity: 0.5,
 
               tooltip: 'Show options',
-              heroTag: 'speed-dial-hero-tag',
               //isOpenOnStart: false,
               animationSpeed: 200,
               switchLabelPosition: true,
               // childMargin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               children: <SpeedDialChild>[
                 SpeedDialChild(
-                  child: const Icon(Icons.info),
+                  backgroundColor: Colors.grey.shade800,
                   label: 'About',
                   labelStyle: Theme.of(context).textTheme.bodyText2,
                   onTap: () {
@@ -238,10 +237,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     );
                   },
+                  child: const Icon(
+                    Icons.info,
+                    color: Colors.white,
+                  ),
                 ),
                 SpeedDialChild(
-                  child: const Icon(Icons.list),
-                  label: 'List of Habits',
+                  backgroundColor: Theme.of(context).primaryColor,
+                  label: 'List of habits',
                   labelStyle: Theme.of(context).textTheme.bodyText2,
                   onTap: () {
                     Navigator.push(
@@ -253,6 +256,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     );
                   },
+                  child: const Icon(
+                    Icons.list,
+                    color: Colors.white,
+                  ),
                 ),
               ],
             ),

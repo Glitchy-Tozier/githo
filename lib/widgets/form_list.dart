@@ -17,6 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
 import 'package:githo/config/data_shortcut.dart';
 import 'package:githo/helpers/text_form_field_validation.dart';
 import 'package:githo/helpers/type_extentions.dart';
@@ -48,22 +50,36 @@ class _FormListState extends State<FormList> {
     (_) => '',
   );
 
+  late List<String> prevInitValues;
+
   @override
   void initState() {
     super.initState();
+    _initList();
+  }
 
-    final List<String> initialValues = widget.initValues;
+  /// Initialize the List of default-values.
+  void _initList() {
+    final List<String> initialValues = List<String>.from(widget.initValues);
+
+    if (initialValues.isEmpty) {
+      initialValues.add('');
+    }
 
     if (initialValues.length < DataShortcut.maxStepCount) {
       initialValues.add('');
     }
 
     // Generate the TextFormFields
+    formFields.clear();
     for (int i = 0; i < initialValues.length; i++) {
       formFields.add(
         textFormField(widget.fieldName, i, initialValues[i]),
       );
     }
+
+    // Save current initValues to make sure change is detected.
+    prevInitValues = widget.initValues;
   }
 
   Widget textFormField(
@@ -71,8 +87,12 @@ class _FormListState extends State<FormList> {
     final int index,
     final String value,
   ) {
+    final TextEditingController controller = TextEditingController();
     final int fieldNr = index + 1;
     final String fieldName;
+
+    controller.text = value;
+
     if (fieldNr < DataShortcut.maxStepCount) {
       fieldName = '${name.capitalize()} $fieldNr';
     } else {
@@ -82,7 +102,7 @@ class _FormListState extends State<FormList> {
     return Column(
       children: <Widget>[
         TextFormField(
-          initialValue: value,
+          controller: controller,
           decoration: InputDecoration(labelText: fieldName),
           maxLength: DataShortcut.maxStepCharacters,
           validator: (final String? input) {
@@ -129,10 +149,17 @@ class _FormListState extends State<FormList> {
           },
           textInputAction: TextInputAction.next,
           onSaved: (final String? input) {
-            final String trimmedInput = input.toString().trim();
+            String correctedInput = input.toString().trim();
+            if (correctedInput.length > DataShortcut.maxStepCharacters) {
+              correctedInput = correctedInput.substring(
+                0,
+                DataShortcut.maxStepCharacters,
+              );
+            }
+
             if (fieldNr < formFields.length) {
               // If this is not the last TextFormField.
-              returnValues[index] = trimmedInput;
+              returnValues[index] = correctedInput;
             } else {
               // If this is the last one of the TextFormFields ([formFields]).
               // Remove the values for all non-existent TextFormFields.
@@ -141,10 +168,10 @@ class _FormListState extends State<FormList> {
               }
               // Remove the value for the last TextFormField if it's empty.
               // If it's not, also return it.
-              if (trimmedInput.isEmpty) {
+              if (correctedInput.isEmpty) {
                 returnValues.removeLast();
               } else {
-                returnValues[index] = trimmedInput;
+                returnValues[index] = correctedInput;
               }
             }
 
@@ -159,6 +186,10 @@ class _FormListState extends State<FormList> {
 
   @override
   Widget build(BuildContext context) {
+    if (prevInitValues != widget.initValues) {
+      _initList();
+    }
+
     return Column(
       children: <Widget>[
         ...formFields,

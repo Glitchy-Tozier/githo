@@ -127,9 +127,9 @@ class ActivationFAB extends StatelessWidget {
   Widget build(BuildContext context) {
     final String tooltip;
     if (habitPlan.isActive == true) {
-      tooltip = 'Deactivate habit-plan';
+      tooltip = 'Deactivate';
     } else {
-      tooltip = 'Activate habit-plan';
+      tooltip = 'Activate';
     }
 
     final Icon child;

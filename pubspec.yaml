@@ -38,6 +38,7 @@ dependencies:
   lint: ^1.5.3
   package_info_plus: ^1.0.4
   path_provider: ^2.0.2
+  share_plus: ^2.1.4
   sqflite: ^2.0.0+3
   sqflite_common_ffi: ^2.0.0+1
   url_launcher: ^6.0.9

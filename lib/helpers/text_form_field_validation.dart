@@ -18,6 +18,10 @@
 
 // Functions that are used to validate TextFormFields.
 
+import 'dart:convert';
+
+import 'package:githo/config/data_shortcut.dart';
+
 /// Checks if the [input] is empty.
 String? complainIfEmpty({
   required final String? input,
@@ -48,14 +52,97 @@ String? validateNumberField({
     return complaint;
   } else {
     // If the TextField contains a value, see if it's valid.
-    final int intput = int.parse(input.toString().trim()); // I'm so funny!
-
-    if (intput > maxInput) {
-      return 'Must be between 1 and $maxInput';
-    } else if (intput == 0) {
-      return textIfZero;
-    } else {
-      return null;
+    try {
+      final int intput = int.parse(input.toString().trim()); // I'm so funny!
+      if (intput > maxInput) {
+        return 'Must be between 1 and $maxInput';
+      } else if (intput == 0) {
+        return textIfZero;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      return 'This is not a number';
     }
+  }
+}
+
+/// Converts a [json]-like [String] into a list of [String]s.
+List<String> _jsonToStringList(final String json) {
+  final dynamic dynamicList = jsonDecode(json);
+  final List<String> stringList = <String>[];
+
+  for (final String element in dynamicList) {
+    stringList.add(element);
+  }
+  return stringList;
+}
+
+/// Checks whether an [input] has the correct structure to be used.
+String? validateHabitPlanImport(final String input) {
+  if (input.length > 9999) {
+    return 'Too much text';
+  }
+
+  try {
+    // Convert the input into something usable.
+    final Map<String, dynamic> map = jsonDecode(input) as Map<String, dynamic>;
+
+    // Make sure all required values exist within the map.
+    if (!map.containsKey('goal') ||
+        !map.containsKey('requiredReps') ||
+        !map.containsKey('steps') ||
+        !map.containsKey('comments') ||
+        !map.containsKey('trainingTimeIndex') ||
+        !map.containsKey('requiredTrainings') ||
+        !map.containsKey('requiredTrainingPeriods')) {
+      return 'Some values are missing';
+    }
+
+    for (final MapEntry<String, dynamic> entry in map.entries) {
+      if (entry.value == null) {
+        return 'A value is missing';
+      }
+    }
+
+    final List<String> steps = _jsonToStringList(map['steps'] as String);
+    final List<String> comments = _jsonToStringList(map['comments'] as String);
+
+    // Check the number of steps & comments.
+    if (steps.isEmpty) {
+      return 'The list of steps is empty.';
+    } else if (steps.length > DataShortcut.maxStepCount) {
+      return 'Too many steps. (> ${DataShortcut.maxStepCount})';
+    }
+    if (comments.length > DataShortcut.maxStepCount) {
+      return 'Too many comments. (> ${DataShortcut.maxStepCount})';
+    }
+
+    // Make sure all other values are within their acceptable ranges.
+    final int requiredReps = map['requiredReps'] as int;
+    if (requiredReps < 1 || requiredReps > 99) {
+      return '[requiredReps]: is out of range';
+    }
+
+    final int trainingTimeIndex = map['trainingTimeIndex'] as int;
+    final int maxTimeIndex = DataShortcut.timeFrames.length - 2;
+    if (trainingTimeIndex < 0 || trainingTimeIndex > maxTimeIndex) {
+      return '[trainingTimeIndex]: out of range';
+    }
+
+    final int requiredTrainings = map['requiredTrainings'] as int;
+    final int maxTrainings = DataShortcut.maxTrainings[trainingTimeIndex];
+    if (requiredTrainings < 1 || requiredTrainings > maxTrainings) {
+      return '[requiredTrainings]: out of range';
+    }
+
+    final int requiredTrainingPeriods = map['requiredTrainingPeriods'] as int;
+
+    if (requiredTrainingPeriods < 1 || requiredTrainingPeriods > 10) {
+      return '[requiredTrainingPeriods]:\nout of range';
+    }
+  } catch (error) {
+    print(error);
+    return 'This format is not valid';
   }
 }
