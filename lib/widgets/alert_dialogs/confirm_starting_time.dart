@@ -43,7 +43,8 @@ class ConfirmStartingTime extends StatefulWidget {
 }
 
 class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormFieldState<String?>> formKey =
+      GlobalKey<FormFieldState<String?>>();
 
   String startingPeriod = 'The first training';
   late DateTime startingDate;
@@ -136,66 +137,65 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
                     style: Theme.of(context).textTheme.bodyText2,
                   ),
                   TextSpan(
-                    text: 'start on $startingDateString',
+                    text: 'start on $startingDateString.',
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 20),
-            Form(
-              key: _formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  TextFormField(
-                    controller: dateController,
-                    decoration: const InputDecoration(
-                      labelText: 'Starting date',
-                    ),
-                    readOnly: true,
-                    onTap: () {
-                      final DateTime now = TimeHelper.instance.currentTime;
-                      showDatePicker(
-                        context: context,
-                        firstDate: now.subtract(const Duration(days: 6)),
-                        initialDate: startingDate,
-                        lastDate: DateTime(now.year + 2000),
-                      ).then(
-                        (DateTime? newStartingDate) {
-                          if (newStartingDate != null) {
-                            setState(() {
-                              startingDate = newStartingDate;
-                            });
-                          }
-                        },
-                      );
-                    },
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                TextFormField(
+                  controller: dateController,
+                  decoration: const InputDecoration(
+                    labelText: 'Starting date',
                   ),
+                  readOnly: true,
+                  onTap: () {
+                    final DateTime now = TimeHelper.instance.currentTime;
+                    showDatePicker(
+                      context: context,
+                      firstDate: now.subtract(const Duration(days: 6)),
+                      initialDate: startingDate,
+                      lastDate: DateTime(now.year + 2000),
+                    ).then(
+                      (DateTime? newStartingDate) {
+                        if (newStartingDate != null) {
+                          setState(() {
+                            startingDate = newStartingDate;
+                          });
+                        }
+                      },
+                    );
+                  },
+                ),
+                if (widget.habitPlan.steps.length > 1) ...<Widget>[
                   const SizedBox(height: 10),
-                  if (widget.habitPlan.steps.length > 1)
-                    TextFormField(
-                      initialValue: '1',
-                      textAlign: TextAlign.end,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly
-                      ],
-                      decoration: const InputDecoration(
-                        labelText: 'Starting step',
-                      ),
-                      validator: (final String? input) => validateNumberField(
-                        input: input,
-                        maxInput: widget.habitPlan.steps.length,
-                        toFillIn: 'the starting step',
-                        textIfZero: 'Fill in number between 1 and '
-                            '${widget.habitPlan.steps.length}',
-                      ),
-                      onSaved: (final String? input) =>
-                          startingStep = int.parse(input.toString().trim()),
+                  TextFormField(
+                    initialValue: '1',
+                    key: formKey,
+                    textAlign: TextAlign.end,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
+                    decoration: const InputDecoration(
+                      labelText: 'Starting step',
                     ),
+                    validator: (final String? input) => validateNumberField(
+                      input: input,
+                      maxInput: widget.habitPlan.steps.length,
+                      toFillIn: 'the starting step',
+                      textIfZero: 'Fill in number between 1 and '
+                          '${widget.habitPlan.steps.length}',
+                    ),
+                    onSaved: (final String? input) =>
+                        startingStep = int.parse(input.toString().trim()),
+                  ),
                 ],
-              ),
+              ],
             ),
           ],
         ),
@@ -236,8 +236,8 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
               ),
               onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
+                if (formKey.currentState!.validate()) {
+                  formKey.currentState!.save();
 
                   Navigator.pop(context); // Pop dialog
 

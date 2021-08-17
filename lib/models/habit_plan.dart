@@ -56,12 +56,10 @@ class HabitPlan {
       : id = null,
         isActive = false,
         fullyCompleted = false,
-        // TextFormFields:
         habit = '',
         requiredReps = 1,
         steps = <String>[],
         comments = <String>[],
-        // Sliders:
         trainingTimeIndex = 1,
         requiredTrainings = 5,
         requiredTrainingPeriods = 1,

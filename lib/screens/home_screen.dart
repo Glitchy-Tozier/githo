@@ -85,8 +85,6 @@ class _HomeScreenState extends State<HomeScreen> {
             duration: const Duration(seconds: 1),
             alignment: 0.5,
           );
-        } else {
-          print('\nGlobalKey is null\n');
         }
       },
     );
