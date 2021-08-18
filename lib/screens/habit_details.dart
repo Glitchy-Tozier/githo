@@ -258,7 +258,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  const Heading('levels'),
+                  const Heading('Levels'),
                   _getLevelTable(),
                 ],
               ),
