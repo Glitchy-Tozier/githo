@@ -3,13 +3,13 @@
 Acquiring habits that stick can be difficult. Githo helps you by letting you gradually advance, instead of going from 0 to 100%.
 This principle borrows ideas from exposure therapy.
 
-Define the steps towards your final habit, then start with the first one. Advance to the next step by consistently succeeding. If a step is too difficult (= if success isn't consistent), repeat the one before it.
+Define levels of your final habit, going from easy to hard. Then start with the first one. Level up by consistently succeeding. If a level is too difficult (= if success isn't consistent), repeat the previous one.
 
-Such a gradual acquisition reduces the physical/mental strain and helps you create a routine long before arriving at the final habit.
+Such a gradual acquisition <b>reduces the physical/mental strain</b> and helps you <b>create a routine long before arriving at the final habit</b>.
 
 <strong>Example of a Habit-Plan:</strong>
 Final Habit: <i>Go jogging every morning</i>
-<strong>Steps:</strong> <i>Every morning...</i>
+<strong>Levels:</strong> <i>Every morning...</i>
 <ul>
   <li>
     <b>Week 1:</b> Just step outside on the street, then return home.

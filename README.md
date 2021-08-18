@@ -1,10 +1,10 @@
 # Githo
 
-***G**et **I**nto **T**he **H**abit **O**f… An app that helps you form long-lasting habits, one step at a time.*
+***G**et **I**nto **T**he **H**abit **O**f… An app in which you level up towards your final habit.*
 
 Acquiring habits that stick can be difficult. Githo helps you by letting you gradually advance, instead of going from 0 to 100%. This principle borrows ideas from exposure therapy.
 
-Define the steps towards your final habit, then start with the first one. Advance to the next step by consistently succeeding. If a step is too difficult (= if success isn't consistent), repeat the one before it.
+Define levels of your final habit, going from easy to hard. Then start with the first one. Level up by consistently succeeding. If a level is too difficult (= if success isn't consistent), repeat the previous one.
 
 Such a gradual acquisition **reduces the physical/mental strain** and **helps you create a routine long before arriving at the final habit**.
 
@@ -15,7 +15,7 @@ Such a gradual acquisition **reduces the physical/mental strain** and **helps yo
 ## Example of a Habit-Plan:
 ### Final Habit:
 Go jogging every morning
-### Steps:
+### Levels:
 Every morning...
 1. Week: Just step outside on the street, then return home.
 2. Week: Take a short walk.
@@ -25,7 +25,7 @@ Every morning...
 
 ## License
 ```
-Githo – An app that helps you form long-lasting habits, one step at a time.
+Githo – An app that helps you gradually form long-lasting habits.
 Copyright (C) 2021 Florian Thaler
 
 This program is free software: you can redistribute it and/or modify
