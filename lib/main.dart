@@ -25,12 +25,8 @@ import 'package:githo/widgets/choose_first_screen.dart';
 import 'package:githo/database/adapt_database_to_os.dart';
 
 void main() {
-  try {
-    adaptDatabaseToOS();
-    runApp(MyApp());
-  } catch (error) {
-    print(error);
-  }
+  adaptDatabaseToOS();
+  runApp(MyApp());
 }
 
 /// This widget is the root of the application.

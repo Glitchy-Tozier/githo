@@ -277,8 +277,6 @@ ALTER TABLE newProgressDataTable RENAME TO $_progressDataTable;
     final List<Map<String, dynamic>> habitPlanMapList =
         await getDataMapList(_habitPlansTable);
 
-    print(habitPlanMapList[1]);
-
     final List<HabitPlan> habitPlanList = <HabitPlan>[];
 
     for (final Map<String, dynamic> habitPlanMap in habitPlanMapList) {
