@@ -1,5 +1,5 @@
 /* 
- * Githo – An app that helps you form long-lasting habits, one step at a time.
+ * Githo – An app that helps you gradually form long-lasting habits.
  * Copyright (C) 2021 Florian Thaler
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -29,25 +29,22 @@ import 'package:githo/screens/introduction.dart';
 /// Else: [HomeScreen];
 
 class FirstScreen extends StatelessWidget {
-  Future<Widget> getFirstScreen() async {
-    final SettingsData settings = await DatabaseHelper.instance.getSettings();
-
-    if (settings.showIntroduction) {
-      return OnBoardingScreen();
-    } else {
-      return HomeScreen();
-    }
-  }
+  final Future<SettingsData> _settings = DatabaseHelper.instance.getSettings();
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Widget>(
-      future: getFirstScreen(),
-      builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
+    return FutureBuilder<SettingsData>(
+      future: _settings,
+      builder: (BuildContext context, AsyncSnapshot<SettingsData> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
-            final Widget firstScreen = snapshot.data!;
-            return firstScreen;
+            final SettingsData settings = snapshot.data!;
+
+            if (settings.showIntroduction) {
+              return OnBoardingScreen();
+            } else {
+              return HomeScreen();
+            }
           }
         }
         // While loading, return this:

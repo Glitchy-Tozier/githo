@@ -1,5 +1,5 @@
 /* 
- * Githo – An app that helps you form long-lasting habits, one step at a time.
+ * Githo – An app that helps you gradually form long-lasting habits.
  * Copyright (C) 2021 Florian Thaler
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -25,8 +25,12 @@ import 'package:githo/widgets/choose_first_screen.dart';
 import 'package:githo/database/adapt_database_to_os.dart';
 
 void main() {
-  adaptDatabaseToOS();
-  runApp(MyApp());
+  try {
+    adaptDatabaseToOS();
+    runApp(MyApp());
+  } catch (error) {
+    print(error);
+  }
 }
 
 /// This widget is the root of the application.

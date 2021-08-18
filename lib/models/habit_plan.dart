@@ -1,5 +1,5 @@
 /* 
- * Githo – An app that helps you form long-lasting habits, one step at a time.
+ * Githo – An app that helps you gradually form long-lasting habits.
  * Copyright (C) 2021 Florian Thaler
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -29,7 +29,7 @@ class HabitPlan {
     required this.fullyCompleted,
     required this.habit,
     required this.requiredReps,
-    required this.steps,
+    required this.levels,
     required this.comments,
     required this.trainingTimeIndex,
     required this.requiredTrainings,
@@ -43,7 +43,7 @@ class HabitPlan {
     required this.fullyCompleted,
     required this.habit,
     required this.requiredReps,
-    required this.steps,
+    required this.levels,
     required this.comments,
     required this.trainingTimeIndex,
     required this.requiredTrainings,
@@ -58,7 +58,7 @@ class HabitPlan {
         fullyCompleted = false,
         habit = '',
         requiredReps = 1,
-        steps = <String>[],
+        levels = <String>[],
         comments = <String>[],
         trainingTimeIndex = 1,
         requiredTrainings = 5,
@@ -70,9 +70,9 @@ class HabitPlan {
       : id = map['id'] as int,
         isActive = (map['isActive'] as int).toBool(),
         fullyCompleted = (map['fullyCompleted'] as int).toBool(),
-        habit = map['goal'] as String,
+        habit = map['habit'] as String,
         requiredReps = map['requiredReps'] as int,
-        steps = _jsonToStringList(map['steps'] as String),
+        levels = _jsonToStringList(map['levels'] as String),
         comments = _jsonToStringList(map['comments'] as String),
         trainingTimeIndex = map['trainingTimeIndex'] as int,
         requiredTrainings = map['requiredTrainings'] as int,
@@ -84,7 +84,7 @@ class HabitPlan {
   bool fullyCompleted;
   String habit;
   int requiredReps;
-  List<String> steps;
+  List<String> levels;
   List<String> comments;
   int trainingTimeIndex;
   int requiredTrainings;
@@ -111,9 +111,9 @@ class HabitPlan {
     }
     map['isActive'] = isActive.toInt();
     map['fullyCompleted'] = fullyCompleted.toInt();
-    map['goal'] = habit;
+    map['habit'] = habit;
     map['requiredReps'] = requiredReps;
-    map['steps'] = jsonEncode(steps);
+    map['levels'] = jsonEncode(levels);
     map['comments'] = jsonEncode(comments);
     map['trainingTimeIndex'] = trainingTimeIndex;
     map['requiredTrainings'] = requiredTrainings;

@@ -1,5 +1,5 @@
 /* 
- * Githo – An app that helps you form long-lasting habits, one step at a time.
+ * Githo – An app that helps you gradually form long-lasting habits.
  * Copyright (C) 2021 Florian Thaler
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -70,12 +70,12 @@ class OnBoardingScreen extends StatelessWidget {
           pages: <PageViewModel>[
             PageViewModel(
               title: 'Githo – Get Into The Habit Of…',
-              body: 'Aquire an new habit, one step at a time',
+              body: 'Gradually aquire an new habit',
               image: const BorderedImage('assets/launcher/icon.png', width: 90),
               decoration: pageDecoration,
             ),
             PageViewModel(
-              title: 'Define gradual steps',
+              title: 'Define the levels of your habit',
               body: 'Move closer towards your final habit',
               image: const BorderedImage(
                   'assets/introduction_screen_images/defineSteps.jpeg'),
@@ -83,9 +83,8 @@ class OnBoardingScreen extends StatelessWidget {
             ),
             PageViewModel(
               title: 'Build strong habits',
-              body: 'Consistently succeed in trainings to advance '
-                  'to the next step.\n\n'
-                  'If a step is too difficult, repeat the one before it.',
+              body: 'Consistently succeed in trainings to level up.\n\n'
+                  'If a level is too difficult, repeat the one before it.',
               image: const BorderedImage(
                   'assets/introduction_screen_images/training.png'),
               decoration: pageDecoration,

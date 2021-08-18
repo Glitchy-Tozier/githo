@@ -1,5 +1,5 @@
 /* 
- * Githo – An app that helps you form long-lasting habits, one step at a time.
+ * Githo – An app that helps you gradually form long-lasting habits.
  * Copyright (C) 2021 Florian Thaler
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -29,7 +29,7 @@ import 'package:githo/models/progress_data.dart';
 class ConfirmStartingTime extends StatefulWidget {
   /// Returns a dialog that lets the user choose
   /// 1. when his journey will start
-  /// 2. what step it should start with.
+  /// 2. what level it should start with.
   const ConfirmStartingTime({
     required this.habitPlan,
     required this.onConfirmation,
@@ -50,7 +50,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
   late DateTime startingDate;
   late String startingDateString;
   final TextEditingController dateController = TextEditingController();
-  int startingStep = 1;
+  int startingLevelNr = 1;
 
   @override
   void initState() {
@@ -87,7 +87,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
   /// Adapts the database so that [habitPlan] is active.
   Future<void> _startHabitPlan(
     final DateTime startingDate,
-    final int startingStep,
+    final int startingLevelNr,
   ) async {
     // Mark the old plan as inactive.
     final List<HabitPlan> activeHabitPlanList =
@@ -110,7 +110,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
     progressData.adaptToHabitPlan(
       habitPlan: widget.habitPlan,
       startingDate: startingDate,
-      startingStepNr: startingStep,
+      startingLevelNr: startingLevelNr,
     );
     await DatabaseHelper.instance.updateProgressData(progressData);
   }
@@ -171,7 +171,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
                     );
                   },
                 ),
-                if (widget.habitPlan.steps.length > 1) ...<Widget>[
+                if (widget.habitPlan.levels.length > 1) ...<Widget>[
                   const SizedBox(height: 10),
                   TextFormField(
                     initialValue: '1',
@@ -182,17 +182,17 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
                       FilteringTextInputFormatter.digitsOnly
                     ],
                     decoration: const InputDecoration(
-                      labelText: 'Starting step',
+                      labelText: 'Starting level',
                     ),
                     validator: (final String? input) => validateNumberField(
                       input: input,
-                      maxInput: widget.habitPlan.steps.length,
-                      toFillIn: 'the starting step',
+                      maxInput: widget.habitPlan.levels.length,
+                      toFillIn: 'the starting level',
                       textIfZero: 'Fill in number between 1 and '
-                          '${widget.habitPlan.steps.length}',
+                          '${widget.habitPlan.levels.length}',
                     ),
                     onSaved: (final String? input) =>
-                        startingStep = int.parse(input.toString().trim()),
+                        startingLevelNr = int.parse(input.toString().trim()),
                   ),
                 ],
               ],
@@ -243,7 +243,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
 
                   _startHabitPlan(
                     startingDate,
-                    startingStep,
+                    startingLevelNr,
                   ).then(
                     (_) => widget.onConfirmation(widget.habitPlan),
                   );

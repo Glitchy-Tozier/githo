@@ -1,5 +1,5 @@
 /* 
- * Githo – An app that helps you form long-lasting habits, one step at a time.
+ * Githo – An app that helps you gradually form long-lasting habits.
  * Copyright (C) 2021 Florian Thaler
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -46,7 +46,7 @@ class _FormListState extends State<FormList> {
 
   final List<Widget> formFields = <Widget>[];
   final List<String> returnValues = List<String>.generate(
-    DataShortcut.maxStepCount,
+    DataShortcut.maxLevelCount,
     (_) => '',
   );
 
@@ -66,7 +66,7 @@ class _FormListState extends State<FormList> {
       initialValues.add('');
     }
 
-    if (initialValues.length < DataShortcut.maxStepCount) {
+    if (initialValues.length < DataShortcut.maxLevelCount) {
       initialValues.add('');
     }
 
@@ -93,7 +93,7 @@ class _FormListState extends State<FormList> {
 
     controller.text = value;
 
-    if (fieldNr < DataShortcut.maxStepCount) {
+    if (fieldNr < DataShortcut.maxLevelCount) {
       fieldName = '${name.capitalize()} $fieldNr';
     } else {
       fieldName = 'Final $name';
@@ -104,7 +104,7 @@ class _FormListState extends State<FormList> {
         TextFormField(
           controller: controller,
           decoration: InputDecoration(labelText: fieldName),
-          maxLength: DataShortcut.maxStepCharacters,
+          maxLength: DataShortcut.maxLevelCharacters,
           validator: (final String? input) {
             if (widget.canBeEmpty == true) {
               // Use this validation if the fields are optional
@@ -128,7 +128,7 @@ class _FormListState extends State<FormList> {
           },
           onChanged: (final String? input) {
             if (fieldNr == formFields.length &&
-                fieldNr < DataShortcut.maxStepCount) {
+                fieldNr < DataShortcut.maxLevelCount) {
               setState(() {
                 formFields.add(textFormField(name, index + 1, ''));
               });
@@ -150,10 +150,10 @@ class _FormListState extends State<FormList> {
           textInputAction: TextInputAction.next,
           onSaved: (final String? input) {
             String correctedInput = input.toString().trim();
-            if (correctedInput.length > DataShortcut.maxStepCharacters) {
+            if (correctedInput.length > DataShortcut.maxLevelCharacters) {
               correctedInput = correctedInput.substring(
                 0,
-                DataShortcut.maxStepCharacters,
+                DataShortcut.maxLevelCharacters,
               );
             }
 
@@ -193,7 +193,7 @@ class _FormListState extends State<FormList> {
     return Column(
       children: <Widget>[
         ...formFields,
-        if (formFields.length < DataShortcut.maxStepCount)
+        if (formFields.length < DataShortcut.maxLevelCount)
           const Text(
             '⋮',
             style: TextStyle(

@@ -1,5 +1,5 @@
 /* 
- * Githo – An app that helps you form long-lasting habits, one step at a time.
+ * Githo – An app that helps you gradually form long-lasting habits.
  * Copyright (C) 2021 Florian Thaler
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -31,12 +31,12 @@ import 'package:githo/widgets/bottom_sheets/welcome_sheet.dart';
 import 'package:githo/widgets/headings/screen_title.dart';
 import 'package:githo/widgets/headings/heading.dart';
 import 'package:githo/widgets/screen_ending_spacer.dart';
-import 'package:githo/widgets/step_to_do.dart';
+import 'package:githo/widgets/level_to_do.dart';
 
 import 'package:githo/database/database_helper.dart';
 import 'package:githo/helpers/time_helper.dart';
 import 'package:githo/models/progress_data.dart';
-import 'package:githo/models/used_classes/step.dart';
+import 'package:githo/models/used_classes/level.dart';
 import 'package:githo/models/used_classes/training.dart';
 
 import 'package:githo/screens/about.dart';
@@ -155,12 +155,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         // This column exists to make sure all trainings are
                         // being cached. (= to disable lazyloading)
                         children: <Widget>[
-                          ...List<Widget>.generate(progressData.steps.length,
+                          ...List<Widget>.generate(progressData.levels.length,
                               (final int i) {
-                            final StepData step = progressData.steps[i];
-                            return StepToDo(
+                            final Level level = progressData.levels[i];
+                            return LevelToDo(
                               globalKey,
-                              step,
+                              level,
                               _updateDbAndScreen,
                             );
                           }),
@@ -320,8 +320,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         final Training training =
                             waitingMap['training'] as Training;
-                        final StepData step = waitingMap['step'] as StepData;
-                        final String stepDescription = step.text;
+                        final Level level = waitingMap['levels'] as Level;
+                        final String levelDescription = level.text;
 
                         final DateTime now = TimeHelper.instance.currentTime;
                         final String remainingTime = getDurationDiff(
@@ -344,7 +344,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   style: Theme.of(context).textTheme.bodyText1,
                                 ),
                                 TextSpan(
-                                  text: stepDescription,
+                                  text: levelDescription,
                                   style: Theme.of(context).textTheme.bodyText2,
                                 ),
                               ],
@@ -359,8 +359,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       onClickFunc = () {
                         final Training currentTraining =
                             activeMap['training'] as Training;
-                        final StepData currentStep =
-                            activeMap['step'] as StepData;
+                        final Level currentLevel = activeMap['levels'] as Level;
 
                         if (currentTraining.status == 'ready') {
                           showDialog(
@@ -368,7 +367,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             builder: (BuildContext buildContext) {
                               return ConfirmTrainingStart(
                                 title: 'Confirm Activation',
-                                toDo: currentStep.text,
+                                toDo: currentLevel.text,
                                 training: currentTraining,
                                 onConfirmation: () {
                                   currentTraining.activate();

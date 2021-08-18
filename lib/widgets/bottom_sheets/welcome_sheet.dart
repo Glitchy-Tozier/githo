@@ -1,5 +1,5 @@
 /* 
- * Githo – An app that helps you form long-lasting habits, one step at a time.
+ * Githo – An app that helps you gradually form long-lasting habits.
  * Copyright (C) 2021 Florian Thaler
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:githo/widgets/bottom_sheets/text_sheet.dart';
 import 'package:githo/models/progress_data.dart';
-import 'package:githo/models/used_classes/step.dart';
+import 'package:githo/models/used_classes/level.dart';
 import 'package:githo/models/used_classes/training_period.dart';
 
 class WelcomeSheet extends StatelessWidget {
@@ -35,13 +35,13 @@ class WelcomeSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Map<String, dynamic> dataMap;
-    final StepData step;
+    final Level level;
     final TrainingPeriod trainingPeriod;
     final TextSpan text;
 
     if (progressData.activeData != null) {
       dataMap = progressData.activeData!;
-      step = dataMap['step'] as StepData;
+      level = dataMap['levels'] as Level;
       trainingPeriod = dataMap['trainingPeriod'] as TrainingPeriod;
       text = TextSpan(
         children: <TextSpan>[
@@ -50,11 +50,11 @@ class WelcomeSheet extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyText2,
           ),
           TextSpan(
-            text: 'Step ${step.number}\n\nTo-do',
+            text: 'Level ${level.number}\n\nTo-do',
             style: Theme.of(context).textTheme.bodyText1,
           ),
           TextSpan(
-            text: ': ${step.text}\n\n',
+            text: ': ${level.text}\n\n',
             style: Theme.of(context).textTheme.bodyText2,
           ),
           TextSpan(
@@ -70,11 +70,11 @@ class WelcomeSheet extends StatelessWidget {
       );
     } else if (progressData.waitingData != null) {
       dataMap = progressData.waitingData!;
-      step = dataMap['step'] as StepData;
+      level = dataMap['levels'] as Level;
       text = TextSpan(
         children: <TextSpan>[
           TextSpan(
-            text: 'Waiting for step ${step.number} to start.\n\n',
+            text: 'Waiting for level ${level.number} to start.\n\n',
             style: Theme.of(context).textTheme.bodyText2,
           ),
           TextSpan(
@@ -82,7 +82,7 @@ class WelcomeSheet extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyText1,
           ),
           TextSpan(
-            text: ': ${step.text}',
+            text: ': ${level.text}',
             style: Theme.of(context).textTheme.bodyText2,
           ),
         ],

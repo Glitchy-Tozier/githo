@@ -1,5 +1,5 @@
 /* 
- * Githo – An app that helps you form long-lasting habits, one step at a time.
+ * Githo – An app that helps you gradually form long-lasting habits.
  * Copyright (C) 2021 Florian Thaler
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -34,13 +34,13 @@ class PeriodListView extends StatelessWidget {
   /// Creates one of those horizontal training-listViews made out of cards.
   const PeriodListView({
     required this.trainingPeriod,
-    required this.stepDescription,
+    required this.levelDescription,
     required this.updateFunction,
     required this.globalKey,
   });
 
   final TrainingPeriod trainingPeriod;
-  final String stepDescription;
+  final String levelDescription;
   final Function updateFunction;
   final GlobalKey globalKey;
 
@@ -102,7 +102,7 @@ class PeriodListView extends StatelessWidget {
                         style: Theme.of(context).textTheme.bodyText1,
                       ),
                       TextSpan(
-                        text: stepDescription,
+                        text: levelDescription,
                         style: Theme.of(context).textTheme.bodyText2,
                       ),
                     ],
@@ -177,7 +177,7 @@ class PeriodListView extends StatelessWidget {
                   builder: (BuildContext buildContext) {
                     return ConfirmTrainingStart(
                       title: 'Confirm Activation',
-                      toDo: stepDescription,
+                      toDo: levelDescription,
                       training: training,
                       onConfirmation: onConfirmation,
                     );

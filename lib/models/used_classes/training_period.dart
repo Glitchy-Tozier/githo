@@ -1,5 +1,5 @@
 /* 
- * Githo – An app that helps you form long-lasting habits, one step at a time.
+ * Githo – An app that helps you gradually form long-lasting habits.
  * Copyright (C) 2021 Florian Thaler
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -25,7 +25,7 @@ import 'package:githo/models/used_classes/training.dart';
 
 /// A group of [Training]s.
 ///
-/// One or multiple [TrainingPeriods] can make up a step ([StepData]).
+/// One or multiple [TrainingPeriods] can make up a [Level].
 ///
 /// Example: For daily habits this would be a week.
 

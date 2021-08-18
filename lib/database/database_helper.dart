@@ -1,5 +1,5 @@
 /* 
- * Githo – An app that helps you form long-lasting habits, one step at a time.
+ * Githo – An app that helps you gradually form long-lasting habits.
  * Copyright (C) 2021 Florian Thaler
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -36,18 +36,15 @@ class DatabaseHelper {
   /// The singleton-instance of DatabaseHelper.
   static const DatabaseHelper instance = DatabaseHelper._privateConstructor();
   static Database? _db;
-
-  static const String _dbVersionTable = 'dbVersionTable';
-  static const String _colVersion = 'version';
-  static const int version = 1;
+  static const int version = 2;
 
   static const String _habitPlansTable = 'habitPlansTable';
   static const String _colId = 'id';
   static const String _colHabitIsActive = 'isActive';
   static const String _colHabitFullyCompleted = 'fullyCompleted';
-  static const String _colGoal = 'goal';
+  static const String _colHabit = 'habit';
   static const String _colRequiredReps = 'requiredReps';
-  static const String _colSteps = 'steps';
+  static const String _colLevels = 'levels';
   static const String _colComments = 'comments';
   static const String _colTrainingTimeIndex = 'trainingTimeIndex';
   static const String _colRequiredTrainings = 'requiredTrainings';
@@ -59,69 +56,59 @@ class DatabaseHelper {
   static const String _colProgIsActive = 'isActive';
   static const String _colProgFullyCompleted = 'fullyCompleted';
   static const String _colCurrentStartingDate = 'currentStartingDate';
-  static const String _colProgGoal = 'goal';
-  static const String _colProgSteps = 'steps';
+  static const String _colProgHabit = 'habit';
+  static const String _colProgLevels = 'levels';
 
   static const String _settingsTable = 'settingsTable';
   static const String _colShowIntroduction = 'showIntroduction';
 
-  /// Returns the database.
+  /// Returns the [Database].
   ///
-  /// **Never** directly touch [_db].
+  /// Use this function instead of directly touching [_db].
   Future<Database> get _getDb async {
     _db ??= await _initDb();
     return _db!;
   }
 
-  /// Load or newly create database.
-  Future<Database?> _initDb() async {
+  /// Load or newly create the [Database].
+  Future<Database> _initDb() async {
     final Directory dir = await getApplicationDocumentsDirectory();
     final String path = '${dir.path}/githoDatabase.db';
 
-    Database? habitPlanDb;
+    Database? db;
     try {
-      habitPlanDb = await openDatabase(
+      db = await openDatabase(
         path,
-        version: 1,
+        version: version,
         onCreate: _createDb,
+        onUpgrade: _upgradeDb,
       );
     } catch (error) {
       print(error);
     }
 
-    return habitPlanDb;
+    return db!;
   }
 
   /// Create the database from scratch.
   Future<void> _createDb(final Database db, final int version) async {
     String commandString;
 
-    // Initalize the database-version
-    commandString = '';
-    commandString += 'CREATE TABLE $_dbVersionTable';
-    commandString += '($_colVersion INTEGER)';
-    await db.execute(commandString);
-    db.insert(
-      _dbVersionTable,
-      <String, Object>{_colVersion: version},
-    );
-
     // Initialize habitPlan-table
-    commandString = '';
-    commandString += 'CREATE TABLE $_habitPlansTable';
-    commandString += '(';
-    commandString += '$_colId INTEGER PRIMARY KEY AUTOINCREMENT, ';
-    commandString += '$_colHabitIsActive INTEGER, ';
-    commandString += '$_colHabitFullyCompleted INTEGER, ';
-    commandString += '$_colGoal TEXT, ';
-    commandString += '$_colRequiredReps INTEGER, ';
-    commandString += '$_colSteps TEXT, ';
-    commandString += '$_colComments TEXT, ';
-    commandString += '$_colTrainingTimeIndex INTEGER, ';
-    commandString += '$_colRequiredTrainings INTEGER, ';
-    commandString += '$_colRequiredTrainingPeriods INTEGER, ';
-    commandString += '$_colLastChanged TEXT';
-    commandString += ')';
+    commandString = '''
+CREATE TABLE $_habitPlansTable(
+  $_colId INTEGER PRIMARY KEY AUTOINCREMENT,
+  $_colHabitIsActive INTEGER,
+  $_colHabitFullyCompleted INTEGER,
+  $_colHabit TEXT,
+  $_colRequiredReps INTEGER,
+  $_colLevels TEXT,
+  $_colComments TEXT,
+  $_colTrainingTimeIndex INTEGER,
+  $_colRequiredTrainings INTEGER,
+  $_colRequiredTrainingPeriods INTEGER,
+$_colLastChanged TEXT
+)''';
     await db.execute(commandString);
 
     final List<HabitPlan> defaultHabitPlans = DefaultHabitPlans.habitPlanList;
@@ -145,16 +132,15 @@ class DatabaseHelper {
     }
 
     // Initialize progress-table
-    commandString = '';
-    commandString += 'CREATE TABLE $_progressDataTable';
-    commandString += '(';
-    commandString += '$_colHabitPlanId INTEGER, ';
-    commandString += '$_colProgIsActive INTEGER, ';
-    commandString += '$_colProgFullyCompleted INTEGER, ';
-    commandString += '$_colCurrentStartingDate TEXT, ';
-    commandString += '$_colProgGoal TEXT, ';
-    commandString += '$_colProgSteps TEXT';
-    commandString += ')';
+    commandString = '''
+CREATE TABLE $_progressDataTable(
+  $_colHabitPlanId INTEGER,
+  $_colProgIsActive INTEGER,
+  $_colProgFullyCompleted INTEGER,
+  $_colCurrentStartingDate TEXT,
+  $_colProgHabit TEXT,
+  $_colProgLevels TEXT
+)''';
     await db.execute(commandString);
 
     db.insert(
@@ -164,11 +150,10 @@ class DatabaseHelper {
     );
 
     // Initialize settings-table
-    commandString = '';
-    commandString += 'CREATE TABLE $_settingsTable';
-    commandString += '(';
-    commandString += '$_colShowIntroduction INTEGER';
-    commandString += ')';
+    commandString = '''
+CREATE TABLE $_settingsTable(
+  $_colShowIntroduction INTEGER
+)''';
     await db.execute(commandString);
 
     db.insert(
@@ -176,6 +161,103 @@ class DatabaseHelper {
       _settingsTable,
       SettingsData.initialValues().toMap(),
     );
+  }
+
+  /// Adapts the [Database] to make it work in the new version of the app.
+  void _upgradeDb(Database db, int oldVersion, int newVersion) {
+    if (oldVersion == 1 && newVersion == 2) {
+      // Rename all "goal"-columns to "habit
+      // and all "steps" to "levels".
+      // The new, pretty SQLite commands can't be used because Android-versions
+      // <=10 don't support them.
+
+      db.execute('''
+CREATE TABLE newHabitPlansTable(
+  $_colId INTEGER PRIMARY KEY AUTOINCREMENT,
+  $_colHabitIsActive INTEGER,
+  $_colHabitFullyCompleted INTEGER,
+  $_colHabit TEXT,
+  $_colRequiredReps INTEGER,
+  $_colLevels TEXT,
+  $_colComments TEXT,
+  $_colTrainingTimeIndex INTEGER,
+  $_colRequiredTrainings INTEGER,
+  $_colRequiredTrainingPeriods INTEGER,
+  $_colLastChanged TEXT
+);
+''');
+      db.execute('''
+INSERT INTO newHabitPlansTable(
+  $_colId,
+  $_colHabitIsActive,
+  $_colHabitFullyCompleted,
+  $_colHabit,
+  $_colRequiredReps,
+  $_colLevels,
+  $_colComments,
+  $_colTrainingTimeIndex,
+  $_colRequiredTrainings,
+  $_colRequiredTrainingPeriods,
+  $_colLastChanged
+) SELECT 
+  id,
+  isActive,
+  fullyCompleted,
+  goal,
+  requiredReps,
+  steps,
+  comments,
+  trainingTimeIndex,
+  requiredTrainings,
+  requiredTrainingPeriods,
+  lastChanged
+FROM $_habitPlansTable;
+''');
+      db.execute('''
+DROP TABLE $_habitPlansTable;
+''');
+      db.execute('''
+ALTER TABLE newHabitPlansTable RENAME TO $_habitPlansTable;
+''');
+
+      // Do the same thing for the ProgressDataTable.
+      db.execute('''
+CREATE TABLE newProgressDataTable(
+  $_colHabitPlanId INTEGER,
+  $_colProgIsActive INTEGER,
+  $_colProgFullyCompleted INTEGER,
+  $_colCurrentStartingDate TEXT,
+  $_colProgHabit TEXT,
+  $_colProgLevels TEXT
+);
+''');
+      db.execute('''
+INSERT INTO newProgressDataTable(
+  $_colHabitPlanId,
+  $_colProgIsActive,
+  $_colProgFullyCompleted,
+  $_colCurrentStartingDate,
+  $_colProgHabit,
+  $_colProgLevels
+) SELECT 
+  habitPlanId,
+  isActive,
+  fullyCompleted,
+  currentStartingDate,
+  goal,
+  steps
+FROM $_progressDataTable;
+''');
+      db.execute('''
+DROP TABLE $_progressDataTable;
+''');
+      db.execute('''
+ALTER TABLE newProgressDataTable RENAME TO $_progressDataTable;
+''');
+
+      // Delete unused Table.
+      db.execute('DROP TABLE dbVersionTable');
+    }
   }
 
   /// Returns the items found in a table.
@@ -194,6 +276,8 @@ class DatabaseHelper {
   Future<List<HabitPlan>> getHabitPlanList() async {
     final List<Map<String, dynamic>> habitPlanMapList =
         await getDataMapList(_habitPlansTable);
+
+    print(habitPlanMapList[1]);
 
     final List<HabitPlan> habitPlanList = <HabitPlan>[];
 

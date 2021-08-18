@@ -1,5 +1,5 @@
 /* 
- * Githo – An app that helps you form long-lasting habits, one step at a time.
+ * Githo – An app that helps you gradually form long-lasting habits.
  * Copyright (C) 2021 Florian Thaler
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -26,7 +26,7 @@ class DefaultHabitPlans {
       fullyCompleted: false,
       habit: 'Consistently go jogging',
       requiredReps: 1,
-      steps: const <String>[
+      levels: const <String>[
         '''
 Dress up and step outside on the street. 
 Then go back and do whatever you want to do.''',
@@ -39,7 +39,7 @@ Then go back and do whatever you want to do.''',
         '''
 Dress up in your running-gear for each challenge, even for the first one.''',
         '''
-Whatever step you're on, don't overdo it. 
+Whatever level you're on, don't overdo it. 
 We want to go jogging CONSISTENTLY, not twice and then have a hurting foot for a week.'''
       ],
       trainingTimeIndex: 1,
@@ -52,7 +52,7 @@ We want to go jogging CONSISTENTLY, not twice and then have a hurting foot for a
       fullyCompleted: false,
       habit: 'Talk to anybody, anytime',
       requiredReps: 2,
-      steps: const <String>[
+      levels: const <String>[
         'Make eye-contact with a stranger (no matter how short)',
         'Greet a passerby',
         'Ask for the time',
@@ -82,12 +82,12 @@ Give a compliment, then don't walk on. After they say something, reply.
       fullyCompleted: false,
       habit: 'Testing without errors',
       requiredReps: 1,
-      steps: const <String>[
-        'This is step oneeey',
-        'This is step twough',
-        'This is step tré',
-        'This is step four',
-        'This is step faive',
+      levels: const <String>[
+        'This is level oneeey',
+        'This is level twough',
+        'This is level tré',
+        'This is level four',
+        'This is level faive',
       ],
       comments: const <String>[
         '''
@@ -108,12 +108,12 @@ inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.''',
       fullyCompleted: false,
       habit: 'Testing without (t)errors',
       requiredReps: 3,
-      steps: const <String>[
-        'This is step oneeey',
-        'This is step twough',
-        'This is step tré',
-        'This is step four',
-        'This is step faive',
+      levels: const <String>[
+        'This is level oneeey',
+        'This is level twough',
+        'This is level tré',
+        'This is level four',
+        'This is level faive',
       ],
       comments: const <String>[
         '"t" as in hours',

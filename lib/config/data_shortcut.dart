@@ -1,5 +1,5 @@
 /* 
- * Githo – An app that helps you form long-lasting habits, one step at a time.
+ * Githo – An app that helps you gradually form long-lasting habits.
  * Copyright (C) 2021 Florian Thaler
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -50,8 +50,8 @@ class DataShortcut {
   ];
 
   static const int maxHabitCharacters = 40;
-  static const int maxStepCharacters = 140;
-  static const int maxStepCount = 20;
+  static const int maxLevelCharacters = 140;
+  static const int maxLevelCount = 20;
 
   /// Toggles the Debug-banner and activates testing-functionality.
   static const bool testing = false;

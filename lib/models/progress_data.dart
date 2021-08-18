@@ -1,5 +1,5 @@
 /* 
- * Githo – An app that helps you form long-lasting habits, one step at a time.
+ * Githo – An app that helps you gradually form long-lasting habits.
  * Copyright (C) 2021 Florian Thaler
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@ import 'package:githo/helpers/type_extentions.dart';
 import 'package:githo/helpers/time_helper.dart';
 import 'package:githo/database/database_helper.dart';
 import 'package:githo/models/habit_plan.dart';
-import 'package:githo/models/used_classes/step.dart';
+import 'package:githo/models/used_classes/level.dart';
 import 'package:githo/models/used_classes/training.dart';
 import 'package:githo/models/used_classes/training_period.dart';
 
@@ -35,7 +35,7 @@ class ProgressData {
     required this.fullyCompleted,
     required this.currentStartingDate,
     required this.habit,
-    required this.steps,
+    required this.levels,
   });
 
   /// Creates dummy, inactive [ProgressData].
@@ -45,7 +45,7 @@ class ProgressData {
         fullyCompleted = false,
         currentStartingDate = DateTime(0),
         habit = '',
-        steps = <StepData>[];
+        levels = <Level>[];
 
   /// Converts a Map into [ProgressData].
   ProgressData.fromMap(final Map<String, dynamic> map)
@@ -54,60 +54,60 @@ class ProgressData {
         fullyCompleted = (map['fullyCompleted'] as int).toBool(),
         currentStartingDate =
             DateTime.parse(map['currentStartingDate'] as String),
-        habit = map['goal'] as String,
-        steps = _jsonToStepList(map['steps'] as String);
+        habit = map['habit'] as String,
+        levels = _jsonToLevelList(map['levels'] as String);
 
   int habitPlanId;
   bool isActive;
   bool fullyCompleted;
   DateTime currentStartingDate;
   String habit;
-  List<StepData> steps;
+  List<Level> levels;
 
-  /// Converts a [json]-like [String] into a list of [StepData].
-  static List<StepData> _jsonToStepList(final String json) {
+  /// Converts a [json]-like [String] into a list of [Level].
+  static List<Level> _jsonToLevelList(final String json) {
     final dynamic dynamicList = jsonDecode(json);
-    final List<StepData> steps = <StepData>[];
+    final List<Level> levels = <Level>[];
 
     for (final Map<String, dynamic> map in dynamicList) {
-      final StepData step = StepData.fromMap(map);
-      steps.add(step);
+      final Level level = Level.fromMap(map);
+      levels.add(level);
     }
 
-    return steps;
+    return levels;
   }
 
   /// Adapts [this] to a HabitPlan.
   void adaptToHabitPlan({
     required final HabitPlan habitPlan,
     required final DateTime startingDate,
-    final int startingStepNr = 1,
+    final int startingLevelNr = 1,
   }) {
     habitPlanId = habitPlan.id!;
     isActive = true;
     fullyCompleted = habitPlan.fullyCompleted;
     currentStartingDate = startingDate;
     habit = habitPlan.habit;
-    steps = <StepData>[];
-    for (int i = 0; i < habitPlan.steps.length; i++) {
-      steps.add(
-        StepData.fromHabitPlan(
-          stepIndex: i,
+    levels = <Level>[];
+    for (int i = 0; i < habitPlan.levels.length; i++) {
+      levels.add(
+        Level.fromHabitPlan(
+          levelIndex: i,
           habitPlan: habitPlan,
         ),
       );
     }
 
-    final int startingStepIdx = startingStepNr - 1;
-    steps[startingStepIdx].trainingPeriods[0].status = 'waiting for start';
+    final int startingLevelIdx = startingLevelNr - 1;
+    levels[startingLevelIdx].trainingPeriods[0].status = 'waiting for start';
 
     final Map<String, int> startingIdxData = <String, int>{
-      'step': startingStepIdx,
+      'levels': startingLevelIdx,
       'trainingPeriod': 0,
     };
     _setTrainingDates(startingIdxData);
 
-    if (startingStepNr > 0) {
+    if (startingLevelNr > 0) {
       // Set the passed trainings' status to 'completed'
       _completePassedPeriods();
     }
@@ -123,28 +123,28 @@ class ProgressData {
     return hasStarted;
   }
 
-  /// Returns how many hours a step ([StepData]) lasts.
-  int get stepDurationInHours {
-    final int duration = steps[0].durationInHours;
+  /// Returns how many hours a [Level] lasts.
+  int get levelDurationInHours {
+    final int duration = levels[0].durationInHours;
     return duration;
   }
 
   /// Returns how many hours a [TrainingPeriod] lasts.
   int get trainingPeriodDurationInHours {
-    final int duration = steps[0].trainingPeriods[0].durationInHours;
+    final int duration = levels[0].trainingPeriods[0].durationInHours;
     return duration;
   }
 
   /// Returns how many hours a [Training] lasts.
   int get trainingDurationInHours {
     final int duration =
-        steps[0].trainingPeriods[0].trainings[0].durationInHours;
+        levels[0].trainingPeriods[0].trainings[0].durationInHours;
     return duration;
   }
 
   /// Returns how many [Training]s there are in each [TrainingPeriod].
   int get trainingsPerPeriod {
-    final int trainingCount = steps[0].trainingPeriods[0].trainings.length;
+    final int trainingCount = levels[0].trainingPeriods[0].trainings.length;
     return trainingCount;
   }
 
@@ -188,22 +188,22 @@ class ProgressData {
     return passedPeriods;
   }
 
-  /// Returns the [StepData], the [TrainingPeriod], and the [Training]
+  /// Returns the [Level], the [TrainingPeriod], and the [Training]
   /// that currently are active.
   Map<String, dynamic>? get activeData {
-    for (final StepData step in steps) {
-      final Map<String, dynamic>? activeData = step.activeData;
+    for (final Level level in levels) {
+      final Map<String, dynamic>? activeData = level.activeData;
       if (activeData != null) {
         return activeData;
       }
     }
   }
 
-  /// Returns the [StepData], the [TrainingPeriod], and the [Training]
+  /// Returns the [Level], the [TrainingPeriod], and the [Training]
   /// that will start the whole training-process off.
   Map<String, dynamic>? get waitingData {
-    for (final StepData step in steps) {
-      final Map<String, dynamic>? tempResult = step.waitingData;
+    for (final Level level in levels) {
+      final Map<String, dynamic>? tempResult = level.waitingData;
       if (tempResult != null) {
         return tempResult;
       }
@@ -212,8 +212,8 @@ class ProgressData {
 
   /// Performs the initial activation of the starting [TrainingPeriod].
   void _activateStartingPeriod() {
-    for (final StepData step in steps) {
-      step.activateWaitingPeriod();
+    for (final Level level in levels) {
+      level.activateWaitingPeriod();
     }
   }
 
@@ -237,41 +237,41 @@ class ProgressData {
   /// Without any arguments, all trainings will be re-dated.
   void _setTrainingDates(
       [final Map<String, int> startingIndexData = const <String, int>{
-        'step': 0,
+        'levels': 0,
         'trainingPeriod': 0,
       }]) {
-    final int startingStepIdx = startingIndexData['step']!;
+    final int startingLevelIdx = startingIndexData['levels']!;
     final int startingPeriodIdx = startingIndexData['trainingPeriod']!;
 
     // Set dates for all the trainings
     DateTime workingDate = currentStartingDate;
 
-    for (int i = startingStepIdx; i < steps.length; i++) {
-      final StepData step = steps[i];
+    for (int i = startingLevelIdx; i < levels.length; i++) {
+      final Level level = levels[i];
 
-      if (i == startingStepIdx) {
-        workingDate = step.setChildrenDates(workingDate, startingPeriodIdx);
+      if (i == startingLevelIdx) {
+        workingDate = level.setChildrenDates(workingDate, startingPeriodIdx);
       } else {
-        workingDate = step.setChildrenDates(workingDate, 0);
+        workingDate = level.setChildrenDates(workingDate, 0);
       }
     }
   }
 
   /// Marks all [TrainingPeriod]s that have passed as being passed.
   ///
-  /// Necessary if the user starts with something else than step 1.
+  /// Necessary if the user starts with something else than level 1.
   void _completePassedPeriods() {
-    for (final StepData step in steps) {
-      step.markPassedPeriods();
+    for (final Level level in levels) {
+      level.markPassedPeriods();
     }
   }
 
-  /// Returns the [StepData], the [TrainingPeriod], and the [Training]
+  /// Returns the [Level], the [TrainingPeriod], and the [Training]
   /// that aling with on specific [date].
   Map<String, dynamic>? _getDataByDate(final DateTime date) {
     Map<String, dynamic>? map;
-    for (final StepData step in steps) {
-      map = step.getDataByDate(date);
+    for (final Level level in levels) {
+      map = level.getDataByDate(date);
       if (map != null) {
         return map;
       }
@@ -289,24 +289,24 @@ class ProgressData {
     final int previouslyActivePeriodIdx =
         (lastActiveMap['trainingPeriod'] as TrainingPeriod).index;
 
-    int currentStepIdx = (lastActiveMap['step'] as StepData).index;
+    int currentLevelIdx = (lastActiveMap['levels'] as Level).index;
 
     // Always reset one additional period
     // to make sure we actually move backwards in time.
     int remainingRegressions = failedPeriods + 1;
 
     while (true) {
-      final StepData currentStep = steps[currentStepIdx];
-      remainingRegressions = currentStep.regressPeriods(remainingRegressions);
+      final Level currentLevel = levels[currentLevelIdx];
+      remainingRegressions = currentLevel.regressPeriods(remainingRegressions);
 
-      if (remainingRegressions > 0 && currentStepIdx > 0) {
+      if (remainingRegressions > 0 && currentLevelIdx > 0) {
         // If there are more loops to come AND
         // we haven't reached the start of all challenges: Repeat cycle.
-        currentStepIdx--;
+        currentLevelIdx--;
       } else {
         // If this was the last loop,
         // return the current trainingPeriod's position.
-        final int newCurrentStepIdx = currentStepIdx;
+        final int newCurrentLevelIdx = currentLevelIdx;
         final int newCurrentPeriodIdx;
         if (previouslyActivePeriodIdx == 0) {
           newCurrentPeriodIdx = 0;
@@ -315,7 +315,7 @@ class ProgressData {
         }
 
         final Map<String, int> newCurrentPosition = <String, int>{
-          'step': newCurrentStepIdx,
+          'levels': newCurrentLevelIdx,
           'trainingPeriod': newCurrentPeriodIdx,
         };
         return newCurrentPosition;
@@ -368,7 +368,7 @@ class ProgressData {
       print('failedPeriods: $failedPeriods');
       _setNewStartingDate();
 
-      final TrainingPeriod lastPeriod = steps.last.trainingPeriods.last;
+      final TrainingPeriod lastPeriod = levels.last.trainingPeriods.last;
 
       if (lastActivePeriod.wasSuccessful && lastActivePeriod == lastPeriod) {
         fullyCompleted = true;
@@ -429,10 +429,10 @@ class ProgressData {
 
   /// Converts [this] into a Map.
   Map<String, dynamic> toMap() {
-    final List<Map<String, dynamic>> stepMapList = <Map<String, dynamic>>[];
+    final List<Map<String, dynamic>> levelMapList = <Map<String, dynamic>>[];
 
-    for (final StepData step in steps) {
-      stepMapList.add(step.toMap());
+    for (final Level level in levels) {
+      levelMapList.add(level.toMap());
     }
 
     final Map<String, dynamic> map = <String, dynamic>{
@@ -440,8 +440,8 @@ class ProgressData {
       'isActive': isActive.toInt(),
       'fullyCompleted': fullyCompleted.toInt(),
       'currentStartingDate': currentStartingDate.toString(),
-      'goal': habit,
-      'steps': jsonEncode(stepMapList),
+      'habit': habit,
+      'levels': jsonEncode(levelMapList),
     };
     return map;
   }

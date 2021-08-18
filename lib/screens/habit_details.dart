@@ -1,5 +1,5 @@
 /* 
- * Githo – An app that helps you form long-lasting habits, one step at a time.
+ * Githo – An app that helps you gradually form long-lasting habits.
  * Copyright (C) 2021 Florian Thaler
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -44,7 +44,7 @@ class SingleHabitDisplay extends StatefulWidget {
   /// - final habit,
   /// - rules,
   /// - comments,
-  /// - and steps.
+  /// - and levels.
   const SingleHabitDisplay({
     required this.updateFunction,
     required this.habitPlan,
@@ -129,7 +129,8 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
         CustomListTile(
             leadingWidget: BulletPoint(),
             title: '$currentReps out of $maxReps ${trainingTimeFrame}s '
-                'must be successful in order to advance'),
+                'must be successful in order to advance to the next '
+                '$periodTimeFrame'),
         const SizedBox(
           height: StyleData.listRowSpacing,
         ),
@@ -144,8 +145,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
         CustomListTile(
           leadingWidget: BulletPoint(),
           title: '$requiredTrainingPeriods successful '
-              '$periodTimeFrame$periodEnder required to progress '
-              'to the next step',
+              '$periodTimeFrame$periodEnder required to level up',
         ),
         const SizedBox(
           height: StyleData.listRowSpacing,
@@ -156,13 +156,13 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
     return widgetList;
   }
 
-  /// Creates a table that looks like a list of the [steps] of the [habitPlan].
-  Table _getStepTable() {
+  /// Creates a table that looks like a list of the [levels] of the [habitPlan].
+  Table _getLevelTable() {
     final List<TableRow> tableRowList = <TableRow>[];
-    final List<String> steps = habitPlan.steps;
+    final List<String> levels = habitPlan.levels;
 
-    for (int i = 0; i < steps.length; i++) {
-      final int stepNr = i + 1;
+    for (int i = 0; i < levels.length; i++) {
+      final int levelNr = i + 1;
 
       tableRowList.add(
         TableRow(
@@ -172,7 +172,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
                 top: StyleData.listRowSpacing,
               ),
               child: Text(
-                stepNr.toString(),
+                levelNr.toString(),
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyText2,
               ),
@@ -183,7 +183,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
                 top: StyleData.listRowSpacing,
               ),
               child: Text(
-                steps[i],
+                levels[i],
                 style: Theme.of(context).textTheme.bodyText2,
               ),
             ),
@@ -258,8 +258,8 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  const Heading('Steps'),
-                  _getStepTable(),
+                  const Heading('levels'),
+                  _getLevelTable(),
                 ],
               ),
             ),

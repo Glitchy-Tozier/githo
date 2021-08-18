@@ -1,5 +1,5 @@
 /* 
- * Githo – An app that helps you form long-lasting habits, one step at a time.
+ * Githo – An app that helps you gradually form long-lasting habits.
  * Copyright (C) 2021 Florian Thaler
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -22,11 +22,11 @@ import 'package:githo/config/data_shortcut.dart';
 import 'package:githo/models/habit_plan.dart';
 import 'package:githo/models/used_classes/training_period.dart';
 
-/// A step towards your goal.
+/// A level of potency of your final habit.
 
-class StepData {
-  /// Creates a step ([StepData]) by directly supplying its values.
-  StepData({
+class Level {
+  /// Creates a [Level] by directly supplying its values.
+  Level({
     required this.index,
     required this.number,
     required this.text,
@@ -34,19 +34,19 @@ class StepData {
     required this.trainingPeriods,
   });
 
-  /// Creates a step ([StepData]) from a [HabitPlan].
-  StepData.fromHabitPlan({
-    required final int stepIndex,
+  /// Creates a [Level] from a [HabitPlan].
+  Level.fromHabitPlan({
+    required final int levelIndex,
     required final HabitPlan habitPlan,
-  })  : index = stepIndex,
-        number = stepIndex + 1,
-        text = habitPlan.steps[stepIndex],
+  })  : index = levelIndex,
+        number = levelIndex + 1,
+        text = habitPlan.levels[levelIndex],
         durationInHours = _getDurationHours(habitPlan),
         // Create all the TrainingPeriod-instances
-        trainingPeriods = _getTrainingPeriods(stepIndex, habitPlan);
+        trainingPeriods = _getTrainingPeriods(levelIndex, habitPlan);
 
-  /// Converts a Map into a step ([StepData]).
-  StepData.fromMap(final Map<String, dynamic> map)
+  /// Converts a Map into a [Level].
+  Level.fromMap(final Map<String, dynamic> map)
       : index = map['index'] as int,
         number = map['number'] as int,
         text = map['text'] as String,
@@ -59,26 +59,26 @@ class StepData {
   final int durationInHours;
   final List<TrainingPeriod> trainingPeriods;
 
-  /// Calculates the step's duration and returns the number of hours.
+  /// Calculates the level's duration and returns the number of hours.
   static int _getDurationHours(final HabitPlan habitPlan) {
     final int trainingPeriodCount = habitPlan.requiredTrainingPeriods;
     final int trainingPeriodHours =
         DataShortcut.periodDurationInHours[habitPlan.trainingTimeIndex];
-    final int stepHours = trainingPeriodHours * trainingPeriodCount;
-    return stepHours;
+    final int levelHours = trainingPeriodHours * trainingPeriodCount;
+    return levelHours;
   }
 
   /// Generates and returns the [List] of [TrainingPeriod]s that
-  /// form this [StepData].
+  /// form this [Level].
   static List<TrainingPeriod> _getTrainingPeriods(
-    final int stepIndex,
+    final int levelIndex,
     final HabitPlan habitPlan,
   ) {
     final List<TrainingPeriod> trainingPeriods = <TrainingPeriod>[];
     final int trainingPeriodCount = habitPlan.requiredTrainingPeriods;
 
     for (int i = 0; i < habitPlan.requiredTrainingPeriods; i++) {
-      final int trainingPeriodIndex = stepIndex * trainingPeriodCount + i;
+      final int trainingPeriodIndex = levelIndex * trainingPeriodCount + i;
       trainingPeriods.add(
         TrainingPeriod.fromHabitPlan(
           trainingPeriodIndex: trainingPeriodIndex,
@@ -101,7 +101,7 @@ class StepData {
     return trainingPeriods;
   }
 
-  /// Returns the status of the step.
+  /// Returns the status of the [Level].
   ///
   /// This value is derived from its children.
   String get status {
@@ -149,7 +149,7 @@ class StepData {
     return 0;
   }
 
-  /// Sets the dates of the step's children, starting from [startingDate],
+  /// Sets the dates of the level's children, starting from [startingDate],
   /// starting with a specific [trainingPeriod].
   DateTime setChildrenDates(
     final DateTime startingDate,
@@ -176,7 +176,7 @@ class StepData {
     for (final TrainingPeriod trainingPeriod in trainingPeriods) {
       map = trainingPeriod.getDataByDate(date);
       if (map != null) {
-        map['step'] = this;
+        map['levels'] = this;
         break;
       }
     }
@@ -199,7 +199,7 @@ class StepData {
         final Map<String, dynamic>? map = trainingPeriod.activeData;
         if (map != null) {
           result = map;
-          result['step'] = this;
+          result['levels'] = this;
           break;
         }
       }
@@ -212,7 +212,7 @@ class StepData {
     for (final TrainingPeriod trainingPeriod in trainingPeriods) {
       if (trainingPeriod.status == 'waiting for start') {
         final Map<String, dynamic> result = <String, dynamic>{
-          'step': this,
+          'levels': this,
           'trainingPeriod': trainingPeriod,
           'training': trainingPeriod.trainings[0],
         };
@@ -237,7 +237,7 @@ class StepData {
     }
   }
 
-  /// Converts the step ([StepData]) into a Map.
+  /// Converts the [Level] into a Map.
   Map<String, dynamic> toMap() {
     final List<Map<String, dynamic>> trainingPeriodMapList =
         <Map<String, dynamic>>[];

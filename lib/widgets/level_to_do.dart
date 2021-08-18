@@ -1,5 +1,5 @@
 /* 
- * Githo – An app that helps you form long-lasting habits, one step at a time.
+ * Githo – An app that helps you gradually form long-lasting habits.
  * Copyright (C) 2021 Florian Thaler
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -26,15 +26,15 @@ import 'package:githo/widgets/dividers/thin_divider.dart';
 import 'package:githo/widgets/headings/heading.dart';
 import 'package:githo/widgets/period_list_view.dart';
 
-import 'package:githo/models/used_classes/step.dart';
+import 'package:githo/models/used_classes/level.dart';
 import 'package:githo/models/used_classes/training_period.dart';
 
-class StepToDo extends StatelessWidget {
-  /// Create the to-do-section for a whole step.
+class LevelToDo extends StatelessWidget {
+  /// Create the to-do-section for a whole [Level].
   /// Used in the [HomeScreen].
-  const StepToDo(this.globalKey, this.step, this.updateFunction);
+  const LevelToDo(this.globalKey, this.level, this.updateFunction);
 
-  final StepData step;
+  final Level level;
   final Function updateFunction;
   final GlobalKey globalKey;
 
@@ -43,20 +43,20 @@ class StepToDo extends StatelessWidget {
     // What will be the returned contents
     final List<Widget> colChildren = <Widget>[];
 
-    final Color stepColor;
-    switch (step.status) {
+    final Color levelColor;
+    switch (level.status) {
       case 'completed':
-        stepColor = Colors.green;
+        levelColor = Colors.green;
         break;
       case 'active':
-        stepColor = Colors.orange;
+        levelColor = Colors.orange;
         break;
       default:
-        stepColor = Colors.grey.shade300;
+        levelColor = Colors.grey.shade300;
     }
     colChildren.addAll(<Widget>[
       FatDivider(
-        color: stepColor,
+        color: levelColor,
       ),
       // The following monstrosity is the title.
       Padding(
@@ -64,13 +64,13 @@ class StepToDo extends StatelessWidget {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            splashColor: stepColor,
+            splashColor: levelColor,
             borderRadius: BorderRadius.circular(7),
             onTap: () {
               final Color statusColor;
-              if (step.status == 'active') {
+              if (level.status == 'active') {
                 statusColor = Colors.orange.shade800;
-              } else if (step.status == 'locked') {
+              } else if (level.status == 'locked') {
                 statusColor = Colors.grey.shade800;
               } else {
                 statusColor = Colors.green.shade800;
@@ -80,7 +80,7 @@ class StepToDo extends StatelessWidget {
                 context: context,
                 backgroundColor: Colors.transparent,
                 builder: (BuildContext context) => TextSheet(
-                  title: 'Step ${step.number}',
+                  title: 'Level ${level.number}',
                   text: TextSpan(
                     children: <TextSpan>[
                       TextSpan(
@@ -88,7 +88,7 @@ class StepToDo extends StatelessWidget {
                         style: Theme.of(context).textTheme.bodyText2,
                       ),
                       TextSpan(
-                        text: '${step.status}\n\n',
+                        text: '${level.status}\n\n',
                         style: Theme.of(context).textTheme.bodyText1!.copyWith(
                               color: statusColor,
                             ),
@@ -97,7 +97,7 @@ class StepToDo extends StatelessWidget {
                           text: 'To-do: ',
                           style: Theme.of(context).textTheme.bodyText1),
                       TextSpan(
-                        text: step.text,
+                        text: level.text,
                         style: Theme.of(context).textTheme.bodyText2,
                       ),
                     ],
@@ -110,14 +110,14 @@ class StepToDo extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Heading('Step ${step.number}'),
+                  Heading('Level ${level.number}'),
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 9,
                       vertical: 5,
                     ),
                     decoration: BoxDecoration(
-                      color: stepColor,
+                      color: levelColor,
                       borderRadius: const BorderRadius.all(
                         Radius.circular(7),
                       ),
@@ -138,14 +138,14 @@ class StepToDo extends StatelessWidget {
       ),
     ]);
 
-    for (int i = 0; i < step.trainingPeriods.length; i++) {
-      final TrainingPeriod trainingPeriod = step.trainingPeriods[i];
+    for (int i = 0; i < level.trainingPeriods.length; i++) {
+      final TrainingPeriod trainingPeriod = level.trainingPeriods[i];
 
-      if (step.trainingPeriods.length > 1) {
+      if (level.trainingPeriods.length > 1) {
         // Add a divider
         if (i > 0) {
           colChildren.add(
-            ThinDivider(color: stepColor),
+            ThinDivider(color: levelColor),
           );
         }
 
@@ -154,7 +154,7 @@ class StepToDo extends StatelessWidget {
             padding: StyleData.screenPadding,
             child: Text(
               '${trainingPeriod.durationText.capitalize()} ${i + 1} '
-              'of ${step.trainingPeriods.length}',
+              'of ${level.trainingPeriods.length}',
               style: const TextStyle(
                 fontSize: 20,
                 color: Colors.black,
@@ -167,7 +167,7 @@ class StepToDo extends StatelessWidget {
       colChildren.add(
         PeriodListView(
           trainingPeriod: trainingPeriod,
-          stepDescription: step.text,
+          levelDescription: level.text,
           updateFunction: updateFunction,
           globalKey: globalKey,
         ),

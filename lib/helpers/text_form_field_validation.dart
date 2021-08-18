@@ -1,5 +1,5 @@
 /* 
- * Githo – An app that helps you form long-lasting habits, one step at a time.
+ * Githo – An app that helps you gradually form long-lasting habits.
  * Copyright (C) 2021 Florian Thaler
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -89,9 +89,9 @@ String? validateHabitPlanImport(final String input) {
     final Map<String, dynamic> map = jsonDecode(input) as Map<String, dynamic>;
 
     // Make sure all required values exist within the map.
-    if (!map.containsKey('goal') ||
+    if (!map.containsKey('habit') ||
         !map.containsKey('requiredReps') ||
-        !map.containsKey('steps') ||
+        !map.containsKey('levels') ||
         !map.containsKey('comments') ||
         !map.containsKey('trainingTimeIndex') ||
         !map.containsKey('requiredTrainings') ||
@@ -105,17 +105,17 @@ String? validateHabitPlanImport(final String input) {
       }
     }
 
-    final List<String> steps = _jsonToStringList(map['steps'] as String);
+    final List<String> levels = _jsonToStringList(map['levels'] as String);
     final List<String> comments = _jsonToStringList(map['comments'] as String);
 
-    // Check the number of steps & comments.
-    if (steps.isEmpty) {
-      return 'The list of steps is empty.';
-    } else if (steps.length > DataShortcut.maxStepCount) {
-      return 'Too many steps. (> ${DataShortcut.maxStepCount})';
+    // Check the number of levels & comments.
+    if (levels.isEmpty) {
+      return 'The list of levels is empty.';
+    } else if (levels.length > DataShortcut.maxLevelCount) {
+      return 'Too many levels. (> ${DataShortcut.maxLevelCount})';
     }
-    if (comments.length > DataShortcut.maxStepCount) {
-      return 'Too many comments. (> ${DataShortcut.maxStepCount})';
+    if (comments.length > DataShortcut.maxLevelCount) {
+      return 'Too many comments. (> ${DataShortcut.maxLevelCount})';
     }
 
     // Make sure all other values are within their acceptable ranges.

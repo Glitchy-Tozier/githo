@@ -1,5 +1,5 @@
 /* 
- * Githo – An app that helps you form long-lasting habits, one step at a time.
+ * Githo – An app that helps you gradually form long-lasting habits.
  * Copyright (C) 2021 Florian Thaler
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -59,7 +59,7 @@ class _EditHabitState extends State<EditHabit> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController habitController = TextEditingController();
   final TextEditingController repsController = TextEditingController();
-  late List<String> steps;
+  late List<String> levels;
   late List<String> comments;
 
   @override
@@ -67,7 +67,7 @@ class _EditHabitState extends State<EditHabit> {
     super.initState();
     habitController.text = widget.habitPlan.habit;
     repsController.text = widget.habitPlan.requiredReps.toString();
-    steps = widget.habitPlan.steps;
+    levels = widget.habitPlan.levels;
     comments = widget.habitPlan.comments;
   }
 
@@ -78,8 +78,8 @@ class _EditHabitState extends State<EditHabit> {
 
   // ignore: use_setters_to_change_properties
   /// Used for receiving the onSaved-values from formList.dart
-  void _getStepValues(final List<String> valueList) {
-    widget.habitPlan.steps = valueList;
+  void _getLevelValues(final List<String> valueList) {
+    widget.habitPlan.levels = valueList;
   }
 
   // ignore: use_setters_to_change_properties
@@ -102,9 +102,9 @@ class _EditHabitState extends State<EditHabit> {
   void _updateTextFormFields(final String json) {
     final Map<String, dynamic> map = jsonDecode(json) as Map<String, dynamic>;
 
-    habitController.text = map['goal'] as String;
+    habitController.text = map['habit'] as String;
     repsController.text = (map['requiredReps'] as int).toString();
-    steps = _jsonToStringList(map['steps'] as String);
+    levels = _jsonToStringList(map['levels'] as String);
     comments = _jsonToStringList(map['comments'] as String);
     widget.habitPlan.trainingTimeIndex = map['trainingTimeIndex'] as int;
     widget.habitPlan.requiredTrainings = map['requiredTrainings'] as int;
@@ -226,18 +226,18 @@ class _EditHabitState extends State<EditHabit> {
                     ),
                     const ThinDivider(),
 
-                    // Create the step-form-fields
+                    // Create the level-form-fields
                     const Padding(
                       padding: StyleData.screenPadding,
-                      child: Heading('Steps towards the habit'),
+                      child: Heading('Levels of the habit'),
                     ),
                     Padding(
                       padding: StyleData.screenPadding,
                       child: FormList(
-                        fieldName: 'step',
+                        fieldName: 'levels',
                         canBeEmpty: false,
-                        valuesGetter: _getStepValues,
-                        initValues: steps,
+                        valuesGetter: _getLevelValues,
+                        initValues: levels,
                       ),
                     ),
                     const ThinDivider(),
@@ -378,7 +378,7 @@ class _EditHabitState extends State<EditHabit> {
                               TextSpan(
                                 text: ' successful '
                                     '$periodTimeFrame$thirdSliderText '
-                                    'required to advance to the next step.',
+                                    'required to level up.',
                                 style: Theme.of(context).textTheme.headline4,
                               ),
                             ],
