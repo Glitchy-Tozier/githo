@@ -6,7 +6,7 @@ Acquiring habits that stick can be difficult. Githo helps you by letting you gra
 
 Define levels of your final habit, going from easy to hard. Then start with the first one. Level up by consistently succeeding. If a level is too difficult (= if success isn't consistent), repeat the previous one.
 
-Such a gradual acquisition **reduces the physical/mental strain** and **helps you create a routine long before arriving at the final habit**.
+Such a gradual acquisition **reduces the physical/mental strain** and helps you **create a routine long before arriving at the final habit**.
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
      alt="Get it on F-Droid"
