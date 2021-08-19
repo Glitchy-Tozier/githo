@@ -47,6 +47,8 @@ class ImportHabit extends StatelessWidget {
           const SizedBox(height: 20),
           TextFormField(
             key: formKey,
+            autocorrect: false,
+            onFieldSubmitted: (_) => formKey.currentState!.validate(),
             validator: (final String? input) {
               final String? complaint;
               complaint = complainIfEmpty(

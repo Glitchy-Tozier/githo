@@ -176,6 +176,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
                   TextFormField(
                     initialValue: startingLevelNr.toString(),
                     key: formKey,
+                    onFieldSubmitted: (_) => formKey.currentState!.validate(),
                     textAlign: TextAlign.end,
                     keyboardType: TextInputType.number,
                     inputFormatters: <TextInputFormatter>[
