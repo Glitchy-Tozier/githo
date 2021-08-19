@@ -174,7 +174,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
                 if (widget.habitPlan.levels.length > 1) ...<Widget>[
                   const SizedBox(height: 10),
                   TextFormField(
-                    initialValue: '1',
+                    initialValue: startingLevelNr.toString(),
                     key: formKey,
                     textAlign: TextAlign.end,
                     keyboardType: TextInputType.number,
@@ -236,9 +236,18 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
               ),
               onPressed: () {
-                if (formKey.currentState!.validate()) {
-                  formKey.currentState!.save();
+                final bool canStartHabitPlan;
 
+                if (widget.habitPlan.levels.length == 1) {
+                  canStartHabitPlan = true;
+                } else if (formKey.currentState!.validate()) {
+                  formKey.currentState!.save();
+                  canStartHabitPlan = true;
+                } else {
+                  canStartHabitPlan = false;
+                }
+
+                if (canStartHabitPlan) {
                   Navigator.pop(context); // Pop dialog
 
                   _startHabitPlan(

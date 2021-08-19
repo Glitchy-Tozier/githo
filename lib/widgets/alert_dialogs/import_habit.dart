@@ -21,15 +21,14 @@ import 'package:githo/helpers/text_form_field_validation.dart';
 
 class ImportHabit extends StatelessWidget {
   /// Returns a dialog that lets you import a habit-plan.
-  const ImportHabit({required this.onImport});
+  ImportHabit({required this.onImport});
 
   final Function onImport;
+  final GlobalKey<FormFieldState<String?>> formKey =
+      GlobalKey<FormFieldState<String?>>();
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<FormFieldState<String?>> formKey =
-        GlobalKey<FormFieldState<String?>>();
-
     return AlertDialog(
       title: const Text(
         'Import habit-plan',
