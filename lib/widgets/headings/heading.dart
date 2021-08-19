@@ -26,12 +26,6 @@ class Heading extends StatelessWidget {
 
   final String _text;
 
-  static const TextStyle style = TextStyle(
-    fontSize: 26,
-    fontWeight: FontWeight.bold,
-    color: Colors.black,
-  );
-
   @override
   Widget build(BuildContext context) {
     return Padding(

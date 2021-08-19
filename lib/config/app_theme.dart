@@ -55,6 +55,7 @@ class AppTheme {
         color: Colors.black,
       ),
     ),
+    dividerColor: Colors.black54,
     inputDecorationTheme: InputDecorationTheme(
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
