@@ -53,6 +53,6 @@ class DataShortcut {
   static const int maxLevelCharacters = 140;
   static const int maxLevelCount = 20;
 
-  /// Toggles the Debug-banner and activates testing-functionality.
-  static const bool testing = false;
+  /// Toggles the debug-banner and activates testing-functionality.
+  static const bool testing = true;
 }

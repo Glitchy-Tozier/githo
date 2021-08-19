@@ -133,22 +133,22 @@ class ActivationFAB extends StatelessWidget {
     }
 
     final Icon child;
+    final Color color;
+
     if (habitPlan.isActive == true) {
-      child = const Icon(
-        Icons.star_outline,
-      );
-    } else {
+      color = Colors.green;
       child = const Icon(
         Icons.star,
       );
+    } else {
+      color = Theme.of(context).primaryColor;
+      child = const Icon(
+        Icons.star_outline,
+      );
     }
 
-    final Color color;
     if (habitPlan.isActive == true) {
-      color = Colors.black;
-    } else {
-      color = Colors.green;
-    }
+    } else {}
 
     return FloatingActionButton(
       tooltip: tooltip,
