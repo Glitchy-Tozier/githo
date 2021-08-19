@@ -59,6 +59,7 @@ class SingleHabitDisplay extends StatefulWidget {
 
 class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
   late HabitPlan habitPlan;
+  final ValueNotifier<bool> isDialOpen = ValueNotifier<bool>(false);
 
   @override
   void initState() {
@@ -273,84 +274,96 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            SpeedDial(
-              backgroundColor: Colors.orange,
-              icon: Icons.settings,
-              activeIcon: Icons.close,
-              spacing: 4,
-              spaceBetweenChildren: 4,
+            WillPopScope(
+              onWillPop: () async {
+                if (isDialOpen.value) {
+                  isDialOpen.value = false;
+                  return false;
+                } else {
+                  return true;
+                }
+              },
+              child: SpeedDial(
+                backgroundColor: Colors.orange,
+                icon: Icons.settings,
+                activeIcon: Icons.close,
+                spacing: 4,
+                spaceBetweenChildren: 4,
 
-              /// If false, backgroundOverlay will not be rendered.
-              //renderOverlay: true,
-              overlayColor: Colors.black,
-              overlayOpacity: 0.5,
+                // Necessary to make the dial close when pressing the
+                // back-button. Prevents a crash.
+                openCloseDial: isDialOpen,
 
-              tooltip: 'Show options',
-              //isOpenOnStart: false,
-              animationSpeed: 200,
-              switchLabelPosition: true,
-              // childMargin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              children: <SpeedDialChild>[
-                SpeedDialChild(
-                  label: 'Delete',
-                  backgroundColor: Colors.red.shade900,
-                  labelStyle: Theme.of(context).textTheme.bodyText2,
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext buildContext) => ConfirmDeletion(
-                        habitPlan: habitPlan,
-                        onConfirmation: widget.updateFunction,
-                      ),
-                    );
-                  },
-                  child: const Icon(
-                    Icons.delete,
-                    color: Colors.white,
-                  ),
-                ),
-                SpeedDialChild(
-                  label: 'Share',
-                  backgroundColor: Colors.lightBlue,
-                  labelStyle: Theme.of(context).textTheme.bodyText2,
-                  onTap: () => Share.share(
-                    habitPlan.toShareJson(),
-                  ),
-                  child: const Icon(
-                    Icons.share,
-                    color: Colors.white,
-                  ),
-                ),
-                SpeedDialChild(
-                  label: 'Edit',
-                  backgroundColor: Colors.orangeAccent.shade700,
-                  labelStyle: Theme.of(context).textTheme.bodyText2,
-                  onTap: () {
-                    if (habitPlan.isActive) {
+                overlayColor: Colors.black,
+                overlayOpacity: 0.5,
+
+                tooltip: 'Show options',
+
+                animationSpeed: 200,
+                switchLabelPosition: true,
+
+                children: <SpeedDialChild>[
+                  SpeedDialChild(
+                    label: 'Delete',
+                    backgroundColor: Colors.red.shade900,
+                    labelStyle: Theme.of(context).textTheme.bodyText2,
+                    onTap: () {
                       showDialog(
                         context: context,
-                        builder: (BuildContext buildContext) => ConfirmEdit(
-                          onConfirmation: () => editHabit(
-                            context,
-                            _updateLoadedScreens,
-                            habitPlan,
-                          ),
+                        builder: (BuildContext buildContext) => ConfirmDeletion(
+                          habitPlan: habitPlan,
+                          onConfirmation: widget.updateFunction,
                         ),
                       );
-                    } else {
-                      editHabit(
-                        context,
-                        _updateLoadedScreens,
-                        habitPlan,
-                      );
-                    }
-                  },
-                  child: const Icon(
-                    Icons.edit,
-                    color: Colors.white,
+                    },
+                    child: const Icon(
+                      Icons.delete,
+                      color: Colors.white,
+                    ),
                   ),
-                ),
-              ],
+                  SpeedDialChild(
+                    label: 'Share',
+                    backgroundColor: Colors.lightBlue,
+                    labelStyle: Theme.of(context).textTheme.bodyText2,
+                    onTap: () => Share.share(
+                      habitPlan.toShareJson(),
+                    ),
+                    child: const Icon(
+                      Icons.share,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SpeedDialChild(
+                    label: 'Edit',
+                    backgroundColor: Colors.orangeAccent.shade700,
+                    labelStyle: Theme.of(context).textTheme.bodyText2,
+                    onTap: () {
+                      if (habitPlan.isActive) {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext buildContext) => ConfirmEdit(
+                            onConfirmation: () => editHabit(
+                              context,
+                              _updateLoadedScreens,
+                              habitPlan,
+                            ),
+                          ),
+                        );
+                      } else {
+                        editHabit(
+                          context,
+                          _updateLoadedScreens,
+                          habitPlan,
+                        );
+                      }
+                    },
+                    child: const Icon(
+                      Icons.edit,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
             ),
             ActivationFAB(
               habitPlan: habitPlan,

@@ -53,7 +53,8 @@ class _HomeScreenState extends State<HomeScreen> {
   late Future<ProgressData> _progressData;
   bool initialLoad = true;
 
-  final GlobalKey globalKey = GlobalKey();
+  final ValueNotifier<bool> isDialOpen = ValueNotifier<bool>(false);
+  final GlobalKey activeCardKey = GlobalKey();
 
   @override
   void initState() {
@@ -79,9 +80,9 @@ class _HomeScreenState extends State<HomeScreen> {
     Future<void>.delayed(
       Duration(seconds: delay),
       () {
-        if (globalKey.currentContext != null) {
+        if (activeCardKey.currentContext != null) {
           Scrollable.ensureVisible(
-            globalKey.currentContext!,
+            activeCardKey.currentContext!,
             duration: const Duration(seconds: 1),
             alignment: 0.5,
           );
@@ -159,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               (final int i) {
                             final Level level = progressData.levels[i];
                             return LevelToDo(
-                              globalKey,
+                              activeCardKey,
                               level,
                               _updateDbAndScreen,
                             );
@@ -205,61 +206,74 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            SpeedDial(
-              backgroundColor: Colors.orange,
-              icon: Icons.settings,
-              activeIcon: Icons.close,
-              spacing: 4,
-              spaceBetweenChildren: 4,
+            WillPopScope(
+              onWillPop: () async {
+                if (isDialOpen.value) {
+                  isDialOpen.value = false;
+                  return false;
+                } else {
+                  return true;
+                }
+              },
+              child: SpeedDial(
+                backgroundColor: Colors.orange,
+                icon: Icons.settings,
+                activeIcon: Icons.close,
+                spacing: 4,
+                spaceBetweenChildren: 4,
 
-              /// If false, backgroundOverlay will not be rendered.
-              //renderOverlay: true,
-              overlayColor: Colors.black,
-              overlayOpacity: 0.5,
+                // Necessary to make the dial close when pressing
+                // the back-button.
+                openCloseDial: isDialOpen,
 
-              tooltip: 'Show options',
-              //isOpenOnStart: false,
-              animationSpeed: 200,
-              switchLabelPosition: true,
-              // childMargin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              children: <SpeedDialChild>[
-                SpeedDialChild(
-                  backgroundColor: Colors.grey.shade800,
-                  label: 'About',
-                  labelStyle: Theme.of(context).textTheme.bodyText2,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute<About>(
-                        builder: (BuildContext context) => About(),
-                      ),
-                    );
-                  },
-                  child: const Icon(
-                    Icons.info,
-                    color: Colors.white,
-                  ),
-                ),
-                SpeedDialChild(
-                  backgroundColor: Theme.of(context).primaryColor,
-                  label: 'List of habits',
-                  labelStyle: Theme.of(context).textTheme.bodyText2,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute<HabitList>(
-                        builder: (BuildContext context) => HabitList(
-                          updateFunction: _reloadScreen,
+                overlayColor: Colors.black,
+                overlayOpacity: 0.5,
+
+                tooltip: 'Show options',
+                //isOpenOnStart: false,
+                animationSpeed: 200,
+                switchLabelPosition: true,
+                // childMargin:
+                // EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                children: <SpeedDialChild>[
+                  SpeedDialChild(
+                    backgroundColor: Colors.grey.shade800,
+                    label: 'About',
+                    labelStyle: Theme.of(context).textTheme.bodyText2,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<About>(
+                          builder: (BuildContext context) => About(),
                         ),
-                      ),
-                    );
-                  },
-                  child: const Icon(
-                    Icons.list,
-                    color: Colors.white,
+                      );
+                    },
+                    child: const Icon(
+                      Icons.info,
+                      color: Colors.white,
+                    ),
                   ),
-                ),
-              ],
+                  SpeedDialChild(
+                    backgroundColor: Theme.of(context).primaryColor,
+                    label: 'List of habits',
+                    labelStyle: Theme.of(context).textTheme.bodyText2,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<HabitList>(
+                          builder: (BuildContext context) => HabitList(
+                            updateFunction: _reloadScreen,
+                          ),
+                        ),
+                      );
+                    },
+                    child: const Icon(
+                      Icons.list,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
             ),
             FutureBuilder<ProgressData>(
               future: _progressData,
