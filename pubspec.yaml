@@ -73,8 +73,8 @@ flutter:
   #   - images/a_dot_ham.jpeg
     - assets/launcher/icon.png
     - assets/pixabayColorGradient.jpg
-    - assets/introduction_screen_images/defineSteps.jpeg
-    - assets/introduction_screen_images/training.png
+    - assets/introduction_screen_images/defineLevels.jpeg
+    - assets/introduction_screen_images/training.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

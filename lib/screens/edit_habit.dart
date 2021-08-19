@@ -234,7 +234,7 @@ class _EditHabitState extends State<EditHabit> {
                     Padding(
                       padding: StyleData.screenPadding,
                       child: FormList(
-                        fieldName: 'levels',
+                        fieldName: 'level',
                         canBeEmpty: false,
                         valuesGetter: _getLevelValues,
                         initValues: levels,

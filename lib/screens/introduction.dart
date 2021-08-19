@@ -44,10 +44,7 @@ class OnBoardingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final PageDecoration pageDecoration = PageDecoration(
-      titleTextStyle: const TextStyle(
-        fontSize: 28.0,
-        fontWeight: FontWeight.w700,
-      ),
+      titleTextStyle: Theme.of(context).textTheme.headline2!,
       bodyTextStyle: Theme.of(context).textTheme.bodyText2!,
       titlePadding: const EdgeInsets.symmetric(
         vertical: 20,
@@ -69,24 +66,75 @@ class OnBoardingScreen extends StatelessWidget {
           globalBackgroundColor: Colors.transparent,
           pages: <PageViewModel>[
             PageViewModel(
-              title: 'Githo – Get Into The Habit Of…',
-              body: 'Gradually aquire an new habit',
+              title: 'Githo',
+              bodyWidget: Column(
+                children: <Widget>[
+                  RichText(
+                    text: TextSpan(
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: 'G',
+                          style: Theme.of(context).textTheme.headline3,
+                        ),
+                        TextSpan(
+                          text: 'et ',
+                          style: Theme.of(context).textTheme.headline4,
+                        ),
+                        TextSpan(
+                          text: 'I',
+                          style: Theme.of(context).textTheme.headline3,
+                        ),
+                        TextSpan(
+                          text: 'nto ',
+                          style: Theme.of(context).textTheme.headline4,
+                        ),
+                        TextSpan(
+                          text: 'T',
+                          style: Theme.of(context).textTheme.headline3,
+                        ),
+                        TextSpan(
+                          text: 'he ',
+                          style: Theme.of(context).textTheme.headline4,
+                        ),
+                        TextSpan(
+                          text: 'H',
+                          style: Theme.of(context).textTheme.headline3,
+                        ),
+                        TextSpan(
+                          text: 'abit ',
+                          style: Theme.of(context).textTheme.headline4,
+                        ),
+                        TextSpan(
+                          text: 'O',
+                          style: Theme.of(context).textTheme.headline3,
+                        ),
+                        TextSpan(
+                          text: 'f…',
+                          style: Theme.of(context).textTheme.headline4,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              // Get Into The Habit Of…
+              //body: 'Gradually aquire an new habit',
               image: const BorderedImage('assets/launcher/icon.png', width: 90),
               decoration: pageDecoration,
             ),
             PageViewModel(
-              title: 'Define the levels of your habit',
-              body: 'Move closer towards your final habit',
+              title: 'Define levels of difficulty',
+              body: 'Move closer towards your final habit.',
               image: const BorderedImage(
-                  'assets/introduction_screen_images/defineSteps.jpeg'),
+                  'assets/introduction_screen_images/defineLevels.jpeg'),
               decoration: pageDecoration,
             ),
             PageViewModel(
               title: 'Build strong habits',
               body: 'Consistently succeed in trainings to level up.\n\n'
-                  'If a level is too difficult, repeat the one before it.',
+                  'If a level is too difficult, repeat the previous one.',
               image: const BorderedImage(
-                  'assets/introduction_screen_images/training.png'),
+                  'assets/introduction_screen_images/training.jpeg'),
               decoration: pageDecoration,
             ),
           ],

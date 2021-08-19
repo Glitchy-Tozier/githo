@@ -1,6 +1,6 @@
 # Githo
 
-***G**et **I**nto **T**he **H**abit **O**f… An app in which you level up towards your final habit.*
+_**G**et **I**nto **T**he **H**abit **O**f… An app in which you level up towards your final habit._
 
 Acquiring habits that stick can be difficult. Githo helps you by letting you gradually advance, instead of going from 0 to 100%. This principle borrows ideas from exposure therapy.
 
