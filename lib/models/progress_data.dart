@@ -54,23 +54,32 @@ class ProgressData {
         fullyCompleted = (map['fullyCompleted'] as int).toBool(),
         currentStartingDate =
             DateTime.parse(map['currentStartingDate'] as String),
-        habit = map['habit'] as String,
-        levels = _jsonToLevelList(map['levels'] as String);
+        habit = map['habit'] as String {
+    levels = _jsonToLevelList(map['levels'] as String, save);
+  }
 
   int habitPlanId;
   bool isActive;
   bool fullyCompleted;
   DateTime currentStartingDate;
   String habit;
-  List<Level> levels;
+  late List<Level> levels;
+
+  /// Saves the current progressData in the [Database].
+  Future<void> save() async {
+    await DatabaseHelper.instance.updateProgressData(this);
+  }
 
   /// Converts a [json]-like [String] into a list of [Level].
-  static List<Level> _jsonToLevelList(final String json) {
+  static List<Level> _jsonToLevelList(
+    final String json,
+    final Function save,
+  ) {
     final dynamic dynamicList = jsonDecode(json);
     final List<Level> levels = <Level>[];
 
     for (final Map<String, dynamic> map in dynamicList) {
-      final Level level = Level.fromMap(map);
+      final Level level = Level.fromMap(map, save);
       levels.add(level);
     }
 
@@ -94,6 +103,7 @@ class ProgressData {
         Level.fromHabitPlan(
           levelIndex: i,
           habitPlan: habitPlan,
+          save: save,
         ),
       );
     }
@@ -331,7 +341,7 @@ class ProgressData {
 
     if (habitPlan != null) {
       habitPlan.fullyCompleted = true;
-      DatabaseHelper.instance.updateHabitPlan(habitPlan);
+      habitPlan.save();
     }
   }
 
@@ -417,7 +427,7 @@ class ProgressData {
       _activateCurrentTraining();
 
       // Save all changes
-      DatabaseHelper.instance.updateProgressData(this);
+      save();
     } else {
       somethingChanged = false;
     }

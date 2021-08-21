@@ -64,11 +64,13 @@ void editHabit(
     // that nothing gets messed up by changing its values.
     if (habitPlan.isActive) {
       // Reset progressData because it should not be active.
-      DatabaseHelper.instance.updateProgressData(ProgressData.emptyData());
+      final ProgressData newProgressdata = ProgressData.emptyData();
+      newProgressdata.save();
+
       habitPlan.isActive = false;
     }
 
-    DatabaseHelper.instance.updateHabitPlan(habitPlan);
+    habitPlan.save();
     updatePrevScreens(habitPlan);
   }
 

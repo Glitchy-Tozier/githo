@@ -41,11 +41,11 @@ class ActivationFAB extends StatelessWidget {
       Future<void> deactivateHabitPlan() async {
         // Update habitPlan
         habitPlan.isActive = false;
-        await DatabaseHelper.instance.updateHabitPlan(habitPlan);
+        await habitPlan.save();
 
         // Clear progressData
-        final ProgressData progressData = ProgressData.emptyData();
-        await DatabaseHelper.instance.updateProgressData(progressData);
+        final ProgressData inactiveProgressData = ProgressData.emptyData();
+        await inactiveProgressData.save();
 
         // Update previous screens
         updateFunction(habitPlan);

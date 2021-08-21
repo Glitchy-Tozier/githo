@@ -39,30 +39,32 @@ class TrainingPeriod {
     required this.requiredTrainings,
     required this.status,
     required this.trainings,
+    required this.save,
   });
 
   /// Creates a [TrainingPeriod] from a [HabitPlan].
   TrainingPeriod.fromHabitPlan({
     required final int trainingPeriodIndex,
     required final HabitPlan habitPlan,
+    required this.save,
   })  : index = trainingPeriodIndex,
         number = trainingPeriodIndex + 1,
         durationInHours =
             DataShortcut.periodDurationInHours[habitPlan.trainingTimeIndex],
-        durationText = DataShortcut.timeFrames[habitPlan.trainingTimeIndex],
+        durationText = DataShortcut.timeFrames[habitPlan.trainingTimeIndex + 1],
         requiredTrainings = habitPlan.requiredTrainings,
         // Create all the TrainingPeriod-instances
-        trainings = _getTrainings(trainingPeriodIndex, habitPlan);
+        trainings = _getTrainings(trainingPeriodIndex, habitPlan, save);
 
   /// Converts a Map into a [TrainingPeriod].
-  TrainingPeriod.fromMap(final Map<String, dynamic> map)
+  TrainingPeriod.fromMap(final Map<String, dynamic> map, this.save)
       : index = map['index'] as int,
         number = map['number'] as int,
         durationInHours = map['durationInHours'] as int,
         durationText = map['durationText'] as String,
         requiredTrainings = map['requiredTrainings'] as int,
         status = map['status'] as String,
-        trainings = _jsonToTrainingList(map['trainings'] as String);
+        trainings = _jsonToTrainingList(map['trainings'] as String, save);
 
   final int index;
   final int number;
@@ -74,12 +76,14 @@ class TrainingPeriod {
   final int requiredTrainings;
   String status = '';
   final List<Training> trainings;
+  final Function save;
 
   /// Generates and returns the [List] of [Training]s that
   /// form this [TrainingPeriod].
   static List<Training> _getTrainings(
     final int trainingPeriodIndex,
     final HabitPlan habitPlan,
+    final Function save,
   ) {
     final List<Training> trainings = <Training>[];
     final int trainingTimeIndex = habitPlan.trainingTimeIndex;
@@ -91,6 +95,7 @@ class TrainingPeriod {
         Training.fromHabitPlan(
           trainingIndex: trainingIndex,
           habitPlan: habitPlan,
+          save: save,
         ),
       );
     }
@@ -98,12 +103,15 @@ class TrainingPeriod {
   }
 
   /// Converts a [json]-like [String] into a list of [Training]s.
-  static List<Training> _jsonToTrainingList(final String json) {
+  static List<Training> _jsonToTrainingList(
+    final String json,
+    final Function save,
+  ) {
     final dynamic dynamicList = jsonDecode(json);
     final List<Training> trainings = <Training>[];
 
     for (final Map<String, dynamic> map in dynamicList) {
-      final Training training = Training.fromMap(map);
+      final Training training = Training.fromMap(map, save);
       trainings.add(training);
     }
     return trainings;

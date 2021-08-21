@@ -32,11 +32,10 @@ import 'package:githo/models/used_classes/training_period.dart';
 class LevelToDo extends StatelessWidget {
   /// Create the to-do-section for a whole [Level].
   /// Used in the [HomeScreen].
-  const LevelToDo(this.globalKey, this.level, this.updateFunction);
+  const LevelToDo(this.activeCardKey, this.level);
 
   final Level level;
-  final Function updateFunction;
-  final GlobalKey globalKey;
+  final GlobalKey activeCardKey;
 
   @override
   Widget build(BuildContext context) {
@@ -168,8 +167,7 @@ class LevelToDo extends StatelessWidget {
         PeriodListView(
           trainingPeriod: trainingPeriod,
           levelDescription: level.text,
-          updateFunction: updateFunction,
-          globalKey: globalKey,
+          activeCardKey: activeCardKey,
         ),
       );
     }

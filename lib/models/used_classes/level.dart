@@ -32,32 +32,36 @@ class Level {
     required this.text,
     required this.durationInHours,
     required this.trainingPeriods,
+    required this.save,
   });
 
   /// Creates a [Level] from a [HabitPlan].
   Level.fromHabitPlan({
     required final int levelIndex,
     required final HabitPlan habitPlan,
+    required this.save,
   })  : index = levelIndex,
         number = levelIndex + 1,
         text = habitPlan.levels[levelIndex],
         durationInHours = _getDurationHours(habitPlan),
         // Create all the TrainingPeriod-instances
-        trainingPeriods = _getTrainingPeriods(levelIndex, habitPlan);
+        trainingPeriods = _getTrainingPeriods(levelIndex, habitPlan, save);
 
   /// Converts a Map into a [Level].
-  Level.fromMap(final Map<String, dynamic> map)
+  Level.fromMap(final Map<String, dynamic> map, this.save)
       : index = map['index'] as int,
         number = map['number'] as int,
         text = map['text'] as String,
         durationInHours = map['durationInHours'] as int,
-        trainingPeriods = _jsonToPeriodList(map['trainingPeriods'] as String);
+        trainingPeriods =
+            _jsonToPeriodList(map['trainingPeriods'] as String, save);
 
   final int index;
   final int number; // = index + 1
   final String text;
   final int durationInHours;
   final List<TrainingPeriod> trainingPeriods;
+  final Function save;
 
   /// Calculates the level's duration and returns the number of hours.
   static int _getDurationHours(final HabitPlan habitPlan) {
@@ -73,6 +77,7 @@ class Level {
   static List<TrainingPeriod> _getTrainingPeriods(
     final int levelIndex,
     final HabitPlan habitPlan,
+    final Function save,
   ) {
     final List<TrainingPeriod> trainingPeriods = <TrainingPeriod>[];
     final int trainingPeriodCount = habitPlan.requiredTrainingPeriods;
@@ -83,6 +88,7 @@ class Level {
         TrainingPeriod.fromHabitPlan(
           trainingPeriodIndex: trainingPeriodIndex,
           habitPlan: habitPlan,
+          save: save,
         ),
       );
     }
@@ -90,12 +96,15 @@ class Level {
   }
 
   /// Converts a [json]-like [String] into a list of [TrainingPeriod]s.
-  static List<TrainingPeriod> _jsonToPeriodList(final String json) {
+  static List<TrainingPeriod> _jsonToPeriodList(
+    final String json,
+    final Function save,
+  ) {
     final dynamic dynamicList = jsonDecode(json);
     final List<TrainingPeriod> trainingPeriods = <TrainingPeriod>[];
 
     for (final Map<String, dynamic> map in dynamicList) {
-      final TrainingPeriod trainingPeriod = TrainingPeriod.fromMap(map);
+      final TrainingPeriod trainingPeriod = TrainingPeriod.fromMap(map, save);
       trainingPeriods.add(trainingPeriod);
     }
     return trainingPeriods;

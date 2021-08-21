@@ -31,9 +31,8 @@ class CountdownCard extends StatefulWidget {
     required this.cardHeight,
     required this.startingDate,
     required this.textSize,
-    required this.updatePrevScreens,
     required this.color,
-    required this.onTap,
+    this.onTap,
     Key? key,
   }) : super(key: key);
 
@@ -42,7 +41,6 @@ class CountdownCard extends StatefulWidget {
   final double cardHeight;
   final DateTime startingDate;
   final double textSize;
-  final Function updatePrevScreens;
   final Function? onTap;
   final Color color;
 
@@ -61,21 +59,11 @@ class _CountdownCardState extends State<CountdownCard> {
   void initState() {
     super.initState();
 
-    // The timer is used to manage the countdown
+    // The timer is used to manage the countdown.
+    // It refreshes the card every second.
     timer = Timer.periodic(
       const Duration(seconds: 1),
-      (_) {
-        final DateTime now = TimeHelper.instance.currentTime;
-        final Duration remainingTime = widget.startingDate.difference(now);
-
-        if (remainingTime.isNegative) {
-          // Update whole homeScreen when the next training is ready
-          widget.updatePrevScreens();
-        } else {
-          // While waiting, refresh card every second
-          setState(() {});
-        }
-      },
+      (_) => setState(() {}),
     );
   }
 

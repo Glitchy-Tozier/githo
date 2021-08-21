@@ -17,7 +17,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:githo/database/database_helper.dart';
 import 'package:githo/models/habit_plan.dart';
 import 'package:githo/models/progress_data.dart';
 
@@ -79,9 +78,9 @@ class ConfirmDeletion extends StatelessWidget {
               ),
               onPressed: () async {
                 final ProgressData progressData = ProgressData.emptyData();
-                DatabaseHelper.instance.updateProgressData(progressData);
+                progressData.save();
 
-                await DatabaseHelper.instance.deleteHabitPlan(habitPlan.id!);
+                await habitPlan.delete();
 
                 onConfirmation();
 

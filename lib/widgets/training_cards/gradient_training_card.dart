@@ -18,22 +18,22 @@
 
 import 'package:flutter/material.dart';
 
-class GradinentTrainingCard extends StatelessWidget {
+class GradientTrainingCard extends StatelessWidget {
   /// Returns a beautiful training-card that is used
   /// for the current training if it hasn't been started yet.
-  const GradinentTrainingCard({
+  const GradientTrainingCard({
     required this.horizontalMargin,
     required this.cardWidth,
     required this.cardHeight,
     required this.onTap,
-    required this.child,
+    required this.textSize,
     Key? key,
   }) : super(key: key);
 
   final double horizontalMargin;
   final double cardWidth;
   final double cardHeight;
-  final Widget child;
+  final double textSize;
   final Function? onTap;
 
   static const double topMargin = 5;
@@ -81,7 +81,16 @@ class GradinentTrainingCard extends StatelessWidget {
                 splashColor: Colors.black,
                 onTap: (onTap == null) ? null : () => onTap!(),
                 borderRadius: BorderRadius.circular(borderRadius),
-                child: Center(child: child),
+                child: Center(
+                  child: Text(
+                    'Start training',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: textSize * 1.3,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
               ),
             ),
           ),

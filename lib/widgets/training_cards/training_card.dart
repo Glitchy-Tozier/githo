@@ -25,7 +25,6 @@ class TrainingCard extends StatelessWidget {
     required this.cardWidth,
     required this.cardHeight,
     required this.color,
-    required this.onTap,
     required this.child,
     Key? key,
   }) : super(key: key);
@@ -33,9 +32,8 @@ class TrainingCard extends StatelessWidget {
   final double horizontalMargin;
   final double cardWidth;
   final double cardHeight;
-  final Widget child;
-  final Function? onTap;
   final Color color;
+  final Widget child;
 
   static const double topMargin = 5;
   static const double bottomMargin = 15;
@@ -65,7 +63,6 @@ class TrainingCard extends StatelessWidget {
             elevation: 5,
             child: InkWell(
               splashColor: Colors.black,
-              onTap: (onTap == null) ? null : () => onTap!(),
               borderRadius: BorderRadius.circular(borderRadius),
               child: Center(child: child),
             ),

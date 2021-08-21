@@ -91,6 +91,16 @@ class HabitPlan {
   int requiredTrainingPeriods;
   DateTime lastChanged;
 
+  /// Saves this [HabitPlan] in the [Database].
+  Future<void> save() async {
+    await DatabaseHelper.instance.updateHabitPlan(this);
+  }
+
+  /// Saves this [HabitPlan] in the [Database].
+  Future<void> delete() async {
+    await DatabaseHelper.instance.deleteHabitPlan(id!);
+  }
+
   /// Converts a [json]-like [String] into a list of [String]s.
   static List<String> _jsonToStringList(final String json) {
     final dynamic dynamicList = jsonDecode(json);

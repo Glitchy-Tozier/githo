@@ -47,7 +47,8 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
       GlobalKey<FormFieldState<String?>>();
 
   String startingPeriod = 'The first training';
-  late DateTime startingDate;
+  late DateTime firstDate;
+  late DateTime initialDate;
   late String startingDateString;
   final TextEditingController dateController = TextEditingController();
   int startingLevelNr = 1;
@@ -55,18 +56,34 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
   @override
   void initState() {
     super.initState();
-    startingDate = _getDefaultStartingTime();
+    firstDate = _getFirstDate();
+    initialDate = _getInitialDate();
+  }
+
+  /// Returns earliest possible [DateTime] where the first training may start.
+  DateTime _getFirstDate() {
+    final DateTime now = TimeHelper.instance.currentTime;
+    final DateTime firstDate;
+
+    switch (widget.habitPlan.trainingTimeIndex) {
+      case 0:
+        firstDate = now;
+        break;
+      default:
+        firstDate = now.subtract(const Duration(days: 6));
+    }
+    return firstDate;
   }
 
   /// Returns the default [DateTime] for the first trainig to start.
-  DateTime _getDefaultStartingTime() {
+  DateTime _getInitialDate() {
     final DateTime now = TimeHelper.instance.currentTime;
-    final DateTime startingDate;
+    final DateTime initialDate;
 
     switch (widget.habitPlan.trainingTimeIndex) {
       case 0:
         // If it's an hourly habit, start on the next day, 0am.
-        startingDate = DateTime(
+        initialDate = DateTime(
           now.year,
           now.month,
           now.day + 1,
@@ -74,14 +91,13 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
         break;
       default:
         // Else start the next week, monday, 0am.
-        startingDate = DateTime(
+        initialDate = DateTime(
           now.year,
           now.month,
           now.day + 8 - now.weekday,
         );
     }
-
-    return startingDate;
+    return initialDate;
   }
 
   /// Adapts the database so that [habitPlan] is active.
@@ -95,14 +111,14 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
     if (activeHabitPlanList.isNotEmpty) {
       final HabitPlan oldHabitPlan = activeHabitPlanList[0];
       oldHabitPlan.isActive = false;
-      DatabaseHelper.instance.updateHabitPlan(oldHabitPlan);
+      oldHabitPlan.save();
     }
 
     // Update the plan you're looking at to be active.
     final DateTime now = TimeHelper.instance.currentTime;
     widget.habitPlan.isActive = true;
     widget.habitPlan.lastChanged = now;
-    DatabaseHelper.instance.updateHabitPlan(widget.habitPlan);
+    widget.habitPlan.save();
 
     // Adapt [ProgressData] to the [HabitPlan].
     final ProgressData progressData =
@@ -112,12 +128,12 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
       startingDate: startingDate,
       startingLevelNr: startingLevelNr,
     );
-    await DatabaseHelper.instance.updateProgressData(progressData);
+    await progressData.save();
   }
 
   @override
   Widget build(BuildContext context) {
-    startingDateString = formatDate(startingDate);
+    startingDateString = formatDate(initialDate);
     dateController.text = startingDateString;
 
     return AlertDialog(
@@ -157,14 +173,14 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
                     final DateTime now = TimeHelper.instance.currentTime;
                     showDatePicker(
                       context: context,
-                      firstDate: now.subtract(const Duration(days: 6)),
-                      initialDate: startingDate,
+                      firstDate: firstDate,
+                      initialDate: initialDate,
                       lastDate: DateTime(now.year + 2000),
                     ).then(
                       (DateTime? newStartingDate) {
                         if (newStartingDate != null) {
                           setState(() {
-                            startingDate = newStartingDate;
+                            initialDate = newStartingDate;
                           });
                         }
                       },
@@ -252,7 +268,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
                   Navigator.pop(context); // Pop dialog
 
                   _startHabitPlan(
-                    startingDate,
+                    initialDate,
                     startingLevelNr,
                   ).then(
                     (_) => widget.onConfirmation(widget.habitPlan),

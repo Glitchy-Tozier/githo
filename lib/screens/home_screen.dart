@@ -16,6 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
@@ -53,13 +54,20 @@ class _HomeScreenState extends State<HomeScreen> {
   late Future<ProgressData> _progressData;
   bool initialLoad = true;
 
-  final ValueNotifier<bool> isDialOpen = ValueNotifier<bool>(false);
+  Timer? timer;
   final GlobalKey activeCardKey = GlobalKey();
+  final ValueNotifier<bool> isDialOpen = ValueNotifier<bool>(false);
 
   @override
   void initState() {
     super.initState();
     _reloadScreen();
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
   }
 
   void _reloadScreen() {
@@ -69,13 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  /// Reloads the screen and saves [_progressData] in the database.
-  Future<void> _updateDbAndScreen() async {
-    DatabaseHelper.instance.updateProgressData(await _progressData);
-    setState(() {});
-  }
-
-  // Scrolls to the active training, if there is one.
+  /// Scrolls to the active training, if there is one.
   void _scrollToActiveTraining({final int delay = 0}) {
     Future<void>.delayed(
       Duration(seconds: delay),
@@ -91,6 +93,37 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  /// Reloads the screen when the next `setState((){});` needs to occur.
+  void _startReloadTimer(final ProgressData progressData) {
+    final DateTime restartingDate;
+
+    // Get the value for [restartingDate].
+    if (progressData.waitingData != null) {
+      final Training waitingTraining =
+          progressData.waitingData!['training'] as Training;
+      restartingDate = waitingTraining.startingDate;
+    } else {
+      final Training activeTraining =
+          progressData.activeData!['training'] as Training;
+      restartingDate = activeTraining.endingDate;
+    }
+
+    timer = Timer.periodic(
+      const Duration(seconds: 1),
+      (_) {
+        final DateTime now = TimeHelper.instance.currentTime;
+        final Duration remainingTime = restartingDate.difference(now);
+
+        if (remainingTime.isNegative) {
+          setState(() {
+            progressData.updateSelf();
+            _scrollToActiveTraining(delay: 1);
+          });
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,10 +133,11 @@ class _HomeScreenState extends State<HomeScreen> {
           builder:
               (BuildContext context, AsyncSnapshot<ProgressData> snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
+              timer?.cancel();
+
               if (snapshot.hasData) {
                 final ProgressData progressData = snapshot.data!;
                 if (progressData.isActive == false) {
-                  initialLoad = false;
                   // If connection is done but no habitPlan is active:
                   final double screenHeight =
                       MediaQuery.of(context).size.height;
@@ -127,22 +161,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 } else {
                   // If connection is done and there is an active habitPlan:
-                  final bool somethingChanged = progressData.updateSelf();
-                  if (somethingChanged) {
-                    _scrollToActiveTraining();
-
-                    if (initialLoad == true) {
-                      WidgetsBinding.instance?.addPostFrameCallback(
-                        (_) => showModalBottomSheet(
-                          context: context,
-                          backgroundColor: Colors.transparent,
-                          builder: (BuildContext context) =>
-                              WelcomeSheet(progressData: progressData),
-                        ),
-                      );
-                    }
+                  _startReloadTimer(progressData);
+                  if (initialLoad) {
+                    WidgetsBinding.instance?.addPostFrameCallback(
+                      (_) => showModalBottomSheet(
+                        context: context,
+                        backgroundColor: Colors.transparent,
+                        builder: (BuildContext context) =>
+                            WelcomeSheet(progressData: progressData),
+                      ),
+                    );
+                    initialLoad = false;
                   }
-                  initialLoad = false;
 
                   return ListView(
                     physics: const BouncingScrollPhysics(),
@@ -162,7 +192,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             return LevelToDo(
                               activeCardKey,
                               level,
-                              _updateDbAndScreen,
                             );
                           }),
                         ],
@@ -172,8 +201,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 }
               } else if (snapshot.hasError) {
-                initialLoad = false;
-
                 // If connection is done but there was an error:
                 print(snapshot.error);
                 return Padding(
@@ -385,7 +412,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 training: currentTraining,
                                 onConfirmation: () {
                                   currentTraining.activate();
-                                  _updateDbAndScreen();
+                                  setState(() {});
                                 },
                               );
                             },
@@ -402,7 +429,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             );
                           }
                         }
-                        _updateDbAndScreen();
+                        setState(() {});
                       };
                     }
                     return FloatingActionButton(
