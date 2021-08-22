@@ -9,19 +9,9 @@ Esta adquisición tan gradual reduce la carga física/mental y te ayuda a crear 
 Hábito final: <i>Trotar cada mañana</i>
 <strong>Pasos:</strong> <i>Cada mañana...</i>
 <ul>
-  <li>
-    <b>Semana 1:</b> Sólo parate afuera, en la calle. Después volvé a casa.
-  </li>
-  <li>
-    <b>Semana 2:</b> Caminá alrededor de tu casa/edificio.
-  </li>
-  <li>
-    <b>Semana 3:</b> Date un paseo que abarque 3-5 edificios.
-  </li>
-  <li>
-    <b>Semana 4:</b> Date una caminata más grande, y agregá segmentos de trote cortos a la mezcla.
-  </li>
-  <li>
-    <b>Semana 5:</b> Salí a trotar. Bien hecho.
-  </li>
+  <li><b>Semana 1:</b> Sólo parate afuera, en la calle. Después volvé a casa.</li>
+  <li><b>Semana 2:</b> Caminá alrededor de tu casa/edificio.</li>
+  <li><b>Semana 3:</b> Date un paseo que abarque 3-5 edificios.</li>
+  <li><b>Semana 4:</b> Date una caminata más grande, y agregá segmentos de trote cortos a la mezcla.</li>
+  <li><b>Semana 5:</b> Salí a trotar. Bien hecho.</li>
 </ul>

@@ -11,19 +11,9 @@ Such a gradual acquisition <b>reduces the physical/mental strain</b> and helps y
 Final Habit: <i>Go jogging every morning</i>
 <strong>Levels:</strong> <i>Every morning...</i>
 <ul>
-  <li>
-    <b>Week 1:</b> Just step outside on the street, then return home.
-  </li>
-  <li>
-    <b>Week 2:</b> Take a walk around your house/building.
-  </li>
-  <li>
-    <b>Week 3:</b> Take a walk spanning 3-5 buildings.
-  </li>
-  <li>
-    <b>Week 4:</b> Take a longer walk and add short jogging-segments into the mix.
-  </li>
-  <li>
-    <b>Week 5:</b> Go jogging. Well done.
-  </li>
+  <li><b>Week 1:</b> Just step outside on the street, then return home.</li>
+  <li><b>Week 2:</b> Take a walk around your house/building.</li>
+  <li><b>Week 3:</b> Take a walk spanning 3-5 buildings.</li>
+  <li><b>Week 4:</b> Take a longer walk and add short jogging-segments into the mix.</li>
+  <li><b>Week 5:</b> Go jogging. Well done.</li>
 </ul>

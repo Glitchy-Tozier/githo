@@ -1,4 +1,4 @@
-- You can now decrement accidental ticks on your current training by long-pressing on the card.
+- You can now decrement accidental ticks on your current training by long-pressing the card.
 - Rename 'steps' to 'levels' to better indicate the purpose of this app: gradually approaching your final habit by working through "levels of potency" of your habit.
 - Added safety-limit to the allowed number of levels & comments (max. 20).
 - Added Spanish F-Droid translation. (Thanks to @another-sapiens)
