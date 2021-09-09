@@ -23,7 +23,7 @@ import 'package:flutter/material.dart';
 /// Will probably eventually be replaced by themes.
 
 class StyleData {
-  static const double screenPaddingValue = 35;
+  static const double screenPaddingValue = 32;
 
   static const EdgeInsets screenPadding =
       EdgeInsets.symmetric(horizontal: screenPaddingValue);
