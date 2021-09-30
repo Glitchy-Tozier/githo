@@ -20,42 +20,95 @@ import 'package:flutter/material.dart';
 
 /// Defines how the app looks.
 class AppTheme {
+  static const double _headline1size = 35;
+  static const double _headline2size = 26;
+  static const double _headline3size = 20;
+  static const double _headline4size = 18;
+  static const double _bodyText1size = 16;
+  static const double _bodyText2size = 16;
+
   static final ThemeData lightTheme = ThemeData(
     primarySwatch: Colors.pink,
-    backgroundColor: Colors.white70,
+    backgroundColor: Colors.white,
     appBarTheme: AppBarTheme(
       color: Colors.pink.shade400,
     ),
     textTheme: const TextTheme(
       headline1: TextStyle(
-        fontSize: 35,
+        fontSize: _headline1size,
         fontWeight: FontWeight.bold,
         color: Colors.black,
       ),
       headline2: TextStyle(
-        fontSize: 26,
+        fontSize: _headline2size,
         fontWeight: FontWeight.bold,
         color: Colors.black,
       ),
       headline3: TextStyle(
-        fontSize: 20,
+        fontSize: _headline3size,
         fontWeight: FontWeight.bold,
         color: Colors.black,
       ),
       headline4: TextStyle(
-        fontSize: 18,
+        fontSize: _headline4size,
         color: Colors.black,
       ),
       bodyText1: TextStyle(
-        fontSize: 16,
+        fontSize: _bodyText1size,
         color: Colors.black,
       ),
       bodyText2: TextStyle(
-        fontSize: 16,
+        fontSize: _bodyText2size,
         color: Colors.black,
       ),
     ),
     dividerColor: Colors.black54,
+    inputDecorationTheme: InputDecorationTheme(
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+    ),
+  );
+
+  static final ThemeData darkTheme = ThemeData(
+    primarySwatch: Colors.pink,
+    backgroundColor: Colors.black,
+    appBarTheme: AppBarTheme(
+      color: Colors.pink.shade800,
+    ),
+    textTheme: const TextTheme(
+      headline1: TextStyle(
+        fontSize: _headline1size,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+      ),
+      headline2: TextStyle(
+        fontSize: _headline2size,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+      ),
+      headline3: TextStyle(
+        fontSize: _headline3size,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+      ),
+      headline4: TextStyle(
+        fontSize: _headline4size,
+        color: Colors.white,
+      ),
+      bodyText1: TextStyle(
+        fontSize: _bodyText1size,
+        color: Colors.white,
+      ),
+      bodyText2: TextStyle(
+        fontSize: _bodyText2size,
+        color: Colors.white,
+      ),
+    ),
+    dividerColor: Colors.white54,
+    iconTheme: const IconThemeData(
+      color: Colors.white,
+    ),
     inputDecorationTheme: InputDecorationTheme(
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),

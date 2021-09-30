@@ -55,12 +55,12 @@ class TextSheet extends StatelessWidget {
           bottom: 30,
           left: StyleData.screenPaddingValue,
         ),
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.only(
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(40),
             topRight: Radius.circular(40),
           ),
-          color: Colors.white70,
+          color: Theme.of(context).backgroundColor.withOpacity(0.6),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,

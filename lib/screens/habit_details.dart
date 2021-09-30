@@ -306,6 +306,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
                   SpeedDialChild(
                     label: 'Delete',
                     backgroundColor: Colors.red.shade900,
+                    labelBackgroundColor: Theme.of(context).backgroundColor,
                     labelStyle: Theme.of(context).textTheme.bodyText2,
                     onTap: () {
                       showDialog(
@@ -324,6 +325,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
                   SpeedDialChild(
                     label: 'Share',
                     backgroundColor: Colors.lightBlue,
+                    labelBackgroundColor: Theme.of(context).backgroundColor,
                     labelStyle: Theme.of(context).textTheme.bodyText2,
                     onTap: () => Share.share(
                       habitPlan.toShareJson(),
@@ -336,6 +338,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
                   SpeedDialChild(
                     label: 'Edit',
                     backgroundColor: Colors.orangeAccent.shade700,
+                    labelBackgroundColor: Theme.of(context).backgroundColor,
                     labelStyle: Theme.of(context).textTheme.bodyText2,
                     onTap: () {
                       if (habitPlan.isActive) {

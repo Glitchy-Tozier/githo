@@ -51,7 +51,7 @@ class Background extends StatelessWidget {
                 sigmaY: 5,
               ),
               child: Container(
-                color: Theme.of(context).backgroundColor,
+                color: Theme.of(context).backgroundColor.withOpacity(0.6),
               ),
             ),
           ),
