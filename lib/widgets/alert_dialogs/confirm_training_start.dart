@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:githo/config/custom_widget_themes.dart';
 import 'package:githo/models/used_classes/training.dart';
 import 'package:githo/widgets/alert_dialogs/base_dialog.dart';
 
@@ -68,7 +69,7 @@ class ConfirmTrainingStart extends StatelessWidget {
               ),
               style: ButtonStyle(
                 backgroundColor:
-                    MaterialStateProperty.all<Color>(Colors.orange),
+                    MaterialStateProperty.all<Color>(ThemedColors.orange),
               ),
               onPressed: () {
                 Navigator.pop(context);
@@ -85,7 +86,8 @@ class ConfirmTrainingStart extends StatelessWidget {
                     ),
               ),
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(ThemedColors.green),
               ),
               onPressed: () {
                 Navigator.pop(context);

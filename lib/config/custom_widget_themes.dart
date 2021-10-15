@@ -35,7 +35,15 @@ class CardColors {
   }
 
   static Color get unsuccessful {
-    return ThemedColors.red;
+    final ThemeEnum theme = AppThemeData.currentThemeMode;
+    switch (theme) {
+      case ThemeEnum.light:
+        return Colors.red;
+      case ThemeEnum.dark:
+        return Colors.red.shade900;
+      default:
+        return Colors.red;
+    }
   }
 
   static Color get skipped {
@@ -49,7 +57,15 @@ class CardColors {
   }
 
   static Color get waiting {
-    return ThemedColors.orange;
+    final ThemeEnum theme = AppThemeData.currentThemeMode;
+    switch (theme) {
+      case ThemeEnum.light:
+        return Colors.orange;
+      case ThemeEnum.dark:
+        return Colors.orange.shade900;
+      default:
+        return Colors.orange;
+    }
   }
 
   static Color get locked {
@@ -99,7 +115,7 @@ class LevelColors {
   }
 
   static Color get active {
-    return ThemedColors.orange;
+    return CardColors.waiting;
   }
 
   static Color get locked {
@@ -109,16 +125,6 @@ class LevelColors {
 
 /// Color-getters for commonly used colors that vary from theme to theme.
 class ThemedColors {
-  static Color get blue {
-    final ThemeEnum theme = AppThemeData.currentThemeMode;
-    switch (theme) {
-      case ThemeEnum.light:
-        return Colors.lightBlue;
-      default:
-        return Colors.lightBlue.shade700;
-    }
-  }
-
   static Color get gold {
     final ThemeEnum theme = AppThemeData.currentThemeMode;
     switch (theme) {
@@ -134,8 +140,6 @@ class ThemedColors {
     switch (theme) {
       case ThemeEnum.light:
         return Colors.green;
-      case ThemeEnum.dark:
-        return Colors.green.shade700;
       default:
         return Colors.green.shade700;
     }
@@ -153,15 +157,23 @@ class ThemedColors {
     }
   }
 
+  static Color get lightBlue {
+    final ThemeEnum theme = AppThemeData.currentThemeMode;
+    switch (theme) {
+      case ThemeEnum.light:
+        return Colors.lightBlue;
+      default:
+        return Colors.lightBlue.shade700;
+    }
+  }
+
   static Color get orange {
     final ThemeEnum theme = AppThemeData.currentThemeMode;
     switch (theme) {
       case ThemeEnum.light:
         return Colors.orange;
-      case ThemeEnum.dark:
-        return Colors.orange.shade900;
       default:
-        return Colors.orange;
+        return Colors.orange.shade900;
     }
   }
 
@@ -170,10 +182,8 @@ class ThemedColors {
     switch (theme) {
       case ThemeEnum.light:
         return Colors.red;
-      case ThemeEnum.dark:
-        return Colors.red.shade900;
       default:
-        return Colors.red;
+        return Colors.red.shade900;
     }
   }
 }

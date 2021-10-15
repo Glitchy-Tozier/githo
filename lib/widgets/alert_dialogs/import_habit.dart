@@ -85,7 +85,7 @@ class ImportHabit extends StatelessWidget {
               ),
               style: ButtonStyle(
                 backgroundColor:
-                    MaterialStateProperty.all<Color>(Colors.orange),
+                    MaterialStateProperty.all<Color>(ThemedColors.orange),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -103,7 +103,7 @@ class ImportHabit extends StatelessWidget {
               ),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(
-                  ThemedColors.blue,
+                  ThemedColors.lightBlue,
                 ),
               ),
               onPressed: () {

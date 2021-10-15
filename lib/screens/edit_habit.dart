@@ -420,7 +420,7 @@ class _EditHabitState extends State<EditHabit> {
             Visibility(
               visible: widget.displayImportFAB,
               child: FloatingActionButton(
-                backgroundColor: ThemedColors.blue,
+                backgroundColor: ThemedColors.lightBlue,
                 tooltip: 'Import habit-plan.',
                 heroTag: null,
                 onPressed: () {

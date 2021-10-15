@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:githo/config/custom_widget_themes.dart';
 
 import 'package:githo/helpers/format_date.dart';
 import 'package:githo/helpers/text_form_field_validation.dart';
@@ -234,7 +235,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
               ),
               style: ButtonStyle(
                 backgroundColor:
-                    MaterialStateProperty.all<Color>(Colors.orange),
+                    MaterialStateProperty.all<Color>(ThemedColors.orange),
               ),
               onPressed: () {
                 Navigator.pop(context);
@@ -251,7 +252,8 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
                     ),
               ),
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(ThemedColors.green),
               ),
               onPressed: () {
                 final bool canStartHabitPlan;

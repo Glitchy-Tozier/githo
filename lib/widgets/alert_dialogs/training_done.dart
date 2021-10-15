@@ -18,6 +18,7 @@
 
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:githo/config/custom_widget_themes.dart';
 import 'package:githo/widgets/alert_dialogs/base_dialog.dart';
 
 /// Notifies the user of his success.
@@ -41,7 +42,8 @@ class TrainingDoneAlert extends StatelessWidget {
       actions: <ElevatedButton>[
         ElevatedButton(
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+            backgroundColor:
+                MaterialStateProperty.all<Color>(ThemedColors.green),
             minimumSize: MaterialStateProperty.all<Size>(
               const Size(double.infinity, 60),
             ),

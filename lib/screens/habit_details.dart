@@ -325,7 +325,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
                   ),
                   SpeedDialChild(
                     label: 'Share',
-                    backgroundColor: ThemedColors.blue,
+                    backgroundColor: ThemedColors.lightBlue,
                     labelBackgroundColor: Theme.of(context).backgroundColor,
                     labelStyle: Theme.of(context).textTheme.bodyText2,
                     onTap: () => Share.share(
