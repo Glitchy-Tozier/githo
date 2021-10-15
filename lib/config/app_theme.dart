@@ -22,7 +22,7 @@ enum ThemeEnum { light, dark, black }
 
 /// Defines how the app looks.
 class AppThemeData {
-  static ThemeEnum _currentAppTheme = ThemeEnum.light;
+  static ThemeEnum _currentAppTheme = ThemeEnum.dark;
   static ThemeEnum get currentThemeMode {
     return _currentAppTheme;
   }

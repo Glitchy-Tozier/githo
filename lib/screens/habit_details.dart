@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:githo/config/custom_widget_themes.dart';
 
 import 'package:githo/config/data_shortcut.dart';
 import 'package:githo/config/style_data.dart';
@@ -284,7 +285,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
                 }
               },
               child: SpeedDial(
-                backgroundColor: Colors.orange,
+                backgroundColor: ThemedColors.orange,
                 icon: Icons.settings,
                 activeIcon: Icons.close,
                 spacing: 4,
@@ -324,7 +325,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
                   ),
                   SpeedDialChild(
                     label: 'Share',
-                    backgroundColor: Colors.lightBlue,
+                    backgroundColor: ThemedColors.blue,
                     labelBackgroundColor: Theme.of(context).backgroundColor,
                     labelStyle: Theme.of(context).textTheme.bodyText2,
                     onTap: () => Share.share(

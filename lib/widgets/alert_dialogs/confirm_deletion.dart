@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:githo/config/custom_widget_themes.dart';
 import 'package:githo/models/habit_plan.dart';
 import 'package:githo/models/progress_data.dart';
 import 'package:githo/widgets/alert_dialogs/base_dialog.dart';
@@ -58,7 +59,7 @@ class ConfirmDeletion extends StatelessWidget {
               ),
               style: ButtonStyle(
                 backgroundColor:
-                    MaterialStateProperty.all<Color>(Colors.orange),
+                    MaterialStateProperty.all<Color>(ThemedColors.orange),
               ),
               onPressed: () {
                 Navigator.pop(context);
@@ -75,7 +76,8 @@ class ConfirmDeletion extends StatelessWidget {
                     ),
               ),
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(ThemedColors.red),
               ),
               onPressed: () async {
                 final ProgressData progressData = ProgressData.emptyData();

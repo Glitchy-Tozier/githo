@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:githo/config/custom_widget_themes.dart';
 
 import 'package:githo/widgets/alert_dialogs/confirm_activation_change.dart';
 import 'package:githo/widgets/alert_dialogs/confirm_starting_time.dart';
@@ -136,7 +137,7 @@ class ActivationFAB extends StatelessWidget {
     final Color color;
 
     if (habitPlan.isActive == true) {
-      color = Colors.green;
+      color = ThemedColors.green;
       child = const Icon(
         Icons.star,
       );

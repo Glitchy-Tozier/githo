@@ -20,6 +20,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:githo/config/custom_widget_themes.dart';
 
 import 'package:githo/config/data_shortcut.dart';
 import 'package:githo/config/style_data.dart';
@@ -419,7 +420,7 @@ class _EditHabitState extends State<EditHabit> {
             Visibility(
               visible: widget.displayImportFAB,
               child: FloatingActionButton(
-                backgroundColor: Colors.lightBlue,
+                backgroundColor: ThemedColors.blue,
                 tooltip: 'Import habit-plan.',
                 heroTag: null,
                 onPressed: () {
@@ -439,7 +440,7 @@ class _EditHabitState extends State<EditHabit> {
             ),
             FloatingActionButton(
               tooltip: 'Save',
-              backgroundColor: Colors.green,
+              backgroundColor: ThemedColors.green,
               heroTag: null,
               onPressed: () {
                 if (_formKey.currentState!.validate()) {

@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:githo/config/custom_widget_themes.dart';
 import 'package:githo/helpers/text_form_field_validation.dart';
 import 'package:githo/widgets/alert_dialogs/base_dialog.dart';
 
@@ -102,7 +103,7 @@ class ImportHabit extends StatelessWidget {
               ),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(
-                  Colors.lightBlue,
+                  ThemedColors.blue,
                 ),
               ),
               onPressed: () {

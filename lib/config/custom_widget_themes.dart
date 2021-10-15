@@ -23,7 +23,15 @@ import 'package:githo/config/app_theme.dart';
 /// the training-cards in the [HomeScreen] can be used.
 class CardColors {
   static Color get successful {
-    return ThemedColors.green;
+    final ThemeEnum theme = AppThemeData.currentThemeMode;
+    switch (theme) {
+      case ThemeEnum.light:
+        return Colors.green;
+      case ThemeEnum.dark:
+        return Colors.green.shade900;
+      default:
+        return Colors.green;
+    }
   }
 
   static Color get unsuccessful {
@@ -101,6 +109,16 @@ class LevelColors {
 
 /// Color-getters for commonly used colors that vary from theme to theme.
 class ThemedColors {
+  static Color get blue {
+    final ThemeEnum theme = AppThemeData.currentThemeMode;
+    switch (theme) {
+      case ThemeEnum.light:
+        return Colors.lightBlue;
+      default:
+        return Colors.lightBlue.shade700;
+    }
+  }
+
   static Color get gold {
     final ThemeEnum theme = AppThemeData.currentThemeMode;
     switch (theme) {
@@ -117,9 +135,9 @@ class ThemedColors {
       case ThemeEnum.light:
         return Colors.green;
       case ThemeEnum.dark:
-        return Colors.green.shade900;
+        return Colors.green.shade700;
       default:
-        return Colors.green.shade900;
+        return Colors.green.shade700;
     }
   }
 
