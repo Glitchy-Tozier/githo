@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:githo/config/custom_widget_themes.dart';
 
 import 'package:githo/config/style_data.dart';
 import 'package:githo/helpers/format_date.dart';
@@ -65,15 +66,15 @@ class _PeriodListViewState extends State<PeriodListView> {
 
       if (widget.trainingPeriod.status == 'completed') {
         if (training.status == 'successful') {
-          color = Colors.green;
+          color = CardColors.successful;
         } else if (training.status == 'unsuccessful') {
-          color = Colors.red;
+          color = CardColors.unsuccessful;
         } else {
-          color = Colors.grey.shade400;
+          color = CardColors.skipped;
         }
         child = const Icon(Icons.check_rounded);
       } else if (widget.trainingPeriod.status == 'waiting for start') {
-        color = Colors.orange;
+        color = CardColors.waiting;
         if (i == 0) {
           cardWidth *= 1.3;
           cardHeight *= 1.3;
@@ -131,7 +132,7 @@ class _PeriodListViewState extends State<PeriodListView> {
         cardMarginRL *= 1.3;
         if (training.hasPassed) {
           if (training.status == 'successful') {
-            color = Colors.green;
+            color = CardColors.successful;
             child = Text(
               '${training.doneReps}/${training.requiredReps}',
               style: const TextStyle(
@@ -140,7 +141,7 @@ class _PeriodListViewState extends State<PeriodListView> {
               ),
             );
           } else if (training.status == 'unsuccessful') {
-            color = Colors.red;
+            color = CardColors.unsuccessful;
             child = Text(
               '${training.doneReps}/${training.requiredReps}',
               style: const TextStyle(
@@ -149,12 +150,11 @@ class _PeriodListViewState extends State<PeriodListView> {
               ),
             );
           } else {
-            color = Colors.grey.shade400;
+            color = CardColors.skipped;
             child = const Text(
               'Skipped',
               style: TextStyle(
                 fontSize: textSize,
-                color: Colors.black,
               ),
             );
           }
@@ -181,6 +181,7 @@ class _PeriodListViewState extends State<PeriodListView> {
                     );
                   },
                 );
+
             listViewChildren.add(
               GradientTrainingCard(
                 key: widget.activeCardKey,
@@ -206,7 +207,7 @@ class _PeriodListViewState extends State<PeriodListView> {
             continue;
           }
         } else {
-          color = Colors.orange;
+          color = CardColors.waiting;
           if (i == activeTrainingIndex + 1) {
             listViewChildren.add(
               CountdownCard(
@@ -224,7 +225,7 @@ class _PeriodListViewState extends State<PeriodListView> {
           }
         }
       } else {
-        color = Colors.grey.shade300;
+        color = CardColors.locked;
         child = const Icon(Icons.lock);
       }
 

@@ -60,7 +60,6 @@ class About extends StatelessWidget {
                       const SizedBox(height: 20),
                       ListButton(
                         text: 'Source Code',
-                        color: Theme.of(context).buttonColor,
                         onPressed: () async {
                           const String url =
                               'https://github.com/Glitchy-Tozier/githo';
@@ -73,7 +72,6 @@ class About extends StatelessWidget {
                       ),
                       ListButton(
                         text: 'Privacy Policy',
-                        color: Theme.of(context).buttonColor,
                         onPressed: () async {
                           const String url =
                               'https://github.com/Glitchy-Tozier/githo/blob/main/privacyPolicy.md';
@@ -86,7 +84,6 @@ class About extends StatelessWidget {
                       ),
                       ListButton(
                         text: 'Licenses',
-                        color: Theme.of(context).buttonColor,
                         onPressed: () {
                           showLicensePage(
                             context: context,

@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:githo/widgets/alert_dialogs/base_dialog.dart';
 
 class ConfirmEdit extends StatelessWidget {
   /// Returns a dialog that asks 'Do you really want to edit the habit-plan?'
@@ -26,7 +27,7 @@ class ConfirmEdit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
+    return BaseDialog(
       title: const Text(
         'Edit current habit-plan?',
       ),

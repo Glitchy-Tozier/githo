@@ -234,6 +234,8 @@ class _HomeScreenState extends State<HomeScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             WillPopScope(
+              // Necessary to prevent a crash when pressing the back-button
+              // while the dial is open.
               onWillPop: () async {
                 if (isDialOpen.value) {
                   isDialOpen.value = false;

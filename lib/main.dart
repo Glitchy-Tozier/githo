@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       title: 'Githo - Get Into The Habit Of…',
-      theme: AppTheme.lightTheme,
+      theme: AppThemeData.currentTheme,
       home: FirstScreen(),
       debugShowCheckedModeBanner: DataShortcut.testing,
     );

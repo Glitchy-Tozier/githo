@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:githo/config/custom_widget_themes.dart';
 
 import 'package:githo/config/style_data.dart';
 import 'package:githo/helpers/type_extentions.dart';
@@ -45,13 +46,13 @@ class LevelToDo extends StatelessWidget {
     final Color levelColor;
     switch (level.status) {
       case 'completed':
-        levelColor = Colors.green;
+        levelColor = LevelColors.completed;
         break;
       case 'active':
-        levelColor = Colors.orange;
+        levelColor = LevelColors.active;
         break;
-      default:
-        levelColor = Colors.grey.shade300;
+      default: // 'locked':
+        levelColor = LevelColors.locked;
     }
     colChildren.addAll(<Widget>[
       FatDivider(
@@ -67,14 +68,14 @@ class LevelToDo extends StatelessWidget {
             borderRadius: BorderRadius.circular(7),
             onTap: () {
               final Color statusColor;
-              if (level.status == 'active') {
-                statusColor = Colors.orange.shade800;
-              } else if (level.status == 'locked') {
-                statusColor = Colors.grey.shade800;
+              if (level.status == 'completed') {
+                statusColor = LevelContrastColors.completed;
+              } else if (level.status == 'active') {
+                statusColor = LevelContrastColors.active;
               } else {
-                statusColor = Colors.green.shade800;
+                // status == 'locked'
+                statusColor = LevelContrastColors.locked;
               }
-
               showModalBottomSheet(
                 context: context,
                 backgroundColor: Colors.transparent,
@@ -125,7 +126,6 @@ class LevelToDo extends StatelessWidget {
                       'Info',
                       style: TextStyle(
                         fontSize: 30,
-                        color: Colors.black,
                       ),
                     ),
                   )
@@ -156,7 +156,6 @@ class LevelToDo extends StatelessWidget {
               'of ${level.trainingPeriods.length}',
               style: const TextStyle(
                 fontSize: 20,
-                color: Colors.black,
               ),
             ),
           ),

@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:githo/models/used_classes/training.dart';
+import 'package:githo/widgets/alert_dialogs/base_dialog.dart';
 
 class ConfirmTrainingStart extends StatelessWidget {
   /// Returns a dialog that lets the user confirm that he really
@@ -43,7 +44,7 @@ class ConfirmTrainingStart extends StatelessWidget {
       amountString = 'Perform ${training.requiredReps} times';
     }
 
-    return AlertDialog(
+    return BaseDialog(
       title: const Text(
         'Tackle the next training?',
       ),

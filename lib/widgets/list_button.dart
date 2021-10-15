@@ -17,17 +17,18 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:githo/config/custom_widget_themes.dart';
 
 class ListButton extends StatelessWidget {
   /// The default list-item used in this application.
   const ListButton({
+    this.color,
     required this.text,
-    required this.color,
     required this.onPressed,
   });
 
+  final Color? color;
   final String text;
-  final Color color;
   final Function onPressed;
 
   @override
@@ -36,7 +37,9 @@ class ListButton extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: ElevatedButton(
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(color),
+          backgroundColor: MaterialStateProperty.all<Color?>(
+            color ?? ThemedColors.grey,
+          ),
           minimumSize: MaterialStateProperty.all<Size>(
             const Size(double.infinity, 60),
           ),

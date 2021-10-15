@@ -18,6 +18,7 @@
 
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:githo/widgets/alert_dialogs/base_dialog.dart';
 
 /// Notifies the user of his success.
 
@@ -33,7 +34,7 @@ class TrainingDoneAlert extends StatelessWidget {
     final String buttonString =
         buttonStrings[random.nextInt(buttonStrings.length)];
 
-    return AlertDialog(
+    return BaseDialog(
       title: const Text(
         'Training completed!',
       ),

@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:githo/models/habit_plan.dart';
 import 'package:githo/models/progress_data.dart';
+import 'package:githo/widgets/alert_dialogs/base_dialog.dart';
 
 class ConfirmDeletion extends StatelessWidget {
   /// Returns a dialog that asks 'Do you really want to delete the habit-plan?'
@@ -33,7 +34,7 @@ class ConfirmDeletion extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
+    return BaseDialog(
       title: const Text(
         'Confirm deletion',
       ),

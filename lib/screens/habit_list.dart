@@ -121,13 +121,11 @@ class _HabitListState extends State<HabitList> {
                         itemBuilder: (BuildContext buildContex, int i) {
                           if (i < orderedHabitPlans.length) {
                             final HabitPlan habitPlan = orderedHabitPlans[i];
-                            final Color color;
+                            Color? color;
                             if (habitPlan.fullyCompleted) {
                               color = Colors.amberAccent;
                             } else if (habitPlan.isActive) {
                               color = Colors.green;
-                            } else {
-                              color = Theme.of(context).buttonColor;
                             }
                             return ListButton(
                               text: habitPlan.habit,

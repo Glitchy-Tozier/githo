@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:githo/widgets/alert_dialogs/base_dialog.dart';
 
 class ConfirmActivationChange extends StatelessWidget {
   /// Returns a dialog that asks 'Do you really want to activate/deactivate the habit-plan?'
@@ -32,7 +33,7 @@ class ConfirmActivationChange extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
+    return BaseDialog(
       title: Text(
         title,
       ),

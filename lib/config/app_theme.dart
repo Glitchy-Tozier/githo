@@ -18,16 +18,38 @@
 
 import 'package:flutter/material.dart';
 
+enum ThemeEnum { light, dark, black }
+
 /// Defines how the app looks.
-class AppTheme {
+class AppThemeData {
+  static ThemeEnum _currentAppTheme = ThemeEnum.light;
+  static ThemeEnum get currentThemeMode {
+    return _currentAppTheme;
+  }
+
+  /// Returns the correct [ThemeData].
+  static ThemeData get currentTheme {
+    switch (_currentAppTheme) {
+      case ThemeEnum.black:
+        return _blackTheme;
+      case ThemeEnum.dark:
+        return _darkTheme;
+      default:
+        return _lightTheme;
+    }
+  }
+
+  // A shortcut for the heading-sizes.
   static const double _headline1size = 35;
   static const double _headline2size = 26;
   static const double _headline3size = 20;
   static const double _headline4size = 18;
   static const double _bodyText1size = 16;
   static const double _bodyText2size = 16;
+  // A shortcut to important [InputDecorationTheme]-values.
+  static final BorderRadius _borderRadius = BorderRadius.circular(10);
 
-  static final ThemeData lightTheme = ThemeData(
+  static final ThemeData _lightTheme = ThemeData(
     primarySwatch: Colors.pink,
     backgroundColor: Colors.white,
     appBarTheme: AppBarTheme(
@@ -65,12 +87,12 @@ class AppTheme {
     dividerColor: Colors.black54,
     inputDecorationTheme: InputDecorationTheme(
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: _borderRadius,
       ),
     ),
   );
 
-  static final ThemeData darkTheme = ThemeData(
+  static final ThemeData _darkTheme = ThemeData(
     primarySwatch: Colors.pink,
     backgroundColor: Colors.black,
     appBarTheme: AppBarTheme(
@@ -80,30 +102,29 @@ class AppTheme {
       headline1: TextStyle(
         fontSize: _headline1size,
         fontWeight: FontWeight.bold,
-        color: Colors.white,
       ),
       headline2: TextStyle(
         fontSize: _headline2size,
         fontWeight: FontWeight.bold,
-        color: Colors.white,
       ),
       headline3: TextStyle(
         fontSize: _headline3size,
         fontWeight: FontWeight.bold,
-        color: Colors.white,
       ),
       headline4: TextStyle(
         fontSize: _headline4size,
-        color: Colors.white,
       ),
+      headline6: TextStyle(),
       bodyText1: TextStyle(
         fontSize: _bodyText1size,
-        color: Colors.white,
       ),
       bodyText2: TextStyle(
         fontSize: _bodyText2size,
-        color: Colors.white,
       ),
+      subtitle1: TextStyle(),
+    ).apply(
+      bodyColor: Colors.white,
+      displayColor: Colors.white,
     ),
     dividerColor: Colors.white54,
     iconTheme: const IconThemeData(
@@ -111,7 +132,94 @@ class AppTheme {
     ),
     inputDecorationTheme: InputDecorationTheme(
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: _borderRadius,
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: _borderRadius,
+        borderSide: const BorderSide(
+          color: Colors.white,
+        ),
+      ),
+      labelStyle: const TextStyle(
+        color: Colors.white,
+      ),
+      helperStyle: const TextStyle(
+        color: Colors.white,
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: _borderRadius,
+        borderSide: BorderSide(
+          color: Colors.red.shade300,
+        ),
+      ),
+      errorStyle: TextStyle(
+        color: Colors.red.shade50,
+      ),
+    ),
+  );
+
+  static final ThemeData _blackTheme = ThemeData(
+    primarySwatch: Colors.pink,
+    backgroundColor: Colors.black,
+    appBarTheme: AppBarTheme(
+      color: Colors.pink.shade900,
+    ),
+    textTheme: const TextTheme(
+      headline1: TextStyle(
+        fontSize: _headline1size,
+        fontWeight: FontWeight.bold,
+      ),
+      headline2: TextStyle(
+        fontSize: _headline2size,
+        fontWeight: FontWeight.bold,
+      ),
+      headline3: TextStyle(
+        fontSize: _headline3size,
+        fontWeight: FontWeight.bold,
+      ),
+      headline4: TextStyle(
+        fontSize: _headline4size,
+      ),
+      headline6: TextStyle(),
+      bodyText1: TextStyle(
+        fontSize: _bodyText1size,
+      ),
+      bodyText2: TextStyle(
+        fontSize: _bodyText2size,
+      ),
+      subtitle1: TextStyle(),
+    ).apply(
+      bodyColor: Colors.white,
+      displayColor: Colors.white,
+    ),
+    dividerColor: Colors.black,
+    iconTheme: const IconThemeData(
+      color: Colors.white,
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      border: OutlineInputBorder(
+        borderRadius: _borderRadius,
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: _borderRadius,
+        borderSide: const BorderSide(
+          color: Colors.white,
+        ),
+      ),
+      labelStyle: const TextStyle(
+        color: Colors.white,
+      ),
+      helperStyle: const TextStyle(
+        color: Colors.white,
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: _borderRadius,
+        borderSide: BorderSide(
+          color: Colors.red.shade300,
+        ),
+      ),
+      errorStyle: TextStyle(
+        color: Colors.red.shade50,
       ),
     ),
   );

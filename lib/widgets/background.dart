@@ -18,6 +18,7 @@
 
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:githo/config/custom_widget_themes.dart';
 import 'package:githo/config/style_data.dart';
 
 class Background extends StatelessWidget {
@@ -40,6 +41,19 @@ class Background extends StatelessWidget {
               image: AssetImage('assets/pixabayColorGradient.jpg'),
               fit: BoxFit.cover,
             ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                width: StyleData.screenPaddingValue / 2,
+                color: getBackgroundPaddingColor(context),
+              ),
+              Container(
+                width: StyleData.screenPaddingValue / 2,
+                color: getBackgroundPaddingColor(context),
+              ),
+            ],
           ),
         ),
         Padding(

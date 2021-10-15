@@ -25,6 +25,7 @@ import 'package:githo/database/database_helper.dart';
 import 'package:githo/helpers/time_helper.dart';
 import 'package:githo/models/habit_plan.dart';
 import 'package:githo/models/progress_data.dart';
+import 'package:githo/widgets/alert_dialogs/base_dialog.dart';
 
 class ConfirmStartingTime extends StatefulWidget {
   /// Returns a dialog that lets the user choose
@@ -136,7 +137,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
     startingDateString = formatDate(initialDate);
     dateController.text = startingDateString;
 
-    return AlertDialog(
+    return BaseDialog(
       title: const Text(
         'Confirm starting time',
       ),
