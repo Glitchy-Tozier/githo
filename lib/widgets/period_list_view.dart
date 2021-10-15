@@ -137,7 +137,6 @@ class _PeriodListViewState extends State<PeriodListView> {
               '${training.doneReps}/${training.requiredReps}',
               style: const TextStyle(
                 fontSize: textSize * 1.3,
-                color: Colors.black,
               ),
             );
           } else if (training.status == 'unsuccessful') {
@@ -146,7 +145,6 @@ class _PeriodListViewState extends State<PeriodListView> {
               '${training.doneReps}/${training.requiredReps}',
               style: const TextStyle(
                 fontSize: textSize * 1.3,
-                color: Colors.black,
               ),
             );
           } else {

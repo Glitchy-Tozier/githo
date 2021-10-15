@@ -54,7 +54,7 @@ class CardColors {
       case ThemeEnum.light:
         return Colors.red.shade100;
       case ThemeEnum.dark:
-        return Colors.red.shade900;
+        return Colors.red;
       default:
         return Colors.red.shade100;
     }
@@ -66,7 +66,7 @@ class CardColors {
       case ThemeEnum.light:
         return Colors.lightGreenAccent;
       case ThemeEnum.dark:
-        return Colors.green.shade700;
+        return Colors.green.shade600;
       default:
         return Colors.lightGreenAccent;
     }
@@ -101,15 +101,25 @@ class LevelColors {
 
 /// Color-getters for commonly used colors that vary from theme to theme.
 class ThemedColors {
+  static Color get gold {
+    final ThemeEnum theme = AppThemeData.currentThemeMode;
+    switch (theme) {
+      case ThemeEnum.light:
+        return Colors.amberAccent;
+      default:
+        return Colors.amber.shade900;
+    }
+  }
+
   static Color get green {
     final ThemeEnum theme = AppThemeData.currentThemeMode;
     switch (theme) {
       case ThemeEnum.light:
         return Colors.green;
       case ThemeEnum.dark:
-        return Colors.green.shade800;
+        return Colors.green.shade900;
       default:
-        return Colors.green.shade800;
+        return Colors.green.shade900;
     }
   }
 
@@ -143,7 +153,7 @@ class ThemedColors {
       case ThemeEnum.light:
         return Colors.red;
       case ThemeEnum.dark:
-        return Colors.red;
+        return Colors.red.shade900;
       default:
         return Colors.red;
     }

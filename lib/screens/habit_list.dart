@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:githo/config/custom_widget_themes.dart';
 
 import 'package:githo/config/style_data.dart';
 import 'package:githo/helpers/edit_habit_routes.dart';
@@ -123,9 +124,9 @@ class _HabitListState extends State<HabitList> {
                             final HabitPlan habitPlan = orderedHabitPlans[i];
                             Color? color;
                             if (habitPlan.fullyCompleted) {
-                              color = Colors.amberAccent;
+                              color = ThemedColors.gold;
                             } else if (habitPlan.isActive) {
-                              color = Colors.green;
+                              color = ThemedColors.green;
                             }
                             return ListButton(
                               text: habitPlan.habit,
