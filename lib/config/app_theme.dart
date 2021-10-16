@@ -35,7 +35,7 @@ class AppThemeData {
       case ThemeEnum.dark:
         return _darkTheme;
       default:
-        return _lightTheme;
+        return lightTheme;
     }
   }
 
@@ -49,12 +49,12 @@ class AppThemeData {
   // A shortcut to important [InputDecorationTheme]-values.
   static final BorderRadius _borderRadius = BorderRadius.circular(10);
 
-  static final ThemeData _lightTheme = ThemeData(
+  static final ThemeData lightTheme = ThemeData(
     primarySwatch: Colors.pink,
-    backgroundColor: Colors.white,
     appBarTheme: AppBarTheme(
       color: Colors.pink.shade400,
     ),
+    backgroundColor: Colors.white,
     textTheme: const TextTheme(
       headline1: TextStyle(
         fontSize: _headline1size,
@@ -94,10 +94,10 @@ class AppThemeData {
 
   static final ThemeData _darkTheme = ThemeData(
     primarySwatch: Colors.pink,
-    backgroundColor: Colors.black,
     appBarTheme: AppBarTheme(
       color: Colors.pink.shade800,
     ),
+    backgroundColor: Colors.black,
     textTheme: const TextTheme(
       headline1: TextStyle(
         fontSize: _headline1size,
@@ -160,10 +160,10 @@ class AppThemeData {
 
   static final ThemeData _blackTheme = ThemeData(
     primarySwatch: Colors.pink,
-    backgroundColor: Colors.black,
     appBarTheme: AppBarTheme(
       color: Colors.pink.shade900,
     ),
+    backgroundColor: Colors.black,
     textTheme: const TextTheme(
       headline1: TextStyle(
         fontSize: _headline1size,

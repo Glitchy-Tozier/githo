@@ -62,7 +62,7 @@ class CardColors {
       case ThemeEnum.light:
         return Colors.orange;
       case ThemeEnum.dark:
-        return Colors.orange.shade900;
+        return Colors.orange.shade800;
       default:
         return Colors.orange;
     }
@@ -173,7 +173,7 @@ class ThemedColors {
       case ThemeEnum.light:
         return Colors.orange;
       default:
-        return Colors.orange.shade900;
+        return Colors.orange.shade800;
     }
   }
 

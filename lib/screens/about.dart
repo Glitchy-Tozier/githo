@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:githo/widgets/custom_licence_page.dart';
 import 'package:githo/widgets/list_button.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -46,15 +47,18 @@ class About extends StatelessWidget {
               if (snapShot.connectionState == ConnectionState.done) {
                 if (snapShot.hasData) {
                   final PackageInfo packageInfo = snapShot.data!;
+                  final String version = packageInfo.version;
 
                   return Column(
                     children: <Widget>[
                       const SizedBox(height: 70),
-                      const BorderedImage('assets/launcher/icon.png',
-                          width: 90),
+                      const BorderedImage(
+                        'assets/zoomed_icon.png',
+                        width: 90,
+                      ),
                       const Heading('Githo'),
                       Text(
-                        packageInfo.version,
+                        version,
                         style: Theme.of(context).textTheme.bodyText2,
                       ),
                       const SizedBox(height: 20),
@@ -85,13 +89,12 @@ class About extends StatelessWidget {
                       ListButton(
                         text: 'Licenses',
                         onPressed: () {
-                          showLicensePage(
-                            context: context,
-                            applicationIcon: const BorderedImage(
-                              'assets/launcher/icon.png',
-                              width: 90,
+                          Navigator.of(context).push(MaterialPageRoute<void>(
+                            builder: (BuildContext context) =>
+                                const CustomLicensePage(
+                              applicationName: 'Githo\nGet Into The Habit Of…',
                             ),
-                          );
+                          ));
                         },
                       ),
                     ],

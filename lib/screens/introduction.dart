@@ -119,7 +119,7 @@ class OnBoardingScreen extends StatelessWidget {
               ),
               // Get Into The Habit Of…
               //body: 'Gradually aquire an new habit',
-              image: const BorderedImage('assets/launcher/icon.png', width: 90),
+              image: const BorderedImage('assets/zoomed_icon.png', width: 90),
               decoration: pageDecoration,
             ),
             PageViewModel(

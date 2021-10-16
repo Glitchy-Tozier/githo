@@ -71,10 +71,10 @@ flutter:
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
-    - assets/launcher/icon.png
-    - assets/pixabayColorGradient.jpg
+    - assets/zoomed_icon.png
     - assets/introduction_screen_images/defineLevels.jpeg
     - assets/introduction_screen_images/training.jpeg
+    - assets/pixabayColorGradient.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
