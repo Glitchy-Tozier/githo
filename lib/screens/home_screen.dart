@@ -267,7 +267,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   SpeedDialChild(
                     backgroundColor: Colors.grey.shade800,
                     label: 'About',
-                    labelBackgroundColor: Theme.of(context).backgroundColor,
+                    labelStyle: Theme.of(context).textTheme.bodyText2!.copyWith(
+                          color: Colors.black,
+                        ),
                     onTap: () {
                       Navigator.push(
                         context,
@@ -284,7 +286,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   SpeedDialChild(
                     backgroundColor: Theme.of(context).primaryColor,
                     label: 'List of habits',
-                    labelBackgroundColor: Theme.of(context).backgroundColor,
+                    labelStyle: Theme.of(context).textTheme.bodyText2!.copyWith(
+                          color: Colors.black,
+                        ),
                     onTap: () {
                       Navigator.push(
                         context,
