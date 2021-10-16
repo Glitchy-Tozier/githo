@@ -57,10 +57,7 @@ class About extends StatelessWidget {
                         width: 90,
                       ),
                       const Heading('Githo'),
-                      Text(
-                        version,
-                        style: Theme.of(context).textTheme.bodyText2,
-                      ),
+                      Text(version),
                       const SizedBox(height: 20),
                       ListButton(
                         text: 'Source Code',

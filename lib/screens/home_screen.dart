@@ -150,12 +150,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        const Heading('No habit-plan is active.'),
+                      children: const <Widget>[
+                        Heading('No habit-plan is active.'),
                         Text(
                           'Click on the orange button to '
                           'add or activate your habit-plan',
-                          style: Theme.of(context).textTheme.bodyText2,
                         ),
                       ],
                     ),
@@ -214,7 +213,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           'There was an error connecting to the database.'),
                       Text(
                         snapshot.error.toString(),
-                        style: Theme.of(context).textTheme.bodyText2,
                       ),
                     ],
                   ),
@@ -270,7 +268,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     backgroundColor: Colors.grey.shade800,
                     label: 'About',
                     labelBackgroundColor: Theme.of(context).backgroundColor,
-                    labelStyle: Theme.of(context).textTheme.bodyText2,
                     onTap: () {
                       Navigator.push(
                         context,
@@ -288,7 +285,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     backgroundColor: Theme.of(context).primaryColor,
                     label: 'List of habits',
                     labelBackgroundColor: Theme.of(context).backgroundColor,
-                    labelStyle: Theme.of(context).textTheme.bodyText2,
                     onTap: () {
                       Navigator.push(
                         context,

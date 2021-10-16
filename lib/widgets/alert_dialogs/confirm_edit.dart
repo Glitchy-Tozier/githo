@@ -35,19 +35,17 @@ class ConfirmEdit extends StatelessWidget {
       content: RichText(
         text: TextSpan(
           children: <TextSpan>[
-            TextSpan(
+            const TextSpan(
               text: 'By changing something, ',
-              style: Theme.of(context).textTheme.bodyText2,
             ),
             TextSpan(
               text: 'all previous progress will be lost.\n',
               style: Theme.of(context).textTheme.bodyText1,
             ),
-            TextSpan(
+            const TextSpan(
               text: '\n'
                   'You will need to re-activate the '
                   'habit-plan after editing it.',
-              style: Theme.of(context).textTheme.bodyText2,
             ),
           ],
         ),

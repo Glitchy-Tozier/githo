@@ -39,9 +39,8 @@ class ConfirmDeletion extends StatelessWidget {
       title: const Text(
         'Confirm deletion',
       ),
-      content: Text(
+      content: const Text(
         'All previous progress will be lost.',
-        style: Theme.of(context).textTheme.bodyText2,
       ),
       actions: <Widget>[
         Row(

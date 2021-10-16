@@ -248,10 +248,9 @@ class _EditHabitState extends State<EditHabit> {
                       padding: StyleData.screenPadding,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          const Heading('Comments'),
-                          Text('(Optional)',
-                              style: Theme.of(context).textTheme.bodyText2),
+                        children: const <Widget>[
+                          Heading('Comments'),
+                          Text('(Optional)'),
                         ],
                       ),
                     ),

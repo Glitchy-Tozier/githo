@@ -37,7 +37,6 @@ class CustomListTile extends StatelessWidget {
         Flexible(
           child: Text(
             title,
-            style: Theme.of(context).textTheme.bodyText2,
           ),
         ),
       ],

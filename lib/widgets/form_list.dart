@@ -194,12 +194,11 @@ class _FormListState extends State<FormList> {
       children: <Widget>[
         ...formFields,
         if (formFields.length < DataShortcut.maxLevelCount)
-          Text(
+          const Text(
             '⋮',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Theme.of(context).textTheme.bodyText2!.color,
             ),
           ),
       ],

@@ -152,7 +152,6 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
                 children: <TextSpan>[
                   TextSpan(
                     text: '$startingPeriod will ',
-                    style: Theme.of(context).textTheme.bodyText2,
                   ),
                   TextSpan(
                     text: 'start on $startingDateString.',

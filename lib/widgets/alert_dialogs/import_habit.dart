@@ -38,9 +38,8 @@ class ImportHabit extends StatelessWidget {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Text(
+          const Text(
             'Copy the habit-plan-text into the field below.',
-            style: Theme.of(context).textTheme.bodyText2,
           ),
           Text(
             'This will overwrite all previous text.',

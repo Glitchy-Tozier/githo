@@ -176,7 +176,6 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
               child: Text(
                 levelNr.toString(),
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyText2,
               ),
             ),
             Padding(
@@ -186,7 +185,6 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
               ),
               child: Text(
                 levels[i],
-                style: Theme.of(context).textTheme.bodyText2,
               ),
             ),
           ],
@@ -308,7 +306,6 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
                     label: 'Delete',
                     backgroundColor: Colors.red.shade900,
                     labelBackgroundColor: Theme.of(context).backgroundColor,
-                    labelStyle: Theme.of(context).textTheme.bodyText2,
                     onTap: () {
                       showDialog(
                         context: context,
@@ -327,7 +324,6 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
                     label: 'Share',
                     backgroundColor: ThemedColors.lightBlue,
                     labelBackgroundColor: Theme.of(context).backgroundColor,
-                    labelStyle: Theme.of(context).textTheme.bodyText2,
                     onTap: () => Share.share(
                       habitPlan.toShareJson(),
                     ),
@@ -340,7 +336,6 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
                     label: 'Edit',
                     backgroundColor: Colors.orangeAccent.shade700,
                     labelBackgroundColor: Theme.of(context).backgroundColor,
-                    labelStyle: Theme.of(context).textTheme.bodyText2,
                     onTap: () {
                       if (habitPlan.isActive) {
                         showDialog(
