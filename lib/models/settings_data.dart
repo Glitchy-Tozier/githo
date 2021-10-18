@@ -16,6 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'package:githo/config/app_theme.dart';
 import 'package:githo/helpers/type_extentions.dart';
 
 /// A model for how the user's settings are stored.
@@ -23,15 +24,22 @@ import 'package:githo/helpers/type_extentions.dart';
 class SettingsData {
   SettingsData({
     required this.showIntroduction,
+    //required this.lightTheme,
+    //required this.darkTheme,
   });
 
   /// Converts a Map into [SettingsData].
   SettingsData.fromMap(final Map<String, dynamic> map)
-      : showIntroduction = (map['showIntroduction'] as int).toBool();
+      : showIntroduction = (map['showIntroduction'] as int)
+            .toBool() /* ,
+      : themes = toThemes:map['themes'] */
+  ;
 
   SettingsData.initialValues() : showIntroduction = true;
 
   bool showIntroduction;
+  //ThemeEnum lightTheme;
+  //ThemeEnum darkTheme;
 
   /// Converts the [SettingsData] into a Map.
   Map<String, dynamic> toMap() {

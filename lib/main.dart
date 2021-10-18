@@ -30,7 +30,21 @@ void main() {
 }
 
 /// This widget is the root of the application.
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    // Necessary to make the app reload when manually changing the theme.
+    AppThemeData.instance.addListener(() {
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // Disables screen-rotation to prevent some layots getting too large.
@@ -41,7 +55,8 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       title: 'Githo - Get Into The Habit Of…',
-      theme: AppThemeData.currentTheme,
+      theme: AppThemeData.instance.currentLightTheme,
+      darkTheme: AppThemeData.instance.currentDarkTheme,
       home: FirstScreen(),
       debugShowCheckedModeBanner: DataShortcut.testing,
     );

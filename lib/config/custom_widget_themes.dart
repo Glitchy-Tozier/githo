@@ -23,7 +23,7 @@ import 'package:githo/config/app_theme.dart';
 /// the training-cards in the [HomeScreen] can be used.
 class CardColors {
   static Color get successful {
-    final ThemeEnum theme = AppThemeData.currentThemeMode;
+    final ThemeEnum theme = AppThemeData.instance.currentThemeMode;
     switch (theme) {
       case ThemeEnum.light:
         return Colors.green;
@@ -35,7 +35,7 @@ class CardColors {
   }
 
   static Color get unsuccessful {
-    final ThemeEnum theme = AppThemeData.currentThemeMode;
+    final ThemeEnum theme = AppThemeData.instance.currentThemeMode;
     switch (theme) {
       case ThemeEnum.light:
         return Colors.red;
@@ -47,7 +47,7 @@ class CardColors {
   }
 
   static Color get skipped {
-    final ThemeEnum theme = AppThemeData.currentThemeMode;
+    final ThemeEnum theme = AppThemeData.instance.currentThemeMode;
     switch (theme) {
       case ThemeEnum.black:
         return Colors.grey;
@@ -57,7 +57,7 @@ class CardColors {
   }
 
   static Color get waiting {
-    final ThemeEnum theme = AppThemeData.currentThemeMode;
+    final ThemeEnum theme = AppThemeData.instance.currentThemeMode;
     switch (theme) {
       case ThemeEnum.light:
         return Colors.orange;
@@ -73,7 +73,7 @@ class CardColors {
   }
 
   static Color get activeNotDone {
-    final ThemeEnum theme = AppThemeData.currentThemeMode;
+    final ThemeEnum theme = AppThemeData.instance.currentThemeMode;
     switch (theme) {
       case ThemeEnum.light:
         return Colors.red.shade100;
@@ -85,7 +85,7 @@ class CardColors {
   }
 
   static Color get activeDone {
-    final ThemeEnum theme = AppThemeData.currentThemeMode;
+    final ThemeEnum theme = AppThemeData.instance.currentThemeMode;
     switch (theme) {
       case ThemeEnum.light:
         return Colors.lightGreenAccent;
@@ -99,7 +99,7 @@ class CardColors {
 
 /// Returns the color the padding in the [Background]-Widget should have.
 Color getBackgroundPaddingColor(final BuildContext context) {
-  final ThemeEnum currentTheme = AppThemeData.currentThemeMode;
+  final ThemeEnum currentTheme = AppThemeData.instance.currentThemeMode;
   switch (currentTheme) {
     case ThemeEnum.black:
       return Colors.black;
@@ -126,7 +126,7 @@ class LevelColors {
 /// Color-getters for commonly used colors that vary from theme to theme.
 class ThemedColors {
   static Color get gold {
-    final ThemeEnum theme = AppThemeData.currentThemeMode;
+    final ThemeEnum theme = AppThemeData.instance.currentThemeMode;
     switch (theme) {
       case ThemeEnum.light:
         return Colors.amberAccent;
@@ -136,7 +136,7 @@ class ThemedColors {
   }
 
   static Color get green {
-    final ThemeEnum theme = AppThemeData.currentThemeMode;
+    final ThemeEnum theme = AppThemeData.instance.currentThemeMode;
     switch (theme) {
       case ThemeEnum.light:
         return Colors.green;
@@ -146,7 +146,7 @@ class ThemedColors {
   }
 
   static Color get grey {
-    final ThemeEnum theme = AppThemeData.currentThemeMode;
+    final ThemeEnum theme = AppThemeData.instance.currentThemeMode;
     switch (theme) {
       case ThemeEnum.light:
         return Colors.grey.shade300;
@@ -158,7 +158,7 @@ class ThemedColors {
   }
 
   static Color get lightBlue {
-    final ThemeEnum theme = AppThemeData.currentThemeMode;
+    final ThemeEnum theme = AppThemeData.instance.currentThemeMode;
     switch (theme) {
       case ThemeEnum.light:
         return Colors.lightBlue;
@@ -168,7 +168,7 @@ class ThemedColors {
   }
 
   static Color get orange {
-    final ThemeEnum theme = AppThemeData.currentThemeMode;
+    final ThemeEnum theme = AppThemeData.instance.currentThemeMode;
     switch (theme) {
       case ThemeEnum.light:
         return Colors.orange;
@@ -178,12 +178,23 @@ class ThemedColors {
   }
 
   static Color get red {
-    final ThemeEnum theme = AppThemeData.currentThemeMode;
+    final ThemeEnum theme = AppThemeData.instance.currentThemeMode;
     switch (theme) {
       case ThemeEnum.light:
         return Colors.red;
       default:
         return Colors.red.shade900;
+    }
+  }
+
+  static Color greyFrom(final ThemeEnum theme) {
+    switch (theme) {
+      case ThemeEnum.light:
+        return Colors.grey.shade300;
+      case ThemeEnum.dark:
+        return Colors.grey.shade800;
+      default:
+        return Colors.black;
     }
   }
 }
@@ -192,7 +203,7 @@ class ThemedColors {
 /// for a level.
 class LevelContrastColors {
   static Color get completed {
-    final ThemeEnum theme = AppThemeData.currentThemeMode;
+    final ThemeEnum theme = AppThemeData.instance.currentThemeMode;
     switch (theme) {
       case ThemeEnum.light:
         return Colors.green.shade800;
@@ -205,7 +216,7 @@ class LevelContrastColors {
   }
 
   static Color get active {
-    final ThemeEnum theme = AppThemeData.currentThemeMode;
+    final ThemeEnum theme = AppThemeData.instance.currentThemeMode;
     switch (theme) {
       case ThemeEnum.light:
         return Colors.orange.shade800;
@@ -218,7 +229,7 @@ class LevelContrastColors {
   }
 
   static Color get locked {
-    final ThemeEnum theme = AppThemeData.currentThemeMode;
+    final ThemeEnum theme = AppThemeData.instance.currentThemeMode;
     switch (theme) {
       case ThemeEnum.light:
         return Colors.grey.shade800;
@@ -246,7 +257,7 @@ class TrainingCardThemes {
     required final Widget child,
   }) {
     const double borderRadius = 7;
-    final ThemeEnum currentTheme = AppThemeData.currentThemeMode;
+    final ThemeEnum currentTheme = AppThemeData.instance.currentThemeMode;
     switch (currentTheme) {
       case ThemeEnum.black:
         return Material(

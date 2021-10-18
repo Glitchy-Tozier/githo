@@ -17,25 +17,81 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 enum ThemeEnum { light, dark, black }
 
 /// Defines how the app looks.
-class AppThemeData {
-  static ThemeEnum _currentAppTheme = ThemeEnum.dark;
-  static ThemeEnum get currentThemeMode {
-    return _currentAppTheme;
+class AppThemeData with ChangeNotifier {
+  AppThemeData._privateConstructor();
+
+  /// The singleton-instance of DatabaseHelper.
+  static AppThemeData instance = AppThemeData._privateConstructor();
+
+  ThemeEnum currentLightThemeMode = ThemeEnum.light;
+  ThemeEnum currentDarkThemeMode = ThemeEnum.dark;
+
+  /// Change [currentLightThemeMode] to some other [ThemeEnum]-value
+  /// and use this new information.
+  void setNewLightMode(final ThemeEnum newThemeEnum) {
+    currentLightThemeMode = newThemeEnum;
+    notifyListeners();
   }
 
-  /// Returns the correct [ThemeData].
-  static ThemeData get currentTheme {
-    switch (_currentAppTheme) {
-      case ThemeEnum.black:
-        return _blackTheme;
+  /// Change [currentDarkThemeMode] to some other [ThemeEnum]-value
+  /// and use this new information.
+  void setNewDarkMode(final ThemeEnum newThemeEnum) {
+    currentDarkThemeMode = newThemeEnum;
+    notifyListeners();
+  }
+
+  /// Returns the [ThemeEnum] that corresponds to the currently used
+  /// [ThemeData].
+  ThemeEnum get currentThemeMode {
+    final Brightness brightness =
+        SchedulerBinding.instance!.window.platformBrightness;
+
+    if (brightness == Brightness.light) {
+      return currentLightThemeMode;
+    } else {
+      return currentDarkThemeMode;
+    }
+  }
+
+  /// Returns the [ThemeData] that is to be displayed in light-mode.
+  ThemeData get currentLightTheme {
+    switch (currentLightThemeMode) {
+      case ThemeEnum.light:
+        return lightTheme;
       case ThemeEnum.dark:
         return _darkTheme;
       default:
+        return _blackTheme;
+    }
+  }
+
+  /// Returns the [ThemeData] that is to be displayed in dark-mode.
+  ThemeData get currentDarkTheme {
+    switch (currentDarkThemeMode) {
+      case ThemeEnum.light:
         return lightTheme;
+      case ThemeEnum.dark:
+        return _darkTheme;
+      default:
+        return _blackTheme;
+    }
+  }
+
+  /// Returns the [ThemeEnum] that is next in line after the current one.
+  ThemeEnum nextThemeEnum(final ThemeEnum themeEnum) {
+    switch (themeEnum) {
+      case ThemeEnum.light:
+        return ThemeEnum.dark;
+
+      case ThemeEnum.dark:
+        return ThemeEnum.black;
+      default:
+        return ThemeEnum.light;
     }
   }
 
@@ -49,7 +105,7 @@ class AppThemeData {
   // A shortcut to important [InputDecorationTheme]-values.
   static final BorderRadius _borderRadius = BorderRadius.circular(10);
 
-  static final ThemeData lightTheme = ThemeData(
+  final ThemeData lightTheme = ThemeData(
     primarySwatch: Colors.pink,
     appBarTheme: AppBarTheme(
       color: Colors.pink.shade400,
@@ -92,7 +148,7 @@ class AppThemeData {
     ),
   );
 
-  static final ThemeData _darkTheme = ThemeData(
+  final ThemeData _darkTheme = ThemeData(
     primarySwatch: Colors.pink,
     appBarTheme: AppBarTheme(
       color: Colors.pink.shade800,
@@ -158,7 +214,7 @@ class AppThemeData {
     ),
   );
 
-  static final ThemeData _blackTheme = ThemeData(
+  final ThemeData _blackTheme = ThemeData(
     primarySwatch: Colors.pink,
     appBarTheme: AppBarTheme(
       color: Colors.pink.shade900,

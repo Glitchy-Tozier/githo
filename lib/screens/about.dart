@@ -17,6 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:githo/config/app_theme.dart';
+import 'package:githo/config/custom_widget_themes.dart';
 import 'package:githo/widgets/custom_licence_page.dart';
 import 'package:githo/widgets/list_button.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -93,6 +95,51 @@ class About extends StatelessWidget {
                             ),
                           ));
                         },
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Expanded(
+                            child: Theme(
+                              data: AppThemeData.instance.currentLightTheme,
+                              child: ListButton(
+                                text: 'Change LightTheme',
+                                color: ThemedColors.greyFrom(
+                                  AppThemeData.instance.currentLightThemeMode,
+                                ),
+                                onPressed: () {
+                                  AppThemeData.instance.setNewLightMode(
+                                    AppThemeData.instance.nextThemeEnum(
+                                      AppThemeData
+                                          .instance.currentLightThemeMode,
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Theme(
+                              data: AppThemeData.instance.currentDarkTheme,
+                              child: ListButton(
+                                text: 'Change DarkTheme',
+                                color: ThemedColors.greyFrom(
+                                  AppThemeData.instance.currentDarkThemeMode,
+                                ),
+                                onPressed: () {
+                                  AppThemeData.instance.setNewDarkMode(
+                                      AppThemeData.instance.nextThemeEnum(
+                                    AppThemeData.instance.currentDarkThemeMode,
+                                  ));
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      ListButton(
+                        text: 'Go back',
+                        onPressed: () => Navigator.pop(context),
                       ),
                     ],
                   );
