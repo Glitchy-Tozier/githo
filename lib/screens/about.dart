@@ -105,14 +105,12 @@ class About extends StatelessWidget {
                               child: ListButton(
                                 text: 'Change LightTheme',
                                 color: ThemedColors.greyFrom(
-                                  AppThemeData.instance.currentLightThemeMode,
+                                  AppThemeData.instance.currentLightThemeEnum,
                                 ),
                                 onPressed: () {
                                   AppThemeData.instance.setNewLightMode(
-                                    AppThemeData.instance.nextThemeEnum(
-                                      AppThemeData
-                                          .instance.currentLightThemeMode,
-                                    ),
+                                    AppThemeData.instance.currentLightThemeEnum
+                                        .nextEnum,
                                   );
                                 },
                               ),
@@ -124,13 +122,13 @@ class About extends StatelessWidget {
                               child: ListButton(
                                 text: 'Change DarkTheme',
                                 color: ThemedColors.greyFrom(
-                                  AppThemeData.instance.currentDarkThemeMode,
+                                  AppThemeData.instance.currentDarkThemeEnum,
                                 ),
                                 onPressed: () {
                                   AppThemeData.instance.setNewDarkMode(
-                                      AppThemeData.instance.nextThemeEnum(
-                                    AppThemeData.instance.currentDarkThemeMode,
-                                  ));
+                                    AppThemeData
+                                        .instance.currentDarkThemeEnum.nextEnum,
+                                  );
                                 },
                               ),
                             ),
