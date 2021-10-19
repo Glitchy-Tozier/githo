@@ -18,25 +18,24 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:githo/config/custom_widget_themes.dart';
+import 'package:share_plus/share_plus.dart';
 
+import 'package:githo/config/custom_widget_themes.dart';
 import 'package:githo/config/data_shortcut.dart';
 import 'package:githo/config/style_data.dart';
 import 'package:githo/helpers/edit_habit_routes.dart';
+import 'package:githo/models/habit_plan.dart';
 
 import 'package:githo/widgets/activation_fab.dart';
+import 'package:githo/widgets/alert_dialogs/confirm_deletion.dart';
 import 'package:githo/widgets/alert_dialogs/confirm_edit.dart';
 import 'package:githo/widgets/background.dart';
 import 'package:githo/widgets/bullet_point.dart';
 import 'package:githo/widgets/custom_list_tile.dart';
-import 'package:githo/widgets/alert_dialogs/confirm_deletion.dart';
 import 'package:githo/widgets/dividers/fat_divider.dart';
-import 'package:githo/widgets/headings/screen_title.dart';
 import 'package:githo/widgets/headings/heading.dart';
+import 'package:githo/widgets/headings/screen_title.dart';
 import 'package:githo/widgets/screen_ending_spacer.dart';
-
-import 'package:githo/models/habit_plan.dart';
-import 'package:share_plus/share_plus.dart';
 
 class SingleHabitDisplay extends StatefulWidget {
   /// Displays the details of the [habitPlan].

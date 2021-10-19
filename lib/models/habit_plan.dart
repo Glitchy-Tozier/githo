@@ -18,8 +18,8 @@
 
 import 'dart:convert';
 import 'package:githo/database/database_helper.dart';
-import 'package:githo/helpers/type_extentions.dart';
 import 'package:githo/helpers/time_helper.dart';
+import 'package:githo/helpers/type_extentions.dart';
 
 /// The model for what a habit-plan consists of.
 

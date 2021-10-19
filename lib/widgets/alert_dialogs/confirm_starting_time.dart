@@ -18,11 +18,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:githo/config/custom_widget_themes.dart';
 
+import 'package:githo/config/custom_widget_themes.dart';
+import 'package:githo/database/database_helper.dart';
 import 'package:githo/helpers/format_date.dart';
 import 'package:githo/helpers/text_form_field_validation.dart';
-import 'package:githo/database/database_helper.dart';
 import 'package:githo/helpers/time_helper.dart';
 import 'package:githo/models/habit_plan.dart';
 import 'package:githo/models/progress_data.dart';

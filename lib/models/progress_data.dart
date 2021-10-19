@@ -18,9 +18,9 @@
 
 import 'dart:convert';
 
-import 'package:githo/helpers/type_extentions.dart';
-import 'package:githo/helpers/time_helper.dart';
 import 'package:githo/database/database_helper.dart';
+import 'package:githo/helpers/time_helper.dart';
+import 'package:githo/helpers/type_extentions.dart';
 import 'package:githo/models/habit_plan.dart';
 import 'package:githo/models/used_classes/level.dart';
 import 'package:githo/models/used_classes/training.dart';

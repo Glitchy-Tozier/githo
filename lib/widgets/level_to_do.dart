@@ -21,14 +21,13 @@ import 'package:githo/config/custom_widget_themes.dart';
 
 import 'package:githo/config/style_data.dart';
 import 'package:githo/helpers/type_extentions.dart';
+import 'package:githo/models/used_classes/level.dart';
+import 'package:githo/models/used_classes/training_period.dart';
 import 'package:githo/widgets/bottom_sheets/text_sheet.dart';
 import 'package:githo/widgets/dividers/fat_divider.dart';
 import 'package:githo/widgets/dividers/thin_divider.dart';
 import 'package:githo/widgets/headings/heading.dart';
 import 'package:githo/widgets/period_list_view.dart';
-
-import 'package:githo/models/used_classes/level.dart';
-import 'package:githo/models/used_classes/training_period.dart';
 
 class LevelToDo extends StatelessWidget {
   /// Create the to-do-section for a whole [Level].

@@ -20,17 +20,18 @@ import 'package:flutter/material.dart';
 import 'package:githo/config/custom_widget_themes.dart';
 
 import 'package:githo/config/style_data.dart';
-import 'package:githo/helpers/edit_habit_routes.dart';
-import 'package:githo/widgets/background.dart';
-import 'package:githo/widgets/list_button.dart';
-import 'package:githo/widgets/dividers/fat_divider.dart';
-import 'package:githo/widgets/headings/screen_title.dart';
-import 'package:githo/widgets/headings/heading.dart';
-import 'package:githo/widgets/screen_ending_spacer.dart';
 import 'package:githo/database/database_helper.dart';
+import 'package:githo/helpers/edit_habit_routes.dart';
 import 'package:githo/models/habit_plan.dart';
 
 import 'package:githo/screens/habit_details.dart';
+
+import 'package:githo/widgets/background.dart';
+import 'package:githo/widgets/dividers/fat_divider.dart';
+import 'package:githo/widgets/headings/heading.dart';
+import 'package:githo/widgets/headings/screen_title.dart';
+import 'package:githo/widgets/list_button.dart';
+import 'package:githo/widgets/screen_ending_spacer.dart';
 
 class HabitList extends StatefulWidget {
   /// Lists all habit-plans

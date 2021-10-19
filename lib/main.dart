@@ -21,8 +21,8 @@ import 'package:flutter/services.dart';
 
 import 'package:githo/config/app_theme.dart';
 import 'package:githo/config/data_shortcut.dart';
-import 'package:githo/widgets/choose_first_screen.dart';
 import 'package:githo/database/adapt_database_to_os.dart';
+import 'package:githo/widgets/choose_first_screen.dart';
 
 void main() {
   adaptDatabaseToOS();

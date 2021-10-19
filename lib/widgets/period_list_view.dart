@@ -17,18 +17,18 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:githo/config/custom_widget_themes.dart';
 
+import 'package:githo/config/custom_widget_themes.dart';
 import 'package:githo/config/style_data.dart';
 import 'package:githo/helpers/format_date.dart';
+import 'package:githo/models/used_classes/training.dart';
+import 'package:githo/models/used_classes/training_period.dart';
 import 'package:githo/widgets/alert_dialogs/confirm_training_start.dart';
 import 'package:githo/widgets/bottom_sheets/text_sheet.dart';
 import 'package:githo/widgets/training_cards/active_training_card.dart';
 import 'package:githo/widgets/training_cards/countdown_card.dart';
 import 'package:githo/widgets/training_cards/gradient_training_card.dart';
 import 'package:githo/widgets/training_cards/training_card.dart';
-import 'package:githo/models/used_classes/training.dart';
-import 'package:githo/models/used_classes/training_period.dart';
 
 class PeriodListView extends StatefulWidget {
   /// Creates one of those horizontal training-listViews made out of cards.

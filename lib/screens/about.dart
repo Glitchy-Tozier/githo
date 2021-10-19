@@ -17,18 +17,18 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:githo/config/app_theme.dart';
-import 'package:githo/config/custom_widget_themes.dart';
-import 'package:githo/widgets/custom_licence_page.dart';
-import 'package:githo/widgets/list_button.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:githo/config/app_theme.dart';
+import 'package:githo/config/custom_widget_themes.dart';
 import 'package:githo/config/style_data.dart';
-import 'package:githo/widgets/background.dart';
 
+import 'package:githo/widgets/background.dart';
 import 'package:githo/widgets/bordered_image.dart';
+import 'package:githo/widgets/custom_licence_page.dart';
 import 'package:githo/widgets/headings/heading.dart';
+import 'package:githo/widgets/list_button.dart';
 
 /// Contains licenses and important links.
 

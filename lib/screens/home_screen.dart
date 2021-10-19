@@ -19,23 +19,13 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:githo/config/custom_widget_themes.dart';
 
+import 'package:githo/config/custom_widget_themes.dart';
 import 'package:githo/config/data_shortcut.dart';
 import 'package:githo/config/style_data.dart';
-import 'package:githo/helpers/get_duration_diff.dart';
-
-import 'package:githo/widgets/alert_dialogs/confirm_training_start.dart';
-import 'package:githo/widgets/alert_dialogs/training_done.dart';
-import 'package:githo/widgets/background.dart';
-import 'package:githo/widgets/bottom_sheets/text_sheet.dart';
-import 'package:githo/widgets/bottom_sheets/welcome_sheet.dart';
-import 'package:githo/widgets/headings/screen_title.dart';
-import 'package:githo/widgets/headings/heading.dart';
-import 'package:githo/widgets/screen_ending_spacer.dart';
-import 'package:githo/widgets/level_to_do.dart';
 
 import 'package:githo/database/database_helper.dart';
+import 'package:githo/helpers/get_duration_diff.dart';
 import 'package:githo/helpers/time_helper.dart';
 import 'package:githo/models/progress_data.dart';
 import 'package:githo/models/used_classes/level.dart';
@@ -43,6 +33,16 @@ import 'package:githo/models/used_classes/training.dart';
 
 import 'package:githo/screens/about.dart';
 import 'package:githo/screens/habit_list.dart';
+
+import 'package:githo/widgets/alert_dialogs/confirm_training_start.dart';
+import 'package:githo/widgets/alert_dialogs/training_done.dart';
+import 'package:githo/widgets/background.dart';
+import 'package:githo/widgets/bottom_sheets/text_sheet.dart';
+import 'package:githo/widgets/bottom_sheets/welcome_sheet.dart';
+import 'package:githo/widgets/headings/heading.dart';
+import 'package:githo/widgets/headings/screen_title.dart';
+import 'package:githo/widgets/level_to_do.dart';
+import 'package:githo/widgets/screen_ending_spacer.dart';
 
 /// The regular home-screen, containing the to-do's.
 

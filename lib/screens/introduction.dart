@@ -17,14 +17,17 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:introduction_screen/introduction_screen.dart';
+
+// ignore: directives_ordering
 import 'package:githo/config/style_data.dart';
-import 'package:githo/widgets/background.dart';
-import 'package:githo/widgets/bordered_image.dart';
 import 'package:githo/database/database_helper.dart';
 import 'package:githo/models/settings_data.dart';
 import 'package:githo/screens/home_screen.dart';
-import 'package:introduction_screen/introduction_screen.dart';
-// The introduction-screen that explains how this app works.
+import 'package:githo/widgets/background.dart';
+import 'package:githo/widgets/bordered_image.dart';
+
+/// The introduction-screen that explains how this app works.
 
 class OnBoardingScreen extends StatelessWidget {
   Future<void> _onIntroEnd(BuildContext context) async {
