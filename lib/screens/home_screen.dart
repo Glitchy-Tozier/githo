@@ -18,6 +18,7 @@
 
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 import 'package:githo/config/custom_widget_themes.dart';
@@ -33,6 +34,7 @@ import 'package:githo/models/used_classes/training.dart';
 
 import 'package:githo/screens/about.dart';
 import 'package:githo/screens/habit_list.dart';
+import 'package:githo/screens/set_themes.dart';
 
 import 'package:githo/widgets/alert_dialogs/confirm_training_start.dart';
 import 'package:githo/widgets/alert_dialogs/training_done.dart';
@@ -280,6 +282,28 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                     child: const Icon(
                       Icons.info,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SpeedDialChild(
+                    backgroundColor: Colors.pink.shade900,
+                    label: 'Themes',
+                    labelStyle: Theme.of(context).textTheme.bodyText2!.copyWith(
+                          color: Colors.black,
+                        ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<SetThemes>(
+                          builder: (BuildContext context) => SetThemes(),
+                        ),
+                      );
+                    },
+                    child: Icon(
+                      SchedulerBinding.instance!.window.platformBrightness ==
+                              Brightness.light
+                          ? Icons.light_mode
+                          : Icons.dark_mode,
                       color: Colors.white,
                     ),
                   ),

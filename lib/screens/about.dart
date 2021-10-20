@@ -20,10 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:githo/config/app_theme.dart';
-import 'package:githo/config/custom_widget_themes.dart';
 import 'package:githo/config/style_data.dart';
-
 import 'package:githo/widgets/background.dart';
 import 'package:githo/widgets/bordered_image.dart';
 import 'package:githo/widgets/custom_licence_page.dart';
@@ -39,8 +36,7 @@ class About extends StatelessWidget {
 
     return Scaffold(
       body: Background(
-        child: Container(
-          alignment: Alignment.center,
+        child: Padding(
           padding: StyleData.screenPadding,
           child: FutureBuilder<PackageInfo>(
             future: futurePackageInfo,
@@ -95,49 +91,6 @@ class About extends StatelessWidget {
                             ),
                           ));
                         },
-                      ),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Expanded(
-                            child: Theme(
-                              data: AppThemeData.instance.currentLightTheme,
-                              child: ListButton(
-                                text: 'Change LightTheme',
-                                color: ThemedColors.greyFrom(
-                                  AppThemeData.instance.currentLightThemeEnum,
-                                ),
-                                onPressed: () {
-                                  AppThemeData.instance.setNewLightMode(
-                                    AppThemeData.instance.currentLightThemeEnum
-                                        .nextEnum,
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Theme(
-                              data: AppThemeData.instance.currentDarkTheme,
-                              child: ListButton(
-                                text: 'Change DarkTheme',
-                                color: ThemedColors.greyFrom(
-                                  AppThemeData.instance.currentDarkThemeEnum,
-                                ),
-                                onPressed: () {
-                                  AppThemeData.instance.setNewDarkMode(
-                                    AppThemeData
-                                        .instance.currentDarkThemeEnum.nextEnum,
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      ListButton(
-                        text: 'Go back',
-                        onPressed: () => Navigator.pop(context),
                       ),
                     ],
                   );

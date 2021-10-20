@@ -31,21 +31,36 @@ class ListButton extends StatelessWidget {
   final String text;
   final Function onPressed;
 
+  /// The distance the button keeps to other widgets.
+  static const EdgeInsets margin = EdgeInsets.symmetric(
+    vertical: 5,
+  );
+
+  /// The minimum size the button can have.
+  static const Size minSize = Size(
+    double.infinity,
+    60,
+  );
+
+  /// The distance the button's border stays away from its child-widget.
+  static const EdgeInsets padding = EdgeInsets.symmetric(
+    vertical: 20,
+    horizontal: 20,
+  );
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
+      padding: margin,
       child: ElevatedButton(
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color?>(
             color ?? ThemedColors.grey,
           ),
           minimumSize: MaterialStateProperty.all<Size>(
-            const Size(double.infinity, 60),
+            minSize,
           ),
-          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-            const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-          ),
+          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(padding),
           alignment: Alignment.centerLeft,
         ),
         onPressed: () => onPressed(),
