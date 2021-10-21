@@ -151,12 +151,12 @@ class OnBoardingScreen extends StatelessWidget {
           ),
           curve: Curves.fastLinearToSlowEaseIn,
           controlsMargin: const EdgeInsets.all(16),
-          dotsDecorator: const DotsDecorator(
-            size: Size(10.0, 10.0),
-            color: Colors.black,
+          dotsDecorator: DotsDecorator(
+            size: const Size(10.0, 10.0),
+            color: Theme.of(context).textTheme.bodyText2!.color!,
             activeColor: Colors.pink,
-            activeSize: Size(22.0, 10.0),
-            activeShape: RoundedRectangleBorder(
+            activeSize: const Size(22.0, 10.0),
+            activeShape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(25.0)),
             ),
           ),
