@@ -49,9 +49,12 @@ class SetThemes extends StatelessWidget {
             Padding(
               padding: StyleData.screenPadding,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   const SizedBox(height: 20),
-                  const Text('Click on a button to change the theme.'),
+                  const Text(
+                    'Click on a button to change the theme used in light / dark mode.',
+                  ),
                   const SizedBox(height: 60),
                   IntrinsicHeight(
                     child: Row(
