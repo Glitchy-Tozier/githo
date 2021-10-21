@@ -23,14 +23,15 @@ import 'package:githo/database/database_helper.dart';
 import 'package:githo/models/settings_data.dart';
 import 'package:githo/screens/home_screen.dart';
 import 'package:githo/screens/introduction.dart';
-import 'package:githo/widgets/background.dart';
 
-/// Return the apropriate first screen.
+/// A splash screen that decides which view/screen should follow.
 ///
-/// If the app is started for the first time: [OnBoardingScreen];
-/// Else: [HomeScreen];
+/// If the app is started for the first time:
+/// [OnBoardingScreen];
+/// Else:
+/// [HomeScreen].
 
-class FirstScreen extends StatelessWidget {
+class SplashScreen extends StatelessWidget {
   final Future<SettingsData> _settings = DatabaseHelper.instance.getSettings();
 
   /// Update the app's themes according to what is stored in the database.
@@ -49,6 +50,8 @@ class FirstScreen extends StatelessWidget {
             final SettingsData settings = snapshot.data!;
 
             if (settings.showIntroduction) {
+              // If this is the first start of the app reading the theme-
+              // config isn't needed.
               return OnBoardingScreen();
             } else {
               return FutureBuilder<void>(
@@ -57,28 +60,37 @@ class FirstScreen extends StatelessWidget {
                   if (snapshot.connectionState == ConnectionState.done) {
                     return HomeScreen();
                   }
-                  // While loading, return this:
-                  return Background(
-                    child: Container(
-                      height: 30,
-                      width: 30,
-                      color: Colors.green,
-                    ),
-                  );
+                  return Splash();
                 },
               );
             }
           }
         }
-        // While loading, return this:
-        return Background(
-          child: Container(
-            height: 30,
-            width: 30,
-            color: Colors.blue,
-          ),
-        );
+        return Splash();
       },
+    );
+  }
+}
+
+/// The [Widget] displayed on the [SplashScreen].
+class Splash extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/pixabayColorGradient.jpg'),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Center(
+        child: Image(
+          image: const AssetImage('assets/launcher/foreground.png'),
+          width: screenWidth * 0.7,
+        ),
+      ),
     );
   }
 }

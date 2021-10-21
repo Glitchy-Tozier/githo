@@ -22,7 +22,7 @@ import 'package:flutter/services.dart';
 import 'package:githo/config/app_theme.dart';
 import 'package:githo/config/data_shortcut.dart';
 import 'package:githo/database/adapt_database_to_os.dart';
-import 'package:githo/widgets/choose_first_screen.dart';
+import 'package:githo/widgets/splash_screen.dart';
 
 void main() {
   adaptDatabaseToOS();
@@ -57,7 +57,7 @@ class _MyAppState extends State<MyApp> {
       title: 'Githo - Get Into The Habit Of…',
       theme: AppThemeData.instance.currentLightTheme,
       darkTheme: AppThemeData.instance.currentDarkTheme,
-      home: FirstScreen(),
+      home: SplashScreen(),
       debugShowCheckedModeBanner: DataShortcut.testing,
     );
   }
