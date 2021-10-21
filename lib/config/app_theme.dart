@@ -19,6 +19,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
+import 'package:githo/database/database_helper.dart';
+import 'package:githo/models/settings_data.dart';
+
 enum ThemeEnum { light, dark, black }
 
 /// A few handy methods for the [ThemeEnum]-enum.
@@ -63,21 +66,46 @@ class AppThemeData with ChangeNotifier {
   /// The singleton-instance of DatabaseHelper.
   static AppThemeData instance = AppThemeData._privateConstructor();
 
+  /// The field that tells the rest of the app what [ThemeEnum] should be used
+  /// during daytime.
+  /// Only change this field by using the method [setNewLightMode]!
   ThemeEnum currentLightThemeEnum = ThemeEnum.light;
+
+  /// The field that tells the rest of the app what [ThemeEnum] should be used
+  /// during nighttime.
+  /// Only change this field by using the method [setNewDarkMode]!
   ThemeEnum currentDarkThemeEnum = ThemeEnum.dark;
 
   /// Change [currentLightThemeEnum] to some other [ThemeEnum]-value
   /// and use this new information.
-  void setNewLightMode(final ThemeEnum newThemeEnum) {
-    currentLightThemeEnum = newThemeEnum;
-    notifyListeners();
+  Future<void> setNewLightMode(final ThemeEnum newThemeEnum) async {
+    if (newThemeEnum != currentLightThemeEnum) {
+      // Set the relevant field to the new [ThemeEnum].
+      currentLightThemeEnum = newThemeEnum;
+      // Save the new theme to the database.
+      final SettingsData settingsData =
+          await DatabaseHelper.instance.getSettings();
+      settingsData.lightThemeEnum = newThemeEnum;
+      await DatabaseHelper.instance.updateSettings(settingsData);
+      // Make sure the app updates its design.
+      notifyListeners();
+    }
   }
 
   /// Change [currentDarkThemeEnum] to some other [ThemeEnum]-value
   /// and use this new information.
-  void setNewDarkMode(final ThemeEnum newThemeEnum) {
-    currentDarkThemeEnum = newThemeEnum;
-    notifyListeners();
+  Future<void> setNewDarkMode(final ThemeEnum newThemeEnum) async {
+    if (newThemeEnum != currentDarkThemeEnum) {
+      // Set the relevant field to the new [ThemeEnum].
+      currentDarkThemeEnum = newThemeEnum;
+      // Save the new theme to the database.
+      final SettingsData settingsData =
+          await DatabaseHelper.instance.getSettings();
+      settingsData.darkThemeEnum = newThemeEnum;
+      await DatabaseHelper.instance.updateSettings(settingsData);
+      // Make sure the app updates its design.
+      notifyListeners();
+    }
   }
 
   /// Returns the [ThemeEnum] that corresponds to the currently used
@@ -125,7 +153,7 @@ class AppThemeData with ChangeNotifier {
   static const double _bodyText1size = 16;
   static const double _bodyText2size = 16;
   // A shortcut to important [InputDecorationTheme]-values.
-  static final BorderRadius _borderRadius = BorderRadius.circular(10);
+  static final BorderRadius _inputDecBorderRadius = BorderRadius.circular(10);
 
   final ThemeData lightTheme = ThemeData(
     primarySwatch: Colors.pink,
@@ -165,7 +193,7 @@ class AppThemeData with ChangeNotifier {
     dividerColor: Colors.black54,
     inputDecorationTheme: InputDecorationTheme(
       border: OutlineInputBorder(
-        borderRadius: _borderRadius,
+        borderRadius: _inputDecBorderRadius,
       ),
     ),
   );
@@ -210,10 +238,10 @@ class AppThemeData with ChangeNotifier {
     ),
     inputDecorationTheme: InputDecorationTheme(
       border: OutlineInputBorder(
-        borderRadius: _borderRadius,
+        borderRadius: _inputDecBorderRadius,
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: _borderRadius,
+        borderRadius: _inputDecBorderRadius,
         borderSide: const BorderSide(
           color: Colors.white,
         ),
@@ -225,7 +253,7 @@ class AppThemeData with ChangeNotifier {
         color: Colors.white,
       ),
       errorBorder: OutlineInputBorder(
-        borderRadius: _borderRadius,
+        borderRadius: _inputDecBorderRadius,
         borderSide: BorderSide(
           color: Colors.red.shade300,
         ),
@@ -276,10 +304,10 @@ class AppThemeData with ChangeNotifier {
     ),
     inputDecorationTheme: InputDecorationTheme(
       border: OutlineInputBorder(
-        borderRadius: _borderRadius,
+        borderRadius: _inputDecBorderRadius,
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: _borderRadius,
+        borderRadius: _inputDecBorderRadius,
         borderSide: const BorderSide(
           color: Colors.white,
         ),
@@ -291,7 +319,7 @@ class AppThemeData with ChangeNotifier {
         color: Colors.white,
       ),
       errorBorder: OutlineInputBorder(
-        borderRadius: _borderRadius,
+        borderRadius: _inputDecBorderRadius,
         borderSide: BorderSide(
           color: Colors.red.shade300,
         ),

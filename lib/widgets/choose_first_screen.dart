@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 
+import 'package:githo/config/app_theme.dart';
 import 'package:githo/database/database_helper.dart';
 import 'package:githo/models/settings_data.dart';
 import 'package:githo/screens/home_screen.dart';
@@ -32,6 +33,12 @@ import 'package:githo/widgets/background.dart';
 class FirstScreen extends StatelessWidget {
   final Future<SettingsData> _settings = DatabaseHelper.instance.getSettings();
 
+  /// Update the app's themes according to what is stored in the database.
+  Future<void> setThemes(final SettingsData settingsData) async {
+    await AppThemeData.instance.setNewLightMode(settingsData.lightThemeEnum);
+    await AppThemeData.instance.setNewDarkMode(settingsData.darkThemeEnum);
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<SettingsData>(
@@ -44,12 +51,33 @@ class FirstScreen extends StatelessWidget {
             if (settings.showIntroduction) {
               return OnBoardingScreen();
             } else {
-              return HomeScreen();
+              return FutureBuilder<void>(
+                future: setThemes(settings),
+                builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    return HomeScreen();
+                  }
+                  // While loading, return this:
+                  return Background(
+                    child: Container(
+                      height: 30,
+                      width: 30,
+                      color: Colors.green,
+                    ),
+                  );
+                },
+              );
             }
           }
         }
         // While loading, return this:
-        return const Background();
+        return Background(
+          child: Container(
+            height: 30,
+            width: 30,
+            color: Colors.blue,
+          ),
+        );
       },
     );
   }
