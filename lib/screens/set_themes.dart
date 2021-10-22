@@ -177,7 +177,7 @@ class _SetThemesState extends State<SetThemes> with WidgetsBindingObserver {
                   const SizedBox(height: 55),
                   const Text(
                     'To always use the same theme, '
-                    'just set both modes to that theme.',
+                    'set both light and dark mode to that theme.',
                   ),
                   ScreenEndingSpacer(),
                 ],
