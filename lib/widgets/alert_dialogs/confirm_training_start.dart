@@ -51,6 +51,7 @@ class ConfirmTrainingStart extends StatelessWidget {
       ),
       content: Text(
         'To-Do: $toDo\n\nReps: $amountString',
+        style: Theme.of(context).textTheme.bodyText2,
       ),
       actions: <Widget>[
         Row(
