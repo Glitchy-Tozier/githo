@@ -1,0 +1,1 @@
+- You can now choose from three different themes: light, dark, black. They're beautiful.
