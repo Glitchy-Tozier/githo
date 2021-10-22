@@ -27,6 +27,7 @@ import 'package:githo/config/style_data.dart';
 
 import 'package:githo/database/database_helper.dart';
 import 'package:githo/helpers/get_duration_diff.dart';
+import 'package:githo/helpers/runtime_variables.dart';
 import 'package:githo/helpers/time_helper.dart';
 import 'package:githo/models/progress_data.dart';
 import 'package:githo/models/used_classes/level.dart';
@@ -55,7 +56,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late Future<ProgressData> _progressData;
-  bool initialLoad = true;
 
   Timer? timer;
   final GlobalKey activeCardKey = GlobalKey();
@@ -164,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 } else {
                   // If connection is done and there is an active habitPlan:
                   _startReloadTimer(progressData);
-                  if (initialLoad) {
+                  if (RuntimeVariables.instance.showWelcomeSheet) {
                     WidgetsBinding.instance?.addPostFrameCallback(
                       (_) => showModalBottomSheet(
                         context: context,
@@ -173,7 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             WelcomeSheet(progressData: progressData),
                       ),
                     );
-                    initialLoad = false;
+                    RuntimeVariables.instance.showWelcomeSheet = false;
                   }
 
                   return ListView(
