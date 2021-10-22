@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+
 import 'package:githo/config/app_theme.dart';
 import 'package:githo/config/custom_widget_themes.dart';
 import 'package:githo/config/style_data.dart';
@@ -30,12 +31,37 @@ import 'package:githo/widgets/screen_ending_spacer.dart';
 
 /// A view that allows for changing the app's theme.
 
-class SetThemes extends StatelessWidget {
+class SetThemes extends StatefulWidget {
+  @override
+  State<SetThemes> createState() => _SetThemesState();
+}
+
+class _SetThemesState extends State<SetThemes> with WidgetsBindingObserver {
+  Brightness brightness = SchedulerBinding.instance!.window.platformBrightness;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addObserver(this);
+  }
+
+  // Reload this screen if platform-brightness (light/dark mode) changes.
+  @override
+  void didChangePlatformBrightness() {
+    setState(() {
+      brightness = SchedulerBinding.instance!.window.platformBrightness;
+    });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance!.removeObserver(this);
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final Brightness brightness =
-        SchedulerBinding.instance!.window.platformBrightness;
-
+    // Shortcuts to simplify some of the following commands.
     final AppThemeData themeClass = AppThemeData.instance;
     final ThemeEnum currentLightThemeEnum = themeClass.currentLightThemeEnum;
     final ThemeEnum currentDarkThemeEnum = themeClass.currentDarkThemeEnum;
@@ -150,7 +176,7 @@ class SetThemes extends StatelessWidget {
                   ),
                   const SizedBox(height: 55),
                   const Text(
-                    'If you always want to use the same theme, '
+                    'To always use the same theme, '
                     'just set both modes to that theme.',
                   ),
                   ScreenEndingSpacer(),
