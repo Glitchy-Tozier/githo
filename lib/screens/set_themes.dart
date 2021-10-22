@@ -73,6 +73,7 @@ class _SetThemesState extends State<SetThemes> with WidgetsBindingObserver {
     return Scaffold(
       body: Background(
         child: ListView(
+          physics: const BouncingScrollPhysics(),
           children: <Widget>[
             const ScreenTitle('Themes'),
             const FatDivider(),
