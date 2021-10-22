@@ -73,7 +73,7 @@ class SetThemes extends StatelessWidget {
                               const SizedBox(height: 20),
                               ElevatedButton(
                                 onPressed: () {
-                                  themeClass.setNewLightMode(
+                                  themeClass.setNewLightEnum(
                                     currentLightThemeEnum.nextEnum,
                                   );
                                 },
@@ -117,7 +117,7 @@ class SetThemes extends StatelessWidget {
                               const SizedBox(height: 20),
                               ElevatedButton(
                                 onPressed: () {
-                                  themeClass.setNewDarkMode(
+                                  themeClass.setNewDarkEnum(
                                     currentDarkThemeEnum.nextEnum,
                                   );
                                 },

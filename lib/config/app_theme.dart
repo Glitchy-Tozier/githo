@@ -22,6 +22,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:githo/database/database_helper.dart';
 import 'package:githo/models/settings_data.dart';
 
+/// A class that is used to represent what [ThemeData] should be used.
 enum ThemeEnum { light, dark, black }
 
 /// A few handy methods for the [ThemeEnum]-enum.
@@ -59,7 +60,8 @@ extension ThemeEnumMethods on ThemeEnum {
   }
 }
 
-/// Defines how the app looks.
+/// Contains the app's [ThemeData]s and the information for which
+/// [ThemeData] should be used in light mode and dark mode.
 class AppThemeData with ChangeNotifier {
   AppThemeData._privateConstructor();
 
@@ -68,20 +70,30 @@ class AppThemeData with ChangeNotifier {
 
   /// The field that tells the rest of the app what [ThemeEnum] should be used
   /// during daytime.
-  /// Only change this field by using the method [setNewLightMode]!
-  ThemeEnum currentLightThemeEnum = ThemeEnum.light;
+  /// Only change this field by using the method [setNewLightEnum]!
+  ThemeEnum _currentLightThemeEnum = ThemeEnum.light;
 
   /// The field that tells the rest of the app what [ThemeEnum] should be used
   /// during nighttime.
-  /// Only change this field by using the method [setNewDarkMode]!
-  ThemeEnum currentDarkThemeEnum = ThemeEnum.dark;
+  /// Only change this field by using the method [setNewDarkEnum]!
+  ThemeEnum _currentDarkThemeEnum = ThemeEnum.dark;
 
-  /// Change [currentLightThemeEnum] to some other [ThemeEnum]-value
+  /// Returns the [ThemeEnum] used during daytime (light mode).
+  ThemeEnum get currentLightThemeEnum {
+    return _currentLightThemeEnum;
+  }
+
+  /// Returns the [ThemeEnum] used during nighttime (dark mode).
+  ThemeEnum get currentDarkThemeEnum {
+    return _currentDarkThemeEnum;
+  }
+
+  /// Change [_currentLightThemeEnum] to some other [ThemeEnum]-value
   /// and use this new information.
-  Future<void> setNewLightMode(final ThemeEnum newThemeEnum) async {
-    if (newThemeEnum != currentLightThemeEnum) {
+  Future<void> setNewLightEnum(final ThemeEnum newThemeEnum) async {
+    if (newThemeEnum != _currentLightThemeEnum) {
       // Set the relevant field to the new [ThemeEnum].
-      currentLightThemeEnum = newThemeEnum;
+      _currentLightThemeEnum = newThemeEnum;
       // Save the new theme to the database.
       final SettingsData settingsData =
           await DatabaseHelper.instance.getSettings();
@@ -92,12 +104,12 @@ class AppThemeData with ChangeNotifier {
     }
   }
 
-  /// Change [currentDarkThemeEnum] to some other [ThemeEnum]-value
+  /// Change [_currentDarkThemeEnum] to some other [ThemeEnum]-value
   /// and use this new information.
-  Future<void> setNewDarkMode(final ThemeEnum newThemeEnum) async {
-    if (newThemeEnum != currentDarkThemeEnum) {
+  Future<void> setNewDarkEnum(final ThemeEnum newThemeEnum) async {
+    if (newThemeEnum != _currentDarkThemeEnum) {
       // Set the relevant field to the new [ThemeEnum].
-      currentDarkThemeEnum = newThemeEnum;
+      _currentDarkThemeEnum = newThemeEnum;
       // Save the new theme to the database.
       final SettingsData settingsData =
           await DatabaseHelper.instance.getSettings();
@@ -108,22 +120,9 @@ class AppThemeData with ChangeNotifier {
     }
   }
 
-  /// Returns the [ThemeEnum] that corresponds to the currently used
-  /// [ThemeData].
-  ThemeEnum get currentThemeMode {
-    final Brightness brightness =
-        SchedulerBinding.instance!.window.platformBrightness;
-
-    if (brightness == Brightness.light) {
-      return currentLightThemeEnum;
-    } else {
-      return currentDarkThemeEnum;
-    }
-  }
-
   /// Returns the [ThemeData] that is to be displayed in light-mode.
   ThemeData get currentLightTheme {
-    switch (currentLightThemeEnum) {
+    switch (_currentLightThemeEnum) {
       case ThemeEnum.light:
         return lightTheme;
       case ThemeEnum.dark:
@@ -135,13 +134,26 @@ class AppThemeData with ChangeNotifier {
 
   /// Returns the [ThemeData] that is to be displayed in dark-mode.
   ThemeData get currentDarkTheme {
-    switch (currentDarkThemeEnum) {
+    switch (_currentDarkThemeEnum) {
       case ThemeEnum.light:
         return lightTheme;
       case ThemeEnum.dark:
         return _darkTheme;
       default:
         return _blackTheme;
+    }
+  }
+
+  /// Returns the [ThemeEnum] that corresponds to the currently used
+  /// [ThemeData].
+  ThemeEnum get currentThemeMode {
+    final Brightness brightness =
+        SchedulerBinding.instance!.window.platformBrightness;
+
+    if (brightness == Brightness.light) {
+      return _currentLightThemeEnum;
+    } else {
+      return _currentDarkThemeEnum;
     }
   }
 
