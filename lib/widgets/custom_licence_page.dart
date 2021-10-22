@@ -40,7 +40,9 @@ class CustomLicensePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Theme(
-      data: AppThemeData.instance.lightTheme,
+      data: AppThemeData.instance.lightTheme.copyWith(
+        appBarTheme: Theme.of(context).appBarTheme,
+      ),
       child: LicensePage(
         applicationIcon: applicationIcon,
         applicationLegalese: applicationLegalese,
