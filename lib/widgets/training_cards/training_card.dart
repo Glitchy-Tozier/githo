@@ -25,6 +25,7 @@ class TrainingCard extends StatelessWidget {
     required this.horizontalMargin,
     required this.cardWidth,
     required this.cardHeight,
+    this.shadowColor,
     required this.color,
     required this.child,
     Key? key,
@@ -34,6 +35,7 @@ class TrainingCard extends StatelessWidget {
   final double cardWidth;
   final double cardHeight;
   final Color color;
+  final Color? shadowColor;
   final Widget child;
 
   static const double topMargin = 5;
@@ -59,9 +61,10 @@ class TrainingCard extends StatelessWidget {
           width: cardWidth,
           height: cardHeight,
           child: TrainingCardThemes.getThemedCard(
+            cardHeight: cardHeight,
             color: color,
             elevation: 5,
-            cardHeight: cardHeight,
+            shadowColor: shadowColor,
             child: child,
           ),
         ),

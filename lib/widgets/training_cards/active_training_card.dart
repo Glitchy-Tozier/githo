@@ -73,9 +73,9 @@ class _ActiveTrainingCardState extends State<ActiveTrainingCard> {
           width: widget.cardWidth,
           height: widget.cardHeight,
           child: TrainingCardThemes.getThemedCard(
+            cardHeight: widget.cardHeight,
             color: color,
             elevation: 7,
-            cardHeight: widget.cardHeight,
             onTap: () {
               widget.training.incrementReps();
               setState(() {});

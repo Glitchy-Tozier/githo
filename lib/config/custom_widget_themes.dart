@@ -249,9 +249,10 @@ class TrainingCardThemes {
 
   /// Returns an appropriately styled visible part of a [TrainingCard].
   static Widget getThemedCard({
+    required final double cardHeight,
     required final Color color,
     required final double elevation,
-    required final double cardHeight,
+    final Color? shadowColor,
     final void Function()? onTap,
     final void Function()? onLongPress,
     required final Widget child,
@@ -261,9 +262,10 @@ class TrainingCardThemes {
     switch (currentTheme) {
       case ThemeEnum.black:
         return Material(
-          color: color,
           borderRadius: BorderRadius.circular(borderRadius),
+          color: color,
           elevation: elevation,
+          shadowColor: shadowColor,
           child: Padding(
             padding: EdgeInsets.all(
                 cardHeight / 20), // Adapts border-width to card-height.
@@ -284,9 +286,10 @@ class TrainingCardThemes {
         );
       default: // For light and dark theme.
         return Material(
-          color: color,
           borderRadius: BorderRadius.circular(borderRadius),
+          color: color,
           elevation: elevation,
+          shadowColor: shadowColor,
           child: InkWell(
             splashColor: Colors.black,
             onTap: onTap,

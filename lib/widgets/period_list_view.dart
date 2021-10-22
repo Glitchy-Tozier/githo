@@ -62,6 +62,7 @@ class _PeriodListViewState extends State<PeriodListView> {
       cardMarginRL = 6;
 
       final Color color;
+      Color? shadowColor;
       final Widget child;
 
       if (widget.trainingPeriod.status == 'completed') {
@@ -224,6 +225,7 @@ class _PeriodListViewState extends State<PeriodListView> {
         }
       } else {
         color = CardColors.locked;
+        shadowColor = Colors.black.withOpacity(0.5);
         child = const Icon(Icons.lock);
       }
 
@@ -233,6 +235,7 @@ class _PeriodListViewState extends State<PeriodListView> {
           cardWidth: cardWidth,
           cardHeight: cardHeight,
           color: color,
+          shadowColor: shadowColor,
           child: child,
         ),
       );
