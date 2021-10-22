@@ -119,7 +119,13 @@ class LevelColors {
   }
 
   static Color get locked {
-    return ThemedColors.grey;
+    final ThemeEnum theme = AppThemeData.instance.currentThemeMode;
+    switch (theme) {
+      case ThemeEnum.black:
+        return Colors.black;
+      default:
+        return ThemedColors.grey.withOpacity(0.5);
+    }
   }
 }
 
