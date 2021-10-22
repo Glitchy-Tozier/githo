@@ -64,6 +64,9 @@ class SplashScreen extends StatelessWidget {
                 },
               );
             }
+          } else if (snapshot.hasError) {
+            // If connection is done but there was an error:
+            print(snapshot.error);
           }
         }
         return Splash();
