@@ -65,6 +65,10 @@ class _SetThemesState extends State<SetThemes> with WidgetsBindingObserver {
     final AppThemeData themeClass = AppThemeData.instance;
     final ThemeEnum currentLightThemeEnum = themeClass.currentLightThemeEnum;
     final ThemeEnum currentDarkThemeEnum = themeClass.currentDarkThemeEnum;
+    final TextStyle lightBodyStyle2 =
+        themeClass.currentLightTheme.textTheme.bodyText2!;
+    final TextStyle darkBodyStyle2 =
+        themeClass.currentDarkTheme.textTheme.bodyText2!;
 
     return Scaffold(
       body: Background(
@@ -109,10 +113,8 @@ class _SetThemesState extends State<SetThemes> with WidgetsBindingObserver {
                                   primary: ThemedColors.greyFrom(
                                     currentLightThemeEnum,
                                   ),
-                                  textStyle: themeClass
-                                      .currentLightTheme.textTheme.bodyText2,
-                                  onPrimary: themeClass.currentLightTheme
-                                      .textTheme.bodyText2!.color,
+                                  onPrimary: lightBodyStyle2.color,
+                                  textStyle: lightBodyStyle2,
                                   shape: const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(4),
@@ -153,10 +155,8 @@ class _SetThemesState extends State<SetThemes> with WidgetsBindingObserver {
                                   primary: ThemedColors.greyFrom(
                                     currentDarkThemeEnum,
                                   ),
-                                  textStyle: themeClass
-                                      .currentDarkTheme.textTheme.bodyText2,
-                                  onPrimary: themeClass.currentDarkTheme
-                                      .textTheme.bodyText2!.color,
+                                  onPrimary: darkBodyStyle2.color,
+                                  textStyle: darkBodyStyle2,
                                   shape: const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.only(
                                       topRight: Radius.circular(4),
