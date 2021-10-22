@@ -56,8 +56,9 @@ class ActivationFAB extends StatelessWidget {
         context: context,
         builder: (BuildContext buildContext) => ConfirmActivationChange(
           title: 'Confirm Deactivation',
-          content: const Text(
+          content: Text(
             'All progress will be lost.',
+            style: Theme.of(context).textTheme.bodyText2,
           ),
           onConfirmation: () {
             deactivateHabitPlan();
@@ -97,15 +98,17 @@ class ActivationFAB extends StatelessWidget {
             content: RichText(
               text: TextSpan(
                 children: <TextSpan>[
-                  const TextSpan(
+                  TextSpan(
                     text: 'Your previous habit-plan ',
+                    style: Theme.of(context).textTheme.bodyText2,
                   ),
                   TextSpan(
                     text: '(Habit: ${progressData.habit})',
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
-                  const TextSpan(
+                  TextSpan(
                     text: ' will be deactivated.',
+                    style: Theme.of(context).textTheme.bodyText2,
                   ),
                 ],
               ),
