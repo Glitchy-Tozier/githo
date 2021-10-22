@@ -168,82 +168,53 @@ class AppThemeData with ChangeNotifier {
   static final BorderRadius _inputDecBorderRadius = BorderRadius.circular(10);
 
   final ThemeData lightTheme = ThemeData(
-    primarySwatch: Colors.pink,
     appBarTheme: AppBarTheme(
       color: Colors.pink.shade400,
     ),
     backgroundColor: Colors.white,
-    textTheme: const TextTheme(
-      headline1: TextStyle(
-        fontSize: _headline1size,
-        fontWeight: FontWeight.bold,
-        color: Colors.black,
-      ),
-      headline2: TextStyle(
-        fontSize: _headline2size,
-        fontWeight: FontWeight.bold,
-        color: Colors.black,
-      ),
-      headline3: TextStyle(
-        fontSize: _headline3size,
-        fontWeight: FontWeight.bold,
-        color: Colors.black,
-      ),
-      headline4: TextStyle(
-        fontSize: _headline4size,
-        color: Colors.black,
-      ),
-      bodyText1: TextStyle(
-        fontSize: _bodyText1size,
-        color: Colors.black,
-      ),
-      bodyText2: TextStyle(
-        fontSize: _bodyText2size,
-        color: Colors.black,
-      ),
-    ),
     dividerColor: Colors.black54,
     inputDecorationTheme: InputDecorationTheme(
       border: OutlineInputBorder(
         borderRadius: _inputDecBorderRadius,
       ),
     ),
-  );
-
-  final ThemeData _darkTheme = ThemeData(
     primarySwatch: Colors.pink,
-    appBarTheme: AppBarTheme(
-      color: Colors.pink.shade800,
-    ),
-    backgroundColor: Colors.black,
     textTheme: const TextTheme(
       headline1: TextStyle(
         fontSize: _headline1size,
         fontWeight: FontWeight.bold,
+        color: Colors.black,
       ),
       headline2: TextStyle(
         fontSize: _headline2size,
         fontWeight: FontWeight.bold,
+        color: Colors.black,
       ),
       headline3: TextStyle(
         fontSize: _headline3size,
         fontWeight: FontWeight.bold,
+        color: Colors.black,
       ),
       headline4: TextStyle(
         fontSize: _headline4size,
+        color: Colors.black,
       ),
-      headline6: TextStyle(),
       bodyText1: TextStyle(
         fontSize: _bodyText1size,
+        color: Colors.black,
       ),
       bodyText2: TextStyle(
         fontSize: _bodyText2size,
+        color: Colors.black,
       ),
-      subtitle1: TextStyle(),
-    ).apply(
-      bodyColor: Colors.white,
-      displayColor: Colors.white,
     ),
+  );
+
+  final ThemeData _darkTheme = ThemeData(
+    appBarTheme: AppBarTheme(
+      color: Colors.pink.shade800,
+    ),
+    backgroundColor: Colors.black,
     dividerColor: Colors.white54,
     iconTheme: const IconThemeData(
       color: Colors.white,
@@ -274,14 +245,7 @@ class AppThemeData with ChangeNotifier {
         color: Colors.red.shade50,
       ),
     ),
-  );
-
-  final ThemeData _blackTheme = ThemeData(
     primarySwatch: Colors.pink,
-    appBarTheme: AppBarTheme(
-      color: Colors.pink.shade900,
-    ),
-    backgroundColor: Colors.black,
     textTheme: const TextTheme(
       headline1: TextStyle(
         fontSize: _headline1size,
@@ -310,6 +274,13 @@ class AppThemeData with ChangeNotifier {
       bodyColor: Colors.white,
       displayColor: Colors.white,
     ),
+  );
+
+  final ThemeData _blackTheme = ThemeData(
+    appBarTheme: AppBarTheme(
+      color: Colors.pink.shade900,
+    ),
+    backgroundColor: Colors.black,
     dividerColor: Colors.black,
     iconTheme: const IconThemeData(
       color: Colors.white,
@@ -339,6 +310,35 @@ class AppThemeData with ChangeNotifier {
       errorStyle: TextStyle(
         color: Colors.red.shade50,
       ),
+    ),
+    primarySwatch: Colors.pink,
+    textTheme: const TextTheme(
+      headline1: TextStyle(
+        fontSize: _headline1size,
+        fontWeight: FontWeight.bold,
+      ),
+      headline2: TextStyle(
+        fontSize: _headline2size,
+        fontWeight: FontWeight.bold,
+      ),
+      headline3: TextStyle(
+        fontSize: _headline3size,
+        fontWeight: FontWeight.bold,
+      ),
+      headline4: TextStyle(
+        fontSize: _headline4size,
+      ),
+      headline6: TextStyle(),
+      bodyText1: TextStyle(
+        fontSize: _bodyText1size,
+      ),
+      bodyText2: TextStyle(
+        fontSize: _bodyText2size,
+      ),
+      subtitle1: TextStyle(),
+    ).apply(
+      bodyColor: Colors.white,
+      displayColor: Colors.white,
     ),
   );
 }
