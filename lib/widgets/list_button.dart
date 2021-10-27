@@ -23,13 +23,15 @@ class ListButton extends StatelessWidget {
   /// The default list-item used in this application.
   const ListButton({
     this.color,
-    required this.text,
     required this.onPressed,
+    this.text = '',
+    this.child,
   });
 
   final Color? color;
-  final String text;
   final Function onPressed;
+  final String text;
+  final Widget? child;
 
   /// The distance the button keeps to other widgets.
   static const EdgeInsets margin = EdgeInsets.symmetric(
@@ -64,12 +66,13 @@ class ListButton extends StatelessWidget {
           alignment: Alignment.centerLeft,
         ),
         onPressed: () => onPressed(),
-        child: Text(
-          text,
-          maxLines: 3,
-          overflow: TextOverflow.ellipsis,
-          style: Theme.of(context).textTheme.bodyText2,
-        ),
+        child: child ??
+            Text(
+              text,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.bodyText2,
+            ),
       ),
     );
   }

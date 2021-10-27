@@ -49,15 +49,6 @@ extension ThemeEnumMethods on ThemeEnum {
   String get name {
     return _shortNames[this]!;
   }
-
-  /// Returns the [ThemeEnum] that is next in line after the current one.
-  ThemeEnum get nextEnum {
-    final int index = this.index;
-    final int nextIndex = (index + 1) % 3;
-
-    final ThemeEnum nextEnum = ThemeEnum.values[nextIndex];
-    return nextEnum;
-  }
 }
 
 /// Contains the app's [ThemeData]s and the information for which
@@ -67,6 +58,25 @@ class AppThemeData with ChangeNotifier {
 
   /// The singleton-instance of DatabaseHelper.
   static AppThemeData instance = AppThemeData._privateConstructor();
+
+  /// The bool value that decides whether the app should use light and dark mode
+  /// or always light mode.
+  bool _adaptToSystem = true;
+
+  bool get adaptToSystem => _adaptToSystem;
+  set adaptToSystem(final bool value) {
+    _adaptToSystem = value;
+    notifyListeners();
+  }
+
+  /// Returns the [ThemeMode] that corresponds to [_adaptToSystem].
+  ThemeMode get themeMode {
+    if (_adaptToSystem) {
+      return ThemeMode.system;
+    } else {
+      return ThemeMode.light;
+    }
+  }
 
   /// The field that tells the rest of the app what [ThemeEnum] should be used
   /// during daytime.
@@ -122,38 +132,36 @@ class AppThemeData with ChangeNotifier {
 
   /// Returns the [ThemeData] that is to be displayed in light-mode.
   ThemeData get currentLightTheme {
-    switch (_currentLightThemeEnum) {
-      case ThemeEnum.light:
-        return lightTheme;
-      case ThemeEnum.dark:
-        return _darkTheme;
-      default:
-        return _blackTheme;
-    }
+    return themefromEnum(_currentLightThemeEnum);
   }
 
   /// Returns the [ThemeData] that is to be displayed in dark-mode.
   ThemeData get currentDarkTheme {
-    switch (_currentDarkThemeEnum) {
-      case ThemeEnum.light:
-        return lightTheme;
-      case ThemeEnum.dark:
-        return _darkTheme;
-      default:
-        return _blackTheme;
-    }
+    return themefromEnum(_currentDarkThemeEnum);
   }
 
   /// Returns the [ThemeEnum] that corresponds to the currently used
   /// [ThemeData].
-  ThemeEnum get currentThemeMode {
+  ThemeEnum get currentThemeEnum {
     final Brightness brightness =
         SchedulerBinding.instance!.window.platformBrightness;
 
-    if (brightness == Brightness.light) {
+    if (_adaptToSystem == false || brightness == Brightness.light) {
       return _currentLightThemeEnum;
     } else {
       return _currentDarkThemeEnum;
+    }
+  }
+
+  /// Returns the [ThemeData] that corresponds to a certain [ThemeEnum].
+  ThemeData themefromEnum(final ThemeEnum themeEnum) {
+    switch (themeEnum) {
+      case ThemeEnum.light:
+        return lightTheme;
+      case ThemeEnum.dark:
+        return darkTheme;
+      default:
+        return blackTheme;
     }
   }
 
@@ -210,7 +218,7 @@ class AppThemeData with ChangeNotifier {
     ),
   );
 
-  final ThemeData _darkTheme = ThemeData(
+  final ThemeData darkTheme = ThemeData(
     appBarTheme: AppBarTheme(
       color: Colors.pink.shade800,
     ),
@@ -276,7 +284,7 @@ class AppThemeData with ChangeNotifier {
     ),
   );
 
-  final ThemeData _blackTheme = ThemeData(
+  final ThemeData blackTheme = ThemeData(
     appBarTheme: AppBarTheme(
       color: Colors.pink.shade900,
     ),

@@ -57,6 +57,7 @@ class _MyAppState extends State<MyApp> {
       title: 'Githo - Get Into The Habit Of…',
       theme: AppThemeData.instance.currentLightTheme,
       darkTheme: AppThemeData.instance.currentDarkTheme,
+      themeMode: AppThemeData.instance.themeMode,
       home: SplashScreen(),
       debugShowCheckedModeBanner: DataShortcut.testing,
     );
