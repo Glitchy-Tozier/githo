@@ -64,9 +64,17 @@ class AppThemeData with ChangeNotifier {
   bool _adaptToSystem = true;
 
   bool get adaptToSystem => _adaptToSystem;
-  set adaptToSystem(final bool value) {
-    _adaptToSystem = value;
-    notifyListeners();
+  Future<void> setAdaptToSystem({required final bool value}) async {
+    if (value != _adaptToSystem) {
+      _adaptToSystem = value;
+      // Save the new value to the database.
+      final SettingsData settingsData =
+          await DatabaseHelper.instance.getSettings();
+      settingsData.adaptThemeToSystem = value;
+      await DatabaseHelper.instance.updateSettings(settingsData);
+      // Make sure the app updates its design.
+      notifyListeners();
+    }
   }
 
   /// Returns the [ThemeMode] that corresponds to [_adaptToSystem].

@@ -81,7 +81,7 @@ class _SetThemesState extends State<SetThemes> with WidgetsBindingObserver {
                 title: const Text('Sync. with system'),
                 value: AppThemeData.instance.adaptToSystem,
                 onChanged: (final bool value) =>
-                    AppThemeData.instance.adaptToSystem = value,
+                    AppThemeData.instance.setAdaptToSystem(value: value),
               ),
             ),
             const FatDivider(),

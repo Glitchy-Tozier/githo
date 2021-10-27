@@ -61,6 +61,7 @@ class DatabaseHelper {
 
   static const String _settingsTable = 'settingsTable';
   static const String _colShowIntroduction = 'showIntroduction';
+  static const String _colAdaptThemeToSystem = 'adaptThemeToSystem';
   static const String _colLightTheme = 'lightTheme';
   static const String _colDarkTheme = 'darkTheme';
 
@@ -155,6 +156,7 @@ CREATE TABLE $_progressDataTable(
     commandString = '''
 CREATE TABLE $_settingsTable(
   $_colShowIntroduction INTEGER,
+  $_colAdaptThemeToSystem INTEGER,
   $_colLightTheme TEXT,
   $_colDarkTheme TEXT
 )''';
@@ -268,6 +270,10 @@ ALTER TABLE newProgressDataTable RENAME TO $_progressDataTable;
     }
 
     if (currentVersion == 2) {
+      // Add the dark-theme-column to the settings-table.
+      db.execute('''
+ALTER TABLE $_settingsTable ADD $_colAdaptThemeToSystem INTEGER;
+''');
       // Add the light-theme-column to the settings-table.
       db.execute('''
 ALTER TABLE $_settingsTable ADD $_colLightTheme TEXT;
@@ -280,7 +286,8 @@ ALTER TABLE $_settingsTable ADD $_colDarkTheme TEXT;
       // Fill the columns with their default values.
       final Map<String, dynamic> initialSettings =
           SettingsData.initialValues().toMap();
-      db.update(_settingsTable, <String, String>{
+      db.update(_settingsTable, <String, dynamic>{
+        _colAdaptThemeToSystem: initialSettings[_colAdaptThemeToSystem] as int,
         _colLightTheme: initialSettings[_colLightTheme] as String,
         _colDarkTheme: initialSettings[_colDarkTheme] as String,
       });

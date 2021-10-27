@@ -36,6 +36,9 @@ class SplashScreen extends StatelessWidget {
 
   /// Update the app's themes according to what is stored in the database.
   Future<void> setThemes(final SettingsData settingsData) async {
+    await AppThemeData.instance.setAdaptToSystem(
+      value: settingsData.adaptThemeToSystem,
+    );
     await AppThemeData.instance.setNewLightEnum(settingsData.lightThemeEnum);
     await AppThemeData.instance.setNewDarkEnum(settingsData.darkThemeEnum);
   }

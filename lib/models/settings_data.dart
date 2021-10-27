@@ -24,6 +24,7 @@ import 'package:githo/helpers/type_extentions.dart';
 class SettingsData {
   SettingsData({
     required this.showIntroduction,
+    required this.adaptThemeToSystem,
     required this.lightThemeEnum,
     required this.darkThemeEnum,
   });
@@ -31,16 +32,19 @@ class SettingsData {
   /// Converts a Map into [SettingsData].
   SettingsData.fromMap(final Map<String, dynamic> map)
       : showIntroduction = (map['showIntroduction'] as int).toBool(),
+        adaptThemeToSystem = (map['adaptThemeToSystem'] as int).toBool(),
         lightThemeEnum = ThemeEnumMethods.fromName(map['lightTheme'] as String),
         darkThemeEnum = ThemeEnumMethods.fromName(map['darkTheme'] as String);
 
   /// Supplies an instance of [SettingsData] that contains its default values.
   SettingsData.initialValues()
       : showIntroduction = true,
+        adaptThemeToSystem = true,
         lightThemeEnum = AppThemeData.instance.currentLightThemeEnum,
         darkThemeEnum = AppThemeData.instance.currentDarkThemeEnum;
 
   bool showIntroduction;
+  bool adaptThemeToSystem;
   ThemeEnum lightThemeEnum;
   ThemeEnum darkThemeEnum;
 
@@ -48,6 +52,7 @@ class SettingsData {
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> map = <String, dynamic>{
       'showIntroduction': showIntroduction.toInt(),
+      'adaptThemeToSystem': adaptThemeToSystem.toInt(),
       'lightTheme': lightThemeEnum.name,
       'darkTheme': darkThemeEnum.name,
     };
