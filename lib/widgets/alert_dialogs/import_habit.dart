@@ -43,7 +43,7 @@ class ImportHabit extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyText2,
           ),
           Text(
-            'This will overwrite all previous text.',
+            'This will overwrite all previous inputs.',
             style: Theme.of(context).textTheme.bodyText1,
           ),
           const SizedBox(height: 20),
