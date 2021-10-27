@@ -19,6 +19,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:githo/config/custom_widget_themes.dart';
 import 'package:githo/models/used_classes/training.dart';
 import 'package:githo/widgets/alert_dialogs/training_done.dart';
 
@@ -39,10 +40,6 @@ class ActiveTrainingCard extends StatefulWidget {
   final double cardHeight;
   final double textSize;
 
-  static const double topMargin = 5;
-  static const double bottomMargin = 15;
-  static const double borderRadius = 7;
-
   @override
   _ActiveTrainingCardState createState() => _ActiveTrainingCardState();
 }
@@ -50,8 +47,8 @@ class ActiveTrainingCard extends StatefulWidget {
 class _ActiveTrainingCardState extends State<ActiveTrainingCard> {
   double get height {
     final double height = widget.cardHeight +
-        ActiveTrainingCard.topMargin +
-        ActiveTrainingCard.bottomMargin;
+        TrainingCardThemes.topMargin +
+        TrainingCardThemes.bottomMargin;
     return height;
   }
 
@@ -59,58 +56,49 @@ class _ActiveTrainingCardState extends State<ActiveTrainingCard> {
   Widget build(BuildContext context) {
     final Color color;
     if (widget.training.status == 'done') {
-      color = Colors.lightGreenAccent;
+      color = CardColors.activeDone;
     } else {
-      color = Colors.red.shade100;
+      color = CardColors.activeNotDone;
     }
 
     return Center(
       child: Padding(
         padding: EdgeInsets.only(
-          top: ActiveTrainingCard.topMargin,
+          top: TrainingCardThemes.topMargin,
           right: widget.horizontalMargin,
-          bottom: ActiveTrainingCard.bottomMargin,
+          bottom: TrainingCardThemes.bottomMargin,
           left: widget.horizontalMargin,
         ),
         child: SizedBox(
           width: widget.cardWidth,
           height: widget.cardHeight,
-          child: Material(
+          child: TrainingCardThemes.getThemedCard(
+            cardHeight: widget.cardHeight,
             color: color,
-            borderRadius:
-                BorderRadius.circular(ActiveTrainingCard.borderRadius),
-            elevation: 5,
-            child: InkWell(
-              splashColor: Colors.black,
-              onTap: () {
-                widget.training.incrementReps();
-                setState(() {});
-                if (widget.training.doneReps == widget.training.requiredReps) {
-                  Timer(
-                    const Duration(milliseconds: 700),
-                    () => showDialog(
-                      context: context,
-                      builder: (BuildContext buildContext) {
-                        return TrainingDoneAlert();
-                      },
-                    ),
-                  );
-                }
-              },
-              onLongPress: () {
-                widget.training.decrementReps();
-                setState(() {});
-              },
-              borderRadius:
-                  BorderRadius.circular(ActiveTrainingCard.borderRadius),
-              child: Center(
-                child: Text(
-                  '${widget.training.doneReps}/${widget.training.requiredReps}',
-                  style: TextStyle(
-                    fontSize: widget.textSize * 1.3 * 1.3,
-                    color: Colors.black,
+            elevation: 7,
+            onTap: () {
+              widget.training.incrementReps();
+              setState(() {});
+              if (widget.training.doneReps == widget.training.requiredReps) {
+                Timer(
+                  const Duration(milliseconds: 700),
+                  () => showDialog(
+                    context: context,
+                    builder: (BuildContext buildContext) {
+                      return TrainingDoneAlert();
+                    },
                   ),
-                ),
+                );
+              }
+            },
+            onLongPress: () {
+              widget.training.decrementReps();
+              setState(() {});
+            },
+            child: Text(
+              '${widget.training.doneReps}/${widget.training.requiredReps}',
+              style: TextStyle(
+                fontSize: widget.textSize * 1.3 * 1.3,
               ),
             ),
           ),

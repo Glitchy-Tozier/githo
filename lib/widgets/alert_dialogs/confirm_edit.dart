@@ -17,6 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:githo/config/custom_widget_themes.dart';
+import 'package:githo/widgets/alert_dialogs/base_dialog.dart';
 
 class ConfirmEdit extends StatelessWidget {
   /// Returns a dialog that asks 'Do you really want to edit the habit-plan?'
@@ -26,7 +28,7 @@ class ConfirmEdit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
+    return BaseDialog(
       title: const Text(
         'Edit current habit-plan?',
       ),
@@ -66,7 +68,7 @@ class ConfirmEdit extends StatelessWidget {
               ),
               style: ButtonStyle(
                 backgroundColor:
-                    MaterialStateProperty.all<Color>(Colors.orange),
+                    MaterialStateProperty.all<Color>(ThemedColors.orange),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -83,7 +85,8 @@ class ConfirmEdit extends StatelessWidget {
                     ),
               ),
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(ThemedColors.green),
               ),
               onPressed: () {
                 Navigator.pop(context);

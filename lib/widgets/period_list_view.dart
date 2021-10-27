@@ -18,16 +18,17 @@
 
 import 'package:flutter/material.dart';
 
+import 'package:githo/config/custom_widget_themes.dart';
 import 'package:githo/config/style_data.dart';
 import 'package:githo/helpers/format_date.dart';
+import 'package:githo/models/used_classes/training.dart';
+import 'package:githo/models/used_classes/training_period.dart';
 import 'package:githo/widgets/alert_dialogs/confirm_training_start.dart';
 import 'package:githo/widgets/bottom_sheets/text_sheet.dart';
 import 'package:githo/widgets/training_cards/active_training_card.dart';
 import 'package:githo/widgets/training_cards/countdown_card.dart';
 import 'package:githo/widgets/training_cards/gradient_training_card.dart';
 import 'package:githo/widgets/training_cards/training_card.dart';
-import 'package:githo/models/used_classes/training.dart';
-import 'package:githo/models/used_classes/training_period.dart';
 
 class PeriodListView extends StatefulWidget {
   /// Creates one of those horizontal training-listViews made out of cards.
@@ -61,19 +62,20 @@ class _PeriodListViewState extends State<PeriodListView> {
       cardMarginRL = 6;
 
       final Color color;
+      Color? shadowColor;
       final Widget child;
 
       if (widget.trainingPeriod.status == 'completed') {
         if (training.status == 'successful') {
-          color = Colors.green;
+          color = CardColors.successful;
         } else if (training.status == 'unsuccessful') {
-          color = Colors.red;
+          color = CardColors.unsuccessful;
         } else {
-          color = Colors.grey.shade400;
+          color = CardColors.skipped;
         }
         child = const Icon(Icons.check_rounded);
       } else if (widget.trainingPeriod.status == 'waiting for start') {
-        color = Colors.orange;
+        color = CardColors.waiting;
         if (i == 0) {
           cardWidth *= 1.3;
           cardHeight *= 1.3;
@@ -131,30 +133,27 @@ class _PeriodListViewState extends State<PeriodListView> {
         cardMarginRL *= 1.3;
         if (training.hasPassed) {
           if (training.status == 'successful') {
-            color = Colors.green;
+            color = CardColors.successful;
             child = Text(
               '${training.doneReps}/${training.requiredReps}',
               style: const TextStyle(
                 fontSize: textSize * 1.3,
-                color: Colors.black,
               ),
             );
           } else if (training.status == 'unsuccessful') {
-            color = Colors.red;
+            color = CardColors.unsuccessful;
             child = Text(
               '${training.doneReps}/${training.requiredReps}',
               style: const TextStyle(
                 fontSize: textSize * 1.3,
-                color: Colors.black,
               ),
             );
           } else {
-            color = Colors.grey.shade400;
+            color = CardColors.skipped;
             child = const Text(
               'Skipped',
               style: TextStyle(
                 fontSize: textSize,
-                color: Colors.black,
               ),
             );
           }
@@ -181,6 +180,7 @@ class _PeriodListViewState extends State<PeriodListView> {
                     );
                   },
                 );
+
             listViewChildren.add(
               GradientTrainingCard(
                 key: widget.activeCardKey,
@@ -206,7 +206,7 @@ class _PeriodListViewState extends State<PeriodListView> {
             continue;
           }
         } else {
-          color = Colors.orange;
+          color = CardColors.waiting;
           if (i == activeTrainingIndex + 1) {
             listViewChildren.add(
               CountdownCard(
@@ -224,7 +224,8 @@ class _PeriodListViewState extends State<PeriodListView> {
           }
         }
       } else {
-        color = Colors.grey.shade300;
+        color = CardColors.locked;
+        shadowColor = Colors.black.withOpacity(0.5);
         child = const Icon(Icons.lock);
       }
 
@@ -234,6 +235,7 @@ class _PeriodListViewState extends State<PeriodListView> {
           cardWidth: cardWidth,
           cardHeight: cardHeight,
           color: color,
+          shadowColor: shadowColor,
           child: child,
         ),
       );

@@ -18,6 +18,7 @@
 
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:githo/config/custom_widget_themes.dart';
 
 import 'package:githo/helpers/get_duration_diff.dart';
 import 'package:githo/helpers/time_helper.dart';
@@ -41,7 +42,7 @@ class CountdownCard extends StatefulWidget {
   final double cardHeight;
   final DateTime startingDate;
   final double textSize;
-  final Function? onTap;
+  final void Function(String)? onTap;
   final Color color;
 
   @override
@@ -51,7 +52,6 @@ class CountdownCard extends StatefulWidget {
 class _CountdownCardState extends State<CountdownCard> {
   static const double topMargin = 5;
   static const double bottomMargin = 15;
-  static const double borderRadius = 7;
 
   late final Timer timer;
 
@@ -97,24 +97,18 @@ class _CountdownCardState extends State<CountdownCard> {
         child: SizedBox(
           width: widget.cardWidth,
           height: widget.cardHeight,
-          child: Material(
+          child: TrainingCardThemes.getThemedCard(
             color: widget.color,
-            borderRadius: BorderRadius.circular(borderRadius),
             elevation: 6,
-            child: InkWell(
-              splashColor: Colors.black,
-              onTap: (widget.onTap == null)
-                  ? null
-                  : () => widget.onTap!(remainingTimeStr),
-              borderRadius: BorderRadius.circular(borderRadius),
-              child: Center(
-                child: Text(
-                  '$remainingTimeStr remaining',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: widget.textSize,
-                  ),
-                ),
+            cardHeight: widget.cardHeight,
+            onTap: (widget.onTap == null)
+                ? null
+                : () => widget.onTap!(remainingTimeStr),
+            child: Text(
+              '$remainingTimeStr remaining',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: widget.textSize,
               ),
             ),
           ),

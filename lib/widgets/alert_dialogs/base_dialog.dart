@@ -16,30 +16,44 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'dart:ui';
 import 'package:flutter/material.dart';
 
-class CustomListTile extends StatelessWidget {
-  /// A list-item used in the habitDetails.dart-screen.
-  const CustomListTile({
-    required this.leadingWidget,
-    required this.title,
-  });
+/// An [AlertDialog] that serves as the base for all used Dialogues.
+/// This makes styling all of them at once very easy.
 
-  final Widget leadingWidget;
-  final String title;
+class BaseDialog extends StatelessWidget {
+  const BaseDialog({
+    this.title,
+    this.content,
+    this.actions,
+    Key? key,
+  }) : super(key: key);
+
+  final Widget? title;
+  final Widget? content;
+  final List<Widget>? actions;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        leadingWidget,
-        Flexible(
-          child: Text(
-            title,
+    return BackdropFilter(
+      filter: ImageFilter.blur(
+        sigmaX: 5,
+        sigmaY: 5,
+      ),
+      child: AlertDialog(
+        backgroundColor: Theme.of(context).backgroundColor.withOpacity(0.6),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(7)),
+          side: BorderSide(
+            color: Colors.white,
+            width: 3,
           ),
         ),
-      ],
+        title: title,
+        content: content,
+        actions: actions,
+      ),
     );
   }
 }

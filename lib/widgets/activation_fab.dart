@@ -18,11 +18,12 @@
 
 import 'package:flutter/material.dart';
 
-import 'package:githo/widgets/alert_dialogs/confirm_activation_change.dart';
-import 'package:githo/widgets/alert_dialogs/confirm_starting_time.dart';
+import 'package:githo/config/custom_widget_themes.dart';
 import 'package:githo/database/database_helper.dart';
 import 'package:githo/models/habit_plan.dart';
 import 'package:githo/models/progress_data.dart';
+import 'package:githo/widgets/alert_dialogs/confirm_activation_change.dart';
+import 'package:githo/widgets/alert_dialogs/confirm_starting_time.dart';
 
 class ActivationFAB extends StatelessWidget {
   /// The middle FloatingActionButton in the habitDetals.dart-screen.
@@ -136,7 +137,7 @@ class ActivationFAB extends StatelessWidget {
     final Color color;
 
     if (habitPlan.isActive == true) {
-      color = Colors.green;
+      color = ThemedColors.green;
       child = const Icon(
         Icons.star,
       );

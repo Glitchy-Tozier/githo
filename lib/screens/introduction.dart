@@ -17,14 +17,17 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:introduction_screen/introduction_screen.dart';
+
+// ignore: directives_ordering
 import 'package:githo/config/style_data.dart';
-import 'package:githo/widgets/background.dart';
-import 'package:githo/widgets/bordered_image.dart';
 import 'package:githo/database/database_helper.dart';
 import 'package:githo/models/settings_data.dart';
 import 'package:githo/screens/home_screen.dart';
-import 'package:introduction_screen/introduction_screen.dart';
-// The introduction-screen that explains how this app works.
+import 'package:githo/widgets/background.dart';
+import 'package:githo/widgets/bordered_image.dart';
+
+/// The introduction-screen that explains how this app works.
 
 class OnBoardingScreen extends StatelessWidget {
   Future<void> _onIntroEnd(BuildContext context) async {
@@ -119,7 +122,7 @@ class OnBoardingScreen extends StatelessWidget {
               ),
               // Get Into The Habit Of…
               //body: 'Gradually aquire an new habit',
-              image: const BorderedImage('assets/launcher/icon.png', width: 90),
+              image: const BorderedImage('assets/zoomed_icon.png', width: 90),
               decoration: pageDecoration,
             ),
             PageViewModel(
@@ -148,12 +151,12 @@ class OnBoardingScreen extends StatelessWidget {
           ),
           curve: Curves.fastLinearToSlowEaseIn,
           controlsMargin: const EdgeInsets.all(16),
-          dotsDecorator: const DotsDecorator(
-            size: Size(10.0, 10.0),
-            color: Colors.black,
+          dotsDecorator: DotsDecorator(
+            size: const Size(10.0, 10.0),
+            color: Theme.of(context).textTheme.bodyText2!.color!,
             activeColor: Colors.pink,
-            activeSize: Size(22.0, 10.0),
-            activeShape: RoundedRectangleBorder(
+            activeSize: const Size(22.0, 10.0),
+            activeShape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(25.0)),
             ),
           ),

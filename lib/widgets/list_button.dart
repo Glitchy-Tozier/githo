@@ -17,41 +17,62 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:githo/config/custom_widget_themes.dart';
 
 class ListButton extends StatelessWidget {
   /// The default list-item used in this application.
   const ListButton({
-    required this.text,
-    required this.color,
+    this.color,
     required this.onPressed,
+    this.text = '',
+    this.child,
   });
 
-  final String text;
-  final Color color;
+  final Color? color;
   final Function onPressed;
+  final String text;
+  final Widget? child;
+
+  /// The distance the button keeps to other widgets.
+  static const EdgeInsets margin = EdgeInsets.symmetric(
+    vertical: 5,
+  );
+
+  /// The minimum size the button can have.
+  static const Size minSize = Size(
+    double.infinity,
+    60,
+  );
+
+  /// The distance the button's border stays away from its child-widget.
+  static const EdgeInsets padding = EdgeInsets.symmetric(
+    vertical: 20,
+    horizontal: 20,
+  );
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
+      padding: margin,
       child: ElevatedButton(
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(color),
+          backgroundColor: MaterialStateProperty.all<Color?>(
+            color ?? ThemedColors.grey,
+          ),
           minimumSize: MaterialStateProperty.all<Size>(
-            const Size(double.infinity, 60),
+            minSize,
           ),
-          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-            const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-          ),
+          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(padding),
           alignment: Alignment.centerLeft,
         ),
         onPressed: () => onPressed(),
-        child: Text(
-          text,
-          maxLines: 3,
-          overflow: TextOverflow.ellipsis,
-          style: Theme.of(context).textTheme.bodyText2,
-        ),
+        child: child ??
+            Text(
+              text,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.bodyText2,
+            ),
       ),
     );
   }

@@ -19,12 +19,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:githo/config/custom_widget_themes.dart';
+import 'package:githo/database/database_helper.dart';
 import 'package:githo/helpers/format_date.dart';
 import 'package:githo/helpers/text_form_field_validation.dart';
-import 'package:githo/database/database_helper.dart';
 import 'package:githo/helpers/time_helper.dart';
 import 'package:githo/models/habit_plan.dart';
 import 'package:githo/models/progress_data.dart';
+import 'package:githo/widgets/alert_dialogs/base_dialog.dart';
 
 class ConfirmStartingTime extends StatefulWidget {
   /// Returns a dialog that lets the user choose
@@ -136,7 +138,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
     startingDateString = formatDate(initialDate);
     dateController.text = startingDateString;
 
-    return AlertDialog(
+    return BaseDialog(
       title: const Text(
         'Confirm starting time',
       ),
@@ -233,7 +235,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
               ),
               style: ButtonStyle(
                 backgroundColor:
-                    MaterialStateProperty.all<Color>(Colors.orange),
+                    MaterialStateProperty.all<Color>(ThemedColors.orange),
               ),
               onPressed: () {
                 Navigator.pop(context);
@@ -250,7 +252,8 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
                     ),
               ),
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(ThemedColors.green),
               ),
               onPressed: () {
                 final bool canStartHabitPlan;

@@ -17,15 +17,15 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:githo/widgets/list_button.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:githo/config/style_data.dart';
 import 'package:githo/widgets/background.dart';
-
 import 'package:githo/widgets/bordered_image.dart';
+import 'package:githo/widgets/custom_licence_page.dart';
 import 'package:githo/widgets/headings/heading.dart';
+import 'package:githo/widgets/list_button.dart';
 
 /// Contains licenses and important links.
 
@@ -36,8 +36,7 @@ class About extends StatelessWidget {
 
     return Scaffold(
       body: Background(
-        child: Container(
-          alignment: Alignment.center,
+        child: Padding(
           padding: StyleData.screenPadding,
           child: FutureBuilder<PackageInfo>(
             future: futurePackageInfo,
@@ -46,21 +45,20 @@ class About extends StatelessWidget {
               if (snapShot.connectionState == ConnectionState.done) {
                 if (snapShot.hasData) {
                   final PackageInfo packageInfo = snapShot.data!;
+                  final String version = packageInfo.version;
 
                   return Column(
                     children: <Widget>[
                       const SizedBox(height: 70),
-                      const BorderedImage('assets/launcher/icon.png',
-                          width: 90),
-                      const Heading('Githo'),
-                      Text(
-                        packageInfo.version,
-                        style: Theme.of(context).textTheme.bodyText2,
+                      const BorderedImage(
+                        'assets/zoomed_icon.png',
+                        width: 90,
                       ),
+                      const Heading('Githo'),
+                      Text(version),
                       const SizedBox(height: 20),
                       ListButton(
                         text: 'Source Code',
-                        color: Theme.of(context).buttonColor,
                         onPressed: () async {
                           const String url =
                               'https://github.com/Glitchy-Tozier/githo';
@@ -73,7 +71,6 @@ class About extends StatelessWidget {
                       ),
                       ListButton(
                         text: 'Privacy Policy',
-                        color: Theme.of(context).buttonColor,
                         onPressed: () async {
                           const String url =
                               'https://github.com/Glitchy-Tozier/githo/blob/main/privacyPolicy.md';
@@ -86,15 +83,13 @@ class About extends StatelessWidget {
                       ),
                       ListButton(
                         text: 'Licenses',
-                        color: Theme.of(context).buttonColor,
                         onPressed: () {
-                          showLicensePage(
-                            context: context,
-                            applicationIcon: const BorderedImage(
-                              'assets/launcher/icon.png',
-                              width: 90,
+                          Navigator.of(context).push(MaterialPageRoute<void>(
+                            builder: (BuildContext context) =>
+                                const CustomLicensePage(
+                              applicationName: 'Githo\nGet Into The Habit Of…',
                             ),
-                          );
+                          ));
                         },
                       ),
                     ],

@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:githo/config/custom_widget_themes.dart';
 
 class TrainingCard extends StatelessWidget {
   /// Returns the default training-card.
@@ -24,6 +25,7 @@ class TrainingCard extends StatelessWidget {
     required this.horizontalMargin,
     required this.cardWidth,
     required this.cardHeight,
+    this.shadowColor,
     required this.color,
     required this.child,
     Key? key,
@@ -33,6 +35,7 @@ class TrainingCard extends StatelessWidget {
   final double cardWidth;
   final double cardHeight;
   final Color color;
+  final Color? shadowColor;
   final Widget child;
 
   static const double topMargin = 5;
@@ -57,15 +60,12 @@ class TrainingCard extends StatelessWidget {
         child: SizedBox(
           width: cardWidth,
           height: cardHeight,
-          child: Material(
+          child: TrainingCardThemes.getThemedCard(
+            cardHeight: cardHeight,
             color: color,
-            borderRadius: BorderRadius.circular(borderRadius),
             elevation: 5,
-            child: InkWell(
-              splashColor: Colors.black,
-              borderRadius: BorderRadius.circular(borderRadius),
-              child: Center(child: child),
-            ),
+            shadowColor: shadowColor,
+            child: child,
           ),
         ),
       ),

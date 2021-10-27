@@ -21,8 +21,8 @@ import 'package:flutter/services.dart';
 
 import 'package:githo/config/app_theme.dart';
 import 'package:githo/config/data_shortcut.dart';
-import 'package:githo/widgets/choose_first_screen.dart';
 import 'package:githo/database/adapt_database_to_os.dart';
+import 'package:githo/screens/splash_screen.dart';
 
 void main() {
   adaptDatabaseToOS();
@@ -30,7 +30,21 @@ void main() {
 }
 
 /// This widget is the root of the application.
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    // Necessary to make the app reload when manually changing the theme.
+    AppThemeData.instance.addListener(() {
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // Disables screen-rotation to prevent some layots getting too large.
@@ -41,8 +55,10 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       title: 'Githo - Get Into The Habit Of…',
-      theme: AppTheme.lightTheme,
-      home: FirstScreen(),
+      theme: AppThemeData.instance.currentLightTheme,
+      darkTheme: AppThemeData.instance.currentDarkTheme,
+      themeMode: AppThemeData.instance.themeMode,
+      home: SplashScreen(),
       debugShowCheckedModeBanner: DataShortcut.testing,
     );
   }

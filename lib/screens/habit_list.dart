@@ -17,19 +17,21 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:githo/config/custom_widget_themes.dart';
 
 import 'package:githo/config/style_data.dart';
-import 'package:githo/helpers/edit_habit_routes.dart';
-import 'package:githo/widgets/background.dart';
-import 'package:githo/widgets/list_button.dart';
-import 'package:githo/widgets/dividers/fat_divider.dart';
-import 'package:githo/widgets/headings/screen_title.dart';
-import 'package:githo/widgets/headings/heading.dart';
-import 'package:githo/widgets/screen_ending_spacer.dart';
 import 'package:githo/database/database_helper.dart';
+import 'package:githo/helpers/edit_habit_routes.dart';
 import 'package:githo/models/habit_plan.dart';
 
 import 'package:githo/screens/habit_details.dart';
+
+import 'package:githo/widgets/background.dart';
+import 'package:githo/widgets/dividers/fat_divider.dart';
+import 'package:githo/widgets/headings/heading.dart';
+import 'package:githo/widgets/headings/screen_title.dart';
+import 'package:githo/widgets/list_button.dart';
+import 'package:githo/widgets/screen_ending_spacer.dart';
 
 class HabitList extends StatefulWidget {
   /// Lists all habit-plans
@@ -99,9 +101,8 @@ class _HabitListState extends State<HabitList> {
                       child: Container(
                         padding: StyleData.screenPadding,
                         alignment: Alignment.center,
-                        child: Text(
+                        child: const Text(
                           'Add a new habit-plan by clicking on the plus-icon.',
-                          style: Theme.of(context).textTheme.bodyText2,
                         ),
                       ),
                     ),
@@ -121,13 +122,11 @@ class _HabitListState extends State<HabitList> {
                         itemBuilder: (BuildContext buildContex, int i) {
                           if (i < orderedHabitPlans.length) {
                             final HabitPlan habitPlan = orderedHabitPlans[i];
-                            final Color color;
+                            Color? color;
                             if (habitPlan.fullyCompleted) {
-                              color = Colors.amberAccent;
+                              color = ThemedColors.gold;
                             } else if (habitPlan.isActive) {
-                              color = Colors.green;
-                            } else {
-                              color = Theme.of(context).buttonColor;
+                              color = ThemedColors.green;
                             }
                             return ListButton(
                               text: habitPlan.habit,
@@ -168,7 +167,6 @@ class _HabitListState extends State<HabitList> {
                           'There was an error connecting to the database.'),
                       Text(
                         snapshot.error.toString(),
-                        style: Theme.of(context).textTheme.bodyText2,
                       ),
                     ],
                   ),
@@ -184,7 +182,7 @@ class _HabitListState extends State<HabitList> {
       ),
       floatingActionButton: FloatingActionButton(
         tooltip: 'Add new habit-plan',
-        backgroundColor: Colors.green,
+        backgroundColor: ThemedColors.green,
         heroTag: null,
         onPressed: () {
           addNewHabit(context, _updateLoadedScreens);

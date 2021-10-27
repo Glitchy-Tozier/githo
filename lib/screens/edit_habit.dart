@@ -17,25 +17,24 @@
  */
 
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:githo/config/custom_widget_themes.dart';
 import 'package:githo/config/data_shortcut.dart';
 import 'package:githo/config/style_data.dart';
 
 import 'package:githo/helpers/text_form_field_validation.dart';
 import 'package:githo/helpers/type_extentions.dart';
+import 'package:githo/models/habit_plan.dart';
 import 'package:githo/widgets/alert_dialogs/import_habit.dart';
 import 'package:githo/widgets/background.dart';
 import 'package:githo/widgets/dividers/fat_divider.dart';
 import 'package:githo/widgets/dividers/thin_divider.dart';
 import 'package:githo/widgets/form_list.dart';
-import 'package:githo/widgets/headings/screen_title.dart';
 import 'package:githo/widgets/headings/heading.dart';
+import 'package:githo/widgets/headings/screen_title.dart';
 import 'package:githo/widgets/screen_ending_spacer.dart';
-
-import 'package:githo/models/habit_plan.dart';
 
 class EditHabit extends StatefulWidget {
   /// Edit the values of the input [HabitPlan].
@@ -76,14 +75,14 @@ class _EditHabitState extends State<EditHabit> {
   final List<String> _adjTimeFrames = DataShortcut.adjectiveTimeFrames;
   final List<int> _maxTrainings = DataShortcut.maxTrainings;
 
-  // ignore: use_setters_to_change_properties
   /// Used for receiving the onSaved-values from formList.dart
+  // ignore: use_setters_to_change_properties
   void _getLevelValues(final List<String> valueList) {
     widget.habitPlan.levels = valueList;
   }
 
-  // ignore: use_setters_to_change_properties
   /// Used for receiving the onSaved-values from formList.dart
+  // ignore: use_setters_to_change_properties
   void _getCommentValues(final List<String> valueList) {
     widget.habitPlan.comments = valueList;
   }
@@ -247,10 +246,9 @@ class _EditHabitState extends State<EditHabit> {
                       padding: StyleData.screenPadding,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          const Heading('Comments'),
-                          Text('(Optional)',
-                              style: Theme.of(context).textTheme.bodyText2),
+                        children: const <Widget>[
+                          Heading('Comments'),
+                          Text('(Optional)'),
                         ],
                       ),
                     ),
@@ -419,7 +417,7 @@ class _EditHabitState extends State<EditHabit> {
             Visibility(
               visible: widget.displayImportFAB,
               child: FloatingActionButton(
-                backgroundColor: Colors.lightBlue,
+                backgroundColor: ThemedColors.lightBlue,
                 tooltip: 'Import habit-plan.',
                 heroTag: null,
                 onPressed: () {
@@ -439,7 +437,7 @@ class _EditHabitState extends State<EditHabit> {
             ),
             FloatingActionButton(
               tooltip: 'Save',
-              backgroundColor: Colors.green,
+              backgroundColor: ThemedColors.green,
               heroTag: null,
               onPressed: () {
                 if (_formKey.currentState!.validate()) {

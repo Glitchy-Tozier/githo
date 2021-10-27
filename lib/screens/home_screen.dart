@@ -18,23 +18,16 @@
 
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
+import 'package:githo/config/custom_widget_themes.dart';
 import 'package:githo/config/data_shortcut.dart';
 import 'package:githo/config/style_data.dart';
-import 'package:githo/helpers/get_duration_diff.dart';
-
-import 'package:githo/widgets/alert_dialogs/confirm_training_start.dart';
-import 'package:githo/widgets/alert_dialogs/training_done.dart';
-import 'package:githo/widgets/background.dart';
-import 'package:githo/widgets/bottom_sheets/text_sheet.dart';
-import 'package:githo/widgets/bottom_sheets/welcome_sheet.dart';
-import 'package:githo/widgets/headings/screen_title.dart';
-import 'package:githo/widgets/headings/heading.dart';
-import 'package:githo/widgets/screen_ending_spacer.dart';
-import 'package:githo/widgets/level_to_do.dart';
 
 import 'package:githo/database/database_helper.dart';
+import 'package:githo/helpers/get_duration_diff.dart';
+import 'package:githo/helpers/runtime_variables.dart';
 import 'package:githo/helpers/time_helper.dart';
 import 'package:githo/models/progress_data.dart';
 import 'package:githo/models/used_classes/level.dart';
@@ -42,6 +35,17 @@ import 'package:githo/models/used_classes/training.dart';
 
 import 'package:githo/screens/about.dart';
 import 'package:githo/screens/habit_list.dart';
+import 'package:githo/screens/set_themes.dart';
+
+import 'package:githo/widgets/alert_dialogs/confirm_training_start.dart';
+import 'package:githo/widgets/alert_dialogs/training_done.dart';
+import 'package:githo/widgets/background.dart';
+import 'package:githo/widgets/bottom_sheets/text_sheet.dart';
+import 'package:githo/widgets/bottom_sheets/welcome_sheet.dart';
+import 'package:githo/widgets/headings/heading.dart';
+import 'package:githo/widgets/headings/screen_title.dart';
+import 'package:githo/widgets/level_to_do.dart';
+import 'package:githo/widgets/screen_ending_spacer.dart';
 
 /// The regular home-screen, containing the to-do's.
 
@@ -52,7 +56,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late Future<ProgressData> _progressData;
-  bool initialLoad = true;
 
   Timer? timer;
   final GlobalKey activeCardKey = GlobalKey();
@@ -149,12 +152,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        const Heading('No habit-plan is active.'),
+                      children: const <Widget>[
+                        Heading('No habit-plan is active.'),
                         Text(
                           'Click on the orange button to '
                           'add or activate your habit-plan',
-                          style: Theme.of(context).textTheme.bodyText2,
                         ),
                       ],
                     ),
@@ -162,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 } else {
                   // If connection is done and there is an active habitPlan:
                   _startReloadTimer(progressData);
-                  if (initialLoad) {
+                  if (RuntimeVariables.instance.showWelcomeSheet) {
                     WidgetsBinding.instance?.addPostFrameCallback(
                       (_) => showModalBottomSheet(
                         context: context,
@@ -171,7 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             WelcomeSheet(progressData: progressData),
                       ),
                     );
-                    initialLoad = false;
+                    RuntimeVariables.instance.showWelcomeSheet = false;
                   }
 
                   return ListView(
@@ -213,7 +215,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           'There was an error connecting to the database.'),
                       Text(
                         snapshot.error.toString(),
-                        style: Theme.of(context).textTheme.bodyText2,
                       ),
                     ],
                   ),
@@ -234,6 +235,8 @@ class _HomeScreenState extends State<HomeScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             WillPopScope(
+              // Necessary to prevent a crash when pressing the back-button
+              // while the dial is open.
               onWillPop: () async {
                 if (isDialOpen.value) {
                   isDialOpen.value = false;
@@ -243,7 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 }
               },
               child: SpeedDial(
-                backgroundColor: Colors.orange,
+                backgroundColor: ThemedColors.orange,
                 icon: Icons.settings,
                 activeIcon: Icons.close,
                 spacing: 4,
@@ -266,7 +269,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   SpeedDialChild(
                     backgroundColor: Colors.grey.shade800,
                     label: 'About',
-                    labelStyle: Theme.of(context).textTheme.bodyText2,
+                    labelStyle: Theme.of(context).textTheme.bodyText2!.copyWith(
+                          color: Colors.black,
+                        ),
                     onTap: () {
                       Navigator.push(
                         context,
@@ -281,9 +286,33 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   SpeedDialChild(
+                    backgroundColor: Colors.pink.shade900,
+                    label: 'Themes',
+                    labelStyle: Theme.of(context).textTheme.bodyText2!.copyWith(
+                          color: Colors.black,
+                        ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<SetThemes>(
+                          builder: (BuildContext context) => SetThemes(),
+                        ),
+                      );
+                    },
+                    child: Icon(
+                      SchedulerBinding.instance!.window.platformBrightness ==
+                              Brightness.light
+                          ? Icons.light_mode
+                          : Icons.dark_mode,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SpeedDialChild(
                     backgroundColor: Theme.of(context).primaryColor,
                     label: 'List of habits',
-                    labelStyle: Theme.of(context).textTheme.bodyText2,
+                    labelStyle: Theme.of(context).textTheme.bodyText2!.copyWith(
+                          color: Colors.black,
+                        ),
                     onTap: () {
                       Navigator.push(
                         context,
@@ -434,7 +463,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     }
                     return FloatingActionButton(
                       tooltip: 'Mark training as done',
-                      backgroundColor: Colors.green,
+                      backgroundColor: ThemedColors.green,
                       heroTag: null,
                       onPressed: () {
                         onClickFunc();

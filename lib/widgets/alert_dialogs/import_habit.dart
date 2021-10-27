@@ -17,7 +17,9 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:githo/config/custom_widget_themes.dart';
 import 'package:githo/helpers/text_form_field_validation.dart';
+import 'package:githo/widgets/alert_dialogs/base_dialog.dart';
 
 class ImportHabit extends StatelessWidget {
   /// Returns a dialog that lets you import a habit-plan.
@@ -29,7 +31,7 @@ class ImportHabit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
+    return BaseDialog(
       title: const Text(
         'Import habit-plan',
       ),
@@ -41,7 +43,7 @@ class ImportHabit extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyText2,
           ),
           Text(
-            'This will overwrite all previous text.',
+            'This will overwrite all previous inputs.',
             style: Theme.of(context).textTheme.bodyText1,
           ),
           const SizedBox(height: 20),
@@ -83,7 +85,7 @@ class ImportHabit extends StatelessWidget {
               ),
               style: ButtonStyle(
                 backgroundColor:
-                    MaterialStateProperty.all<Color>(Colors.orange),
+                    MaterialStateProperty.all<Color>(ThemedColors.orange),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -101,7 +103,7 @@ class ImportHabit extends StatelessWidget {
               ),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(
-                  Colors.lightBlue,
+                  ThemedColors.lightBlue,
                 ),
               ),
               onPressed: () {

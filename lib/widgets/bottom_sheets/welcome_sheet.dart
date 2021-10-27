@@ -17,10 +17,11 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:githo/widgets/bottom_sheets/text_sheet.dart';
+
 import 'package:githo/models/progress_data.dart';
 import 'package:githo/models/used_classes/level.dart';
 import 'package:githo/models/used_classes/training_period.dart';
+import 'package:githo/widgets/bottom_sheets/text_sheet.dart';
 
 class WelcomeSheet extends StatelessWidget {
   /// Returns a bottom sheet that welcomes the user and

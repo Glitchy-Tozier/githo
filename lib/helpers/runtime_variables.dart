@@ -16,30 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter/material.dart';
+/// A collection of variables that shouldn't be affected by `setState()`s or
+/// other runtiime-reloads.
+class RuntimeVariables {
+  RuntimeVariables._privateConstructor();
 
-class CustomListTile extends StatelessWidget {
-  /// A list-item used in the habitDetails.dart-screen.
-  const CustomListTile({
-    required this.leadingWidget,
-    required this.title,
-  });
+  /// The singleton-instance of DatabaseHelper.
+  static RuntimeVariables instance = RuntimeVariables._privateConstructor();
 
-  final Widget leadingWidget;
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        leadingWidget,
-        Flexible(
-          child: Text(
-            title,
-          ),
-        ),
-      ],
-    );
-  }
+  /// If true, a [WelcomeSheet]-widget will be shown upon the loading of
+  /// [HomeScreen].
+  bool showWelcomeSheet = true;
 }

@@ -36,7 +36,7 @@ class DatabaseHelper {
   /// The singleton-instance of DatabaseHelper.
   static const DatabaseHelper instance = DatabaseHelper._privateConstructor();
   static Database? _db;
-  static const int version = 2;
+  static const int version = 3;
 
   static const String _habitPlansTable = 'habitPlansTable';
   static const String _colId = 'id';
@@ -61,6 +61,9 @@ class DatabaseHelper {
 
   static const String _settingsTable = 'settingsTable';
   static const String _colShowIntroduction = 'showIntroduction';
+  static const String _colAdaptThemeToSystem = 'adaptThemeToSystem';
+  static const String _colLightTheme = 'lightTheme';
+  static const String _colDarkTheme = 'darkTheme';
 
   /// Returns the [Database].
   ///
@@ -152,7 +155,10 @@ CREATE TABLE $_progressDataTable(
     // Initialize settings-table
     commandString = '''
 CREATE TABLE $_settingsTable(
-  $_colShowIntroduction INTEGER
+  $_colShowIntroduction INTEGER,
+  $_colAdaptThemeToSystem INTEGER,
+  $_colLightTheme TEXT,
+  $_colDarkTheme TEXT
 )''';
     await db.execute(commandString);
 
@@ -164,8 +170,9 @@ CREATE TABLE $_settingsTable(
   }
 
   /// Adapts the [Database] to make it work in the new version of the app.
-  void _upgradeDb(Database db, int oldVersion, int newVersion) {
-    if (oldVersion == 1 && newVersion == 2) {
+  void _upgradeDb(Database db, final int oldVersion, final int newVersion) {
+    int currentVersion = oldVersion;
+    if (currentVersion == 1) {
       // Rename all "goal"-columns to "habit
       // and all "steps" to "levels".
       // The new, pretty SQLite commands can't be used because Android-versions
@@ -257,6 +264,36 @@ ALTER TABLE newProgressDataTable RENAME TO $_progressDataTable;
 
       // Delete unused Table.
       db.execute('DROP TABLE dbVersionTable');
+
+      // Update the version-number.
+      currentVersion = 2;
+    }
+
+    if (currentVersion == 2) {
+      // Add the dark-theme-column to the settings-table.
+      db.execute('''
+ALTER TABLE $_settingsTable ADD $_colAdaptThemeToSystem INTEGER;
+''');
+      // Add the light-theme-column to the settings-table.
+      db.execute('''
+ALTER TABLE $_settingsTable ADD $_colLightTheme TEXT;
+''');
+      // Add the dark-theme-column to the settings-table.
+      db.execute('''
+ALTER TABLE $_settingsTable ADD $_colDarkTheme TEXT;
+''');
+
+      // Fill the columns with their default values.
+      final Map<String, dynamic> initialSettings =
+          SettingsData.initialValues().toMap();
+      db.update(_settingsTable, <String, dynamic>{
+        _colAdaptThemeToSystem: initialSettings[_colAdaptThemeToSystem] as int,
+        _colLightTheme: initialSettings[_colLightTheme] as String,
+        _colDarkTheme: initialSettings[_colDarkTheme] as String,
+      });
+
+      // Update the version-number.
+      currentVersion = 3;
     }
   }
 
