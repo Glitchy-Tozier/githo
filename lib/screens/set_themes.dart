@@ -25,6 +25,8 @@ import 'package:githo/config/style_data.dart';
 
 import 'package:githo/widgets/background.dart';
 import 'package:githo/widgets/dividers/fat_divider.dart';
+import 'package:githo/widgets/dividers/thin_divider.dart';
+import 'package:githo/widgets/headings/heading.dart';
 import 'package:githo/widgets/headings/screen_title.dart';
 import 'package:githo/widgets/list_button.dart';
 import 'package:githo/widgets/screen_ending_spacer.dart';
@@ -39,6 +41,7 @@ class SetThemes extends StatefulWidget {
 class _SetThemesState extends State<SetThemes> with WidgetsBindingObserver {
   Brightness brightness = SchedulerBinding.instance!.window.platformBrightness;
 
+  // Necessary for `didChangePlatformBrightness()` to work.
   @override
   void initState() {
     super.initState();
@@ -61,15 +64,6 @@ class _SetThemesState extends State<SetThemes> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    // Shortcuts to simplify some of the following commands.
-    final AppThemeData themeClass = AppThemeData.instance;
-    final ThemeEnum currentLightThemeEnum = themeClass.currentLightThemeEnum;
-    final ThemeEnum currentDarkThemeEnum = themeClass.currentDarkThemeEnum;
-    final TextStyle lightBodyStyle2 =
-        themeClass.currentLightTheme.textTheme.bodyText2!;
-    final TextStyle darkBodyStyle2 =
-        themeClass.currentDarkTheme.textTheme.bodyText2!;
-
     return Scaffold(
       body: Background(
         child: ListView(
@@ -77,108 +71,127 @@ class _SetThemesState extends State<SetThemes> with WidgetsBindingObserver {
           children: <Widget>[
             const ScreenTitle('Themes'),
             const FatDivider(),
+            const Padding(
+              padding: StyleData.screenPadding,
+              child: Heading('Theme Mode'),
+            ),
+            Padding(
+              padding: StyleData.screenPadding,
+              child: SwitchListTile(
+                title: const Text('Sync. with system'),
+                value: AppThemeData.instance.adaptToSystem,
+                onChanged: (final bool value) =>
+                    AppThemeData.instance.adaptToSystem = value,
+              ),
+            ),
+            const FatDivider(),
             Padding(
               padding: StyleData.screenPadding,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  const SizedBox(height: 20),
-                  const Text(
-                    'Click on a button to change the theme used in light / dark mode.',
-                  ),
-                  const SizedBox(height: 60),
-                  IntrinsicHeight(
-                    child: Row(
+                  if (AppThemeData.instance.adaptToSystem) ...<Row>{
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Expanded(
-                          child: Column(
-                            children: <Widget>[
-                              const SizedBox(height: 20),
-                              const Icon(Icons.light_mode),
-                              const SizedBox(height: 20),
-                              Text(
-                                brightness == Brightness.light
-                                    ? '(active)'
-                                    : '',
-                              ),
-                              const SizedBox(height: 20),
-                              ElevatedButton(
-                                onPressed: () {
-                                  themeClass.setNewLightEnum(
-                                    currentLightThemeEnum.nextEnum,
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  minimumSize: ListButton.minSize,
-                                  padding: ListButton.padding,
-                                  primary: ThemedColors.greyFrom(
-                                    currentLightThemeEnum,
-                                  ),
-                                  onPrimary: lightBodyStyle2.color,
-                                  textStyle: lightBodyStyle2,
-                                  shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(4),
-                                      bottomLeft: Radius.circular(4),
-                                    ),
-                                  ),
-                                ),
-                                child: Text(
-                                  currentLightThemeEnum.name,
-                                ),
-                              ),
-                            ],
+                        Row(
+                          children: const <Widget>[
+                            Heading('Light Mode '),
+                            Icon(Icons.light_mode),
+                          ],
+                        ),
+                        Text(
+                          brightness == Brightness.light ? '(active)' : '',
+                        ),
+                      ],
+                    ),
+                  } else ...<Heading>{
+                    const Heading('Choose a Theme'),
+                  },
+                  ThemeButton(
+                    changesLightMode: true,
+                    themeEnum: ThemeEnum.light,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(4),
+                        bottomLeft: Radius.circular(4),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  ThemeButton(
+                    changesLightMode: true,
+                    themeEnum: ThemeEnum.dark,
+                    shape: const RoundedRectangleBorder(),
+                  ),
+                  const SizedBox(width: 10),
+                  ThemeButton(
+                    changesLightMode: true,
+                    themeEnum: ThemeEnum.black,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(4),
+                        bottomRight: Radius.circular(4),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Visibility(
+              visible: AppThemeData.instance.adaptToSystem,
+              child: Column(
+                children: <Widget>[
+                  const SizedBox(height: 15),
+                  const ThinDivider(),
+                  Padding(
+                    padding: StyleData.screenPadding,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Row(
+                              children: const <Widget>[
+                                Heading('Dark Mode '),
+                                Icon(Icons.dark_mode),
+                              ],
+                            ),
+                            Text(
+                              brightness == Brightness.dark ? '(active)' : '',
+                            ),
+                          ],
+                        ),
+                        ThemeButton(
+                          changesLightMode: false,
+                          themeEnum: ThemeEnum.light,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(4),
+                              bottomLeft: Radius.circular(4),
+                            ),
                           ),
                         ),
-                        const VerticalDivider(
-                          thickness: 3,
-                          width: 3,
+                        const SizedBox(width: 10),
+                        ThemeButton(
+                          changesLightMode: false,
+                          themeEnum: ThemeEnum.dark,
+                          shape: const RoundedRectangleBorder(),
                         ),
-                        Expanded(
-                          child: Column(
-                            children: <Widget>[
-                              const SizedBox(height: 20),
-                              const Icon(Icons.dark_mode),
-                              const SizedBox(height: 20),
-                              Text(
-                                brightness == Brightness.dark ? '(active)' : '',
-                              ),
-                              const SizedBox(height: 20),
-                              ElevatedButton(
-                                onPressed: () {
-                                  themeClass.setNewDarkEnum(
-                                    currentDarkThemeEnum.nextEnum,
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  minimumSize: ListButton.minSize,
-                                  padding: ListButton.padding,
-                                  primary: ThemedColors.greyFrom(
-                                    currentDarkThemeEnum,
-                                  ),
-                                  onPrimary: darkBodyStyle2.color,
-                                  textStyle: darkBodyStyle2,
-                                  shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(4),
-                                      bottomRight: Radius.circular(4),
-                                    ),
-                                  ),
-                                ),
-                                child: Text(
-                                  currentDarkThemeEnum.name,
-                                ),
-                              ),
-                            ],
+                        const SizedBox(width: 10),
+                        ThemeButton(
+                          changesLightMode: false,
+                          themeEnum: ThemeEnum.black,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(4),
+                              bottomRight: Radius.circular(4),
+                            ),
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 55),
-                  const Text(
-                    'To always use the same theme, '
-                    'set both light and dark mode to that theme.',
                   ),
                   ScreenEndingSpacer(),
                 ],
@@ -186,6 +199,73 @@ class _SetThemesState extends State<SetThemes> with WidgetsBindingObserver {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class ThemeButton extends StatelessWidget {
+  // ignore: prefer_const_constructors_in_immutables
+  ThemeButton({
+    required this.changesLightMode,
+    required this.themeEnum,
+    required this.shape,
+    Key? key,
+  }) : super(key: key);
+
+  final bool changesLightMode;
+  final ThemeEnum themeEnum;
+  final RoundedRectangleBorder shape;
+
+  @override
+  Widget build(BuildContext context) {
+    final AppThemeData themeClass = AppThemeData.instance;
+    final ThemeData theme = themeClass.themefromEnum(themeEnum);
+
+    final Color buttonColor = ThemedColors.greyFrom(
+      themeEnum,
+    );
+    final Color textColor = theme.textTheme.bodyText2!.color!;
+
+    final ThemeEnum currentThemeEnum;
+    void Function() onPressed;
+    final Widget radioBox;
+
+    if (changesLightMode) {
+      currentThemeEnum = themeClass.currentLightThemeEnum;
+      onPressed = () => themeClass.setNewLightEnum(themeEnum);
+    } else {
+      currentThemeEnum = themeClass.currentDarkThemeEnum;
+      onPressed = () => themeClass.setNewDarkEnum(themeEnum);
+    }
+
+    if (currentThemeEnum == themeEnum) {
+      onPressed = () {};
+      radioBox = Icon(
+        Icons.radio_button_checked,
+        color: textColor,
+      );
+    } else {
+      radioBox = Icon(
+        Icons.radio_button_unchecked,
+        color: textColor,
+      );
+    }
+
+    return ListButton(
+      color: ThemedColors.greyFrom(
+        themeEnum,
+      ),
+      onPressed: onPressed,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text(
+            themeEnum.name,
+            style: theme.textTheme.bodyText2,
+          ),
+          radioBox,
+        ],
       ),
     );
   }
