@@ -111,29 +111,16 @@ class _SetThemesState extends State<SetThemes> with WidgetsBindingObserver {
                   ThemeButton(
                     changesLightMode: true,
                     themeEnum: ThemeEnum.light,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(4),
-                        bottomLeft: Radius.circular(4),
-                      ),
-                    ),
                   ),
                   const SizedBox(width: 10),
                   ThemeButton(
                     changesLightMode: true,
                     themeEnum: ThemeEnum.dark,
-                    shape: const RoundedRectangleBorder(),
                   ),
                   const SizedBox(width: 10),
                   ThemeButton(
                     changesLightMode: true,
                     themeEnum: ThemeEnum.black,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(4),
-                        bottomRight: Radius.circular(4),
-                      ),
-                    ),
                   ),
                 ],
               ),
@@ -166,29 +153,16 @@ class _SetThemesState extends State<SetThemes> with WidgetsBindingObserver {
                         ThemeButton(
                           changesLightMode: false,
                           themeEnum: ThemeEnum.light,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(4),
-                              bottomLeft: Radius.circular(4),
-                            ),
-                          ),
                         ),
                         const SizedBox(width: 10),
                         ThemeButton(
                           changesLightMode: false,
                           themeEnum: ThemeEnum.dark,
-                          shape: const RoundedRectangleBorder(),
                         ),
                         const SizedBox(width: 10),
                         ThemeButton(
                           changesLightMode: false,
                           themeEnum: ThemeEnum.black,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(4),
-                              bottomRight: Radius.circular(4),
-                            ),
-                          ),
                         ),
                       ],
                     ),
@@ -204,27 +178,23 @@ class _SetThemesState extends State<SetThemes> with WidgetsBindingObserver {
   }
 }
 
+/// A [ListButton] that automatically chooses its child & styling according to
+/// the [changesLightMode] and [themeEnum].
 class ThemeButton extends StatelessWidget {
   // ignore: prefer_const_constructors_in_immutables
   ThemeButton({
     required this.changesLightMode,
     required this.themeEnum,
-    required this.shape,
     Key? key,
   }) : super(key: key);
 
   final bool changesLightMode;
   final ThemeEnum themeEnum;
-  final RoundedRectangleBorder shape;
 
   @override
   Widget build(BuildContext context) {
     final AppThemeData themeClass = AppThemeData.instance;
     final ThemeData theme = themeClass.themefromEnum(themeEnum);
-
-    final Color buttonColor = ThemedColors.greyFrom(
-      themeEnum,
-    );
     final Color textColor = theme.textTheme.bodyText2!.color!;
 
     final ThemeEnum currentThemeEnum;
