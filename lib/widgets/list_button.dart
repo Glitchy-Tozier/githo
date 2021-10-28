@@ -29,7 +29,7 @@ class ListButton extends StatelessWidget {
   });
 
   final Color? color;
-  final Function onPressed;
+  final void Function() onPressed;
   final String text;
   final Widget? child;
 
@@ -65,7 +65,7 @@ class ListButton extends StatelessWidget {
           padding: MaterialStateProperty.all<EdgeInsetsGeometry>(padding),
           alignment: Alignment.centerLeft,
         ),
-        onPressed: () => onPressed(),
+        onPressed: onPressed,
         child: child ??
             Text(
               text,

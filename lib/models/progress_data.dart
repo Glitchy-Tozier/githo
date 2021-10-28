@@ -73,7 +73,7 @@ class ProgressData {
   /// Converts a [json]-like [String] into a list of [Level].
   static List<Level> _jsonToLevelList(
     final String json,
-    final Function save,
+    final Future<void> Function() save,
   ) {
     final dynamic dynamicList = jsonDecode(json);
     final List<Level> levels = <Level>[];

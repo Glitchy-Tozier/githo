@@ -30,7 +30,7 @@ class ConfirmActivationChange extends StatelessWidget {
 
   final String title;
   final Widget content;
-  final Function onConfirmation;
+  final void Function() onConfirmation;
 
   @override
   Widget build(BuildContext context) {

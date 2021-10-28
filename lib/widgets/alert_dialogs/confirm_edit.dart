@@ -24,7 +24,7 @@ class ConfirmEdit extends StatelessWidget {
   /// Returns a dialog that asks 'Do you really want to edit the habit-plan?'
   const ConfirmEdit({required this.onConfirmation});
 
-  final Function onConfirmation;
+  final void Function() onConfirmation;
 
   @override
   Widget build(BuildContext context) {

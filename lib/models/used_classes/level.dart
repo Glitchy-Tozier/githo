@@ -61,7 +61,7 @@ class Level {
   final String text;
   final int durationInHours;
   final List<TrainingPeriod> trainingPeriods;
-  final Function save;
+  final Future<void> Function() save;
 
   /// Calculates the level's duration and returns the number of hours.
   static int _getDurationHours(final HabitPlan habitPlan) {
@@ -77,7 +77,7 @@ class Level {
   static List<TrainingPeriod> _getTrainingPeriods(
     final int levelIndex,
     final HabitPlan habitPlan,
-    final Function save,
+    final Future<void> Function() save,
   ) {
     final List<TrainingPeriod> trainingPeriods = <TrainingPeriod>[];
     final int trainingPeriodCount = habitPlan.requiredTrainingPeriods;
@@ -98,7 +98,7 @@ class Level {
   /// Converts a [json]-like [String] into a list of [TrainingPeriod]s.
   static List<TrainingPeriod> _jsonToPeriodList(
     final String json,
-    final Function save,
+    final Future<void> Function() save,
   ) {
     final dynamic dynamicList = jsonDecode(json);
     final List<TrainingPeriod> trainingPeriods = <TrainingPeriod>[];

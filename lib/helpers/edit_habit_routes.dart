@@ -27,7 +27,7 @@ import 'package:githo/screens/edit_habit.dart';
 /// Opens the editHabit-screen without any predefined values.
 void addNewHabit(
   BuildContext context,
-  final Function updatePrevScreens,
+  final void Function() updatePrevScreens,
 ) {
   final HabitPlan habitPlan = HabitPlan.emptyHabitPlan();
 
@@ -53,7 +53,7 @@ void addNewHabit(
 /// Sends an existing habitPlan to the editHabit-screen for you to edit.
 void editHabit(
   BuildContext context,
-  final Function updatePrevScreens,
+  final void Function(HabitPlan) updatePrevScreens,
   final HabitPlan habitPlan,
 ) {
   void _onSaved(final HabitPlan habitPlan) {

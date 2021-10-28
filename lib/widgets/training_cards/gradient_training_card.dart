@@ -34,7 +34,7 @@ class GradientTrainingCard extends StatelessWidget {
   final double cardWidth;
   final double cardHeight;
   final double textSize;
-  final Function? onTap;
+  final void Function() onTap;
 
   static const double topMargin = 5;
   static const double bottomMargin = 15;
@@ -79,7 +79,7 @@ class GradientTrainingCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(borderRadius),
               child: InkWell(
                 splashColor: Colors.black,
-                onTap: (onTap == null) ? null : () => onTap!(),
+                onTap: onTap,
                 borderRadius: BorderRadius.circular(borderRadius),
                 child: Center(
                   child: Text(

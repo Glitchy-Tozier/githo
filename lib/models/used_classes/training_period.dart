@@ -76,14 +76,14 @@ class TrainingPeriod {
   final int requiredTrainings;
   String status = '';
   final List<Training> trainings;
-  final Function save;
+  final Future<void> Function() save;
 
   /// Generates and returns the [List] of [Training]s that
   /// form this [TrainingPeriod].
   static List<Training> _getTrainings(
     final int trainingPeriodIndex,
     final HabitPlan habitPlan,
-    final Function save,
+    final Future<void> Function() save,
   ) {
     final List<Training> trainings = <Training>[];
     final int trainingTimeIndex = habitPlan.trainingTimeIndex;
@@ -105,7 +105,7 @@ class TrainingPeriod {
   /// Converts a [json]-like [String] into a list of [Training]s.
   static List<Training> _jsonToTrainingList(
     final String json,
-    final Function save,
+    final Future<void> Function() save,
   ) {
     final dynamic dynamicList = jsonDecode(json);
     final List<Training> trainings = <Training>[];

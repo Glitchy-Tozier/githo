@@ -31,7 +31,7 @@ class ConfirmDeletion extends StatelessWidget {
   });
 
   final HabitPlan habitPlan;
-  final Function onConfirmation;
+  final void Function() onConfirmation;
 
   @override
   Widget build(BuildContext context) {

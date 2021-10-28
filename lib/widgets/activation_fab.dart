@@ -34,7 +34,7 @@ class ActivationFAB extends StatelessWidget {
   });
 
   final HabitPlan habitPlan;
-  final Function updateFunction;
+  final void Function(HabitPlan) updateFunction;
 
   Future<void> onClickFunc(BuildContext context) async {
     if (habitPlan.isActive == true) {

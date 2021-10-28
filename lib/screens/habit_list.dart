@@ -37,7 +37,7 @@ class HabitList extends StatefulWidget {
   /// Lists all habit-plans
   const HabitList({required this.updateFunction});
 
-  final Function updateFunction;
+  final void Function() updateFunction;
 
   @override
   _HabitListState createState() => _HabitListState();

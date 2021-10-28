@@ -38,7 +38,7 @@ class ConfirmStartingTime extends StatefulWidget {
   });
 
   final HabitPlan habitPlan;
-  final Function onConfirmation;
+  final void Function(HabitPlan) onConfirmation;
 
   @override
   _ConfirmStartingTimeState createState() => _ConfirmStartingTimeState();
@@ -143,7 +143,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
         'Confirm starting time',
       ),
       content: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
+        onTap: FocusScope.of(context).unfocus,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[

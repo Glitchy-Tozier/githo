@@ -25,7 +25,7 @@ class ImportHabit extends StatelessWidget {
   /// Returns a dialog that lets you import a habit-plan.
   ImportHabit({required this.onImport});
 
-  final Function onImport;
+  final void Function(String) onImport;
   final GlobalKey<FormFieldState<String?>> formKey =
       GlobalKey<FormFieldState<String?>>();
 

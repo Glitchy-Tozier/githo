@@ -50,7 +50,7 @@ class SingleHabitDisplay extends StatefulWidget {
     required this.habitPlan,
   });
 
-  final Function updateFunction;
+  final void Function() updateFunction;
   final HabitPlan habitPlan;
 
   @override

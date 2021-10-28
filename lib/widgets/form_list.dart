@@ -34,7 +34,7 @@ class FormList extends StatefulWidget {
 
   final String fieldName;
   final bool canBeEmpty;
-  final Function valuesGetter;
+  final void Function(List<String>) valuesGetter;
   final List<String> initValues;
 
   @override

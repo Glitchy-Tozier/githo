@@ -101,7 +101,7 @@ class _CountdownCardState extends State<CountdownCard> {
             color: widget.color,
             elevation: 6,
             cardHeight: widget.cardHeight,
-            onTap: (widget.onTap == null)
+            onTap: widget.onTap == null
                 ? null
                 : () => widget.onTap!(remainingTimeStr),
             child: Text(

@@ -34,7 +34,7 @@ class ConfirmTrainingStart extends StatelessWidget {
   final String title;
   final String toDo;
   final Training training;
-  final Function onConfirmation;
+  final void Function() onConfirmation;
 
   @override
   Widget build(BuildContext context) {

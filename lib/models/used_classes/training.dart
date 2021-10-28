@@ -64,7 +64,7 @@ class Training {
   DateTime startingDate = DateTime(135);
   DateTime endingDate = DateTime(246);
   String status = '';
-  final Function save;
+  final Future<void> Function() save;
 
   /// Checks whether the training is active.
   bool get isActive {

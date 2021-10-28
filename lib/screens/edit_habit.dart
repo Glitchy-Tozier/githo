@@ -47,7 +47,7 @@ class EditHabit extends StatefulWidget {
 
   final String title;
   final HabitPlan habitPlan;
-  final Function onSavedFunction;
+  final void Function(HabitPlan) onSavedFunction;
   final bool displayImportFAB;
 
   @override
@@ -138,7 +138,7 @@ class _EditHabitState extends State<EditHabit> {
     return Scaffold(
       body: Background(
         child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
+          onTap: FocusScope.of(context).unfocus,
           child: ListView(
             physics: const BouncingScrollPhysics(),
             shrinkWrap: true,

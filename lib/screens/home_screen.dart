@@ -378,7 +378,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         progressData.activeData;
 
                     final IconData icon;
-                    final Function onClickFunc;
+                    final void Function() onClickFunc;
 
                     if (activeMap == null) {
                       // If the user is waiting for the first training to start.
