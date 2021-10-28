@@ -57,15 +57,7 @@ class CardColors {
   }
 
   static Color get waiting {
-    final ThemeEnum theme = AppThemeData.instance.currentThemeEnum;
-    switch (theme) {
-      case ThemeEnum.light:
-        return Colors.orange;
-      case ThemeEnum.dark:
-        return Colors.orange.shade800;
-      default:
-        return Colors.orange;
-    }
+    return ThemedColors.orange;
   }
 
   static Color get locked {
@@ -115,7 +107,7 @@ class LevelColors {
   }
 
   static Color get active {
-    return CardColors.waiting;
+    return ThemedColors.orange;
   }
 
   static Color get locked {

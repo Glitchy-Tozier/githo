@@ -377,102 +377,138 @@ class _HomeScreenState extends State<HomeScreen> {
                     final Map<String, dynamic>? activeMap =
                         progressData.activeData;
 
-                    final IconData icon;
-                    final void Function() onClickFunc;
-
                     if (activeMap == null) {
                       // If the user is waiting for the first training to start.
-                      icon = Icons.lock_clock;
+                      return FloatingActionButton(
+                        tooltip: 'Waiting for training to start',
+                        backgroundColor: ThemedColors.green,
+                        heroTag: null,
+                        onPressed: () {
+                          final Map<String, dynamic> waitingMap =
+                              progressData.waitingData!;
 
-                      onClickFunc = () {
-                        final Map<String, dynamic> waitingMap =
-                            progressData.waitingData!;
+                          final Training training =
+                              waitingMap['training'] as Training;
+                          final Level level = waitingMap['levels'] as Level;
+                          final String levelDescription = level.text;
 
-                        final Training training =
-                            waitingMap['training'] as Training;
-                        final Level level = waitingMap['levels'] as Level;
-                        final String levelDescription = level.text;
+                          final DateTime now = TimeHelper.instance.currentTime;
+                          final String remainingTime = getDurationDiff(
+                            now,
+                            training.startingDate,
+                          );
+                          showModalBottomSheet(
+                            context: context,
+                            backgroundColor: Colors.transparent,
+                            builder: (BuildContext context) => TextSheet(
+                              title: 'Waiting for training to start',
+                              text: TextSpan(
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: 'Starting in ',
+                                    style:
+                                        Theme.of(context).textTheme.bodyText2,
+                                  ),
+                                  TextSpan(
+                                    text: '$remainingTime.\n\nTo-do: ',
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                  ),
+                                  TextSpan(
+                                    text: levelDescription,
+                                    style:
+                                        Theme.of(context).textTheme.bodyText2,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                          _scrollToActiveTraining();
+                        },
+                        child: const Icon(Icons.lock_clock),
+                      );
+                    } else {
+                      // During normal use (= when some training is active).
+                      final Training currentTraining =
+                          activeMap['training'] as Training;
+                      final Level currentLevel = activeMap['levels'] as Level;
 
-                        final DateTime now = TimeHelper.instance.currentTime;
-                        final String remainingTime = getDurationDiff(
-                          now,
-                          training.startingDate,
-                        );
-                        showModalBottomSheet(
-                          context: context,
-                          backgroundColor: Colors.transparent,
-                          builder: (BuildContext context) => TextSheet(
-                            title: 'Waiting for training to start',
-                            text: TextSpan(
-                              children: <TextSpan>[
-                                TextSpan(
-                                  text: 'Starting in ',
-                                  style: Theme.of(context).textTheme.bodyText2,
+                      if (currentTraining.status == 'ready') {
+                        return FloatingActionButton(
+                          tooltip: 'Start Training',
+                          heroTag: null,
+                          onPressed: null,
+                          child: ClipOval(
+                            child: Container(
+                              width: double.infinity,
+                              height: double.infinity,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: <Color>[
+                                    Colors.deepOrange.shade200,
+                                    Colors.pinkAccent.shade400,
+                                    Colors.purple.shade900,
+                                  ],
                                 ),
-                                TextSpan(
-                                  text: '$remainingTime.\n\nTo-do: ',
-                                  style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                              child: Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext buildContext) {
+                                        return ConfirmTrainingStart(
+                                          title: 'Confirm Activation',
+                                          toDo: currentLevel.text,
+                                          training: currentTraining,
+                                          onConfirmation: () {
+                                            currentTraining.activate();
+                                            setState(() {});
+                                          },
+                                        );
+                                      },
+                                    );
+                                    _scrollToActiveTraining();
+                                    setState(() {});
+                                  },
+                                  child: const Icon(Icons.done),
                                 ),
-                                TextSpan(
-                                  text: levelDescription,
-                                  style: Theme.of(context).textTheme.bodyText2,
-                                ),
-                              ],
+                              ),
                             ),
                           ),
                         );
-                      };
-                    } else {
-                      // During normal use (= when some training is active).
-                      icon = Icons.done;
-
-                      onClickFunc = () {
-                        final Training currentTraining =
-                            activeMap['training'] as Training;
-                        final Level currentLevel = activeMap['levels'] as Level;
-
-                        if (currentTraining.status == 'ready') {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext buildContext) {
-                              return ConfirmTrainingStart(
-                                title: 'Confirm Activation',
-                                toDo: currentLevel.text,
-                                training: currentTraining,
-                                onConfirmation: () {
-                                  currentTraining.activate();
-                                  setState(() {});
+                      } else {
+                        return FloatingActionButton(
+                          tooltip: 'Mark training as done',
+                          backgroundColor: ThemedColors.green,
+                          heroTag: null,
+                          onPressed: () {
+                            currentTraining.incrementReps();
+                            if (currentTraining.doneReps ==
+                                currentTraining.requiredReps) {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext buildContext) {
+                                  return TrainingDoneAlert();
                                 },
                               );
+                            }
+                            _scrollToActiveTraining();
+                            setState(() {});
+                          },
+                          child: GestureDetector(
+                            onLongPress: () {
+                              currentTraining.decrementReps();
+                              setState(() {});
                             },
-                          );
-                        } else {
-                          currentTraining.incrementReps();
-                          if (currentTraining.doneReps ==
-                              currentTraining.requiredReps) {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext buildContext) {
-                                return TrainingDoneAlert();
-                              },
-                            );
-                          }
-                        }
-                        setState(() {});
-                      };
+                            child: const Icon(Icons.done),
+                          ),
+                        );
+                      }
                     }
-                    return FloatingActionButton(
-                      tooltip: 'Mark training as done',
-                      backgroundColor: ThemedColors.green,
-                      heroTag: null,
-                      onPressed: () {
-                        onClickFunc();
-                        _scrollToActiveTraining();
-                      },
-                      child: Icon(
-                        icon,
-                      ),
-                    );
                   }
                 }
                 return const SizedBox();
