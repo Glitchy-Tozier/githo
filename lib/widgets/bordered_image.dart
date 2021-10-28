@@ -34,7 +34,7 @@ class BorderedImage extends StatelessWidget {
     return Container(
       width: width,
       decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(20)),
+        borderRadius: const BorderRadius.all(Radius.circular(24)),
         color: Colors.white,
         border: Border.all(
           color: Colors.white,
