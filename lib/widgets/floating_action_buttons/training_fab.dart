@@ -20,6 +20,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:githo/config/custom_widget_themes.dart';
+import 'package:githo/helpers/format_date.dart';
 import 'package:githo/helpers/get_duration_diff.dart';
 import 'package:githo/helpers/time_helper.dart';
 import 'package:githo/models/progress_data.dart';
@@ -91,7 +92,16 @@ class _TrainingFABState extends State<TrainingFAB> {
                             style: Theme.of(context).textTheme.bodyText2,
                           ),
                           TextSpan(
-                            text: '$remainingTime.\n\nTo-do: ',
+                            text: '$remainingTime\n',
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                          TextSpan(
+                            text:
+                                '(On ${formatDate(training.startingDate)})\n\n',
+                            style: Theme.of(context).textTheme.bodyText2,
+                          ),
+                          TextSpan(
+                            text: 'To-do: ',
                             style: Theme.of(context).textTheme.bodyText1,
                           ),
                           TextSpan(
