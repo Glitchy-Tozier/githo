@@ -83,6 +83,9 @@ class Splash extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final double smallestDimension =
+        screenWidth < screenHeight ? screenWidth : screenHeight;
 
     return Container(
       decoration: const BoxDecoration(
@@ -94,7 +97,7 @@ class Splash extends StatelessWidget {
       child: Center(
         child: Image(
           image: const AssetImage('assets/launcher/foreground.png'),
-          width: screenWidth * 0.7,
+          width: smallestDimension * 0.7,
         ),
       ),
     );
