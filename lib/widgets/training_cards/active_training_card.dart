@@ -31,6 +31,7 @@ class ActiveTrainingCard extends StatefulWidget {
     required this.cardWidth,
     required this.cardHeight,
     required this.textSize,
+    required this.setHomeState,
     Key? key,
   }) : super(key: key);
 
@@ -39,6 +40,7 @@ class ActiveTrainingCard extends StatefulWidget {
   final double cardWidth;
   final double cardHeight;
   final double textSize;
+  final void Function() setHomeState;
 
   @override
   _ActiveTrainingCardState createState() => _ActiveTrainingCardState();
@@ -78,7 +80,7 @@ class _ActiveTrainingCardState extends State<ActiveTrainingCard> {
             elevation: 7,
             onTap: () {
               widget.training.incrementReps();
-              setState(() {});
+              widget.setHomeState();
               if (widget.training.doneReps == widget.training.requiredReps) {
                 Timer(
                   const Duration(milliseconds: 700),
@@ -93,7 +95,7 @@ class _ActiveTrainingCardState extends State<ActiveTrainingCard> {
             },
             onLongPress: () {
               widget.training.decrementReps();
-              setState(() {});
+              widget.setHomeState();
             },
             child: Text(
               '${widget.training.doneReps}/${widget.training.requiredReps}',

@@ -36,11 +36,13 @@ class PeriodListView extends StatefulWidget {
     required this.trainingPeriod,
     required this.levelDescription,
     required this.activeCardKey,
+    required this.setHomeState,
   });
 
   final TrainingPeriod trainingPeriod;
   final String levelDescription;
   final GlobalKey activeCardKey;
+  final void Function() setHomeState;
 
   @override
   _PeriodListViewState createState() => _PeriodListViewState();
@@ -166,7 +168,7 @@ class _PeriodListViewState extends State<PeriodListView> {
           if (training.status == 'ready') {
             void onConfirmation() {
               training.activate();
-              setState(() {});
+              widget.setHomeState();
             }
 
             void onTap() => showDialog(
@@ -201,6 +203,7 @@ class _PeriodListViewState extends State<PeriodListView> {
                 cardWidth: cardWidth,
                 cardHeight: cardHeight,
                 textSize: textSize,
+                setHomeState: widget.setHomeState,
               ),
             );
             continue;
