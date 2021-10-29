@@ -30,6 +30,21 @@ import 'package:githo/widgets/list_button.dart';
 /// Contains licenses and important links.
 
 class About extends StatelessWidget {
+  /// Opens an URL-[String]. If something goes wrong, the user gets alerted.
+  void openUrl(final BuildContext context, final String url) {
+    try {
+      launch(url);
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Could not launch URL: $url\n\nError: $error',
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final Future<PackageInfo> futurePackageInfo = PackageInfo.fromPlatform();
@@ -59,26 +74,18 @@ class About extends StatelessWidget {
                       const SizedBox(height: 20),
                       ListButton(
                         text: 'Source Code',
-                        onPressed: () async {
+                        onPressed: () {
                           const String url =
                               'https://github.com/Glitchy-Tozier/githo';
-                          if (await canLaunch(url)) {
-                            launch(url);
-                          } else {
-                            throw 'Could not launch URL: $url';
-                          }
+                          openUrl(context, url);
                         },
                       ),
                       ListButton(
                         text: 'Privacy Policy',
-                        onPressed: () async {
+                        onPressed: () {
                           const String url =
                               'https://github.com/Glitchy-Tozier/githo/blob/main/privacyPolicy.md';
-                          if (await canLaunch(url)) {
-                            launch(url);
-                          } else {
-                            throw 'Could not launch URL: $url';
-                          }
+                          openUrl(context, url);
                         },
                       ),
                       ListButton(
