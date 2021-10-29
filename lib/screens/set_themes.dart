@@ -78,7 +78,7 @@ class _SetThemesState extends State<SetThemes> with WidgetsBindingObserver {
             Padding(
               padding: StyleData.screenPadding,
               child: SwitchListTile(
-                title: const Text('Sync. with system'),
+                title: const Text('Sync with system'),
                 value: AppThemeData.instance.adaptToSystem,
                 onChanged: (final bool value) =>
                     AppThemeData.instance.setAdaptToSystem(value: value),
