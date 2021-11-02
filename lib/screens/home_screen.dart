@@ -70,9 +70,14 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
+  /// Reloads [_progressData] and resets the screen, as if the app just was
+  /// launched.
   void _reloadScreen() {
     setState(() {
       _progressData = DatabaseHelper.instance.getProgressData();
+      _progressData.then(
+        (ProgressData progressData) => progressData.updateSelf(),
+      );
       _scrollToActiveTraining(delay: 1);
     });
   }
