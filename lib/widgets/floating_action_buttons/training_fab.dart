@@ -59,20 +59,20 @@ class _TrainingFABState extends State<TrainingFAB> {
         if (snapshot.hasData) {
           final ProgressData progressData = snapshot.data!;
           if (progressData.isActive) {
-            final Map<String, dynamic>? activeMap = progressData.activeData;
+            final ProgressDataSlice? activeSlice = progressData.activeDataSlice;
 
-            if (activeMap == null) {
+            if (activeSlice == null) {
               // If the user is waiting for the first training to start.
               return FloatingActionButton(
                 tooltip: 'Waiting for training to start',
                 backgroundColor: ThemedColors.green,
                 heroTag: null,
                 onPressed: () {
-                  final Map<String, dynamic> waitingMap =
-                      progressData.waitingData!;
+                  final ProgressDataSlice waitingSlice =
+                      progressData.waitingDataSlice!;
 
-                  final Training training = waitingMap['training'] as Training;
-                  final Level level = waitingMap['levels'] as Level;
+                  final Training training = waitingSlice.training;
+                  final Level level = waitingSlice.level;
                   final String levelDescription = level.text;
 
                   final DateTime now = TimeHelper.instance.currentTime;
@@ -118,9 +118,8 @@ class _TrainingFABState extends State<TrainingFAB> {
               );
             } else {
               // During normal use (= when some training is active).
-              final Level currentLevel = activeMap['levels'] as Level;
-              final Training currentTraining =
-                  activeMap['training'] as Training;
+              final Level currentLevel = activeSlice.level;
+              final Training currentTraining = activeSlice.training;
 
               if (currentTraining.status == 'ready') {
                 return FloatingActionButton(

@@ -132,16 +132,14 @@ class TrainingPeriod {
 
   /// Returns [this] and the [training]-child
   /// if a [training] is found that is active  at [date].
-  Map<String, dynamic>? getDataByDate(final DateTime date) {
+  Training? getChildByDate(final DateTime date) {
     for (final Training training in trainings) {
-      if ((training.startingDate.isAtSameMomentAs(date) ||
-              training.startingDate.isBefore(date)) &&
-          training.endingDate.isAfter(date)) {
-        final Map<String, dynamic> result = <String, dynamic>{
-          'training': training,
-          'trainingPeriod': this,
-        };
-        return result;
+      final bool trainingIsActive =
+          (training.startingDate.isAtSameMomentAs(date) ||
+                  training.startingDate.isBefore(date)) &&
+              training.endingDate.isAfter(date);
+      if (trainingIsActive) {
+        return training;
       }
     }
   }
@@ -174,14 +172,10 @@ class TrainingPeriod {
   }
 
   /// Returns [this] and the [training]-child if a [training] in [this] has a status indicating that it is current/active.
-  Map<String, dynamic>? get activeData {
+  Training? get activeChild {
     for (final Training training in trainings) {
       if (training.isActive) {
-        final Map<String, dynamic> result = <String, dynamic>{
-          'training': training,
-          'trainingPeriod': this,
-        };
-        return result;
+        return training;
       }
     }
   }

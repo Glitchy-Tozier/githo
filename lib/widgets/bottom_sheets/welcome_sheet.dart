@@ -35,15 +35,15 @@ class WelcomeSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic> dataMap;
+    final ProgressDataSlice dataSlice;
     final Level level;
     final TrainingPeriod trainingPeriod;
     final TextSpan text;
 
-    if (progressData.activeData != null) {
-      dataMap = progressData.activeData!;
-      level = dataMap['levels'] as Level;
-      trainingPeriod = dataMap['trainingPeriod'] as TrainingPeriod;
+    if (progressData.activeDataSlice != null) {
+      dataSlice = progressData.activeDataSlice!;
+      level = dataSlice.level;
+      trainingPeriod = dataSlice.period;
       text = TextSpan(
         children: <TextSpan>[
           TextSpan(
@@ -69,9 +69,9 @@ class WelcomeSheet extends StatelessWidget {
           ),
         ],
       );
-    } else if (progressData.waitingData != null) {
-      dataMap = progressData.waitingData!;
-      level = dataMap['levels'] as Level;
+    } else if (progressData.waitingDataSlice != null) {
+      dataSlice = progressData.waitingDataSlice!;
+      level = dataSlice.level;
       text = TextSpan(
         children: <TextSpan>[
           TextSpan(
@@ -89,7 +89,7 @@ class WelcomeSheet extends StatelessWidget {
         ],
       );
     } else {
-      throw 'TimedInfoSheet: All dataMaps are inactive';
+      throw 'TimedInfoSheet: All dataSlices are inactive';
     }
 
     return TextSheet(

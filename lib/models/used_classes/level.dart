@@ -20,6 +20,8 @@ import 'dart:convert';
 
 import 'package:githo/config/data_shortcut.dart';
 import 'package:githo/models/habit_plan.dart';
+import 'package:githo/models/progress_data.dart';
+import 'package:githo/models/used_classes/training.dart';
 import 'package:githo/models/used_classes/training_period.dart';
 
 /// A level of potency of your final habit.
@@ -180,16 +182,18 @@ class Level {
 
   /// Returns [this], the current trainingPeriod, and the current training,
   /// if they align with the specified [date].
-  Map<String, dynamic>? getDataByDate(final DateTime date) {
-    Map<String, dynamic>? map;
+  ProgressDataSlice? getDataSliceByDate(final DateTime date) {
     for (final TrainingPeriod trainingPeriod in trainingPeriods) {
-      map = trainingPeriod.getDataByDate(date);
-      if (map != null) {
-        map['levels'] = this;
-        break;
+      final Training? training = trainingPeriod.getChildByDate(date);
+
+      if (training != null) {
+        return ProgressDataSlice(
+          level: this,
+          period: trainingPeriod,
+          training: training,
+        );
       }
     }
-    return map;
   }
 
   /// Resets the progress of the [TrainingPeriod]-children
@@ -201,31 +205,32 @@ class Level {
   }
 
   /// Returns [this], the active trainingPeriod, and the active training.
-  Map<String, dynamic>? get activeData {
-    Map<String, dynamic>? result;
+  ProgressDataSlice? get activeDataSlice {
     for (final TrainingPeriod trainingPeriod in trainingPeriods) {
       if (trainingPeriod.status == 'active') {
-        final Map<String, dynamic>? map = trainingPeriod.activeData;
-        if (map != null) {
-          result = map;
-          result['levels'] = this;
-          break;
+        final Training? activeTraining = trainingPeriod.activeChild;
+
+        if (activeTraining != null) {
+          return ProgressDataSlice(
+            level: this,
+            period: trainingPeriod,
+            training: activeTraining,
+          );
         }
       }
     }
-    return result;
   }
 
-  /// Returns [this] and the waiting trainingPeriod.
-  Map<String, dynamic>? get waitingData {
+  /// Returns [this], the waiting [TrainingPeriod] and its first [Training], if
+  /// the [TrainingPeriod] actually is waiting for its start.
+  ProgressDataSlice? get waitingDataSlice {
     for (final TrainingPeriod trainingPeriod in trainingPeriods) {
       if (trainingPeriod.status == 'waiting for start') {
-        final Map<String, dynamic> result = <String, dynamic>{
-          'levels': this,
-          'trainingPeriod': trainingPeriod,
-          'training': trainingPeriod.trainings[0],
-        };
-        return result;
+        return ProgressDataSlice(
+          level: this,
+          period: trainingPeriod,
+          training: trainingPeriod.trainings[0],
+        );
       }
     }
   }
