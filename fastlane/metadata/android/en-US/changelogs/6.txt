@@ -1,0 +1,4 @@
+This update was only concerned with bug-fixes.
+• Fixed confusing bug where the user got shown an outdated version of his score
+• Fixed horrible bug where the user got penalized way too hard for not completing a training-period
+• Fixed ugly bug where completed training-periods didn't actually get marked as such
