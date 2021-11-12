@@ -26,8 +26,35 @@ import 'package:githo/models/used_classes/level.dart';
 import 'package:githo/models/used_classes/training.dart';
 import 'package:githo/models/used_classes/training_period.dart';
 
-/// The model for how progress is structured and tracked.
+/// A class that makes conveying a [TrainingPeriod]'s position easier.
+class PeriodPosition {
+  const PeriodPosition({
+    required this.levelIdx,
+    required this.periodIdx,
+  });
 
+  /// The index of what [Level] the [TrainingPeriod] belongs to.
+  final int levelIdx;
+
+  /// The index of the [TrainingPeriod], within the [Level].
+  final int periodIdx;
+}
+
+/// A class that helps with structuring related [Level], [TrainingPeriod], and
+/// [Training] without needing to use `Map<String, dynamic>`.
+class ProgressDataSlice {
+  const ProgressDataSlice({
+    required this.level,
+    required this.period,
+    required this.training,
+  });
+
+  final Level level;
+  final TrainingPeriod period;
+  final Training training;
+}
+
+/// The model for how progress is structured and tracked.
 class ProgressData {
   ProgressData({
     required this.habitPlanId,
@@ -111,11 +138,11 @@ class ProgressData {
     final int startingLevelIdx = startingLevelNr - 1;
     levels[startingLevelIdx].trainingPeriods[0].status = 'waiting for start';
 
-    final Map<String, int> startingIdxData = <String, int>{
-      'levels': startingLevelIdx,
-      'trainingPeriod': 0,
-    };
-    _setTrainingDates(startingIdxData);
+    final PeriodPosition startingPosition = PeriodPosition(
+      levelIdx: startingLevelIdx,
+      periodIdx: 0,
+    );
+    _setTrainingDates(startingPosition);
 
     if (startingLevelNr > 0) {
       // Set the passed trainings' status to 'completed'
@@ -162,15 +189,15 @@ class ProgressData {
   bool get _inNewTraining {
     final bool inNewTraining;
 
-    final Map<String, dynamic>? activeMap = activeData;
-    if (activeMap == null) {
+    final ProgressDataSlice? activeSlice = activeDataSlice;
+    if (activeSlice == null) {
       inNewTraining = true;
     } else {
       final DateTime now = TimeHelper.instance.currentTime;
-      final Map<String, dynamic>? currentMap = _getDataByDate(now);
-      if (currentMap != null) {
-        final Training activeTraining = activeMap['training'] as Training;
-        final Training currentTraining = currentMap['training'] as Training;
+      final ProgressDataSlice? currentSlice = _getDataSliceByDate(now);
+      if (currentSlice != null) {
+        final Training activeTraining = activeSlice.training;
+        final Training currentTraining = currentSlice.training;
 
         if (activeTraining != currentTraining) {
           inNewTraining = true;
@@ -200,20 +227,20 @@ class ProgressData {
 
   /// Returns the [Level], the [TrainingPeriod], and the [Training]
   /// that currently are active.
-  Map<String, dynamic>? get activeData {
+  ProgressDataSlice? get activeDataSlice {
     for (final Level level in levels) {
-      final Map<String, dynamic>? activeData = level.activeData;
-      if (activeData != null) {
-        return activeData;
+      final ProgressDataSlice? activeSlice = level.activeDataSlice;
+      if (activeSlice != null) {
+        return activeSlice;
       }
     }
   }
 
   /// Returns the [Level], the [TrainingPeriod], and the [Training]
   /// that will start the whole training-process off.
-  Map<String, dynamic>? get waitingData {
+  ProgressDataSlice? get waitingDataSlice {
     for (final Level level in levels) {
-      final Map<String, dynamic>? tempResult = level.waitingData;
+      final ProgressDataSlice? tempResult = level.waitingDataSlice;
       if (tempResult != null) {
         return tempResult;
       }
@@ -243,15 +270,15 @@ class ProgressData {
   /// This (re-)sets the dates for all trainings,
   /// the first one starting at [currentStartingDate].
   ///
-  /// Define [startingIndexData] to start at a specified trainingPeriod.
+  /// Define [startingPeriodPosition] to start at a specified trainingPeriod.
   /// Without any arguments, all trainings will be re-dated.
   void _setTrainingDates(
-      [final Map<String, int> startingIndexData = const <String, int>{
-        'levels': 0,
-        'trainingPeriod': 0,
-      }]) {
-    final int startingLevelIdx = startingIndexData['levels']!;
-    final int startingPeriodIdx = startingIndexData['trainingPeriod']!;
+      [final PeriodPosition startingPeriodPosition = const PeriodPosition(
+        levelIdx: 0,
+        periodIdx: 0,
+      )]) {
+    final int startingLevelIdx = startingPeriodPosition.levelIdx;
+    final int startingPeriodIdx = startingPeriodPosition.periodIdx;
 
     // Set dates for all the trainings
     DateTime workingDate = currentStartingDate;
@@ -278,12 +305,12 @@ class ProgressData {
 
   /// Returns the [Level], the [TrainingPeriod], and the [Training]
   /// that aling with on specific [date].
-  Map<String, dynamic>? _getDataByDate(final DateTime date) {
-    Map<String, dynamic>? map;
+  ProgressDataSlice? _getDataSliceByDate(final DateTime date) {
+    ProgressDataSlice? result;
     for (final Level level in levels) {
-      map = level.getDataByDate(date);
-      if (map != null) {
-        return map;
+      result = level.getDataSliceByDate(date);
+      if (result != null) {
+        return result;
       }
     }
   }
@@ -292,14 +319,13 @@ class ProgressData {
   /// derived from [failedPeriods]).
   ///
   /// Returns the position of the new current [TrainingPeriod].
-  Map<String, int> _penalizeFailure(
+  PeriodPosition _penalizeFailure(
     final int failedPeriods,
-    final Map<String, dynamic> lastActiveMap,
+    final ProgressDataSlice lastActiveSlice,
   ) {
-    final int previouslyActivePeriodIdx =
-        (lastActiveMap['trainingPeriod'] as TrainingPeriod).index;
+    final int previouslyActivePeriodIdx = lastActiveSlice.period.index;
 
-    int currentLevelIdx = (lastActiveMap['levels'] as Level).index;
+    int currentLevelIdx = lastActiveSlice.level.index;
 
     // Always reset one additional period
     // to make sure we actually move backwards in time.
@@ -324,10 +350,10 @@ class ProgressData {
           newCurrentPeriodIdx = previouslyActivePeriodIdx - failedPeriods;
         }
 
-        final Map<String, int> newCurrentPosition = <String, int>{
-          'levels': newCurrentLevelIdx,
-          'trainingPeriod': newCurrentPeriodIdx,
-        };
+        final PeriodPosition newCurrentPosition = PeriodPosition(
+          levelIdx: newCurrentLevelIdx,
+          periodIdx: newCurrentPeriodIdx,
+        );
         return newCurrentPosition;
       }
     }
@@ -348,10 +374,10 @@ class ProgressData {
   /// Analyzes the amount of time that has passed since last time opening
   /// the app. Then adapts [ProgressData] accordingly.
   void _adaptToPassedTime() {
-    final Map<String, dynamic> lastActiveMap = activeData!;
+    final ProgressDataSlice lastActiveSlice = activeDataSlice!;
 
     // Analyze the last training
-    final Training lastActiveTraining = lastActiveMap['training'] as Training;
+    final Training lastActiveTraining = lastActiveSlice.training;
     lastActiveTraining.setResult();
 
     // Analyze the passed trainingPeriods
@@ -365,8 +391,7 @@ class ProgressData {
 
     if (passedTrainingPeriods >= 1) {
       // Analyze the trainingPeriod that was last active
-      final TrainingPeriod lastActivePeriod =
-          lastActiveMap['trainingPeriod'] as TrainingPeriod;
+      final TrainingPeriod lastActivePeriod = lastActiveSlice.period;
 
       // Get the number of failed trainigPeriods
       int failedPeriods = passedTrainingPeriods;
@@ -380,14 +405,16 @@ class ProgressData {
 
       final TrainingPeriod lastPeriod = levels.last.trainingPeriods.last;
 
+      // This happens whenever the last training-period of the last level is
+      // completed.
       if (lastActivePeriod.wasSuccessful && lastActivePeriod == lastPeriod) {
         fullyCompleted = true;
         _completeHabitPlan();
       }
 
       if (failedPeriods >= 0 || lastActivePeriod == lastPeriod) {
-        final Map<String, int> nextPeriodPosition;
-        nextPeriodPosition = _penalizeFailure(failedPeriods, lastActiveMap);
+        final PeriodPosition nextPeriodPosition;
+        nextPeriodPosition = _penalizeFailure(failedPeriods, lastActiveSlice);
         _setTrainingDates(nextPeriodPosition);
       }
     }
@@ -396,13 +423,12 @@ class ProgressData {
   /// Activate the next [Training] & [TrainingPeriod].
   void _activateCurrentTraining() {
     final DateTime now = TimeHelper.instance.currentTime;
-    final Map<String, dynamic> currentData = _getDataByDate(now)!;
+    final ProgressDataSlice currentSlice = _getDataSliceByDate(now)!;
 
-    final Training currentTraining = currentData['training'] as Training;
+    final Training currentTraining = currentSlice.training;
     currentTraining.status = 'ready';
 
-    final TrainingPeriod currentPeriod =
-        currentData['trainingPeriod'] as TrainingPeriod;
+    final TrainingPeriod currentPeriod = currentSlice.period;
     currentPeriod.status = 'active';
   }
 
@@ -414,7 +440,7 @@ class ProgressData {
     if (_hasStarted && _inNewTraining) {
       somethingChanged = true;
 
-      if (activeData == null) {
+      if (activeDataSlice == null) {
         // If this is the first training we ever arrive in.
         // Necessary for _analyzePassedTime(); to not crash.
         _activateStartingPeriod();

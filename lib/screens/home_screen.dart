@@ -76,7 +76,11 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _progressData = DatabaseHelper.instance.getProgressData();
       _progressData.then(
-        (ProgressData progressData) => progressData.updateSelf(),
+        (ProgressData progressData) {
+          if (progressData.isActive) {
+            progressData.updateSelf();
+          }
+        },
       );
       _scrollToActiveTraining(delay: 1);
     });
@@ -103,13 +107,11 @@ class _HomeScreenState extends State<HomeScreen> {
     final DateTime restartingDate;
 
     // Get the value for [restartingDate].
-    if (progressData.waitingData != null) {
-      final Training waitingTraining =
-          progressData.waitingData!['training'] as Training;
+    if (progressData.waitingDataSlice != null) {
+      final Training waitingTraining = progressData.waitingDataSlice!.training;
       restartingDate = waitingTraining.startingDate;
     } else {
-      final Training activeTraining =
-          progressData.activeData!['training'] as Training;
+      final Training activeTraining = progressData.activeDataSlice!.training;
       restartingDate = activeTraining.endingDate;
     }
 
