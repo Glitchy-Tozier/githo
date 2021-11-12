@@ -405,6 +405,8 @@ class ProgressData {
 
       final TrainingPeriod lastPeriod = levels.last.trainingPeriods.last;
 
+      // This happens whenever the last training-period of the last level is
+      // completed.
       if (lastActivePeriod.wasSuccessful && lastActivePeriod == lastPeriod) {
         fullyCompleted = true;
         _completeHabitPlan();

@@ -149,9 +149,10 @@ class Level {
     int remainingRegressions = periodsToRegress;
 
     while (remainingRegressions > 0) {
-      trainingPeriods[activePeriodIndex].reset();
+      final TrainingPeriod activePeriod = trainingPeriods[activePeriodIndex];
+      activePeriod.reset();
       if (activePeriodIndex == 0) {
-        return remainingRegressions--;
+        return remainingRegressions - 1;
       } else {
         activePeriodIndex--;
         remainingRegressions--;

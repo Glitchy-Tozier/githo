@@ -76,7 +76,11 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _progressData = DatabaseHelper.instance.getProgressData();
       _progressData.then(
-        (ProgressData progressData) => progressData.updateSelf(),
+        (ProgressData progressData) {
+          if (progressData.isActive) {
+            progressData.updateSelf();
+          }
+        },
       );
       _scrollToActiveTraining(delay: 1);
     });
