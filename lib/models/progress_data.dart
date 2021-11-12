@@ -397,6 +397,7 @@ class ProgressData {
       int failedPeriods = passedTrainingPeriods;
       if (lastActivePeriod.wasSuccessful) {
         print('WAS SUCCESSFUL!!!!!!!!!!');
+        lastActivePeriod.status = 'completed';
         failedPeriods -= 2;
       }
 
