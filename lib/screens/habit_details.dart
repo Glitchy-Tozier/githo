@@ -26,7 +26,7 @@ import 'package:githo/config/style_data.dart';
 import 'package:githo/helpers/edit_habit_routes.dart';
 import 'package:githo/models/habit_plan.dart';
 
-import 'package:githo/widgets/activation_fab.dart';
+import 'package:githo/widgets/floating_action_buttons/activation_fab.dart';
 import 'package:githo/widgets/alert_dialogs/confirm_deletion.dart';
 import 'package:githo/widgets/alert_dialogs/confirm_edit.dart';
 import 'package:githo/widgets/background.dart';
