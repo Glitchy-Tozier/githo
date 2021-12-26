@@ -40,7 +40,9 @@ class ConfirmDeletion extends StatelessWidget {
         'Confirm deletion',
       ),
       content: Text(
-        'All previous progress will be lost.',
+        habitPlan.isActive
+            ? 'All previous progress will be lost.'
+            : 'Do you want to delete this habit-plan?',
         style: Theme.of(context).textTheme.bodyText2,
       ),
       actions: <Widget>[
