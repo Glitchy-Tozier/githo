@@ -80,8 +80,10 @@ class ConfirmDeletion extends StatelessWidget {
                     MaterialStateProperty.all<Color>(ThemedColors.red),
               ),
               onPressed: () async {
-                final ProgressData progressData = ProgressData.emptyData();
-                progressData.save();
+                if (habitPlan.isActive) {
+                  final ProgressData progressData = ProgressData.emptyData();
+                  progressData.save();
+                }
 
                 await habitPlan.delete();
 
