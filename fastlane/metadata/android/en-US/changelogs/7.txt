@@ -1,0 +1,1 @@
+Fixed bug where deleting any habit-plan caused the current habit-plan to get disabled.
