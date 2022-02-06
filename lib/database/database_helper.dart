@@ -25,6 +25,7 @@ import 'package:githo/config/data_shortcut.dart';
 import 'package:githo/database/default_habit_plans.dart';
 
 import 'package:githo/models/habit_plan.dart';
+import 'package:githo/models/notification_data.dart';
 import 'package:githo/models/progress_data.dart';
 import 'package:githo/models/settings_data.dart';
 
@@ -36,7 +37,7 @@ class DatabaseHelper {
   /// The singleton-instance of DatabaseHelper.
   static const DatabaseHelper instance = DatabaseHelper._privateConstructor();
   static Database? _db;
-  static const int version = 3;
+  static const int version = 4;
 
   static const String _habitPlansTable = 'habitPlansTable';
   static const String _colId = 'id';
@@ -50,6 +51,12 @@ class DatabaseHelper {
   static const String _colRequiredTrainings = 'requiredTrainings';
   static const String _colRequiredTrainingPeriods = 'requiredTrainingPeriods';
   static const String _colLastChanged = 'lastChanged';
+
+  static const String _notificationDataTable = 'notificationDataTable';
+  static const String _colNotificationsIsActive = 'isActive';
+  static const String _colNextActivationDate = 'nextActivationDate';
+  static const String _colHoursBetweenNotifications =
+      'hoursBetweenNotifications';
 
   static const String _progressDataTable = 'progressDataTable';
   static const String _colHabitPlanId = 'habitPlanId';
@@ -166,6 +173,21 @@ CREATE TABLE $_settingsTable(
       // Initialize default values
       _settingsTable,
       SettingsData.initialValues().toMap(),
+    );
+
+    // Initialize notifications-table
+    commandString = '''
+CREATE TABLE $_notificationDataTable(
+  $_colNotificationsIsActive INTEGER,
+  $_colNextActivationDate TEXT,
+  $_colHoursBetweenNotifications INTEGER
+)''';
+    await db.execute(commandString);
+
+    db.insert(
+      // Initialize default values
+      _notificationDataTable,
+      NotificationData.initialValues().toMap(),
     );
   }
 
@@ -295,6 +317,25 @@ ALTER TABLE $_settingsTable ADD $_colDarkTheme TEXT;
       // Update the version-number.
       currentVersion = 3;
     }
+
+    if (currentVersion == 3) {
+      // Create the notifications-table
+      db.execute('''
+CREATE TABLE $_notificationDataTable(
+  $_colNotificationsIsActive INTEGER,
+  $_colNextActivationDate TEXT,
+  $_colHoursBetweenNotifications INTEGER
+)''');
+
+      db.insert(
+        // Initialize default values
+        _notificationDataTable,
+        NotificationData.initialValues().toMap(),
+      );
+
+      // Update the version-number.
+      currentVersion = 4;
+    }
   }
 
   /// Returns the items found in a table.
@@ -404,6 +445,28 @@ ALTER TABLE $_settingsTable ADD $_colDarkTheme TEXT;
       _habitPlansTable,
       where: '$_colId = ?',
       whereArgs: <int>[id],
+    );
+    return result;
+  }
+
+  /// Extracts [NotificationData] from the database and returns it.
+  Future<NotificationData> getNotificationData() async {
+    final List<Map<String, Object?>> queryResultList =
+        await getDataMapList(_notificationDataTable);
+    final Map<String, Object?> queryResult = queryResultList[0];
+
+    final NotificationData result = NotificationData.fromMap(queryResult);
+    return result;
+  }
+
+  /// Updates the [notificationData] in the database.
+  Future<int> updateNotificationData(
+    final NotificationData notificationData,
+  ) async {
+    final Database db = await _getDb;
+    final int result = await db.update(
+      _notificationDataTable,
+      notificationData.toMap(),
     );
     return result;
   }
