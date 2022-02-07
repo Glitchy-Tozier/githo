@@ -19,7 +19,6 @@
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
-// ignore: directives_ordering
 import 'package:githo/config/data_shortcut.dart';
 import 'package:githo/models/progress_data.dart';
 
