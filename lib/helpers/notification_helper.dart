@@ -19,10 +19,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:githo/helpers/time_helper.dart';
+import 'package:timezone/timezone.dart' as tz;
+
 import 'package:githo/models/notification_data.dart';
 import 'package:githo/models/progress_data.dart';
-import 'package:timezone/data/latest_all.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
 
 final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -55,10 +56,9 @@ Future<void> scheduleNotification(
         .getDataSliceByDate(notificationData.nextActivationDate)
         ?.level
         .text;
-
-    tz.initializeTimeZones();
+    print(toDo);
     print(DateTime.now());
-    print(tz.TZDateTime.now(tz.local));
+    print(TimeHelper.instance.currentTime);
 
     const NotificationDetails platformChannelSpecifics = NotificationDetails(
       android: AndroidNotificationDetails(

@@ -17,6 +17,7 @@
  */
 
 import 'dart:convert';
+import 'package:timezone/timezone.dart';
 
 import 'package:githo/config/data_shortcut.dart';
 import 'package:githo/helpers/time_helper.dart';
@@ -120,8 +121,8 @@ class TrainingPeriod {
   /// Sets the dates of its [Training]-children.
   ///
   /// The first [training] starts at [startingDate].
-  void setChildrenDates(final DateTime startingDate) {
-    DateTime currentStartingDate = startingDate;
+  void setChildrenDates(final TZDateTime startingDate) {
+    TZDateTime currentStartingDate = startingDate;
 
     for (final Training training in trainings) {
       training.setDates(currentStartingDate);
@@ -132,7 +133,7 @@ class TrainingPeriod {
 
   /// Returns [this] and the [training]-child
   /// if a [training] is found that is active  at [date].
-  Training? getChildByDate(final DateTime date) {
+  Training? getChildByDate(final TZDateTime date) {
     for (final Training training in trainings) {
       final bool trainingIsActive =
           (training.startingDate.isAtSameMomentAs(date) ||
@@ -214,7 +215,7 @@ class TrainingPeriod {
   int get remainingTrainings {
     int remainingTrainings = 0;
     for (final Training training in trainings) {
-      final DateTime now = TimeHelper.instance.currentTime;
+      final TZDateTime now = TimeHelper.instance.currentTime;
       if (training.endingDate.isAfter(now)) {
         remainingTrainings++;
       }
@@ -230,7 +231,7 @@ class TrainingPeriod {
   /// Checks if the [TrainingPeriod] is over. If so, it is marked accordingly.
   void markIfPassed() {
     final Training lastTraining = trainings.last;
-    final DateTime now = TimeHelper.instance.currentTime;
+    final TZDateTime now = TimeHelper.instance.currentTime;
     if (lastTraining.endingDate.isBefore(now)) {
       setResult();
     }

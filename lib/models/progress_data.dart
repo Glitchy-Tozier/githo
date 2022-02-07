@@ -17,6 +17,7 @@
  */
 
 import 'dart:convert';
+import 'package:timezone/timezone.dart' as tz;
 
 import 'package:githo/database/database_helper.dart';
 import 'package:githo/helpers/time_helper.dart';
@@ -70,7 +71,7 @@ class ProgressData {
       : habitPlanId = 123456789,
         isActive = false,
         fullyCompleted = false,
-        currentStartingDate = DateTime(0),
+        currentStartingDate = tz.TZDateTime(tz.local, 0),
         habit = '',
         levels = <Level>[];
 
@@ -80,7 +81,7 @@ class ProgressData {
         isActive = (map['isActive'] as int).toBool(),
         fullyCompleted = (map['fullyCompleted'] as int).toBool(),
         currentStartingDate =
-            DateTime.parse(map['currentStartingDate'] as String),
+            tz.TZDateTime.parse(tz.local, map['currentStartingDate'] as String),
         habit = map['habit'] as String {
     levels = _jsonToLevelList(map['levels'] as String, save);
   }
@@ -88,7 +89,7 @@ class ProgressData {
   int habitPlanId;
   bool isActive;
   bool fullyCompleted;
-  DateTime currentStartingDate;
+  tz.TZDateTime currentStartingDate;
   String habit;
   late List<Level> levels;
 
@@ -116,7 +117,7 @@ class ProgressData {
   /// Adapts [this] to a HabitPlan.
   void adaptToHabitPlan({
     required final HabitPlan habitPlan,
-    required final DateTime startingDate,
+    required final tz.TZDateTime startingDate,
     final int startingLevelNr = 1,
   }) {
     habitPlanId = habitPlan.id!;
@@ -155,7 +156,7 @@ class ProgressData {
   /// Checks whether [this] has started or if it still is waiting
   /// for the [currentStartingDate] to arrive.
   bool get _hasStarted {
-    final DateTime now = TimeHelper.instance.currentTime;
+    final tz.TZDateTime now = TimeHelper.instance.currentTime;
     final bool hasStarted = now.isAfter(currentStartingDate);
     return hasStarted;
   }
@@ -193,7 +194,7 @@ class ProgressData {
     if (activeSlice == null) {
       inNewTraining = true;
     } else {
-      final DateTime now = TimeHelper.instance.currentTime;
+      final tz.TZDateTime now = TimeHelper.instance.currentTime;
       final ProgressDataSlice? currentSlice = getDataSliceByDate(now);
       if (currentSlice != null) {
         final Training activeTraining = activeSlice.training;
@@ -215,8 +216,8 @@ class ProgressData {
   /// Returns how many [TrainingPeriod]s have gone by since last
   /// opening the app.
   int _getPassedTrainingPeriods({
-    required final DateTime startingDate,
-    required final DateTime endingDate,
+    required final tz.TZDateTime startingDate,
+    required final tz.TZDateTime endingDate,
   }) {
     final int passedHours = endingDate.difference(startingDate).inHours;
     final int passedPeriods =
@@ -259,7 +260,7 @@ class ProgressData {
   /// Moves the [currentStartingDate] so that it is the
   /// starting Date for the current [TrainingPeriod].
   void _setNewStartingDate() {
-    final DateTime now = TimeHelper.instance.currentTime;
+    final tz.TZDateTime now = TimeHelper.instance.currentTime;
     final Duration periodDuration =
         Duration(hours: trainingPeriodDurationInHours);
 
@@ -284,7 +285,7 @@ class ProgressData {
     final int startingPeriodIdx = startingPeriodPosition.periodIdx;
 
     // Set dates for all the trainings
-    DateTime workingDate = currentStartingDate;
+    tz.TZDateTime workingDate = currentStartingDate;
 
     for (int i = startingLevelIdx; i < levels.length; i++) {
       final Level level = levels[i];
@@ -308,7 +309,7 @@ class ProgressData {
 
   /// Returns the [Level], the [TrainingPeriod], and the [Training]
   /// that aling with on specific [date].
-  ProgressDataSlice? getDataSliceByDate(final DateTime date) {
+  ProgressDataSlice? getDataSliceByDate(final tz.TZDateTime date) {
     ProgressDataSlice? result;
     for (final Level level in levels) {
       result = level.getDataSliceByDate(date);
@@ -387,7 +388,7 @@ class ProgressData {
     // Analyze the passed trainingPeriods
     // Calculate the number of trainingPeriods passed.
     // For dayly trainings, that would be how many weeks have passed.
-    final DateTime now = TimeHelper.instance.currentTime;
+    final tz.TZDateTime now = TimeHelper.instance.currentTime;
     final int passedTrainingPeriods = _getPassedTrainingPeriods(
       startingDate: currentStartingDate,
       endingDate: now,
@@ -427,7 +428,7 @@ class ProgressData {
 
   /// Activate the next [Training] & [TrainingPeriod].
   void _activateCurrentTraining() {
-    final DateTime now = TimeHelper.instance.currentTime;
+    final tz.TZDateTime now = TimeHelper.instance.currentTime;
     final ProgressDataSlice currentSlice = getDataSliceByDate(now)!;
 
     final Training currentTraining = currentSlice.training;

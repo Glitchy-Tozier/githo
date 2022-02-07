@@ -19,7 +19,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:timezone/timezone.dart';
 
 import 'package:githo/config/custom_widget_themes.dart';
 import 'package:githo/config/data_shortcut.dart';
@@ -113,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   /// Reloads the screen when the next `setState((){});` needs to occur.
   void _startReloadTimer(final ProgressData progressData) {
-    final DateTime restartingDate;
+    final TZDateTime restartingDate;
 
     // Get the value for [restartingDate].
     if (progressData.waitingDataSlice != null) {
@@ -127,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
     timer = Timer.periodic(
       const Duration(seconds: 1),
       (_) {
-        final DateTime now = TimeHelper.instance.currentTime;
+        final TZDateTime now = TimeHelper.instance.currentTime;
         final Duration remainingTime = restartingDate.difference(now);
 
         if (remainingTime.isNegative) {

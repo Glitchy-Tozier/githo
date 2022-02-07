@@ -18,6 +18,7 @@
 
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:timezone/timezone.dart';
 
 import 'package:githo/config/custom_widget_themes.dart';
 import 'package:githo/helpers/format_date.dart';
@@ -75,7 +76,7 @@ class _TrainingFABState extends State<TrainingFAB> {
                   final Level level = waitingSlice.level;
                   final String levelDescription = level.text;
 
-                  final DateTime now = TimeHelper.instance.currentTime;
+                  final TZDateTime now = TimeHelper.instance.currentTime;
                   final String remainingTime = getDurationDiff(
                     now,
                     training.startingDate,
