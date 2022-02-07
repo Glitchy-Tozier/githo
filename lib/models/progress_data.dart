@@ -194,7 +194,7 @@ class ProgressData {
       inNewTraining = true;
     } else {
       final DateTime now = TimeHelper.instance.currentTime;
-      final ProgressDataSlice? currentSlice = _getDataSliceByDate(now);
+      final ProgressDataSlice? currentSlice = getDataSliceByDate(now);
       if (currentSlice != null) {
         final Training activeTraining = activeSlice.training;
         final Training currentTraining = currentSlice.training;
@@ -272,11 +272,12 @@ class ProgressData {
   ///
   /// Define [startingPeriodPosition] to start at a specified trainingPeriod.
   /// Without any arguments, all trainings will be re-dated.
-  void _setTrainingDates(
-      [final PeriodPosition startingPeriodPosition = const PeriodPosition(
-        levelIdx: 0,
-        periodIdx: 0,
-      )]) {
+  void _setTrainingDates([
+    final PeriodPosition startingPeriodPosition = const PeriodPosition(
+      levelIdx: 0,
+      periodIdx: 0,
+    ),
+  ]) {
     final int startingLevelIdx = startingPeriodPosition.levelIdx;
     final int startingPeriodIdx = startingPeriodPosition.periodIdx;
 
@@ -305,7 +306,7 @@ class ProgressData {
 
   /// Returns the [Level], the [TrainingPeriod], and the [Training]
   /// that aling with on specific [date].
-  ProgressDataSlice? _getDataSliceByDate(final DateTime date) {
+  ProgressDataSlice? getDataSliceByDate(final DateTime date) {
     ProgressDataSlice? result;
     for (final Level level in levels) {
       result = level.getDataSliceByDate(date);
@@ -424,7 +425,7 @@ class ProgressData {
   /// Activate the next [Training] & [TrainingPeriod].
   void _activateCurrentTraining() {
     final DateTime now = TimeHelper.instance.currentTime;
-    final ProgressDataSlice currentSlice = _getDataSliceByDate(now)!;
+    final ProgressDataSlice currentSlice = getDataSliceByDate(now)!;
 
     final Training currentTraining = currentSlice.training;
     currentTraining.status = 'ready';

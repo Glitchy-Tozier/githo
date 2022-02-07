@@ -22,10 +22,12 @@ import 'package:flutter/services.dart';
 import 'package:githo/config/app_theme.dart';
 import 'package:githo/config/data_shortcut.dart';
 import 'package:githo/database/adapt_database_to_os.dart';
+import 'package:githo/helpers/notification_helper.dart';
 import 'package:githo/screens/splash_screen.dart';
 
 void main() {
   adaptDatabaseToOS();
+  initNotifications();
   runApp(MyApp());
 }
 
@@ -47,7 +49,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    // Disables screen-rotation to prevent some layots getting too large.
+    // Disables screen-rotation to prevent some layouts getting too large.
     SystemChrome.setPreferredOrientations(const <DeviceOrientation>[
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
