@@ -195,6 +195,7 @@ class Level {
         );
       }
     }
+    return null;
   }
 
   /// Resets the progress of the [TrainingPeriod]-children
@@ -220,6 +221,7 @@ class Level {
         }
       }
     }
+    return null;
   }
 
   /// Returns [this], the waiting [TrainingPeriod] and its first [Training], if
@@ -234,6 +236,7 @@ class Level {
         );
       }
     }
+    return null;
   }
 
   /// Marks the passed [trainingPeriods].

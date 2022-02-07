@@ -142,6 +142,7 @@ class TrainingPeriod {
         return training;
       }
     }
+    return null;
   }
 
   /// Only used **ONCE**: The first time when the waiting-for-start-period needs
@@ -178,6 +179,7 @@ class TrainingPeriod {
         return training;
       }
     }
+    return null;
   }
 
   /// Checks if enough [trainings] were successful for [this] to be successful.

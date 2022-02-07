@@ -124,6 +124,7 @@ class _FormListState extends State<FormList> {
                 );
               }
             }
+            return null;
           },
           onChanged: (final String? input) {
             if (fieldNr == formFields.length &&

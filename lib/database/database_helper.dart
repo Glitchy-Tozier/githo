@@ -388,6 +388,7 @@ CREATE TABLE $_notificationDataTable(
 
       return habitPlan;
     }
+    return null;
   }
 
   /// Returns the HabitPlan that currently is active.

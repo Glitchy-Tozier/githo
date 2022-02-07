@@ -145,4 +145,5 @@ String? validateHabitPlanImport(final String input) {
     print(error);
     return 'This format is not valid';
   }
+  return null;
 }

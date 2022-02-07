@@ -234,6 +234,7 @@ class ProgressData {
         return activeSlice;
       }
     }
+    return null;
   }
 
   /// Returns the [Level], the [TrainingPeriod], and the [Training]
@@ -245,6 +246,7 @@ class ProgressData {
         return tempResult;
       }
     }
+    return null;
   }
 
   /// Performs the initial activation of the starting [TrainingPeriod].
@@ -314,6 +316,7 @@ class ProgressData {
         return result;
       }
     }
+    return null;
   }
 
   /// Resets a number of [TrainingPeriod]s ([remainingRegressions],
