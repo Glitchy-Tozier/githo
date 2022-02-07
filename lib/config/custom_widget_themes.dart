@@ -266,7 +266,8 @@ class TrainingCardThemes {
           shadowColor: shadowColor,
           child: Padding(
             padding: EdgeInsets.all(
-                cardHeight / 20), // Adapts border-width to card-height.
+              cardHeight / 20,
+            ), // Adapts border-width to card-height.
             child: Material(
               color: Colors.black,
               borderRadius: BorderRadius.circular(borderRadius - 3),

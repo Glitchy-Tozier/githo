@@ -164,7 +164,8 @@ class _HabitListState extends State<HabitList> {
                   child: Column(
                     children: <Widget>[
                       const Heading(
-                          'There was an error connecting to the database.'),
+                        'There was an error connecting to the database.',
+                      ),
                       Text(
                         snapshot.error.toString(),
                       ),

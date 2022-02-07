@@ -188,7 +188,8 @@ class _EditHabitState extends State<EditHabit> {
                     Padding(
                       padding: StyleData.screenPadding,
                       child: Heading(
-                          '${trainingAdjTimeFrame.capitalize()} action count'),
+                        '${trainingAdjTimeFrame.capitalize()} action count',
+                      ),
                     ),
                     Padding(
                       padding: StyleData.screenPadding,

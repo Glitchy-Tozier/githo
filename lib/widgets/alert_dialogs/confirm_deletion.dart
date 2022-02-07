@@ -22,7 +22,7 @@ import 'package:githo/models/habit_plan.dart';
 import 'package:githo/models/progress_data.dart';
 import 'package:githo/widgets/alert_dialogs/base_dialog.dart';
 
-class ConfirmDeletion extends StatelessWidget {
+class ConfirmDeletion extends StatefulWidget {
   /// Returns a dialog that asks 'Do you really want to delete the habit-plan?'
   /// If the user says confirms, the habit-plan is deleted.
   const ConfirmDeletion({
@@ -34,13 +34,18 @@ class ConfirmDeletion extends StatelessWidget {
   final void Function() onConfirmation;
 
   @override
+  State<ConfirmDeletion> createState() => _ConfirmDeletionState();
+}
+
+class _ConfirmDeletionState extends State<ConfirmDeletion> {
+  @override
   Widget build(BuildContext context) {
     return BaseDialog(
       title: const Text(
         'Confirm deletion',
       ),
       content: Text(
-        habitPlan.isActive
+        widget.habitPlan.isActive
             ? 'All previous progress will be lost.'
             : 'Do you want to delete this habit-plan?',
         style: Theme.of(context).textTheme.bodyText2,
@@ -82,15 +87,16 @@ class ConfirmDeletion extends StatelessWidget {
                     MaterialStateProperty.all<Color>(ThemedColors.red),
               ),
               onPressed: () async {
-                if (habitPlan.isActive) {
+                if (widget.habitPlan.isActive) {
                   final ProgressData progressData = ProgressData.emptyData();
                   progressData.save();
                 }
 
-                await habitPlan.delete();
+                await widget.habitPlan.delete();
 
-                onConfirmation();
+                widget.onConfirmation();
 
+                if (!mounted) return;
                 Navigator.pop(context); // Pop dialog
                 Navigator.pop(context); // Pop habit-details-screen
               },

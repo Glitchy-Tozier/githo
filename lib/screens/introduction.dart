@@ -29,7 +29,12 @@ import 'package:githo/widgets/bordered_image.dart';
 
 /// The introduction-screen that explains how this app works.
 
-class OnBoardingScreen extends StatelessWidget {
+class OnBoardingScreen extends StatefulWidget {
+  @override
+  State<OnBoardingScreen> createState() => _OnBoardingScreenState();
+}
+
+class _OnBoardingScreenState extends State<OnBoardingScreen> {
   Future<void> _onIntroEnd(BuildContext context) async {
     // Make sure the introduction-screen doesn't get shown again
     final SettingsData settings = await DatabaseHelper.instance.getSettings();
@@ -37,6 +42,7 @@ class OnBoardingScreen extends StatelessWidget {
     DatabaseHelper.instance.updateSettings(settings);
 
     // Navigate to the homescreen
+    if (!mounted) return;
     Navigator.of(context).pushReplacement(
       MaterialPageRoute<HomeScreen>(
         builder: (_) => HomeScreen(),
@@ -129,7 +135,8 @@ class OnBoardingScreen extends StatelessWidget {
               title: 'Define levels of difficulty',
               body: 'Move closer towards your final habit.',
               image: const BorderedImage(
-                  'assets/introduction_screen_images/defineLevels.jpeg'),
+                'assets/introduction_screen_images/defineLevels.jpeg',
+              ),
               decoration: pageDecoration,
             ),
             PageViewModel(
@@ -137,7 +144,8 @@ class OnBoardingScreen extends StatelessWidget {
               body: 'Consistently succeed in trainings to level up.\n\n'
                   'If a level is too difficult, repeat the previous one.',
               image: const BorderedImage(
-                  'assets/introduction_screen_images/training.jpeg'),
+                'assets/introduction_screen_images/training.jpeg',
+              ),
               decoration: pageDecoration,
             ),
           ],

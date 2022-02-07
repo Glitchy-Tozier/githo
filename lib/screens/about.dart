@@ -91,12 +91,15 @@ class About extends StatelessWidget {
                       ListButton(
                         text: 'Licenses',
                         onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute<void>(
-                            builder: (BuildContext context) =>
-                                const CustomLicensePage(
-                              applicationName: 'Githo\nGet Into The Habit Of…',
+                          Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                              builder: (BuildContext context) =>
+                                  const CustomLicensePage(
+                                applicationName:
+                                    'Githo\nGet Into The Habit Of…',
+                              ),
                             ),
-                          ));
+                          );
                         },
                       ),
                     ],

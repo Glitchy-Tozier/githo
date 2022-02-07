@@ -200,7 +200,8 @@ CREATE TABLE $_notificationDataTable(
       // The new, pretty SQLite commands can't be used because Android-versions
       // <=10 don't support them.
 
-      db.execute('''
+      db.execute(
+        '''
 CREATE TABLE newHabitPlansTable(
   $_colId INTEGER PRIMARY KEY AUTOINCREMENT,
   $_colHabitIsActive INTEGER,
@@ -214,8 +215,10 @@ CREATE TABLE newHabitPlansTable(
   $_colRequiredTrainingPeriods INTEGER,
   $_colLastChanged TEXT
 );
-''');
-      db.execute('''
+''',
+      );
+      db.execute(
+        '''
 INSERT INTO newHabitPlansTable(
   $_colId,
   $_colHabitIsActive,
@@ -241,16 +244,22 @@ INSERT INTO newHabitPlansTable(
   requiredTrainingPeriods,
   lastChanged
 FROM $_habitPlansTable;
-''');
-      db.execute('''
+''',
+      );
+      db.execute(
+        '''
 DROP TABLE $_habitPlansTable;
-''');
-      db.execute('''
+''',
+      );
+      db.execute(
+        '''
 ALTER TABLE newHabitPlansTable RENAME TO $_habitPlansTable;
-''');
+''',
+      );
 
       // Do the same thing for the ProgressDataTable.
-      db.execute('''
+      db.execute(
+        '''
 CREATE TABLE newProgressDataTable(
   $_colHabitPlanId INTEGER,
   $_colProgIsActive INTEGER,
@@ -259,8 +268,10 @@ CREATE TABLE newProgressDataTable(
   $_colProgHabit TEXT,
   $_colProgLevels TEXT
 );
-''');
-      db.execute('''
+''',
+      );
+      db.execute(
+        '''
 INSERT INTO newProgressDataTable(
   $_colHabitPlanId,
   $_colProgIsActive,
@@ -276,13 +287,18 @@ INSERT INTO newProgressDataTable(
   goal,
   steps
 FROM $_progressDataTable;
-''');
-      db.execute('''
+''',
+      );
+      db.execute(
+        '''
 DROP TABLE $_progressDataTable;
-''');
-      db.execute('''
+''',
+      );
+      db.execute(
+        '''
 ALTER TABLE newProgressDataTable RENAME TO $_progressDataTable;
-''');
+''',
+      );
 
       // Delete unused Table.
       db.execute('DROP TABLE dbVersionTable');
@@ -293,17 +309,23 @@ ALTER TABLE newProgressDataTable RENAME TO $_progressDataTable;
 
     if (currentVersion == 2) {
       // Add the dark-theme-column to the settings-table.
-      db.execute('''
+      db.execute(
+        '''
 ALTER TABLE $_settingsTable ADD $_colAdaptThemeToSystem INTEGER;
-''');
+''',
+      );
       // Add the light-theme-column to the settings-table.
-      db.execute('''
+      db.execute(
+        '''
 ALTER TABLE $_settingsTable ADD $_colLightTheme TEXT;
-''');
+''',
+      );
       // Add the dark-theme-column to the settings-table.
-      db.execute('''
+      db.execute(
+        '''
 ALTER TABLE $_settingsTable ADD $_colDarkTheme TEXT;
-''');
+''',
+      );
 
       // Fill the columns with their default values.
       final Map<String, dynamic> initialSettings =
@@ -320,12 +342,14 @@ ALTER TABLE $_settingsTable ADD $_colDarkTheme TEXT;
 
     if (currentVersion == 3) {
       // Create the notifications-table
-      db.execute('''
+      db.execute(
+        '''
 CREATE TABLE $_notificationDataTable(
   $_colNotificationsIsActive INTEGER,
   $_colNextActivationDate TEXT,
   $_colHoursBetweenNotifications INTEGER
-)''');
+)''',
+      );
 
       db.insert(
         // Initialize default values
