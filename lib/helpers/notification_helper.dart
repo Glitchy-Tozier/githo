@@ -19,9 +19,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:githo/helpers/time_helper.dart';
-import 'package:timezone/data/latest_10y.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
 
 import 'package:githo/models/notification_data.dart';
 import 'package:githo/models/progress_data.dart';
@@ -32,7 +29,6 @@ final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
 /// Initialises notifications.
 Future<void> initNotifications() async {
   // Initialize timezones.
-  tz.initializeTimeZones();
 
   // Initialise the plugin. app_icon needs to be a added as a drawable resource
   // to the Android head project
@@ -55,15 +51,10 @@ Future<void> scheduleNotification(
   final ProgressData progressData,
 ) async {
   if (/* notificationData.isActive */ true) {
-    print('got in!');
     final String? toDo = progressData
         .getDataSliceByDate(notificationData.nextActivationDate)
         ?.level
         .text;
-    print(toDo);
-    print(DateTime.now());
-    print(TimeHelper.instance.currentTime);
-    print(tz.TZDateTime.now(tz.local));
 
     const NotificationDetails platformChannelSpecifics = NotificationDetails(
       android: AndroidNotificationDetails(
@@ -77,15 +68,11 @@ Future<void> scheduleNotification(
       ),
     );
 
-    await _flutterLocalNotificationsPlugin.zonedSchedule(
+    await _flutterLocalNotificationsPlugin.show(
       progressData.habitPlanId,
       progressData.habit,
       toDo,
-      tz.TZDateTime.now(tz.local).add(const Duration(seconds: 1)),
       platformChannelSpecifics,
-      androidAllowWhileIdle: true,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
     );
   }
 }
