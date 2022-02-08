@@ -54,9 +54,7 @@ class Training {
         requiredReps = map['requiredReps'] as int,
         doneReps = map['doneReps'] as int,
         startingDate = DateTime.parse(map['startingDate'] as String),
-        endingDate = DateTime.parse(
-          map['endingDate'] as String,
-        ),
+        endingDate = DateTime.parse(map['endingDate'] as String),
         status = map['status'] as String;
 
   final int number;
