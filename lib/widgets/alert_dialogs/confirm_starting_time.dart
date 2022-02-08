@@ -18,7 +18,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:timezone/timezone.dart';
 
 import 'package:githo/config/custom_widget_themes.dart';
 import 'package:githo/database/database_helper.dart';
@@ -50,8 +49,8 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
       GlobalKey<FormFieldState<String?>>();
 
   String startingPeriod = 'The first training';
-  late TZDateTime firstDate;
-  late TZDateTime initialDate;
+  late DateTime firstDate;
+  late DateTime initialDate;
   late String startingDateString;
   final TextEditingController dateController = TextEditingController();
   int startingLevelNr = 1;
@@ -64,9 +63,9 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
   }
 
   /// Returns earliest possible [DateTime] where the first training may start.
-  TZDateTime _getFirstDate() {
-    final TZDateTime now = TimeHelper.instance.currentTime;
-    final TZDateTime firstDate;
+  DateTime _getFirstDate() {
+    final DateTime now = TimeHelper.instance.currentTime;
+    final DateTime firstDate;
 
     switch (widget.habitPlan.trainingTimeIndex) {
       case 0:
@@ -79,15 +78,14 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
   }
 
   /// Returns the default [DateTime] for the first trainig to start.
-  TZDateTime _getInitialDate() {
-    final TZDateTime now = TimeHelper.instance.currentTime;
-    final TZDateTime initialDate;
+  DateTime _getInitialDate() {
+    final DateTime now = TimeHelper.instance.currentTime;
+    final DateTime initialDate;
 
     switch (widget.habitPlan.trainingTimeIndex) {
       case 0:
         // If it's an hourly habit, start on the next day, 0am.
-        initialDate = TZDateTime(
-          local,
+        initialDate = DateTime(
           now.year,
           now.month,
           now.day + 1,
@@ -95,8 +93,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
         break;
       default:
         // Else start the next week, monday, 0am.
-        initialDate = TZDateTime(
-          local,
+        initialDate = DateTime(
           now.year,
           now.month,
           now.day + 8 - now.weekday,
@@ -107,7 +104,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
 
   /// Adapts the database so that [habitPlan] is active.
   Future<void> _startHabitPlan(
-    final TZDateTime startingDate,
+    final DateTime startingDate,
     final int startingLevelNr,
   ) async {
     // Mark the old plan as inactive.
@@ -120,7 +117,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
     }
 
     // Update the plan you're looking at to be active.
-    final TZDateTime now = TimeHelper.instance.currentTime;
+    final DateTime now = TimeHelper.instance.currentTime;
     widget.habitPlan.isActive = true;
     widget.habitPlan.lastChanged = now;
     widget.habitPlan.save();
@@ -175,18 +172,17 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
                   ),
                   readOnly: true,
                   onTap: () {
-                    final TZDateTime now = TimeHelper.instance.currentTime;
+                    final DateTime now = TimeHelper.instance.currentTime;
                     showDatePicker(
                       context: context,
                       firstDate: firstDate,
                       initialDate: initialDate,
-                      lastDate: TZDateTime(local, now.year + 2000),
+                      lastDate: DateTime(now.year + 2000),
                     ).then(
                       (DateTime? newStartingDate) {
                         if (newStartingDate != null) {
                           setState(() {
-                            initialDate =
-                                TZDateTime.from(newStartingDate, local);
+                            initialDate = newStartingDate;
                           });
                         }
                       },

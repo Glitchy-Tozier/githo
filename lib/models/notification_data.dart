@@ -16,7 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:timezone/timezone.dart' as tz;
 import 'package:githo/helpers/type_extentions.dart';
 
 /// A model for how and when notifications should be displayed.
@@ -32,17 +31,17 @@ class NotificationData {
   NotificationData.fromMap(final Map<String, dynamic> map)
       : isActive = (map['isActive'] as int).toBool(),
         nextActivationDate =
-            tz.TZDateTime.parse(tz.local, map['nextActivationDate'] as String),
+            DateTime.parse(map['nextActivationDate'] as String),
         hoursBetweenNotifications = map['hoursBetweenNotifications'] as int;
 
   /// Supplies the default instance of [NotificationData].
   NotificationData.initialValues()
       : isActive = false,
-        nextActivationDate = tz.TZDateTime.now(tz.local),
+        nextActivationDate = DateTime.now(),
         hoursBetweenNotifications = 9999;
 
   bool isActive;
-  tz.TZDateTime nextActivationDate;
+  DateTime nextActivationDate;
   int hoursBetweenNotifications;
 
   /// Converts the [NotificationData] into a Map.

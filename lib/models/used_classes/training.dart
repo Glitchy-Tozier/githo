@@ -16,8 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:timezone/timezone.dart' as tz;
-
 import 'package:githo/config/data_shortcut.dart';
 import 'package:githo/helpers/time_helper.dart';
 import 'package:githo/models/habit_plan.dart';
@@ -55,12 +53,8 @@ class Training {
         durationInHours = map['durationInHours'] as int,
         requiredReps = map['requiredReps'] as int,
         doneReps = map['doneReps'] as int,
-        startingDate = tz.TZDateTime.parse(
-          tz.local,
-          map['startingDate'] as String,
-        ),
-        endingDate = tz.TZDateTime.parse(
-          tz.local,
+        startingDate = DateTime.parse(map['startingDate'] as String),
+        endingDate = DateTime.parse(
           map['endingDate'] as String,
         ),
         status = map['status'] as String;
@@ -69,8 +63,8 @@ class Training {
   final int durationInHours;
   final int requiredReps;
   int doneReps = 0;
-  tz.TZDateTime startingDate = tz.TZDateTime(tz.local, 135);
-  tz.TZDateTime endingDate = tz.TZDateTime(tz.local, 246);
+  DateTime startingDate = DateTime(135);
+  DateTime endingDate = DateTime(246);
   String status = '';
   final Future<void> Function() save;
 
@@ -81,9 +75,9 @@ class Training {
     return isActive;
   }
 
-  /// Checks whether the training aligns with the current [tz.TZDateTime].
+  /// Checks whether the training aligns with the current [DateTime].
   bool get isNow {
-    final tz.TZDateTime now = TimeHelper.instance.currentTime;
+    final DateTime now = TimeHelper.instance.currentTime;
     if (now.isAfter(startingDate) && now.isBefore(endingDate)) {
       return true;
     } else {
@@ -93,7 +87,7 @@ class Training {
 
   /// Checks whether the time-period for training has passed.
   bool get hasPassed {
-    final tz.TZDateTime now = TimeHelper.instance.currentTime;
+    final DateTime now = TimeHelper.instance.currentTime;
     if (now.isAfter(endingDate)) {
       return true;
     } else {
@@ -102,7 +96,7 @@ class Training {
   }
 
   /// Sets [this.startingDate] and [this.endingDate] for the training.
-  void setDates(final tz.TZDateTime startingDate) {
+  void setDates(final DateTime startingDate) {
     this.startingDate = startingDate;
     endingDate = startingDate.add(
       Duration(hours: durationInHours),

@@ -17,7 +17,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:timezone/timezone.dart';
 
 import 'package:githo/database/database_helper.dart';
 import 'package:githo/helpers/time_helper.dart';
@@ -58,7 +57,7 @@ void editHabit(
   final HabitPlan habitPlan,
 ) {
   void _onSaved(final HabitPlan habitPlan) {
-    final TZDateTime now = TimeHelper.instance.currentTime;
+    final DateTime now = TimeHelper.instance.currentTime;
     habitPlan.lastChanged = now;
 
     // IF the habitPlan was active, disable it to make sure

@@ -18,7 +18,6 @@
 
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:timezone/timezone.dart';
 
 import 'package:githo/config/custom_widget_themes.dart';
 import 'package:githo/helpers/get_duration_diff.dart';
@@ -41,7 +40,7 @@ class CountdownCard extends StatefulWidget {
   final double horizontalMargin;
   final double cardWidth;
   final double cardHeight;
-  final TZDateTime startingDate;
+  final DateTime startingDate;
   final double textSize;
   final void Function(String)? onTap;
   final Color color;
@@ -81,7 +80,7 @@ class _CountdownCardState extends State<CountdownCard> {
 
   @override
   Widget build(BuildContext context) {
-    final TZDateTime now = TimeHelper.instance.currentTime;
+    final DateTime now = TimeHelper.instance.currentTime;
     final String remainingTimeStr = getDurationDiff(
       now,
       widget.startingDate,

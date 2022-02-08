@@ -17,7 +17,6 @@
  */
 
 import 'dart:convert';
-import 'package:timezone/timezone.dart';
 
 import 'package:githo/config/data_shortcut.dart';
 import 'package:githo/models/habit_plan.dart';
@@ -164,11 +163,11 @@ class Level {
 
   /// Sets the dates of the level's children, starting from [startingDate],
   /// starting with a specific [trainingPeriod].
-  TZDateTime setChildrenDates(
-    final TZDateTime startingDate,
+  DateTime setChildrenDates(
+    final DateTime startingDate,
     final int startingPeriodIdx,
   ) {
-    TZDateTime currentStartingDate = startingDate;
+    DateTime currentStartingDate = startingDate;
     final int startingPeriodListIdx =
         startingPeriodIdx.remainder(trainingPeriods.length);
 
@@ -184,7 +183,7 @@ class Level {
 
   /// Returns [this], the current trainingPeriod, and the current training,
   /// if they align with the specified [date].
-  ProgressDataSlice? getDataSliceByDate(final TZDateTime date) {
+  ProgressDataSlice? getDataSliceByDate(final DateTime date) {
     for (final TrainingPeriod trainingPeriod in trainingPeriods) {
       final Training? training = trainingPeriod.getChildByDate(date);
 

@@ -16,13 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:timezone/data/latest_all.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
-
 import 'package:githo/config/data_shortcut.dart';
 import 'package:githo/models/progress_data.dart';
 
-/// Used intstead of TZDateTime.now(…) to help with debugging.
+/// Used intstead of DateTime.now(…) to help with debugging.
 class TimeHelper {
   const TimeHelper._privateConstructor();
 
@@ -30,18 +27,14 @@ class TimeHelper {
   static const TimeHelper instance = TimeHelper._privateConstructor();
   static Duration _timeToAdd = Duration.zero;
 
-  static void initTimeZones() {
-    tz.initializeTimeZones();
-  }
-
-  /// Returns the current [tz.TZDateTime].
+  /// Returns the current [DateTime].
   ///
-  /// Use this instead of `TZDateTime.now(…)` in your code.
-  tz.TZDateTime get currentTime {
-    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+  /// Use this instead of `DateTime.now(…)` in your code.
+  DateTime get currentTime {
+    final DateTime now = DateTime.now();
 
     if (DataShortcut.testing == true) {
-      final tz.TZDateTime result = now.add(_timeToAdd);
+      final DateTime result = now.add(_timeToAdd);
       return result;
     } else {
       // When not testing, always use the actual current time

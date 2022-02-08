@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:githo/helpers/time_helper.dart';
+import 'package:timezone/data/latest_10y.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 import 'package:githo/models/notification_data.dart';
@@ -30,6 +31,9 @@ final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
 
 /// Initialises notifications.
 Future<void> initNotifications() async {
+  // Initialize timezones.
+  tz.initializeTimeZones();
+
 // Initialise the plugin. app_icon needs to be a added as a drawable resource
 // to the Android head project
   const AndroidInitializationSettings initializationSettingsAndroid =
@@ -59,6 +63,7 @@ Future<void> scheduleNotification(
     print(toDo);
     print(DateTime.now());
     print(TimeHelper.instance.currentTime);
+    print(tz.TZDateTime.now(tz.local));
 
     const NotificationDetails platformChannelSpecifics = NotificationDetails(
       android: AndroidNotificationDetails(

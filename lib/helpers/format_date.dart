@@ -17,10 +17,9 @@
  */
 
 import 'package:intl/intl.dart';
-import 'package:timezone/timezone.dart';
 
 /// Formats a date and returns it as a String.
 
-String formatDate(final TZDateTime dateTime) {
+String formatDate(final DateTime dateTime) {
   return DateFormat('EEEE, dd.MM.yyyy').format(dateTime);
 }
