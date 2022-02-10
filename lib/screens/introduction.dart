@@ -38,11 +38,11 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     // Make sure the introduction-screen doesn't get shown again
     final SettingsData settings = await DatabaseHelper.instance.getSettings();
     settings.showIntroduction = false;
-    DatabaseHelper.instance.updateSettings(settings);
+    await DatabaseHelper.instance.updateSettings(settings);
 
     // Navigate to the homescreen
     if (!mounted) return;
-    Navigator.of(context).pushReplacement(
+    await Navigator.of(context).pushReplacement(
       MaterialPageRoute<HomeScreen>(
         builder: (_) => HomeScreen(),
       ),

@@ -170,7 +170,7 @@ Future<void> _backgroundFetchHeadlessTask(final HeadlessTask task) async {
 Future<void> startHeadlessNotifications() async {
   // Register to receive BackgroundFetch events after app is terminated.
   // Requires {stopOnTerminate: false, enableHeadless: true}
-  BackgroundFetch.registerHeadlessTask(_backgroundFetchHeadlessTask);
+  await BackgroundFetch.registerHeadlessTask(_backgroundFetchHeadlessTask);
 
   // Configure BackgroundFetch.
   final int status = await BackgroundFetch.configure(
@@ -209,10 +209,10 @@ Future<void> initHeadlessNotifications() async {
 
   // If notifications are enabled and a habit-plan is active:
   if (notificationData.isActive) {
-    notificationData.updateActivationDate();
-    startHeadlessNotifications();
+    await notificationData.updateActivationDate();
+    await startHeadlessNotifications();
   } else {
     print('\n\n[BackgroundFetch] NO configuration took place.');
-    _stopBackgroundTasks();
+    await _stopBackgroundTasks();
   }
 }

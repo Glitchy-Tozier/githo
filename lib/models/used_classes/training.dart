@@ -94,52 +94,52 @@ class Training {
   }
 
   /// Sets [this.startingDate] and [this.endingDate] for the training.
-  void setDates(final DateTime startingDate) {
+  Future<void> setDates(final DateTime startingDate) async {
     this.startingDate = startingDate;
     endingDate = startingDate.add(
       Duration(hours: durationInHours),
     );
-    save();
+    await save();
   }
 
   /// Increments the [doneReps] by 1.
   /// Then, if the trainig is successful, set its [status] it accordingly.
-  void incrementReps() {
+  Future<void> incrementReps() async {
     doneReps++;
     if (doneReps >= requiredReps && status == 'started') {
       status = 'done';
     }
-    save();
+    await save();
   }
 
   /// Reduces [doneReps] by 1, if it's value is not already 0.
   /// Then, if the trainig was successful but now isn't anymore,
   /// set its [status] accordingly.
-  void decrementReps() {
+  Future<void> decrementReps() async {
     if (doneReps > 0) {
       doneReps--;
     }
     if (doneReps < requiredReps && status == 'done') {
       status = 'started';
     }
-    save();
+    await save();
   }
 
   /// Activates the training
-  void activate() {
+  Future<void> activate() async {
     if (status == 'ready') status = 'started';
-    save();
+    await save();
   }
 
   /// Resets the progress ([doneReps]) and the [status] of the training.
-  void reset() {
+  Future<void> reset() async {
     doneReps = 0;
     status = '';
-    save();
+    await save();
   }
 
   /// Check the outcome of the (passed) training and mark it accordingly.
-  void setResult() {
+  Future<void> setResult() async {
     if (status == 'ready') {
       // If the training never was started
       status = 'ignored';
@@ -152,7 +152,7 @@ class Training {
     } else {
       throw 'Unknown Status: $status';
     }
-    save();
+    await save();
   }
 
   /// Converts the [Training] into a Map.

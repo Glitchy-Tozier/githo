@@ -30,3 +30,4 @@ linter:
     # Messes with placing flutter/external imports before all other ones.
     directives_ordering: false
     
+    unawaited_futures: true

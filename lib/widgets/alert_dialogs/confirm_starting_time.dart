@@ -113,14 +113,14 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
     if (activeHabitPlanList.isNotEmpty) {
       final HabitPlan oldHabitPlan = activeHabitPlanList[0];
       oldHabitPlan.isActive = false;
-      oldHabitPlan.save();
+      await oldHabitPlan.save();
     }
 
     // Update the plan you're looking at to be active.
     final DateTime now = TimeHelper.instance.currentTime;
     widget.habitPlan.isActive = true;
     widget.habitPlan.lastChanged = now;
-    widget.habitPlan.save();
+    await widget.habitPlan.save();
 
     // Adapt [ProgressData] to the [HabitPlan].
     await ProgressData.fromHabitPlan(

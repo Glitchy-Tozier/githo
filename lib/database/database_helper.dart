@@ -126,7 +126,7 @@ $_colLastChanged TEXT
     final List<HabitPlan> defaultHabitPlans = DefaultHabitPlans.habitPlanList;
     for (final HabitPlan habitPlan in defaultHabitPlans) {
       // Initialize default values
-      db.insert(
+      await db.insert(
         _habitPlansTable,
         habitPlan.toMap(),
       );
@@ -136,7 +136,7 @@ $_colLastChanged TEXT
           DefaultHabitPlans.testingHabitPlanList;
       for (final HabitPlan habitPlan in testingHabitPlans) {
         // Initialize default values
-        db.insert(
+        await db.insert(
           _habitPlansTable,
           habitPlan.toMap(),
         );
@@ -155,7 +155,7 @@ CREATE TABLE $_progressDataTable(
 )''';
     await db.execute(commandString);
 
-    db.insert(
+    await db.insert(
       // Initialize default values
       _progressDataTable,
       ProgressData.emptyData().toMap(),
@@ -171,7 +171,7 @@ CREATE TABLE $_settingsTable(
 )''';
     await db.execute(commandString);
 
-    db.insert(
+    await db.insert(
       // Initialize default values
       _settingsTable,
       SettingsData.initialValues().toMap(),
@@ -187,7 +187,7 @@ CREATE TABLE $_notificationDataTable(
 )''';
     await db.execute(commandString);
 
-    db.insert(
+    await db.insert(
       // Initialize default values
       _notificationDataTable,
       NotificationData.emptyData().toMap(),

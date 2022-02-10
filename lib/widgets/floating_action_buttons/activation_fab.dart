@@ -50,13 +50,13 @@ class ActivationFAB extends StatelessWidget {
 
         // If ProgressData gets reset, so should everything notifications-
         // related.
-        disableNotifcations();
+        await disableNotifcations();
 
         // Update previous screens
         updateFunction(habitPlan);
       }
 
-      showDialog(
+      await showDialog(
         context: context,
         builder: (BuildContext buildContext) => ConfirmActivationChange(
           title: 'Confirm Deactivation',
@@ -95,7 +95,7 @@ class ActivationFAB extends StatelessWidget {
           await DatabaseHelper.instance.getProgressData();
 
       if (progressData.isActive) {
-        showDialog(
+        await showDialog(
           context: context,
           builder: (BuildContext buildContext) => ConfirmActivationChange(
             title: 'Confirm Activation',
