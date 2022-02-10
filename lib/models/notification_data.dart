@@ -16,6 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'package:githo/database/database_helper.dart';
+import 'package:githo/helpers/time_helper.dart';
 import 'package:githo/helpers/type_extentions.dart';
 
 /// A model for how and when notifications should be displayed.
@@ -23,6 +25,7 @@ import 'package:githo/helpers/type_extentions.dart';
 class NotificationData {
   NotificationData({
     required this.isActive,
+    required this.keepNotifyingAfterSuccess,
     required this.nextActivationDate,
     required this.hoursBetweenNotifications,
   });
@@ -30,24 +33,51 @@ class NotificationData {
   /// Converts a Map into [NotificationData].
   NotificationData.fromMap(final Map<String, dynamic> map)
       : isActive = (map['isActive'] as int).toBool(),
+        keepNotifyingAfterSuccess =
+            (map['keepNotifyingAfterSuccess'] as int).toBool(),
         nextActivationDate =
             DateTime.parse(map['nextActivationDate'] as String),
         hoursBetweenNotifications = map['hoursBetweenNotifications'] as int;
 
   /// Supplies the default instance of [NotificationData].
   NotificationData.initialValues()
-      : isActive = false,
-        nextActivationDate = DateTime.now(),
-        hoursBetweenNotifications = 9999;
+      : isActive = true, // TODO: false
+        keepNotifyingAfterSuccess = true, // TODO: false
+        nextActivationDate = DateTime(2022, 2, 9, 2, 30),
+        hoursBetweenNotifications = 1;
 
   bool isActive;
+  bool keepNotifyingAfterSuccess;
   DateTime nextActivationDate;
   int hoursBetweenNotifications;
+
+  /// Moves [nextActivationDate] ahead in time, until the next planned
+  /// notification-date lies in the future.
+  Future<void> updateActivationDate() async {
+    final DateTime now = TimeHelper.instance.currentTime;
+    print('updateActivationDate()');
+    print('starting nextActivationDate: $nextActivationDate');
+    print('now: $now');
+    while (nextActivationDate.isBefore(now)) {
+      print('nextActivationDate: $nextActivationDate');
+      nextActivationDate = nextActivationDate.add(
+        Duration(hours: hoursBetweenNotifications),
+      );
+    }
+    print('nextActivationDate is at: $nextActivationDate\n');
+    await save();
+  }
+
+  /// Saves the current notificationData in the [Database].
+  Future<void> save() async {
+    await DatabaseHelper.instance.updateNotificationData(this);
+  }
 
   /// Converts the [NotificationData] into a Map.
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> map = <String, dynamic>{
       'isActive': isActive.toInt(),
+      'keepNotifyingAfterSuccess': keepNotifyingAfterSuccess.toInt(),
       'nextActivationDate': nextActivationDate.toString(),
       'hoursBetweenNotifications': hoursBetweenNotifications,
     };

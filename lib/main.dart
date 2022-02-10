@@ -27,8 +27,9 @@ import 'package:githo/screens/splash_screen.dart';
 
 void main() {
   adaptDatabaseToOS();
-  initNotifications();
   runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  initHeadlessNotifications();
 }
 
 /// This widget is the root of the application.

@@ -54,6 +54,8 @@ class DatabaseHelper {
 
   static const String _notificationDataTable = 'notificationDataTable';
   static const String _colNotificationsIsActive = 'isActive';
+  static const String _colKeepNotifyingAfterSuccess =
+      'keepNotifyingAfterSuccess';
   static const String _colNextActivationDate = 'nextActivationDate';
   static const String _colHoursBetweenNotifications =
       'hoursBetweenNotifications';
@@ -179,6 +181,7 @@ CREATE TABLE $_settingsTable(
     commandString = '''
 CREATE TABLE $_notificationDataTable(
   $_colNotificationsIsActive INTEGER,
+  $_colKeepNotifyingAfterSuccess INTEGER,
   $_colNextActivationDate TEXT,
   $_colHoursBetweenNotifications INTEGER
 )''';
@@ -346,6 +349,7 @@ ALTER TABLE $_settingsTable ADD $_colDarkTheme TEXT;
         '''
 CREATE TABLE $_notificationDataTable(
   $_colNotificationsIsActive INTEGER,
+  $_colKeepNotifyingAfterSuccess INTEGER,
   $_colNextActivationDate TEXT,
   $_colHoursBetweenNotifications INTEGER
 )''',
