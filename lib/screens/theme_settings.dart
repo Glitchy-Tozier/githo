@@ -33,18 +33,19 @@ import 'package:githo/widgets/screen_ending_spacer.dart';
 
 /// A view that allows for changing the app's theme.
 
-class SetThemes extends StatefulWidget {
+class ThemeSettings extends StatefulWidget {
   @override
-  State<SetThemes> createState() => _SetThemesState();
+  State<ThemeSettings> createState() => _ThemeSettingsState();
 }
 
-class _SetThemesState extends State<SetThemes> with WidgetsBindingObserver {
+class _ThemeSettingsState extends State<ThemeSettings>
+    with WidgetsBindingObserver {
   Brightness brightness = SchedulerBinding.instance!.window.platformBrightness;
 
-  // Necessary for `didChangePlatformBrightness()` to work.
   @override
   void initState() {
     super.initState();
+    // Necessary for `didChangePlatformBrightness()` to work.
     WidgetsBinding.instance!.addObserver(this);
   }
 

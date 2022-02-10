@@ -35,7 +35,7 @@ import 'package:githo/models/used_classes/training.dart';
 
 import 'package:githo/screens/about.dart';
 import 'package:githo/screens/habit_list.dart';
-import 'package:githo/screens/set_themes.dart';
+import 'package:githo/screens/theme_settings.dart';
 
 import 'package:githo/widgets/background.dart';
 import 'package:githo/widgets/bottom_sheets/welcome_sheet.dart';
@@ -301,8 +301,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute<SetThemes>(
-                          builder: (BuildContext context) => SetThemes(),
+                        MaterialPageRoute<ThemeSettings>(
+                          builder: (BuildContext context) => ThemeSettings(),
                         ),
                       );
                     },
