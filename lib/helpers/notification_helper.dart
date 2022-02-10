@@ -53,8 +53,7 @@ Future<int> _stopBackgroundTasks() async {
 }
 
 Future<void> disableNotifcations() async {
-  final NotificationData newNotificationData = NotificationData.emptyData();
-  await newNotificationData.save();
+  await NotificationData.emptyData().save();
   await _stopBackgroundTasks();
 }
 

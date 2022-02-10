@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:githo/config/custom_widget_themes.dart';
+import 'package:githo/helpers/notification_helper.dart';
 import 'package:githo/models/habit_plan.dart';
 import 'package:githo/models/progress_data.dart';
 import 'package:githo/widgets/alert_dialogs/base_dialog.dart';
@@ -88,8 +89,10 @@ class _ConfirmDeletionState extends State<ConfirmDeletion> {
               ),
               onPressed: () async {
                 if (widget.habitPlan.isActive) {
-                  final ProgressData progressData = ProgressData.emptyData();
-                  progressData.save();
+                  await ProgressData.emptyData().save();
+                  // If ProgressData gets reset, so should everything
+                  // notifications-related.
+                  await disableNotifcations();
                 }
 
                 await widget.habitPlan.delete();

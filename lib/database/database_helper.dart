@@ -190,7 +190,7 @@ CREATE TABLE $_notificationDataTable(
     db.insert(
       // Initialize default values
       _notificationDataTable,
-      NotificationData.initialValues().toMap(),
+      NotificationData.emptyData().toMap(),
     );
   }
 
@@ -358,7 +358,7 @@ CREATE TABLE $_notificationDataTable(
       db.insert(
         // Initialize default values
         _notificationDataTable,
-        NotificationData.initialValues().toMap(),
+        NotificationData.emptyData().toMap(),
       );
 
       // Update the version-number.
