@@ -75,6 +75,42 @@ class ProgressData {
         habit = '',
         levels = <Level>[];
 
+  /// Creates a new [ProgressData], according to the [HabitPlan].
+  ProgressData.fromHabitPlan({
+    required final HabitPlan habitPlan,
+    required final DateTime startingDate,
+    final int startingLevelNr = 1,
+  })  : habitPlanId = habitPlan.id!,
+        isActive = true,
+        fullyCompleted = habitPlan.fullyCompleted,
+        currentStartingDate = startingDate,
+        habit = habitPlan.habit,
+        levels = <Level>[] {
+    for (int i = 0; i < habitPlan.levels.length; i++) {
+      levels.add(
+        Level.fromHabitPlan(
+          levelIndex: i,
+          habitPlan: habitPlan,
+          save: save,
+        ),
+      );
+    }
+
+    final int startingLevelIdx = startingLevelNr - 1;
+    levels[startingLevelIdx].trainingPeriods[0].status = 'waiting for start';
+
+    final PeriodPosition startingPosition = PeriodPosition(
+      levelIdx: startingLevelIdx,
+      periodIdx: 0,
+    );
+    _setTrainingDates(startingPosition);
+
+    if (startingLevelNr > 0) {
+      // Set the passed trainings' status to 'completed'
+      _completePassedPeriods();
+    }
+  }
+
   /// Converts a Map into [ProgressData].
   ProgressData.fromMap(final Map<String, dynamic> map)
       : habitPlanId = map['habitPlanId'] as int,
@@ -112,43 +148,6 @@ class ProgressData {
     }
 
     return levels;
-  }
-
-  /// Adapts [this] to a HabitPlan.
-  void adaptToHabitPlan({
-    required final HabitPlan habitPlan,
-    required final DateTime startingDate,
-    final int startingLevelNr = 1,
-  }) {
-    habitPlanId = habitPlan.id!;
-    isActive = true;
-    fullyCompleted = habitPlan.fullyCompleted;
-    currentStartingDate = startingDate;
-    habit = habitPlan.habit;
-    levels = <Level>[];
-    for (int i = 0; i < habitPlan.levels.length; i++) {
-      levels.add(
-        Level.fromHabitPlan(
-          levelIndex: i,
-          habitPlan: habitPlan,
-          save: save,
-        ),
-      );
-    }
-
-    final int startingLevelIdx = startingLevelNr - 1;
-    levels[startingLevelIdx].trainingPeriods[0].status = 'waiting for start';
-
-    final PeriodPosition startingPosition = PeriodPosition(
-      levelIdx: startingLevelIdx,
-      periodIdx: 0,
-    );
-    _setTrainingDates(startingPosition);
-
-    if (startingLevelNr > 0) {
-      // Set the passed trainings' status to 'completed'
-      _completePassedPeriods();
-    }
   }
 
   // Regularly used functions
@@ -372,7 +371,7 @@ class ProgressData {
 
     if (habitPlan != null) {
       habitPlan.fullyCompleted = true;
-      habitPlan.save();
+      await habitPlan.save();
     }
   }
 

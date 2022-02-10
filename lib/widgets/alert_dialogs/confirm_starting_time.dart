@@ -123,14 +123,11 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
     widget.habitPlan.save();
 
     // Adapt [ProgressData] to the [HabitPlan].
-    final ProgressData progressData =
-        await DatabaseHelper.instance.getProgressData();
-    progressData.adaptToHabitPlan(
+    await ProgressData.fromHabitPlan(
       habitPlan: widget.habitPlan,
       startingDate: startingDate,
       startingLevelNr: startingLevelNr,
-    );
-    await progressData.save();
+    ).save();
   }
 
   @override
