@@ -19,7 +19,6 @@
 import 'dart:convert';
 
 import 'package:githo/database/database_helper.dart';
-import 'package:githo/helpers/notification_helper.dart';
 import 'package:githo/helpers/time_helper.dart';
 import 'package:githo/helpers/type_extentions.dart';
 import 'package:githo/models/habit_plan.dart';
@@ -440,8 +439,6 @@ class ProgressData {
   /// Checks how much time has passed since the last activity and
   /// adapts [ProgressData] (and the database) accordingly.
   Future<bool> updateSelf() async {
-    print('\n\nUPDATED PROGRESSDATA\n\n');
-    messageNotification('updated progressData');
     final bool somethingChanged;
 
     if (_hasStarted && _inNewTraining) {

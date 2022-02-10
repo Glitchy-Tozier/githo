@@ -131,7 +131,6 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       },
     );
-    print('started timer');
   }
 
   @override

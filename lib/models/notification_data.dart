@@ -40,11 +40,11 @@ class NotificationData {
         hoursBetweenNotifications = map['hoursBetweenNotifications'] as int;
 
   /// Supplies the default instance of [NotificationData].
-  NotificationData.initialValues()
-      : isActive = true, // TODO: false
-        keepNotifyingAfterSuccess = true, // TODO: false
-        nextActivationDate = DateTime(2022, 2, 9, 2, 30),
-        hoursBetweenNotifications = 1;
+  NotificationData.emptyData()
+      : isActive = false,
+        keepNotifyingAfterSuccess = false,
+        nextActivationDate = DateTime.now(),
+        hoursBetweenNotifications = 255;
 
   bool isActive;
   bool keepNotifyingAfterSuccess;
