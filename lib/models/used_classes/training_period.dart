@@ -223,7 +223,7 @@ class TrainingPeriod {
   }
 
   /// Sets the [status] of [this] to 'completed'.
-  void setResult() {
+  void setCompleted() {
     status = 'completed';
   }
 
@@ -232,7 +232,7 @@ class TrainingPeriod {
     final Training lastTraining = trainings.last;
     final DateTime now = TimeHelper.instance.currentTime;
     if (lastTraining.endingDate.isBefore(now)) {
-      setResult();
+      setCompleted();
     }
   }
 

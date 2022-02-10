@@ -99,7 +99,6 @@ class Training {
     endingDate = startingDate.add(
       Duration(hours: durationInHours),
     );
-    await save();
   }
 
   /// Increments the [doneReps] by 1.
