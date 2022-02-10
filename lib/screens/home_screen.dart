@@ -27,10 +27,8 @@ import 'package:githo/config/data_shortcut.dart';
 import 'package:githo/config/style_data.dart';
 
 import 'package:githo/database/database_helper.dart';
-import 'package:githo/helpers/notification_helper.dart';
 import 'package:githo/helpers/runtime_variables.dart';
 import 'package:githo/helpers/time_helper.dart';
-import 'package:githo/models/notification_data.dart';
 import 'package:githo/models/progress_data.dart';
 import 'package:githo/models/used_classes/level.dart';
 import 'package:githo/models/used_classes/training.dart';
@@ -56,8 +54,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late Future<ProgressData> _progressData;
-  final Future<NotificationData> _notificationData =
-      DatabaseHelper.instance.getNotificationData();
 
   Timer? timer;
   final GlobalKey activeCardKey = GlobalKey();
@@ -67,7 +63,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _reloadScreen();
-    _scheduleNotifications();
   }
 
   @override
@@ -108,10 +103,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Future<void> _scheduleNotifications() async {
-    scheduleNotification(await _notificationData, await _progressData);
-  }
-
   /// Reloads the screen when the next `setState((){});` needs to occur.
   void _startReloadTimer(final ProgressData progressData) {
     final DateTime restartingDate;
@@ -124,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
       final Training activeTraining = progressData.activeDataSlice!.training;
       restartingDate = activeTraining.endingDate;
     }
-
+    timer?.cancel();
     timer = Timer.periodic(
       const Duration(seconds: 1),
       (_) {
@@ -133,16 +124,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
         if (remainingTime.isNegative) {
           setState(() {
+            timer?.cancel();
             progressData.updateSelf();
             _scrollToActiveTraining(delay: 1);
           });
         }
       },
     );
+    print('started timer');
   }
 
   @override
   Widget build(BuildContext context) {
+    timer?.cancel();
     return Scaffold(
       body: Background(
         child: FutureBuilder<ProgressData>(
@@ -150,8 +144,6 @@ class _HomeScreenState extends State<HomeScreen> {
           builder:
               (BuildContext context, AsyncSnapshot<ProgressData> snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              timer?.cancel();
-
               if (snapshot.hasData) {
                 final ProgressData progressData = snapshot.data!;
                 if (progressData.isActive == false) {
