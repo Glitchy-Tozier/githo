@@ -160,7 +160,8 @@ Future<void> _backgroundFetchHeadlessTask(final HeadlessTask task) async {
 //
 // Public functions:
 
-/// Stops all ([BackgroundFetch]-) tasks.
+/// Stops all ([BackgroundFetch]-) tasks, which are the tasks that
+/// will produce notifications.
 Future<int> stopBackgroundTasks() async {
   final int result = await BackgroundFetch.stop();
   return result;
@@ -192,11 +193,12 @@ Future<void> initHeadlessNotifications() async {
       BackgroundFetchConfig(
         minimumFetchInterval: 15,
         stopOnTerminate: false,
+        startOnBoot: true,
         enableHeadless: true,
         requiresBatteryNotLow: false,
         requiresCharging: false,
-        requiresStorageNotLow: false,
         requiresDeviceIdle: false,
+        requiresStorageNotLow: false,
         requiredNetworkType: NetworkType.NONE,
       ),
       (final String taskId) async {

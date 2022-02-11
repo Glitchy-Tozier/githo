@@ -34,6 +34,8 @@ import 'package:githo/models/progress_data.dart';
 import 'package:githo/widgets/background.dart';
 import 'package:githo/widgets/dividers/fat_divider.dart';
 
+/// A view that allows users to customize their notification-timing
+
 class NotificationSettings extends StatefulWidget {
   const NotificationSettings(this._progressData, {Key? key}) : super(key: key);
   final ProgressData _progressData;
@@ -57,7 +59,8 @@ class _NotificationSettingsState extends State<NotificationSettings> {
   @override
   void initState() {
     super.initState();
-    notificationTime = widget._progressData.currentStartingDate;
+
+    // Update the settings to show their actual values.
     notificationDataFuture.then(
       (final NotificationData notificationData) {
         setState(() {
@@ -103,6 +106,7 @@ class _NotificationSettingsState extends State<NotificationSettings> {
             ),
             const ThinDivider(),
             Visibility(
+              // Only show the remaining settings if notifications are enabled.
               visible: enabled,
               child: FutureBuilder<List<HabitPlan>>(
                 future: habitPlanFuture,
@@ -152,6 +156,7 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                           notificationTime,
                         );
                         selectTime = () async {
+                          // Get desired starting-timeOfDay
                           final TimeOfDay? timeOfDay = await showTimePicker(
                             context: context,
                             initialTime: TimeOfDay(
@@ -160,6 +165,7 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                             ),
                           );
                           if (timeOfDay != null) {
+                            // Turn the TimeOfDay into a DateTime
                             return now.copyWith(
                               hour: timeOfDay.hour,
                               minute: timeOfDay.minute,
@@ -174,6 +180,7 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                           notificationTime,
                         );
                         selectTime = () async {
+                          // Get the desired starting-date
                           final DateTime? dateTime = await showDatePicker(
                             context: context,
                             initialDate: notificationTime,
@@ -182,6 +189,7 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                                 .add(const Duration(days: 7)),
                           );
                           if (dateTime != null) {
+                            // Get desired starting-timeOfDay
                             final TimeOfDay? timeOfDay = await showTimePicker(
                               context: context,
                               initialTime: TimeOfDay(
@@ -190,6 +198,7 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                               ),
                             );
                             if (timeOfDay != null) {
+                              // Turn the TimeOfDay into a DateTime
                               return dateTime.copyWith(
                                 hour: timeOfDay.hour,
                                 minute: timeOfDay.minute,
@@ -246,7 +255,7 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 20),
                         Padding(
                           padding: StyleData.screenPadding,
                           child: TextFormField(
