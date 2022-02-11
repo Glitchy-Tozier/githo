@@ -16,8 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'dart:math';
-
 import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -25,6 +23,9 @@ import 'package:githo/database/database_helper.dart';
 import 'package:githo/helpers/time_helper.dart';
 import 'package:githo/models/notification_data.dart';
 import 'package:githo/models/progress_data.dart';
+
+//
+// Notifications:
 
 final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -45,41 +46,29 @@ Future<void> _initNotifications() async {
   );
 }
 
-/// Stops all ([BackgroundFetch]-) tasks.
-Future<int> _stopBackgroundTasks() async {
-  final int result = await BackgroundFetch.stop();
-  print('Stopped all tasks');
-  return result;
-}
-
-Future<void> disableNotifcations() async {
-  await NotificationData.emptyData().save();
-  await _stopBackgroundTasks();
-}
-
 /// Contains the logic that decides whether a notification should get displayed.
 /// If the answer is yes, the notification is deployed.
-Future<void> _manageNotifications() async {
+Future<void> _decideOnNotification() async {
   final NotificationData notificationData =
       await DatabaseHelper.instance.getNotificationData();
-  print(notificationData.toMap());
-  print('');
-  print('started manageNotifications');
+  print('\nstarted manageNotifications');
 
   // If notifications are enabled
   if (notificationData.isActive) {
     print('is allowed');
     final DateTime now = TimeHelper.instance.currentTime;
     // If the time has come to display the notification
-    if (now.isAfter(notificationData.nextActivationDate)) {
+    if (now.isAfter(
+      // Subtraction is necessary to more closely approximate the desired
+      // notification-time.
+      notificationData.nextActivationDate.subtract(const Duration(minutes: 8)),
+    )) {
       print('is now');
       final ProgressData progressData =
           await DatabaseHelper.instance.getProgressData();
-      print('');
-      print(progressData.toMap());
-      print('');
       final ProgressDataSlice? timedDataSlice =
           progressData.getDataSliceByDate(notificationData.nextActivationDate);
+
       await notificationData.updateActivationDate();
       print('finished notificationData.updateActivationDate()');
       if (timedDataSlice != null) {
@@ -121,10 +110,10 @@ Future<void> _manageNotifications() async {
       }
     }
   }
-  print('ran through manageNotifications()');
+  print('ran through manageNotifications()\n');
 }
 
-/// Exists for testing purposes.
+/* /// Exists for testing purposes.
 Future<void> messageNotification(String msg) async {
 // Show the notification.
   const NotificationDetails platformChannelSpecifics = NotificationDetails(
@@ -146,7 +135,10 @@ Future<void> messageNotification(String msg) async {
     '${TimeHelper.instance.currentTime.minute}.',
     platformChannelSpecifics,
   );
-}
+} */
+
+//
+// Tasks:
 
 /// [Android-only] This "Headless Task" is run when the Android app
 /// is terminated with enableHeadless: true
@@ -159,44 +151,24 @@ Future<void> _backgroundFetchHeadlessTask(final HeadlessTask task) async {
     BackgroundFetch.finish(taskId);
     return;
   }
-  print('[BackgroundFetch] Headless event received.');
   // Do your work here...
   await _initNotifications();
-  await _manageNotifications();
+  await _decideOnNotification();
   BackgroundFetch.finish(taskId);
 }
 
-/// Starts the headless tasks which can spawn notifications.
-Future<void> startHeadlessNotifications() async {
-  // Register to receive BackgroundFetch events after app is terminated.
-  // Requires {stopOnTerminate: false, enableHeadless: true}
-  await BackgroundFetch.registerHeadlessTask(_backgroundFetchHeadlessTask);
+//
+// Public functions:
 
-  // Configure BackgroundFetch.
-  final int status = await BackgroundFetch.configure(
-    BackgroundFetchConfig(
-      minimumFetchInterval: 15,
-      stopOnTerminate: false,
-      enableHeadless: true,
-      requiresBatteryNotLow: false,
-      requiresCharging: false,
-      requiresStorageNotLow: false,
-      requiresDeviceIdle: false,
-      requiredNetworkType: NetworkType.NONE,
-    ),
-    (String taskId) async {
-      // <-- Event handler
-      // This is the fetch-event callback.
-      print('[BackgroundFetch] Event received $taskId');
-      await _initNotifications();
-      await _manageNotifications();
-      // IMPORTANT:  You must signal completion of your task or the OS
-      // can punish your app for taking too long in the background.
-      BackgroundFetch.finish(taskId);
-    },
-  );
+/// Stops all ([BackgroundFetch]-) tasks.
+Future<int> stopBackgroundTasks() async {
+  final int result = await BackgroundFetch.stop();
+  return result;
+}
 
-  print('\n\n[BackgroundFetch] configure success: $status\n\n');
+Future<void> annihilateNotifcations() async {
+  await NotificationData.emptyData().save();
+  await stopBackgroundTasks();
 }
 
 /// Initializes the headless tasks that can spawn notifications.
@@ -204,15 +176,38 @@ Future<void> startHeadlessNotifications() async {
 /// As a safety measure, this method will stop all headless tasks
 /// if notifications are disabled.
 Future<void> initHeadlessNotifications() async {
+  await stopBackgroundTasks();
   final NotificationData notificationData =
       await DatabaseHelper.instance.getNotificationData();
 
   // If notifications are enabled and a habit-plan is active:
   if (notificationData.isActive) {
-    await notificationData.updateActivationDate();
-    await startHeadlessNotifications();
-  } else {
-    print('\n\n[BackgroundFetch] NO configuration took place.');
-    await _stopBackgroundTasks();
+    /// Starts the headless tasks which can spawn notifications.
+    // Register to receive BackgroundFetch events after app is terminated.
+    // Requires {stopOnTerminate: false, enableHeadless: true}
+    await BackgroundFetch.registerHeadlessTask(_backgroundFetchHeadlessTask);
+
+    // Configure BackgroundFetch.
+    await BackgroundFetch.configure(
+      BackgroundFetchConfig(
+        minimumFetchInterval: 15,
+        stopOnTerminate: false,
+        enableHeadless: true,
+        requiresBatteryNotLow: false,
+        requiresCharging: false,
+        requiresStorageNotLow: false,
+        requiresDeviceIdle: false,
+        requiredNetworkType: NetworkType.NONE,
+      ),
+      (final String taskId) async {
+        // <-- Event handler
+        // This is the fetch-event callback.
+        await _initNotifications();
+        await _decideOnNotification();
+        // IMPORTANT:  You must signal completion of your task or the OS
+        // can punish your app for taking too long in the background.
+        BackgroundFetch.finish(taskId);
+      },
+    );
   }
 }

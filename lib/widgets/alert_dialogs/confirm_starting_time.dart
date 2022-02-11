@@ -25,6 +25,7 @@ import 'package:githo/helpers/format_date.dart';
 import 'package:githo/helpers/text_form_field_validation.dart';
 import 'package:githo/helpers/time_helper.dart';
 import 'package:githo/models/habit_plan.dart';
+import 'package:githo/models/notification_data.dart';
 import 'package:githo/models/progress_data.dart';
 import 'package:githo/widgets/alert_dialogs/base_dialog.dart';
 
@@ -128,6 +129,9 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
       startingDate: startingDate,
       startingLevelNr: startingLevelNr,
     ).save();
+
+    // Adapt [NotificationData] to the [HabitPlan].
+    await NotificationData.fromHabitPlan(widget.habitPlan).save();
   }
 
   @override

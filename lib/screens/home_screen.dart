@@ -35,6 +35,7 @@ import 'package:githo/models/used_classes/training.dart';
 
 import 'package:githo/screens/about.dart';
 import 'package:githo/screens/habit_list.dart';
+import 'package:githo/screens/notification_settings.dart';
 import 'package:githo/screens/theme_settings.dart';
 
 import 'package:githo/widgets/background.dart';
@@ -252,90 +253,129 @@ class _HomeScreenState extends State<HomeScreen> {
                   return true;
                 }
               },
-              child: SpeedDial(
-                backgroundColor: ThemedColors.orange,
-                icon: Icons.settings,
-                activeIcon: Icons.close,
-                spacing: 4,
-                spaceBetweenChildren: 4,
+              child: FutureBuilder<ProgressData>(
+                future: _progressData,
+                builder: (
+                  BuildContext context,
+                  AsyncSnapshot<ProgressData> snapshot,
+                ) {
+                  if (snapshot.hasData) {
+                    final ProgressData progressData = snapshot.data!;
+                    return SpeedDial(
+                      backgroundColor: ThemedColors.orange,
+                      icon: Icons.settings,
+                      activeIcon: Icons.close,
+                      spacing: 4,
+                      spaceBetweenChildren: 4,
 
-                // Necessary to make the dial close when pressing
-                // the back-button.
-                openCloseDial: isDialOpen,
+                      // Necessary to make the dial close when pressing
+                      // the back-button.
+                      openCloseDial: isDialOpen,
 
-                overlayColor: Colors.black,
-                overlayOpacity: 0.5,
+                      overlayColor: Colors.black,
+                      overlayOpacity: 0.5,
 
-                tooltip: 'Show options',
-                //isOpenOnStart: false,
-                animationSpeed: 200,
-                switchLabelPosition: true,
-                // childMargin:
-                // EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                children: <SpeedDialChild>[
-                  SpeedDialChild(
-                    backgroundColor: Colors.grey.shade800,
-                    label: 'About',
-                    labelStyle: Theme.of(context).textTheme.bodyText2!.copyWith(
-                          color: Colors.black,
-                        ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<About>(
-                          builder: (BuildContext context) => About(),
-                        ),
-                      );
-                    },
-                    child: const Icon(
-                      Icons.info,
-                      color: Colors.white,
-                    ),
-                  ),
-                  SpeedDialChild(
-                    backgroundColor: Colors.pink.shade900,
-                    label: 'Themes',
-                    labelStyle: Theme.of(context).textTheme.bodyText2!.copyWith(
-                          color: Colors.black,
-                        ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<ThemeSettings>(
-                          builder: (BuildContext context) => ThemeSettings(),
-                        ),
-                      );
-                    },
-                    child: Icon(
-                      SchedulerBinding.instance!.window.platformBrightness ==
-                              Brightness.light
-                          ? Icons.light_mode
-                          : Icons.dark_mode,
-                      color: Colors.white,
-                    ),
-                  ),
-                  SpeedDialChild(
-                    backgroundColor: Theme.of(context).primaryColor,
-                    label: 'List of habits',
-                    labelStyle: Theme.of(context).textTheme.bodyText2!.copyWith(
-                          color: Colors.black,
-                        ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<HabitList>(
-                          builder: (BuildContext context) => HabitList(
-                            updateFunction: _reloadScreen,
+                      tooltip: 'Show options',
+                      //isOpenOnStart: false,
+                      animationSpeed: 200,
+                      switchLabelPosition: true,
+                      // childMargin:
+                      // EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      children: <SpeedDialChild>[
+                        SpeedDialChild(
+                          backgroundColor: Colors.grey.shade800,
+                          label: 'About',
+                          labelStyle:
+                              Theme.of(context).textTheme.bodyText2!.copyWith(
+                                    color: Colors.black,
+                                  ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute<About>(
+                                builder: (BuildContext context) => About(),
+                              ),
+                            );
+                          },
+                          child: const Icon(
+                            Icons.info,
+                            color: Colors.white,
                           ),
                         ),
-                      );
-                    },
-                    child: const Icon(
-                      Icons.list,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
+                        SpeedDialChild(
+                          backgroundColor: Colors.pink.shade900,
+                          label: 'Themes',
+                          labelStyle:
+                              Theme.of(context).textTheme.bodyText2!.copyWith(
+                                    color: Colors.black,
+                                  ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute<ThemeSettings>(
+                                builder: (BuildContext context) =>
+                                    ThemeSettings(),
+                              ),
+                            );
+                          },
+                          child: Icon(
+                            SchedulerBinding
+                                        .instance!.window.platformBrightness ==
+                                    Brightness.light
+                                ? Icons.light_mode
+                                : Icons.dark_mode,
+                            color: Colors.white,
+                          ),
+                        ),
+                        if (progressData.isActive)
+                          SpeedDialChild(
+                            backgroundColor: Colors.lightBlue.shade700,
+                            label: 'Notifications',
+                            labelStyle:
+                                Theme.of(context).textTheme.bodyText2!.copyWith(
+                                      color: Colors.black,
+                                    ),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute<NotificationSettings>(
+                                  builder: (BuildContext context) =>
+                                      NotificationSettings(progressData),
+                                ),
+                              );
+                            },
+                            child: const Icon(
+                              Icons.notifications,
+                              color: Colors.white,
+                            ),
+                          ),
+                        SpeedDialChild(
+                          backgroundColor: Theme.of(context).primaryColor,
+                          label: 'List of habits',
+                          labelStyle:
+                              Theme.of(context).textTheme.bodyText2!.copyWith(
+                                    color: Colors.black,
+                                  ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute<HabitList>(
+                                builder: (BuildContext context) => HabitList(
+                                  updateFunction: _reloadScreen,
+                                ),
+                              ),
+                            );
+                          },
+                          child: const Icon(
+                            Icons.list,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+                  return const SizedBox();
+                },
               ),
             ),
             FutureBuilder<ProgressData>(

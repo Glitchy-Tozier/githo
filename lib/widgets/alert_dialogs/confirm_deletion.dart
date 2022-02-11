@@ -92,7 +92,7 @@ class _ConfirmDeletionState extends State<ConfirmDeletion> {
                   await ProgressData.emptyData().save();
                   // If ProgressData gets reset, so should everything
                   // notifications-related.
-                  await disableNotifcations();
+                  await annihilateNotifcations();
                 }
 
                 await widget.habitPlan.delete();

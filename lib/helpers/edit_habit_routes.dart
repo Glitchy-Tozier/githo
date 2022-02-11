@@ -66,7 +66,7 @@ void editHabit(
       // Reset progressData because it should not be active.
       await ProgressData.emptyData().save();
       // If ProgressData gets reset, so should everything notifications-related.
-      await disableNotifcations();
+      await annihilateNotifcations();
 
       habitPlan.isActive = false;
     }

@@ -50,7 +50,7 @@ class ActivationFAB extends StatelessWidget {
 
         // If ProgressData gets reset, so should everything notifications-
         // related.
-        await disableNotifcations();
+        await annihilateNotifcations();
 
         // Update previous screens
         updateFunction(habitPlan);

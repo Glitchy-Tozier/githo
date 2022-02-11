@@ -16,9 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'package:githo/config/data_shortcut.dart';
 import 'package:githo/database/database_helper.dart';
 import 'package:githo/helpers/time_helper.dart';
 import 'package:githo/helpers/type_extentions.dart';
+import 'package:githo/models/habit_plan.dart';
 
 /// A model for how and when notifications should be displayed.
 
@@ -30,6 +32,22 @@ class NotificationData {
     required this.hoursBetweenNotifications,
   });
 
+  /// Supplies the default instance of [NotificationData].
+  NotificationData.emptyData()
+      : isActive = false,
+        keepNotifyingAfterSuccess = false,
+        nextActivationDate = TimeHelper.instance.currentTime,
+        hoursBetweenNotifications = 255;
+
+  /// Creates a new instance of [NotificationData], adapting
+  /// [hoursBetweenNotifications] to the supplied [HabitPlan].
+  NotificationData.fromHabitPlan(final HabitPlan habitPlan)
+      : isActive = false,
+        keepNotifyingAfterSuccess = false,
+        nextActivationDate = TimeHelper.instance.currentTime,
+        hoursBetweenNotifications =
+            DataShortcut.trainingDurationInHours[habitPlan.trainingTimeIndex];
+
   /// Converts a Map into [NotificationData].
   NotificationData.fromMap(final Map<String, dynamic> map)
       : isActive = (map['isActive'] as int).toBool(),
@@ -38,13 +56,6 @@ class NotificationData {
         nextActivationDate =
             DateTime.parse(map['nextActivationDate'] as String),
         hoursBetweenNotifications = map['hoursBetweenNotifications'] as int;
-
-  /// Supplies the default instance of [NotificationData].
-  NotificationData.emptyData()
-      : isActive = false,
-        keepNotifyingAfterSuccess = false,
-        nextActivationDate = DateTime.now(),
-        hoursBetweenNotifications = 255;
 
   bool isActive;
   bool keepNotifyingAfterSuccess;
