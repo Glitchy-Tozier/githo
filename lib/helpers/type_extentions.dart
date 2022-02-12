@@ -57,7 +57,7 @@ extension IntExtension on int {
 
 /// An extension on [DateTime].
 extension MyDateUtils on DateTime {
-  /// Copies [this], while overriding the selected attributes.
+  /// Copies the [DateTime], while overriding the selected attributes.
   DateTime copyWith({
     final int? year,
     final int? month,

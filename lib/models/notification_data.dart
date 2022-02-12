@@ -62,6 +62,15 @@ class NotificationData {
   DateTime nextActivationDate;
   int hoursBetweenNotifications;
 
+  /// The [DateTime] that should be compared to [TimeHelper.instance.now].
+  /// The reason this getter is necessary is to more closely approximate the
+  /// user's desired notification-time.
+  DateTime get comparisonActivationDate {
+    return nextActivationDate.subtract(
+      const Duration(minutes: 8),
+    );
+  }
+
   /// Moves [nextActivationDate] ahead in time, until the next planned
   /// notification-date lies in the future.
   Future<void> updateActivationDate() async {
@@ -69,7 +78,7 @@ class NotificationData {
     print('updateActivationDate()');
     print('starting nextActivationDate: $nextActivationDate');
     print('now: $now');
-    while (nextActivationDate.isBefore(now)) {
+    while (comparisonActivationDate.isBefore(now)) {
       print('nextActivationDate: $nextActivationDate');
       nextActivationDate = nextActivationDate.add(
         Duration(hours: hoursBetweenNotifications),

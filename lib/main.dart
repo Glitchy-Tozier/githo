@@ -19,9 +19,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:sqflite_common/sqflite_dev.dart';
-import 'package:sqflite/sqflite.dart';
-
 import 'package:githo/config/app_theme.dart';
 import 'package:githo/config/data_shortcut.dart';
 import 'package:githo/database/adapt_database_to_os.dart';
@@ -32,7 +29,6 @@ void main() {
   adaptDatabaseToOS();
   runApp(MyApp());
   WidgetsFlutterBinding.ensureInitialized();
-  databaseFactory.setLogLevel(sqfliteLogLevelVerbose);
   initHeadlessNotifications();
 }
 

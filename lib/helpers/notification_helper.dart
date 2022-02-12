@@ -32,8 +32,6 @@ final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
 
 /// Initialises notifications.
 Future<void> _initNotifications() async {
-  // Initialize timezones.
-
   // Initialise the plugin. app_icon needs to be a added as a drawable resource
   // to the Android head project
   const AndroidInitializationSettings initializationSettingsAndroid =
@@ -58,11 +56,7 @@ Future<void> _decideOnNotification() async {
     print('is allowed');
     final DateTime now = TimeHelper.instance.currentTime;
     // If the time has come to display the notification
-    if (now.isAfter(
-      // Subtraction is necessary to more closely approximate the desired
-      // notification-time.
-      notificationData.nextActivationDate.subtract(const Duration(minutes: 8)),
-    )) {
+    if (now.isAfter(notificationData.comparisonActivationDate)) {
       print('is now');
       final ProgressData progressData =
           await DatabaseHelper.instance.getProgressData();
@@ -130,6 +124,7 @@ Future<void> messageNotification(String msg) async {
   await _flutterLocalNotificationsPlugin.show(
     Random().nextInt(100000000) + 99999239,
     msg,
+    '$msg\n'
     'This message was sent at ${TimeHelper.instance.currentTime.weekday}, '
     '${TimeHelper.instance.currentTime.hour}:'
     '${TimeHelper.instance.currentTime.minute}.',
