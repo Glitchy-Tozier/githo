@@ -25,9 +25,9 @@ import 'package:githo/helpers/format_date.dart';
 import 'package:githo/helpers/text_form_field_validation.dart';
 import 'package:githo/helpers/time_helper.dart';
 import 'package:githo/models/habit_plan.dart';
-import 'package:githo/models/notification_data.dart';
 import 'package:githo/models/progress_data.dart';
 import 'package:githo/widgets/alert_dialogs/base_dialog.dart';
+import 'package:githo/widgets/alert_dialogs/notification_dialogue.dart';
 
 class ConfirmStartingTime extends StatefulWidget {
   /// Returns a dialog that lets the user choose
@@ -104,10 +104,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
   }
 
   /// Adapts the database so that [habitPlan] is active.
-  Future<void> _startHabitPlan(
-    final DateTime startingDate,
-    final int startingLevelNr,
-  ) async {
+  Future<void> _startHabitPlan() async {
     // Mark the old plan as inactive.
     final List<HabitPlan> activeHabitPlanList =
         await DatabaseHelper.instance.getActiveHabitPlan();
@@ -122,16 +119,6 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
     widget.habitPlan.isActive = true;
     widget.habitPlan.lastChanged = now;
     await widget.habitPlan.save();
-
-    // Adapt [ProgressData] to the [HabitPlan].
-    await ProgressData.fromHabitPlan(
-      habitPlan: widget.habitPlan,
-      startingDate: startingDate,
-      startingLevelNr: startingLevelNr,
-    ).save();
-
-    // Adapt [NotificationData] to the [HabitPlan].
-    await NotificationData.fromHabitPlan(widget.habitPlan).save();
   }
 
   @override
@@ -247,7 +234,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
                 Icons.check_circle,
               ),
               label: Text(
-                'Start',
+                'Confirm',
                 style: Theme.of(context).textTheme.bodyText1!.copyWith(
                       color: Colors.white,
                     ),
@@ -256,7 +243,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
                 backgroundColor:
                     MaterialStateProperty.all<Color>(ThemedColors.green),
               ),
-              onPressed: () {
+              onPressed: () async {
                 final bool canStartHabitPlan;
 
                 if (widget.habitPlan.levels.length == 1) {
@@ -271,11 +258,22 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
                 if (canStartHabitPlan) {
                   Navigator.pop(context); // Pop dialog
 
-                  _startHabitPlan(
-                    initialDate,
-                    startingLevelNr,
-                  ).then(
-                    (_) => widget.onConfirmation(widget.habitPlan),
+                  final ProgressData progressData = ProgressData.fromHabitPlan(
+                    habitPlan: widget.habitPlan,
+                    startingDate: initialDate,
+                    startingLevelNr: startingLevelNr,
+                  );
+                  await showDialog(
+                    context: context,
+                    builder: (BuildContext buildContext) =>
+                        NotificationDialogue(
+                      habitPlan: widget.habitPlan,
+                      progressData: progressData,
+                      onConfirmation: () async {
+                        await _startHabitPlan();
+                        widget.onConfirmation(widget.habitPlan);
+                      },
+                    ),
                   );
                 }
               },

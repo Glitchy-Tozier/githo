@@ -34,8 +34,127 @@ import 'package:githo/models/progress_data.dart';
 import 'package:githo/widgets/background.dart';
 import 'package:githo/widgets/dividers/fat_divider.dart';
 
-/// A view that allows users to customize their notification-timing
+/// A class that enables us to return two string-values from a function.
+class TimeStrings {
+  TimeStrings(
+    final int trainingTimeIdx,
+    final DateTime notificationTime,
+  )   : prefix = getPrefix(trainingTimeIdx, notificationTime),
+        text = getText(trainingTimeIdx, notificationTime);
 
+  static String getPrefix(
+    final int trainingTimeIdx,
+    final DateTime notificationTime,
+  ) {
+    switch (trainingTimeIdx) {
+      case 0:
+        return 'at';
+
+      case 1:
+        return 'at';
+      default:
+        return 'on';
+    }
+  }
+
+  static String getText(
+    final int trainingTimeIdx,
+    final DateTime notificationTime,
+  ) {
+    switch (trainingTimeIdx) {
+      case 0:
+        return notificationTime.minute.toString().length == 1
+            ? 'xx:0${notificationTime.minute}'
+            : 'xx:${notificationTime.minute}';
+      case 1:
+        return DateFormat('Hm').format(notificationTime);
+      default:
+        return DateFormat('EEEE, Hm').format(notificationTime);
+    }
+  }
+
+  final String prefix;
+  final String text;
+}
+
+Future<DateTime?> Function() getSelectTime(
+  final BuildContext context,
+  final int trainingTimeIdx,
+  final DateTime notificationTime,
+  final ProgressData progressData,
+) {
+  final DateTime now = TimeHelper.instance.currentTime;
+  switch (trainingTimeIdx) {
+    case 0:
+      return () async {
+        final TimeOfDay? timeOfDay = await showTimePicker(
+          context: context,
+          initialTime: TimeOfDay(
+            hour: notificationTime.hour,
+            minute: notificationTime.minute,
+          ),
+        );
+        if (timeOfDay != null) {
+          return now.copyWith(
+            hour: timeOfDay.hour,
+            minute: timeOfDay.minute,
+          );
+        }
+        return null;
+      };
+    case 1:
+      return () async {
+        // Get desired starting-timeOfDay
+        final TimeOfDay? timeOfDay = await showTimePicker(
+          context: context,
+          initialTime: TimeOfDay(
+            hour: notificationTime.hour,
+            minute: notificationTime.minute,
+          ),
+        );
+        if (timeOfDay != null) {
+          // Turn the TimeOfDay into a DateTime
+          return now.copyWith(
+            hour: timeOfDay.hour,
+            minute: timeOfDay.minute,
+          );
+        }
+        return null;
+      };
+    default:
+      return () async {
+        // Get the desired starting-date
+        final DateTime? dateTime = await showDatePicker(
+          context: context,
+          initialDate: notificationTime,
+          firstDate: progressData.currentStartingDate,
+          lastDate: progressData.currentStartingDate.add(
+            const Duration(days: 7),
+          ),
+        );
+        if (dateTime != null) {
+          // Get desired starting-timeOfDay
+          final TimeOfDay? timeOfDay = await showTimePicker(
+            context: context,
+            initialTime: TimeOfDay(
+              hour: notificationTime.hour,
+              minute: notificationTime.minute,
+            ),
+          );
+          if (timeOfDay != null) {
+            // Turn the TimeOfDay into a DateTime
+            return dateTime.copyWith(
+              hour: timeOfDay.hour,
+              minute: timeOfDay.minute,
+            );
+          }
+        }
+        return null;
+      };
+  }
+}
+
+/// A view that allows users to customize their notification-timing
 class NotificationSettings extends StatefulWidget {
   const NotificationSettings(this._progressData, {Key? key}) : super(key: key);
   final ProgressData _progressData;
@@ -119,96 +238,20 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                     final int trainingTimeIndex = habitPlan.trainingTimeIndex;
                     final String trainingDuration =
                         DataShortcut.timeFrames[trainingTimeIndex];
-                    final DateTime now = TimeHelper.instance.currentTime;
+                    final TimeStrings timeStrings =
+                        TimeStrings(trainingTimeIndex, notificationTime);
 
-                    final String notificationTimePrefix;
-                    String notificationTimeStr;
-                    final Future<DateTime?> Function() selectTime;
-                    switch (trainingTimeIndex) {
-                      case 0:
-                        notificationTimePrefix = 'at';
-                        if (notificationTime.minute.toString().length == 1) {
-                          notificationTimeStr =
-                              'xx:0${notificationTime.minute}';
-                        } else {
-                          notificationTimeStr = 'xx:${notificationTime.minute}';
-                        }
-                        selectTime = () async {
-                          final TimeOfDay? timeOfDay = await showTimePicker(
-                            context: context,
-                            initialTime: TimeOfDay(
-                              hour: notificationTime.hour,
-                              minute: notificationTime.minute,
-                            ),
-                          );
-                          if (timeOfDay != null) {
-                            return now.copyWith(
-                              hour: timeOfDay.hour,
-                              minute: timeOfDay.minute,
-                            );
-                          }
-                          return null;
-                        };
-                        break;
-                      case 1:
-                        notificationTimePrefix = 'at';
-                        notificationTimeStr = DateFormat('Hm').format(
-                          notificationTime,
-                        );
-                        selectTime = () async {
-                          // Get desired starting-timeOfDay
-                          final TimeOfDay? timeOfDay = await showTimePicker(
-                            context: context,
-                            initialTime: TimeOfDay(
-                              hour: notificationTime.hour,
-                              minute: notificationTime.minute,
-                            ),
-                          );
-                          if (timeOfDay != null) {
-                            // Turn the TimeOfDay into a DateTime
-                            return now.copyWith(
-                              hour: timeOfDay.hour,
-                              minute: timeOfDay.minute,
-                            );
-                          }
-                          return null;
-                        };
-                        break;
-                      default:
-                        notificationTimePrefix = 'on';
-                        notificationTimeStr = DateFormat('EEEE, Hm').format(
-                          notificationTime,
-                        );
-                        selectTime = () async {
-                          // Get the desired starting-date
-                          final DateTime? dateTime = await showDatePicker(
-                            context: context,
-                            initialDate: notificationTime,
-                            firstDate: widget._progressData.currentStartingDate,
-                            lastDate: widget._progressData.currentStartingDate
-                                .add(const Duration(days: 7)),
-                          );
-                          if (dateTime != null) {
-                            // Get desired starting-timeOfDay
-                            final TimeOfDay? timeOfDay = await showTimePicker(
-                              context: context,
-                              initialTime: TimeOfDay(
-                                hour: notificationTime.hour,
-                                minute: notificationTime.minute,
-                              ),
-                            );
-                            if (timeOfDay != null) {
-                              // Turn the TimeOfDay into a DateTime
-                              return dateTime.copyWith(
-                                hour: timeOfDay.hour,
-                                minute: timeOfDay.minute,
-                              );
-                            }
-                          }
-                          return null;
-                        };
-                    }
+                    final String notificationTimePrefix = timeStrings.prefix;
+                    final String notificationTimeStr = timeStrings.text;
                     dateController.text = notificationTimeStr;
+
+                    final Future<DateTime?> Function() selectTime =
+                        getSelectTime(
+                      context,
+                      trainingTimeIndex,
+                      notificationTime,
+                      widget._progressData,
+                    );
 
                     return Column(
                       children: <Widget>[
