@@ -27,8 +27,10 @@ import 'package:githo/config/data_shortcut.dart';
 import 'package:githo/config/style_data.dart';
 
 import 'package:githo/database/database_helper.dart';
+import 'package:githo/helpers/notification_helper.dart';
 import 'package:githo/helpers/runtime_variables.dart';
 import 'package:githo/helpers/time_helper.dart';
+import 'package:githo/models/notification_data.dart';
 import 'package:githo/models/progress_data.dart';
 import 'package:githo/models/used_classes/level.dart';
 import 'package:githo/models/used_classes/training.dart';
@@ -72,15 +74,26 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  /// Reloads [_progressData] and resets the screen, as if the app just was
-  /// launched.
+  /// Reloads [_progressData] (and possibly the notifications) and resets the
+  /// screen, as if the app just was launched.
   void _reloadScreen() {
     setState(() {
       _progressData = DatabaseHelper.instance.getProgressData();
       _progressData.then(
-        (ProgressData progressData) {
+        (ProgressData progressData) async {
           if (progressData.isActive) {
-            progressData.updateSelf();
+            // Update ProgressData
+            final bool somethingChanged = await progressData.updateSelf();
+            if (somethingChanged) {
+              final NotificationData notificationData =
+                  await DatabaseHelper.instance.getNotificationData();
+              if (notificationData.isActive) {
+                // Update Notifications
+                await notificationData.updateActivationDate();
+                await cancelNotifications();
+                await scheduleNotifications();
+              }
+            }
           }
         },
       );
@@ -126,7 +139,22 @@ class _HomeScreenState extends State<HomeScreen> {
         if (remainingTime.isNegative) {
           setState(() {
             timer?.cancel();
-            progressData.updateSelf();
+            // Update ProgressData
+            progressData.updateSelf().then(
+              (final bool somethingChanged) async {
+                if (somethingChanged) {
+                  final NotificationData notificationData =
+                      await DatabaseHelper.instance.getNotificationData();
+                  if (notificationData.isActive) {
+                    // Update Notifications
+                    await notificationData.updateActivationDate();
+                    await cancelNotifications();
+                    await scheduleNotifications();
+                  }
+                }
+              },
+            );
+
             _scrollToActiveTraining(delay: 1);
           });
         }

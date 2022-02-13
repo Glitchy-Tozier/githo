@@ -20,6 +20,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:githo/config/custom_widget_themes.dart';
+import 'package:githo/helpers/notification_helper.dart';
 import 'package:githo/models/used_classes/training.dart';
 import 'package:githo/widgets/alert_dialogs/training_done.dart';
 
@@ -78,10 +79,12 @@ class _ActiveTrainingCardState extends State<ActiveTrainingCard> {
             cardHeight: widget.cardHeight,
             color: color,
             elevation: 7,
-            onTap: () {
-              widget.training.incrementReps();
+            onTap: () async {
+              await widget.training.incrementReps();
               widget.setHomeState();
               if (widget.training.doneReps == widget.training.requiredReps) {
+                await cancelNotifications();
+                await scheduleNotifications();
                 Timer(
                   const Duration(milliseconds: 700),
                   () => showDialog(
@@ -93,8 +96,13 @@ class _ActiveTrainingCardState extends State<ActiveTrainingCard> {
                 );
               }
             },
-            onLongPress: () {
-              widget.training.decrementReps();
+            onLongPress: () async {
+              await widget.training.decrementReps();
+              if (widget.training.doneReps ==
+                  widget.training.requiredReps - 1) {
+                await cancelNotifications();
+                await scheduleNotifications();
+              }
               widget.setHomeState();
             },
             child: Text(

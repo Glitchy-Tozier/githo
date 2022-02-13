@@ -22,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:githo/config/custom_widget_themes.dart';
 import 'package:githo/helpers/format_date.dart';
 import 'package:githo/helpers/get_duration_diff.dart';
+import 'package:githo/helpers/notification_helper.dart';
 import 'package:githo/helpers/time_helper.dart';
 import 'package:githo/models/progress_data.dart';
 import 'package:githo/models/used_classes/level.dart';
@@ -173,10 +174,12 @@ class _TrainingFABState extends State<TrainingFAB> {
                   tooltip: 'Mark training as done',
                   backgroundColor: ThemedColors.green,
                   heroTag: null,
-                  onPressed: () {
-                    currentTraining.incrementReps();
+                  onPressed: () async {
+                    await currentTraining.incrementReps();
                     if (currentTraining.doneReps ==
                         currentTraining.requiredReps) {
+                      await cancelNotifications();
+                      await scheduleNotifications();
                       Timer(
                         const Duration(milliseconds: 700),
                         () => showDialog(
@@ -191,8 +194,13 @@ class _TrainingFABState extends State<TrainingFAB> {
                     widget.setHomeState();
                   },
                   child: GestureDetector(
-                    onLongPress: () {
-                      currentTraining.decrementReps();
+                    onLongPress: () async {
+                      await currentTraining.decrementReps();
+                      if (currentTraining.doneReps ==
+                          currentTraining.requiredReps - 1) {
+                        await cancelNotifications();
+                        await scheduleNotifications();
+                      }
                       widget.scrollToActiveTraining();
                       widget.setHomeState();
                     },

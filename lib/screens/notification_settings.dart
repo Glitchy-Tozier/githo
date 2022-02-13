@@ -16,10 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:githo/helpers/notification_helper.dart';
-import 'package:githo/widgets/dividers/thin_divider.dart';
-import 'package:githo/widgets/headings/screen_title.dart';
-import 'package:githo/widgets/screen_ending_spacer.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
@@ -32,7 +28,11 @@ import 'package:githo/models/habit_plan.dart';
 import 'package:githo/models/notification_data.dart';
 import 'package:githo/models/progress_data.dart';
 import 'package:githo/widgets/background.dart';
+import 'package:githo/helpers/notification_helper.dart';
 import 'package:githo/widgets/dividers/fat_divider.dart';
+import 'package:githo/widgets/dividers/thin_divider.dart';
+import 'package:githo/widgets/headings/screen_title.dart';
+import 'package:githo/widgets/screen_ending_spacer.dart';
 
 /// A class that enables us to return two string-values from a function.
 class TimeStrings {
@@ -64,8 +64,8 @@ class TimeStrings {
     switch (trainingTimeIdx) {
       case 0:
         return notificationTime.minute.toString().length == 1
-            ? 'xx:0${notificationTime.minute}'
-            : 'xx:${notificationTime.minute}';
+            ? 'XX:0${notificationTime.minute}'
+            : 'XX:${notificationTime.minute}';
       case 1:
         return DateFormat('Hm').format(notificationTime);
       default:
@@ -171,9 +171,9 @@ class _NotificationSettingsState extends State<NotificationSettings> {
   final Future<List<HabitPlan>> habitPlanFuture =
       DatabaseHelper.instance.getActiveHabitPlan();
 
-  late bool enabled = false;
-  late bool keepNotifyingAfterSuccess = false;
-  late DateTime notificationTime = DateTime(0);
+  bool enabled = false;
+  bool keepNotifyingAfterSuccess = false;
+  DateTime notificationTime = DateTime(0);
 
   @override
   void initState() {
@@ -216,9 +216,9 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                 setState(() {
                   enabled = enableNotifications;
                   if (enableNotifications == true) {
-                    initHeadlessNotifications();
+                    scheduleNotifications();
                   } else {
-                    stopBackgroundTasks();
+                    cancelNotifications();
                   }
                 });
               },
@@ -238,9 +238,9 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                     final int trainingTimeIndex = habitPlan.trainingTimeIndex;
                     final String trainingDuration =
                         DataShortcut.timeFrames[trainingTimeIndex];
+
                     final TimeStrings timeStrings =
                         TimeStrings(trainingTimeIndex, notificationTime);
-
                     final String notificationTimePrefix = timeStrings.prefix;
                     final String notificationTimeStr = timeStrings.text;
                     dateController.text = notificationTimeStr;
@@ -270,7 +270,8 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                             await notificationData.save();
                             setState(() {
                               keepNotifyingAfterSuccess = value;
-                              initHeadlessNotifications();
+                              cancelNotifications();
+                              scheduleNotifications();
                             });
                           },
                         ),
@@ -291,7 +292,7 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                                   style: Theme.of(context).textTheme.headline3,
                                 ),
                                 TextSpan(
-                                  text: ' (± 8 Minutes)',
+                                  text: '.',
                                   style: Theme.of(context).textTheme.headline4,
                                 ),
                               ],
@@ -319,7 +320,8 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                                 await notificationData.save();
                                 setState(() {
                                   notificationTime = selectedDateTime;
-                                  initHeadlessNotifications();
+                                  cancelNotifications();
+                                  scheduleNotifications();
                                 });
                               }
                             },

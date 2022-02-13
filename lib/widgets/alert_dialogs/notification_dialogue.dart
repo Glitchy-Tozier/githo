@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 
 import 'package:githo/config/custom_widget_themes.dart';
 import 'package:githo/config/data_shortcut.dart';
+import 'package:githo/helpers/notification_helper.dart';
 import 'package:githo/models/habit_plan.dart';
 import 'package:githo/models/notification_data.dart';
 import 'package:githo/models/progress_data.dart';
@@ -109,7 +110,7 @@ class _NotificationDialogueState extends State<NotificationDialogue> {
                         style: Theme.of(context).textTheme.bodyText1,
                       ),
                       TextSpan(
-                        text: ' (± 8 Minutes)',
+                        text: '.',
                         style: Theme.of(context).textTheme.bodyText2,
                       ),
                     ],
@@ -177,6 +178,11 @@ class _NotificationDialogueState extends State<NotificationDialogue> {
 
                 await widget.progressData.save(); // Save ProgressData
                 await notificationData.save(); // Save NotificationData
+
+                // Set up notifications
+                await notificationData.updateActivationDate();
+                await scheduleNotifications();
+
                 widget.onConfirmation();
               },
             ),

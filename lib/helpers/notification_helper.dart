@@ -16,13 +16,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:githo/helpers/time_helper.dart';
+import 'package:githo/models/used_classes/training_period.dart';
+import 'package:timezone/data/latest_10y.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 import 'package:githo/database/database_helper.dart';
-import 'package:githo/helpers/time_helper.dart';
 import 'package:githo/models/notification_data.dart';
 import 'package:githo/models/progress_data.dart';
+import 'package:githo/models/used_classes/training.dart';
 
 //
 // Notifications:
@@ -30,81 +33,170 @@ import 'package:githo/models/progress_data.dart';
 final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
-/// Initialises notifications.
-Future<void> _initNotifications() async {
-  // Initialise the plugin. app_icon needs to be a added as a drawable resource
-  // to the Android head project
-  const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('repeat');
-  const InitializationSettings initializationSettings = InitializationSettings(
-    android: initializationSettingsAndroid,
-  );
-  await _flutterLocalNotificationsPlugin.initialize(
-    initializationSettings,
-  );
-}
-
-/// Contains the logic that decides whether a notification should get displayed.
-/// If the answer is yes, the notification is deployed.
-Future<void> _decideOnNotification() async {
-  final NotificationData notificationData =
-      await DatabaseHelper.instance.getNotificationData();
-  print('\nstarted manageNotifications');
-
-  // If notifications are enabled
-  if (notificationData.isActive) {
-    print('is allowed');
-    final DateTime now = TimeHelper.instance.currentTime;
-    // If the time has come to display the notification
-    if (now.isAfter(notificationData.comparisonActivationDate)) {
-      print('is now');
-      final ProgressData progressData =
-          await DatabaseHelper.instance.getProgressData();
-      final ProgressDataSlice? timedDataSlice =
-          progressData.getDataSliceByDate(notificationData.nextActivationDate);
-
-      await notificationData.updateActivationDate();
-      print('finished notificationData.updateActivationDate()');
-      if (timedDataSlice != null) {
-        print('timedDataSlice exists');
-        if (!timedDataSlice.period.wasSuccessful ||
-            notificationData.keepNotifyingAfterSuccess) {
-          print(
-            "period wasn't successful yet (${!timedDataSlice.period.wasSuccessful})"
-            ' or notifications should always be displayed (${notificationData.keepNotifyingAfterSuccess})',
-          );
-          if (timedDataSlice.training.hasPassed) {
-            print('timed dataSlice has passed => NO notification');
-            await progressData.updateSelf();
-          } else {
-            print('correct training => showing notification');
-            final String toDo = timedDataSlice.level.text;
-
-            // Show the notification.
-            const NotificationDetails platformChannelSpecifics =
-                NotificationDetails(
-              android: AndroidNotificationDetails(
-                'your channel id',
-                'your channel name',
-                channelDescription: 'your channel description',
-                importance: Importance.max,
-                styleInformation: BigTextStyleInformation(''),
-                priority: Priority.high,
-                ticker: 'ticker',
+Future<void> _scheduleTrainingNotifications(
+  final List<Training> trainings,
+  final NotificationData notificationData,
+) async {
+  for (final Training training in trainings) {
+    final DateTime? notificationTime = notificationData.getNotifyTimeBetween(
+      training.startingDate,
+      training.endingDate,
+    );
+    if (notificationTime != null) {
+      if (notificationTime.isAfter(TimeHelper.instance.currentTime)) {
+        print('TrainingNotification scheduled for $notificationTime');
+        await _flutterLocalNotificationsPlugin.zonedSchedule(
+          training.number,
+          'scheduled title',
+          'scheduled body',
+          tz.TZDateTime.from(notificationTime, tz.local),
+          const NotificationDetails(
+            android: AndroidNotificationDetails(
+              'your channel id',
+              'your channel name',
+              channelDescription: 'your channel description',
+              styleInformation: BigTextStyleInformation(
+                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. '
+                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. '
+                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. '
+                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. '
+                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. '
+                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. '
+                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. '
+                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. '
+                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. '
+                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. '
+                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. '
+                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. '
+                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. '
+                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. '
+                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. '
+                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. '
+                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. ',
               ),
-            );
-            await _flutterLocalNotificationsPlugin.show(
-              0,
-              progressData.habit,
-              '${timedDataSlice.training.number}:\n$toDo',
-              platformChannelSpecifics,
-            );
-          }
-        }
+              ticker: 'ticker',
+            ),
+          ),
+          androidAllowWhileIdle: true,
+          uiLocalNotificationDateInterpretation:
+              UILocalNotificationDateInterpretation.wallClockTime,
+        );
       }
     }
   }
-  print('ran through manageNotifications()\n');
+}
+
+//
+// Public functions:
+
+/// Contains the logic that decides when and if a notification should get
+/// displayed.
+Future<void> scheduleNotifications() async {
+  final NotificationData notificationData =
+      await DatabaseHelper.instance.getNotificationData();
+
+  if (notificationData.isActive) {
+    final ProgressData progressData =
+        await DatabaseHelper.instance.getProgressData();
+
+    // Schedule notifications for the active trainings.
+    ProgressDataSlice? dataSlice = progressData.activeDataSlice;
+    if (dataSlice != null) {
+      final TrainingPeriod activePeriod = dataSlice.period;
+      if (!activePeriod.currentlyIsSuccessful ||
+          notificationData.keepNotifyingAfterSuccess) {
+        final int nrTrainings = activePeriod.trainings.length;
+
+        int startingNotifyIdx =
+            dataSlice.training.number - activePeriod.trainings.first.number;
+        final int scheduledNotificationCount =
+            1 + nrTrainings - activePeriod.requiredTrainings;
+        int endingNotifyIdx = startingNotifyIdx + scheduledNotificationCount;
+
+        // If the current training already was successfully completed or its
+        // notification-time already has passed, don't set up a notification for
+        // it.
+        if (TimeHelper.instance.currentTime.isAfter(
+              notificationData.getNotifyTimeBetween(
+                dataSlice.training.startingDate,
+                dataSlice.training.endingDate,
+              )!,
+            ) ||
+            dataSlice.training.status == 'done') {
+          startingNotifyIdx++;
+          endingNotifyIdx++;
+          if (startingNotifyIdx == nrTrainings) {
+            startingNotifyIdx = nrTrainings - 1;
+          }
+        }
+        if (endingNotifyIdx > nrTrainings) endingNotifyIdx = nrTrainings;
+
+        final List<Training> notifiedTrainings =
+            dataSlice.period.trainings.sublist(
+          startingNotifyIdx,
+          endingNotifyIdx,
+        );
+        await _scheduleTrainingNotifications(
+          notifiedTrainings,
+          notificationData,
+        );
+      }
+      // Schedule the notification for the beginnig of the next week.
+      final DateTime? notifyDateTimeNextPeriod = notificationData
+          .getNotifyTimeBetween(
+            dataSlice.period.trainings.last.startingDate,
+            dataSlice.period.trainings.last.endingDate,
+          )
+          ?.add(Duration(hours: notificationData.hoursBetweenNotifications));
+      if (notifyDateTimeNextPeriod != null) {
+        final String msg;
+        if (activePeriod.currentlyIsSuccessful) {
+          msg = 'Tackle the next Level!';
+        } else {
+          msg = 'A new week!';
+        }
+        print('NextWeekNotification scheduled for $notifyDateTimeNextPeriod');
+        await _flutterLocalNotificationsPlugin.zonedSchedule(
+          0,
+          'scheduled title',
+          msg,
+          tz.TZDateTime.from(notifyDateTimeNextPeriod, tz.local),
+          const NotificationDetails(
+            android: AndroidNotificationDetails(
+              'your channel id',
+              'your channel name',
+              channelDescription: 'your channel description',
+              ticker: 'ticker',
+            ),
+          ),
+          androidAllowWhileIdle: true,
+          uiLocalNotificationDateInterpretation:
+              UILocalNotificationDateInterpretation.wallClockTime,
+        );
+      }
+    } else {
+      // Schedule notifications for waiting, future trainings.
+      dataSlice = progressData.waitingDataSlice;
+      if (dataSlice != null) {
+        final int scheduledNotificationCount = 1 +
+            dataSlice.period.trainings.length -
+            dataSlice.period.requiredTrainings;
+        print('length: ${dataSlice.period.trainings.length}');
+        print('required: ${dataSlice.period.requiredTrainings}');
+        print('scheduledNotificationCount = $scheduledNotificationCount');
+
+        final List<Training> notifiedTrainings =
+            dataSlice.period.trainings.sublist(
+          0,
+          scheduledNotificationCount,
+        );
+        await _scheduleTrainingNotifications(
+          notifiedTrainings,
+          notificationData,
+        );
+      }
+    }
+  }
 }
 
 /* /// Exists for testing purposes.
@@ -132,79 +224,38 @@ Future<void> messageNotification(String msg) async {
   );
 } */
 
-//
-// Tasks:
-
-/// [Android-only] This "Headless Task" is run when the Android app
-/// is terminated with enableHeadless: true
-Future<void> _backgroundFetchHeadlessTask(final HeadlessTask task) async {
-  final String taskId = task.taskId;
-  final bool isTimeout = task.timeout;
-  if (isTimeout) {
-    // This task has exceeded its allowed running-time.
-    // You must stop what you're doing and immediately .finish(taskId)
-    BackgroundFetch.finish(taskId);
-    return;
-  }
-  // Do your work here...
-  await _initNotifications();
-  await _decideOnNotification();
-  BackgroundFetch.finish(taskId);
-}
-
-//
-// Public functions:
-
-/// Stops all ([BackgroundFetch]-) tasks, which are the tasks that
-/// will produce notifications.
-Future<int> stopBackgroundTasks() async {
-  final int result = await BackgroundFetch.stop();
-  return result;
-}
-
+/// Cancels all scheduled notifications and resets [NotificationData].
 Future<void> annihilateNotifcations() async {
+  await cancelNotifications();
   await NotificationData.emptyData().save();
-  await stopBackgroundTasks();
 }
 
-/// Initializes the headless tasks that can spawn notifications.
+/// Cancels a scheduled notification with a specific ID.
 ///
-/// As a safety measure, this method will stop all headless tasks
-/// if notifications are disabled.
-Future<void> initHeadlessNotifications() async {
-  await stopBackgroundTasks();
-  final NotificationData notificationData =
-      await DatabaseHelper.instance.getNotificationData();
+/// - ID 0 = Next week's notification.
+/// - ID [training.number] = The notification that corresponds to a specific
+/// training.
+Future<void> cancelNotification(final int id) async {
+  await _flutterLocalNotificationsPlugin.cancel(id);
+}
 
-  // If notifications are enabled and a habit-plan is active:
-  if (notificationData.isActive) {
-    /// Starts the headless tasks which can spawn notifications.
-    // Register to receive BackgroundFetch events after app is terminated.
-    // Requires {stopOnTerminate: false, enableHeadless: true}
-    await BackgroundFetch.registerHeadlessTask(_backgroundFetchHeadlessTask);
+/// Cancels all scheduled notifications.
+Future<void> cancelNotifications() async {
+  print('canceled Notifications');
+  await _flutterLocalNotificationsPlugin.cancelAll();
+}
 
-    // Configure BackgroundFetch.
-    await BackgroundFetch.configure(
-      BackgroundFetchConfig(
-        minimumFetchInterval: 15,
-        stopOnTerminate: false,
-        startOnBoot: true,
-        enableHeadless: true,
-        requiresBatteryNotLow: false,
-        requiresCharging: false,
-        requiresDeviceIdle: false,
-        requiresStorageNotLow: false,
-        requiredNetworkType: NetworkType.NONE,
-      ),
-      (final String taskId) async {
-        // <-- Event handler
-        // This is the fetch-event callback.
-        await _initNotifications();
-        await _decideOnNotification();
-        // IMPORTANT:  You must signal completion of your task or the OS
-        // can punish your app for taking too long in the background.
-        BackgroundFetch.finish(taskId);
-      },
-    );
-  }
+/// Initialises everything needed to later call [scheduleNotifications].
+Future<void> initNotifications() async {
+  // Initialise the plugin. app_icon needs to be a added as a drawable resource
+  // to the Android head project
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('repeat');
+  const InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+  );
+  tz.initializeTimeZones();
+  await _flutterLocalNotificationsPlugin.initialize(
+    initializationSettings,
+  );
 }

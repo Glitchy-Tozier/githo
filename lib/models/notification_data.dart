@@ -42,9 +42,15 @@ class NotificationData {
   /// Creates a new instance of [NotificationData], adapting
   /// [hoursBetweenNotifications] to the supplied [HabitPlan].
   NotificationData.fromHabitPlan(final HabitPlan habitPlan)
-      : isActive = false,
+      : isActive = true,
         keepNotifyingAfterSuccess = false,
-        nextActivationDate = TimeHelper.instance.currentTime,
+        nextActivationDate = TimeHelper.instance.currentTime.copyWith(
+          hour: 0,
+          minute: 0,
+          second: 0,
+          millisecond: 0,
+          microsecond: 0,
+        ),
         hoursBetweenNotifications =
             DataShortcut.trainingDurationInHours[habitPlan.trainingTimeIndex];
 
@@ -62,15 +68,6 @@ class NotificationData {
   DateTime nextActivationDate;
   int hoursBetweenNotifications;
 
-  /// The [DateTime] that should be compared to [TimeHelper.instance.now].
-  /// The reason this getter is necessary is to more closely approximate the
-  /// user's desired notification-time.
-  DateTime get comparisonActivationDate {
-    return nextActivationDate.subtract(
-      const Duration(minutes: 8),
-    );
-  }
-
   /// Moves [nextActivationDate] ahead in time, until the next planned
   /// notification-date lies in the future.
   Future<void> updateActivationDate() async {
@@ -78,7 +75,7 @@ class NotificationData {
     print('updateActivationDate()');
     print('starting nextActivationDate: $nextActivationDate');
     print('now: $now');
-    while (comparisonActivationDate.isBefore(now)) {
+    while (nextActivationDate.isBefore(now)) {
       print('nextActivationDate: $nextActivationDate');
       nextActivationDate = nextActivationDate.add(
         Duration(hours: hoursBetweenNotifications),
@@ -86,6 +83,31 @@ class NotificationData {
     }
     print('nextActivationDate is at: $nextActivationDate\n');
     await save();
+  }
+
+  /// Returs a notification-time that lies between two [DateTime]s.
+  DateTime? getNotifyTimeBetween(final DateTime start, final DateTime end) {
+    DateTime dateTime = nextActivationDate;
+
+    // Try making sure the [dateTime] is after (or at the same moment)
+    // as [start]
+    while (dateTime.isBefore(start)) {
+      dateTime = dateTime.add(
+        Duration(hours: hoursBetweenNotifications),
+      );
+    }
+    // Try making sure the [dateTime] is before [end]
+    while (dateTime.isAfter(end) || dateTime.isAtSameMomentAs(end)) {
+      dateTime = dateTime.subtract(
+        Duration(hours: hoursBetweenNotifications),
+      );
+    }
+    if ((dateTime.isAfter(start) || dateTime.isAtSameMomentAs(start)) &&
+        dateTime.isBefore(end)) {
+      return dateTime;
+    } else {
+      return null;
+    }
   }
 
   /// Saves the current notificationData in the [Database].

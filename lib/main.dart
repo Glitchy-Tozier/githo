@@ -29,7 +29,7 @@ void main() {
   adaptDatabaseToOS();
   runApp(MyApp());
   WidgetsFlutterBinding.ensureInitialized();
-  initHeadlessNotifications();
+  initNotifications();
 }
 
 /// This widget is the root of the application.

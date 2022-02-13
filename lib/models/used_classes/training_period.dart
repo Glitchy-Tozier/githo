@@ -182,6 +182,20 @@ class TrainingPeriod {
     return null;
   }
 
+  /// Checks if, AT THE MOMENT, enough [trainings] are successful for [this] to
+  /// be successful, provided the user doesn't decrement them.
+  bool get currentlyIsSuccessful {
+    int successfulTrainings = 0;
+
+    for (final Training training in trainings) {
+      if (training.status == 'successful' || training.status == 'done') {
+        successfulTrainings++;
+      }
+    }
+    final bool wasSuccessful = successfulTrainings >= requiredTrainings;
+    return wasSuccessful;
+  }
+
   /// Checks if enough [trainings] were successful for [this] to be successful.
   bool get wasSuccessful {
     int successfulTrainings = 0;
