@@ -91,8 +91,9 @@ Future<void> scheduleNotifications() async {
     ProgressDataSlice? dataSlice = progressData.activeDataSlice;
     if (dataSlice != null) {
       final TrainingPeriod activePeriod = dataSlice.period;
-      if (!activePeriod.currentlyIsSuccessful ||
-          notificationData.keepNotifyingAfterSuccess) {
+      if ((!activePeriod.currentlyIsSuccessful ||
+              notificationData.keepNotifyingAfterSuccess) &&
+          !activePeriod.hasFailed) {
         final int nrTrainings = activePeriod.trainings.length;
 
         int startingNotifyIdx =
@@ -113,7 +114,18 @@ Future<void> scheduleNotifications() async {
             dataSlice.training.status == 'done') {
           startingNotifyIdx++;
           endingNotifyIdx++;
+        } else if (TimeHelper.instance.currentTime.isBefore(
+              notificationData.getNotifyTimeBetween(
+                dataSlice.training.startingDate,
+                dataSlice.training.endingDate,
+              )!,
+            ) &&
+            dataSlice.training.status != 'done') {
+          // Add one more training to keep the number of "future trainings"
+          // correct
+          endingNotifyIdx++;
         }
+
         if (endingNotifyIdx > nrTrainings) endingNotifyIdx = nrTrainings;
 
         final List<Training> notifiedTrainings =

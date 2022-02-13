@@ -187,7 +187,10 @@ class TrainingPeriod {
   int get remainingAllowedUnsuccessfulTrainings {
     int unsuccessfulTrainings = 0;
     for (final Training training in trainings) {
-      if (training.status == 'unsuccessful') {
+      if (training.status == 'ready' ||
+          training.status == 'ignored' ||
+          training.status == 'started' ||
+          training.status == 'unsuccessful') {
         unsuccessfulTrainings++;
       }
     }
@@ -196,7 +199,7 @@ class TrainingPeriod {
     final int remainingAllowedUnsuccessfulTrainings =
         allowedUnsuccessfulTrainings - unsuccessfulTrainings;
     if (remainingAllowedUnsuccessfulTrainings < 0) {
-      return 0;
+      return -1;
     } else {
       return remainingAllowedUnsuccessfulTrainings;
     }
@@ -227,6 +230,19 @@ class TrainingPeriod {
     }
     final bool wasSuccessful = successfulTrainings >= requiredTrainings;
     return wasSuccessful;
+  }
+
+  /// Returns whether [this] has too many unsuccessful trainings.
+  bool get hasFailed {
+    int failedTrainings = 0;
+    for (final Training training in trainings) {
+      if (training.status == 'ignored' || training.status == 'unsuccessful') {
+        failedTrainings++;
+      }
+    }
+    final int allowedUnsuccessfulTrainings =
+        trainings.length - requiredTrainings;
+    return failedTrainings > allowedUnsuccessfulTrainings;
   }
 
   /// Returns how many [trainings] so far were successful
