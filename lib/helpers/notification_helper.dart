@@ -33,9 +33,22 @@ import 'package:githo/models/used_classes/training.dart';
 final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
+const NotificationDetails _trainingNotificationDetails = NotificationDetails(
+  android: AndroidNotificationDetails(
+    'training_notifications',
+    'Training Notifications',
+    channelDescription: 'Reminders, shown for every training.',
+    importance: Importance.max,
+    styleInformation: BigTextStyleInformation(''),
+    priority: Priority.high,
+    ticker: 'ticker',
+  ),
+);
+
 Future<void> _scheduleTrainingNotifications(
   final List<Training> trainings,
   final NotificationData notificationData,
+  final String toDo,
 ) async {
   for (final Training training in trainings) {
     final DateTime? notificationTime = notificationData.getNotifyTimeBetween(
@@ -47,36 +60,10 @@ Future<void> _scheduleTrainingNotifications(
         print('TrainingNotification scheduled for $notificationTime');
         await _flutterLocalNotificationsPlugin.zonedSchedule(
           training.number,
-          'scheduled title',
-          'scheduled body',
+          'Ready for the next training?',
+          toDo,
           tz.TZDateTime.from(notificationTime, tz.local),
-          const NotificationDetails(
-            android: AndroidNotificationDetails(
-              'your channel id',
-              'your channel name',
-              channelDescription: 'your channel description',
-              styleInformation: BigTextStyleInformation(
-                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. '
-                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. '
-                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. '
-                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. '
-                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. '
-                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. '
-                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. '
-                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. '
-                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. '
-                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. '
-                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. '
-                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. '
-                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. '
-                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. '
-                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. '
-                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. '
-                'Big Text. Big Text. Big Text. Big Text. Big Text. Big Text. ',
-              ),
-              ticker: 'ticker',
-            ),
-          ),
+          _trainingNotificationDetails,
           androidAllowWhileIdle: true,
           uiLocalNotificationDateInterpretation:
               UILocalNotificationDateInterpretation.wallClockTime,
@@ -139,6 +126,7 @@ Future<void> scheduleNotifications() async {
         await _scheduleTrainingNotifications(
           notifiedTrainings,
           notificationData,
+          dataSlice.level.text,
         );
       }
       // Schedule the notification for the beginnig of the next week.
@@ -158,17 +146,10 @@ Future<void> scheduleNotifications() async {
         print('NextWeekNotification scheduled for $notifyDateTimeNextPeriod');
         await _flutterLocalNotificationsPlugin.zonedSchedule(
           0,
-          'scheduled title',
           msg,
+          null,
           tz.TZDateTime.from(notifyDateTimeNextPeriod, tz.local),
-          const NotificationDetails(
-            android: AndroidNotificationDetails(
-              'your channel id',
-              'your channel name',
-              channelDescription: 'your channel description',
-              ticker: 'ticker',
-            ),
-          ),
+          _trainingNotificationDetails,
           androidAllowWhileIdle: true,
           uiLocalNotificationDateInterpretation:
               UILocalNotificationDateInterpretation.wallClockTime,
@@ -193,6 +174,7 @@ Future<void> scheduleNotifications() async {
         await _scheduleTrainingNotifications(
           notifiedTrainings,
           notificationData,
+          dataSlice.level.text,
         );
       }
     }
@@ -204,9 +186,9 @@ Future<void> messageNotification(String msg) async {
 // Show the notification.
   const NotificationDetails platformChannelSpecifics = NotificationDetails(
     android: AndroidNotificationDetails(
-      'your channel id',
-      'your channel name',
-      channelDescription: 'your channel description',
+      'debug_notifications',
+      'Debug Notifications',
+      channelDescription: 'Exists for testing purposes.',
       importance: Importance.max,
       styleInformation: BigTextStyleInformation(''),
       priority: Priority.high,
@@ -214,12 +196,13 @@ Future<void> messageNotification(String msg) async {
     ),
   );
   await _flutterLocalNotificationsPlugin.show(
-    Random().nextInt(100000000) + 99999239,
+    999999,
     msg,
-    '$msg\n'
-    'This message was sent at ${TimeHelper.instance.currentTime.weekday}, '
-    '${TimeHelper.instance.currentTime.hour}:'
-    '${TimeHelper.instance.currentTime.minute}.',
+    null,
+    /* '$msg\n'
+  'This message was sent at weekday ${TimeHelper.instance.currentTime.weekday},'
+  '${TimeHelper.instance.currentTime.hour}:'
+  '${TimeHelper.instance.currentTime.minute}.', */
     platformChannelSpecifics,
   );
 } */
