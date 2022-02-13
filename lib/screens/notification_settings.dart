@@ -90,7 +90,7 @@ Future<DateTime?> Function() getSelectTime(
         final TimeOfDay? timeOfDay = await showTimePicker(
           context: context,
           initialTime: TimeOfDay(
-            hour: notificationTime.hour,
+            hour: 0,
             minute: notificationTime.minute,
           ),
         );
