@@ -98,7 +98,7 @@ Future<void> scheduleNotifications() async {
         int startingNotifyIdx =
             dataSlice.training.number - activePeriod.trainings.first.number;
         final int scheduledNotificationCount =
-            1 + nrTrainings - activePeriod.requiredTrainings;
+            1 + activePeriod.remainingAllowedUnsuccessfulTrainings;
         int endingNotifyIdx = startingNotifyIdx + scheduledNotificationCount;
 
         // If the current training already was successfully completed or its

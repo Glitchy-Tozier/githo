@@ -182,6 +182,26 @@ class TrainingPeriod {
     return null;
   }
 
+  /// Returns the number of trainings the user may fail (from now on) until the
+  /// whole [TrainingPeriod] is prononunced unsuccessful.
+  int get remainingAllowedUnsuccessfulTrainings {
+    int unsuccessfulTrainings = 0;
+    for (final Training training in trainings) {
+      if (training.status == 'unsuccessful') {
+        unsuccessfulTrainings++;
+      }
+    }
+    final int allowedUnsuccessfulTrainings =
+        trainings.length - requiredTrainings;
+    final int remainingAllowedUnsuccessfulTrainings =
+        allowedUnsuccessfulTrainings - unsuccessfulTrainings;
+    if (remainingAllowedUnsuccessfulTrainings < 0) {
+      return 0;
+    } else {
+      return remainingAllowedUnsuccessfulTrainings;
+    }
+  }
+
   /// Checks if, AT THE MOMENT, enough [trainings] are successful for [this] to
   /// be successful, provided the user doesn't decrement them.
   bool get currentlyIsSuccessful {
