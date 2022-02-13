@@ -45,6 +45,7 @@ const NotificationDetails _trainingNotificationDetails = NotificationDetails(
   ),
 );
 
+/// Takes a list of trainings and schedules a message for each of them.
 Future<void> _scheduleTrainingNotifications(
   final List<Training> trainings,
   final NotificationData notificationData,
@@ -112,9 +113,6 @@ Future<void> scheduleNotifications() async {
             dataSlice.training.status == 'done') {
           startingNotifyIdx++;
           endingNotifyIdx++;
-          if (startingNotifyIdx == nrTrainings) {
-            startingNotifyIdx = nrTrainings - 1;
-          }
         }
         if (endingNotifyIdx > nrTrainings) endingNotifyIdx = nrTrainings;
 
