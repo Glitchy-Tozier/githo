@@ -183,10 +183,10 @@ class _NotificationSettingsState extends State<NotificationSettings> {
     notificationDataFuture.then(
       (final NotificationData notificationData) {
         setState(() {
-          enabled = notificationData.isActive;
+          enabled = notificationData.isEnabled;
           keepNotifyingAfterSuccess =
               notificationData.keepNotifyingAfterSuccess;
-          if (notificationData.isActive) {
+          if (notificationData.isEnabled) {
             notificationTime = notificationData.nextActivationDate;
           } else {
             notificationTime = widget._progressData.currentStartingDate;
@@ -211,7 +211,7 @@ class _NotificationSettingsState extends State<NotificationSettings> {
               onChanged: (final bool enableNotifications) async {
                 final NotificationData notificationData =
                     await notificationDataFuture;
-                notificationData.isActive = enableNotifications;
+                notificationData.isEnabled = enableNotifications;
                 await notificationData.save();
                 setState(() {
                   enabled = enableNotifications;

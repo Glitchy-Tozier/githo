@@ -83,7 +83,7 @@ Future<void> scheduleNotifications() async {
   final NotificationData notificationData =
       await DatabaseHelper.instance.getNotificationData();
 
-  if (notificationData.isActive) {
+  if (notificationData.isEnabled) {
     final ProgressData progressData =
         await DatabaseHelper.instance.getProgressData();
 

@@ -84,15 +84,15 @@ class _NotificationDialogueState extends State<NotificationDialogue> {
           SwitchListTile(
             contentPadding: EdgeInsets.zero,
             title: const Text('Use notifications'),
-            value: notificationData.isActive,
+            value: notificationData.isEnabled,
             onChanged: (final bool value) async {
               setState(() {
-                notificationData.isActive = value;
+                notificationData.isEnabled = value;
               });
             },
           ),
           Visibility(
-            visible: notificationData.isActive,
+            visible: notificationData.isEnabled,
             child: Column(
               children: <Widget>[
                 const SizedBox(height: 20),

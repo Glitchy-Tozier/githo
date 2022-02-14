@@ -87,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
             if (somethingChanged) {
               final NotificationData notificationData =
                   await DatabaseHelper.instance.getNotificationData();
-              if (notificationData.isActive) {
+              if (notificationData.isEnabled) {
                 // Update Notifications
                 await notificationData.updateActivationDate();
                 await cancelNotifications();
@@ -145,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (somethingChanged) {
                   final NotificationData notificationData =
                       await DatabaseHelper.instance.getNotificationData();
-                  if (notificationData.isActive) {
+                  if (notificationData.isEnabled) {
                     // Update Notifications
                     await notificationData.updateActivationDate();
                     await cancelNotifications();

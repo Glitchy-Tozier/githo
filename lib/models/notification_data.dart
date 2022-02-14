@@ -26,7 +26,7 @@ import 'package:githo/models/habit_plan.dart';
 
 class NotificationData {
   NotificationData({
-    required this.isActive,
+    required this.isEnabled,
     required this.keepNotifyingAfterSuccess,
     required this.nextActivationDate,
     required this.hoursBetweenNotifications,
@@ -34,7 +34,7 @@ class NotificationData {
 
   /// Supplies the default instance of [NotificationData].
   NotificationData.emptyData()
-      : isActive = false,
+      : isEnabled = false,
         keepNotifyingAfterSuccess = false,
         nextActivationDate = TimeHelper.instance.currentTime,
         hoursBetweenNotifications = 255;
@@ -42,7 +42,7 @@ class NotificationData {
   /// Creates a new instance of [NotificationData], adapting
   /// [hoursBetweenNotifications] to the supplied [HabitPlan].
   NotificationData.fromHabitPlan(final HabitPlan habitPlan)
-      : isActive = true,
+      : isEnabled = true,
         keepNotifyingAfterSuccess = false,
         nextActivationDate = TimeHelper.instance.currentTime.copyWith(
           hour: 0,
@@ -56,14 +56,14 @@ class NotificationData {
 
   /// Converts a Map into [NotificationData].
   NotificationData.fromMap(final Map<String, dynamic> map)
-      : isActive = (map['isActive'] as int).toBool(),
+      : isEnabled = (map['isEnabled'] as int).toBool(),
         keepNotifyingAfterSuccess =
             (map['keepNotifyingAfterSuccess'] as int).toBool(),
         nextActivationDate =
             DateTime.parse(map['nextActivationDate'] as String),
         hoursBetweenNotifications = map['hoursBetweenNotifications'] as int;
 
-  bool isActive;
+  bool isEnabled;
   bool keepNotifyingAfterSuccess;
   DateTime nextActivationDate;
   int hoursBetweenNotifications;
@@ -118,7 +118,7 @@ class NotificationData {
   /// Converts the [NotificationData] into a Map.
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> map = <String, dynamic>{
-      'isActive': isActive.toInt(),
+      'isEnabled': isEnabled.toInt(),
       'keepNotifyingAfterSuccess': keepNotifyingAfterSuccess.toInt(),
       'nextActivationDate': nextActivationDate.toString(),
       'hoursBetweenNotifications': hoursBetweenNotifications,

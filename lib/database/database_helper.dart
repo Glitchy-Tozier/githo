@@ -53,7 +53,7 @@ class DatabaseHelper {
   static const String _colLastChanged = 'lastChanged';
 
   static const String _notificationDataTable = 'notificationDataTable';
-  static const String _colNotificationsIsActive = 'isActive';
+  static const String _colNotificationsIsEnabled = 'isEnabled';
   static const String _colKeepNotifyingAfterSuccess =
       'keepNotifyingAfterSuccess';
   static const String _colNextActivationDate = 'nextActivationDate';
@@ -180,7 +180,7 @@ CREATE TABLE $_settingsTable(
     // Initialize notifications-table
     commandString = '''
 CREATE TABLE $_notificationDataTable(
-  $_colNotificationsIsActive INTEGER,
+  $_colNotificationsIsEnabled INTEGER,
   $_colKeepNotifyingAfterSuccess INTEGER,
   $_colNextActivationDate TEXT,
   $_colHoursBetweenNotifications INTEGER
@@ -348,7 +348,7 @@ ALTER TABLE $_settingsTable ADD $_colDarkTheme TEXT;
       db.execute(
         '''
 CREATE TABLE $_notificationDataTable(
-  $_colNotificationsIsActive INTEGER,
+  $_colNotificationsIsEnabled INTEGER,
   $_colKeepNotifyingAfterSuccess INTEGER,
   $_colNextActivationDate TEXT,
   $_colHoursBetweenNotifications INTEGER
