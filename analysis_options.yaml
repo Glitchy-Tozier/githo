@@ -26,8 +26,5 @@ linter:
 
     # Util classes are awesome!
     avoid_classes_with_only_static_members: false
-
-    # Messes with placing flutter/external imports before all other ones.
-    directives_ordering: false
     
     unawaited_futures: true
