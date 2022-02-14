@@ -244,8 +244,11 @@ Future<void> initNotifications() async {
   // to the Android head project
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('repeat');
+  const LinuxInitializationSettings initializationSettingsLinux =
+      LinuxInitializationSettings(defaultActionName: 'repeat');
   const InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
+    linux: initializationSettingsLinux,
   );
   tz.initializeTimeZones();
   await _flutterLocalNotificationsPlugin.initialize(
