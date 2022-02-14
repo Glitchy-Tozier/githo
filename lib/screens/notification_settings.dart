@@ -31,6 +31,7 @@ import 'package:githo/widgets/background.dart';
 import 'package:githo/helpers/notification_helper.dart';
 import 'package:githo/widgets/dividers/fat_divider.dart';
 import 'package:githo/widgets/dividers/thin_divider.dart';
+import 'package:githo/widgets/headings/heading.dart';
 import 'package:githo/widgets/headings/screen_title.dart';
 import 'package:githo/widgets/screen_ending_spacer.dart';
 
@@ -171,173 +172,203 @@ class _NotificationSettingsState extends State<NotificationSettings> {
   final Future<List<HabitPlan>> habitPlanFuture =
       DatabaseHelper.instance.getActiveHabitPlan();
 
-  bool enabled = false;
-  bool keepNotifyingAfterSuccess = false;
-  DateTime notificationTime = DateTime(0);
-
-  @override
-  void initState() {
-    super.initState();
-
-    // Update the settings to show their actual values.
-    notificationDataFuture.then(
-      (final NotificationData notificationData) {
-        setState(() {
-          enabled = notificationData.isEnabled;
-          keepNotifyingAfterSuccess =
-              notificationData.keepNotifyingAfterSuccess;
-          if (notificationData.isEnabled) {
-            notificationTime = notificationData.nextActivationDate;
-          } else {
-            notificationTime = widget._progressData.currentStartingDate;
-          }
-        });
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Background(
-        child: Column(
-          children: <Widget>[
-            const ScreenTitle('Notifications'),
-            const FatDivider(),
-            SwitchListTile(
-              contentPadding: StyleData.screenPadding,
-              title: const Text('Use notifications'),
-              value: enabled,
-              onChanged: (final bool enableNotifications) async {
-                final NotificationData notificationData =
-                    await notificationDataFuture;
-                notificationData.isEnabled = enableNotifications;
-                await notificationData.save();
-                setState(() {
-                  enabled = enableNotifications;
-                  if (enableNotifications == true) {
-                    scheduleNotifications();
-                  } else {
-                    cancelNotifications();
-                  }
-                });
-              },
-            ),
-            const ThinDivider(),
-            Visibility(
-              // Only show the remaining settings if notifications are enabled.
-              visible: enabled,
-              child: FutureBuilder<List<HabitPlan>>(
-                future: habitPlanFuture,
-                builder: (
-                  BuildContext context,
-                  AsyncSnapshot<List<HabitPlan>> snapshot,
-                ) {
-                  if (snapshot.hasData) {
-                    final HabitPlan habitPlan = snapshot.data!.first;
-                    final int trainingTimeIndex = habitPlan.trainingTimeIndex;
-                    final String trainingDuration =
-                        DataShortcut.timeFrames[trainingTimeIndex];
+        child: FutureBuilder<NotificationData>(
+          future: notificationDataFuture,
+          builder:
+              (BuildContext context, AsyncSnapshot<NotificationData> snapshot) {
+            if (snapshot.hasData) {
+              final NotificationData notificationData = snapshot.data!;
+              return Column(
+                children: <Widget>[
+                  const ScreenTitle('Notifications'),
+                  const FatDivider(),
+                  SwitchListTile(
+                    contentPadding: StyleData.screenPadding,
+                    title: const Text('Use notifications'),
+                    value: notificationData.isEnabled,
+                    onChanged: (final bool value) async {
+                      notificationData.isEnabled = value;
+                      await notificationData.save();
+                      setState(() {
+                        if (value == true) {
+                          scheduleNotifications();
+                        } else {
+                          cancelNotifications();
+                        }
+                      });
+                    },
+                  ),
+                  const ThinDivider(),
+                  Visibility(
+                    // Only show the remaining settings if notifications are
+                    // enabled.
+                    visible: notificationData.isEnabled,
+                    child: FutureBuilder<List<HabitPlan>>(
+                      future: habitPlanFuture,
+                      builder: (
+                        BuildContext context,
+                        AsyncSnapshot<List<HabitPlan>> snapshot,
+                      ) {
+                        if (snapshot.hasData) {
+                          final HabitPlan habitPlan = snapshot.data!.first;
+                          final int trainingTimeIndex =
+                              habitPlan.trainingTimeIndex;
+                          final String trainingDuration =
+                              DataShortcut.timeFrames[trainingTimeIndex];
 
-                    final TimeStrings timeStrings =
-                        TimeStrings(trainingTimeIndex, notificationTime);
-                    final String notificationTimePrefix = timeStrings.prefix;
-                    final String notificationTimeStr = timeStrings.text;
-                    dateController.text = notificationTimeStr;
+                          final TimeStrings timeStrings = TimeStrings(
+                            trainingTimeIndex,
+                            notificationData.nextActivationDate,
+                          );
+                          final String notificationTimePrefix =
+                              timeStrings.prefix;
+                          final String notificationTimeStr = timeStrings.text;
+                          dateController.text = notificationTimeStr;
 
-                    final Future<DateTime?> Function() selectTime =
-                        getSelectTime(
-                      context,
-                      trainingTimeIndex,
-                      notificationTime,
-                      widget._progressData,
-                    );
+                          final Future<DateTime?> Function() selectTime =
+                              getSelectTime(
+                            context,
+                            trainingTimeIndex,
+                            notificationData.nextActivationDate,
+                            widget._progressData,
+                          );
 
-                    return Column(
-                      children: <Widget>[
-                        SwitchListTile(
-                          contentPadding: StyleData.screenPadding,
-                          title: Text(
-                            'Keep reminding me every $trainingDuration, '
-                            'even after completing the required number '
-                            'of trainings',
-                          ),
-                          value: keepNotifyingAfterSuccess,
-                          onChanged: (final bool value) async {
-                            final NotificationData notificationData =
-                                await notificationDataFuture;
-                            notificationData.keepNotifyingAfterSuccess = value;
-                            await notificationData.save();
-                            setState(() {
-                              keepNotifyingAfterSuccess = value;
-                              cancelNotifications();
-                              scheduleNotifications();
-                            });
-                          },
-                        ),
-                        const FatDivider(),
-                        Padding(
-                          padding: StyleData.screenPadding,
-                          child: RichText(
-                            textAlign: TextAlign.center,
-                            text: TextSpan(
-                              children: <TextSpan>[
-                                TextSpan(
-                                  text: 'Every $trainingDuration, you will '
-                                      'be notified $notificationTimePrefix ',
-                                  style: Theme.of(context).textTheme.headline4,
+                          return Column(
+                            children: <Widget>[
+                              SwitchListTile(
+                                contentPadding: StyleData.screenPadding,
+                                title: Text(
+                                  'Keep reminding me every $trainingDuration, '
+                                  'even after completing the required number '
+                                  'of trainings',
                                 ),
-                                TextSpan(
-                                  text: notificationTimeStr,
-                                  style: Theme.of(context).textTheme.headline3,
+                                value:
+                                    notificationData.keepNotifyingAfterSuccess,
+                                onChanged: (final bool value) async {
+                                  notificationData.keepNotifyingAfterSuccess =
+                                      value;
+                                  await notificationData.save();
+                                  setState(() {
+                                    cancelNotifications();
+                                    scheduleNotifications();
+                                  });
+                                },
+                              ),
+                              const FatDivider(),
+                              Padding(
+                                padding: StyleData.screenPadding,
+                                child: RichText(
+                                  textAlign: TextAlign.center,
+                                  text: TextSpan(
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text:
+                                            'Every $trainingDuration, you will '
+                                            'be notified '
+                                            '$notificationTimePrefix ',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline4,
+                                      ),
+                                      TextSpan(
+                                        text: notificationTimeStr,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline3,
+                                      ),
+                                      TextSpan(
+                                        text: '.',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline4,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                TextSpan(
-                                  text: '.',
-                                  style: Theme.of(context).textTheme.headline4,
+                              ),
+                              const SizedBox(height: 20),
+                              Padding(
+                                padding: StyleData.screenPadding,
+                                child: TextFormField(
+                                  controller: dateController,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Notification Time',
+                                  ),
+                                  readOnly: true,
+                                  onTap: () async {
+                                    final DateTime? selectedDateTime =
+                                        await selectTime();
+
+                                    if (selectedDateTime != null) {
+                                      notificationData.nextActivationDate =
+                                          selectedDateTime;
+                                      await notificationData.save();
+                                      setState(() {
+                                        cancelNotifications();
+                                        scheduleNotifications();
+                                      });
+                                    }
+                                  },
+                                ),
+                              ),
+                            ],
+                          );
+                        } else if (snapshot.hasError) {
+                          // If connection is done but there was an error:
+                          print(snapshot.error);
+                          return Padding(
+                            padding: StyleData.screenPadding,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                const Heading(
+                                  'There was an error connecting '
+                                  'to the database.',
+                                ),
+                                Text(
+                                  snapshot.error.toString(),
                                 ),
                               ],
                             ),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        Padding(
-                          padding: StyleData.screenPadding,
-                          child: TextFormField(
-                            controller: dateController,
-                            decoration: const InputDecoration(
-                              labelText: 'Notification Time',
-                            ),
-                            readOnly: true,
-                            onTap: () async {
-                              final DateTime? selectedDateTime =
-                                  await selectTime();
-
-                              if (selectedDateTime != null) {
-                                final NotificationData notificationData =
-                                    await notificationDataFuture;
-                                notificationData.nextActivationDate =
-                                    selectedDateTime;
-                                await notificationData.save();
-                                setState(() {
-                                  notificationTime = selectedDateTime;
-                                  cancelNotifications();
-                                  scheduleNotifications();
-                                });
-                              }
-                            },
-                          ),
-                        ),
-                      ],
-                    );
-                  }
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
-              ),
-            ),
-            ScreenEndingSpacer(),
-          ],
+                          );
+                        }
+                        // While loading, do this:
+                        return const SizedBox();
+                      },
+                    ),
+                  ),
+                  ScreenEndingSpacer(),
+                ],
+              );
+            } else if (snapshot.hasError) {
+              // If connection is done but there was an error:
+              print(snapshot.error);
+              return Padding(
+                padding: StyleData.screenPadding,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const Heading(
+                      'There was an error connecting to the database.',
+                    ),
+                    Text(
+                      snapshot.error.toString(),
+                    ),
+                  ],
+                ),
+              );
+            }
+            // While loading, do this:
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          },
         ),
       ),
     );
