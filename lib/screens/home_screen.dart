@@ -171,91 +171,88 @@ class _HomeScreenState extends State<HomeScreen> {
           future: _progressData,
           builder:
               (BuildContext context, AsyncSnapshot<ProgressData> snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasData) {
-                final ProgressData progressData = snapshot.data!;
-                if (progressData.isActive == false) {
-                  // If connection is done but no habitPlan is active:
-                  final double screenHeight =
-                      MediaQuery.of(context).size.height;
-                  return Padding(
-                    padding: EdgeInsets.only(
-                      top: screenHeight * 0.25,
-                      right: StyleData.screenPaddingValue,
-                      left: StyleData.screenPaddingValue,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const <Widget>[
-                        Heading('No habit-plan is active.'),
-                        Text(
-                          'Click on the orange button to '
-                          'add or activate your habit-plan',
-                        ),
-                      ],
-                    ),
-                  );
-                } else {
-                  // If connection is done and there is an active habitPlan:
-                  _startReloadTimer(progressData);
-                  if (RuntimeVariables.instance.showWelcomeSheet) {
-                    WidgetsBinding.instance?.addPostFrameCallback(
-                      (_) => showModalBottomSheet(
-                        context: context,
-                        backgroundColor: Colors.transparent,
-                        builder: (BuildContext context) =>
-                            WelcomeSheet(progressData: progressData),
-                      ),
-                    );
-                    RuntimeVariables.instance.showWelcomeSheet = false;
-                  }
-
-                  return ListView(
-                    physics: const BouncingScrollPhysics(),
-                    shrinkWrap: true,
-                    children: <Widget>[
-                      Padding(
-                        padding: StyleData.screenPadding,
-                        child: ScreenTitle(progressData.habit),
-                      ),
-                      Column(
-                        // This column exists to make sure all trainings are
-                        // being cached. (= to disable lazyloading)
-                        children: <Widget>[
-                          ...List<Widget>.generate(progressData.levels.length,
-                              (final int i) {
-                            final Level level = progressData.levels[i];
-                            return LevelToDo(
-                              activeCardKey: activeCardKey,
-                              level: level,
-                              setHomeState: () => setState(() {}),
-                            );
-                          }),
-                        ],
-                      ),
-                      ScreenEndingSpacer(),
-                    ],
-                  );
-                }
-              } else if (snapshot.hasError) {
-                // If connection is done but there was an error:
-                print(snapshot.error);
+            if (snapshot.hasData) {
+              final ProgressData progressData = snapshot.data!;
+              if (progressData.isActive == false) {
+                // If connection is done but no habitPlan is active:
+                final double screenHeight = MediaQuery.of(context).size.height;
                 return Padding(
-                  padding: StyleData.screenPadding,
+                  padding: EdgeInsets.only(
+                    top: screenHeight * 0.25,
+                    right: StyleData.screenPaddingValue,
+                    left: StyleData.screenPaddingValue,
+                  ),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      const Heading(
-                        'There was an error connecting to the database.',
-                      ),
+                    children: const <Widget>[
+                      Heading('No habit-plan is active.'),
                       Text(
-                        snapshot.error.toString(),
+                        'Click on the orange button to '
+                        'add or activate your habit-plan',
                       ),
                     ],
                   ),
                 );
+              } else {
+                // If connection is done and there is an active habitPlan:
+                _startReloadTimer(progressData);
+                if (RuntimeVariables.instance.showWelcomeSheet) {
+                  WidgetsBinding.instance?.addPostFrameCallback(
+                    (_) => showModalBottomSheet(
+                      context: context,
+                      backgroundColor: Colors.transparent,
+                      builder: (BuildContext context) =>
+                          WelcomeSheet(progressData: progressData),
+                    ),
+                  );
+                  RuntimeVariables.instance.showWelcomeSheet = false;
+                }
+
+                return ListView(
+                  physics: const BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  children: <Widget>[
+                    Padding(
+                      padding: StyleData.screenPadding,
+                      child: ScreenTitle(progressData.habit),
+                    ),
+                    Column(
+                      // This column exists to make sure all trainings are
+                      // being cached. (= to disable lazyloading)
+                      children: <Widget>[
+                        ...List<Widget>.generate(progressData.levels.length,
+                            (final int i) {
+                          final Level level = progressData.levels[i];
+                          return LevelToDo(
+                            activeCardKey: activeCardKey,
+                            level: level,
+                            setHomeState: () => setState(() {}),
+                          );
+                        }),
+                      ],
+                    ),
+                    ScreenEndingSpacer(),
+                  ],
+                );
               }
+            } else if (snapshot.hasError) {
+              // If connection is done but there was an error:
+              print(snapshot.error);
+              return Padding(
+                padding: StyleData.screenPadding,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const Heading(
+                      'There was an error connecting to the database.',
+                    ),
+                    Text(
+                      snapshot.error.toString(),
+                    ),
+                  ],
+                ),
+              );
             }
             // While loading, do this:
             return const Center(
@@ -271,116 +268,92 @@ class _HomeScreenState extends State<HomeScreen> {
           future: _progressData,
           builder:
               (BuildContext context, AsyncSnapshot<ProgressData> snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasData) {
-                final ProgressData progressData = snapshot.data!;
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    WillPopScope(
-                      // Necessary to prevent a crash when pressing the
-                      // back-button while the dial is open.
-                      onWillPop: () async {
-                        if (isDialOpen.value) {
-                          isDialOpen.value = false;
-                          return false;
-                        } else {
-                          return true;
-                        }
-                      },
-                      child: SpeedDial(
-                        backgroundColor: ThemedColors.orange,
-                        icon: Icons.settings,
-                        activeIcon: Icons.close,
-                        spacing: 4,
-                        spaceBetweenChildren: 4,
+            if (snapshot.hasData) {
+              final ProgressData progressData = snapshot.data!;
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  WillPopScope(
+                    // Necessary to prevent a crash when pressing the
+                    // back-button while the dial is open.
+                    onWillPop: () async {
+                      if (isDialOpen.value) {
+                        isDialOpen.value = false;
+                        return false;
+                      } else {
+                        return true;
+                      }
+                    },
+                    child: SpeedDial(
+                      backgroundColor: ThemedColors.orange,
+                      icon: Icons.settings,
+                      activeIcon: Icons.close,
+                      spacing: 4,
+                      spaceBetweenChildren: 4,
 
-                        // Necessary to make the dial close when pressing
-                        // the back-button.
-                        openCloseDial: isDialOpen,
+                      // Necessary to make the dial close when pressing
+                      // the back-button.
+                      openCloseDial: isDialOpen,
 
-                        overlayColor: Colors.black,
-                        overlayOpacity: 0.5,
+                      overlayColor: Colors.black,
+                      overlayOpacity: 0.5,
 
-                        tooltip: 'Show options',
-                        //isOpenOnStart: false,
-                        animationSpeed: 200,
-                        switchLabelPosition: true,
-                        // childMargin:
-                        // EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                        children: <SpeedDialChild>[
-                          SpeedDialChild(
-                            backgroundColor: Colors.grey.shade800,
-                            label: 'About',
-                            labelStyle:
-                                Theme.of(context).textTheme.bodyText2!.copyWith(
-                                      color: Colors.black,
-                                    ),
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute<About>(
-                                  builder: (BuildContext context) => About(),
-                                ),
-                              );
-                            },
-                            child: const Icon(
-                              Icons.info,
-                              color: Colors.white,
-                            ),
-                          ),
-                          SpeedDialChild(
-                            backgroundColor: Colors.pink.shade900,
-                            label: 'Themes',
-                            labelStyle:
-                                Theme.of(context).textTheme.bodyText2!.copyWith(
-                                      color: Colors.black,
-                                    ),
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute<ThemeSettings>(
-                                  builder: (BuildContext context) =>
-                                      ThemeSettings(),
-                                ),
-                              );
-                            },
-                            child: Icon(
-                              SchedulerBinding.instance!.window
-                                          .platformBrightness ==
-                                      Brightness.light
-                                  ? Icons.light_mode
-                                  : Icons.dark_mode,
-                              color: Colors.white,
-                            ),
-                          ),
-                          if (progressData.isActive)
-                            SpeedDialChild(
-                              backgroundColor: Colors.lightBlue.shade700,
-                              label: 'Notifications',
-                              labelStyle: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2!
-                                  .copyWith(
+                      tooltip: 'Show options',
+                      //isOpenOnStart: false,
+                      animationSpeed: 200,
+                      switchLabelPosition: true,
+                      // childMargin:
+                      // EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      children: <SpeedDialChild>[
+                        SpeedDialChild(
+                          backgroundColor: Colors.grey.shade800,
+                          label: 'About',
+                          labelStyle:
+                              Theme.of(context).textTheme.bodyText2!.copyWith(
                                     color: Colors.black,
                                   ),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute<NotificationSettings>(
-                                    builder: (BuildContext context) =>
-                                        NotificationSettings(progressData),
-                                  ),
-                                );
-                              },
-                              child: const Icon(
-                                Icons.notifications,
-                                color: Colors.white,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute<About>(
+                                builder: (BuildContext context) => About(),
                               ),
-                            ),
+                            );
+                          },
+                          child: const Icon(
+                            Icons.info,
+                            color: Colors.white,
+                          ),
+                        ),
+                        SpeedDialChild(
+                          backgroundColor: Colors.pink.shade900,
+                          label: 'Themes',
+                          labelStyle:
+                              Theme.of(context).textTheme.bodyText2!.copyWith(
+                                    color: Colors.black,
+                                  ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute<ThemeSettings>(
+                                builder: (BuildContext context) =>
+                                    ThemeSettings(),
+                              ),
+                            );
+                          },
+                          child: Icon(
+                            SchedulerBinding
+                                        .instance!.window.platformBrightness ==
+                                    Brightness.light
+                                ? Icons.light_mode
+                                : Icons.dark_mode,
+                            color: Colors.white,
+                          ),
+                        ),
+                        if (progressData.isActive)
                           SpeedDialChild(
-                            backgroundColor: Theme.of(context).primaryColor,
-                            label: 'List of habits',
+                            backgroundColor: Colors.lightBlue.shade700,
+                            label: 'Notifications',
                             labelStyle:
                                 Theme.of(context).textTheme.bodyText2!.copyWith(
                                       color: Colors.black,
@@ -388,60 +361,80 @@ class _HomeScreenState extends State<HomeScreen> {
                             onTap: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute<HabitList>(
-                                  builder: (BuildContext context) => HabitList(
-                                    updateFunction: _reloadScreen,
-                                  ),
+                                MaterialPageRoute<NotificationSettings>(
+                                  builder: (BuildContext context) =>
+                                      NotificationSettings(progressData),
                                 ),
                               );
                             },
                             child: const Icon(
-                              Icons.list,
+                              Icons.notifications,
                               color: Colors.white,
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                    if (progressData.isActive && DataShortcut.testing)
-                      SizedBox(
-                        height: 55,
-                        width: 150,
-                        child: Material(
-                          color: Colors.cyan.withOpacity(0.5),
-                          child: InkWell(
-                            splashColor: Colors.purple,
-                            onTap: () {
-                              // Move one training ahead in time.
-                              TimeHelper.instance.timeTravel(progressData);
-                              print(
-                                'Start ${progressData.currentStartingDate}',
-                              );
-                              print(
-                                'Now   ${TimeHelper.instance.currentTime}\n',
-                              );
-                            },
-                            onLongPress: () {
-                              // Move one trainingPeriod ahead in time.
-                              TimeHelper.instance.superTimeTravel(progressData);
-                              print(
-                                'Start ${progressData.currentStartingDate}',
-                              );
-                              print(
-                                'Now   ${TimeHelper.instance.currentTime}\n',
-                              );
-                            },
+                        SpeedDialChild(
+                          backgroundColor: Theme.of(context).primaryColor,
+                          label: 'List of habits',
+                          labelStyle:
+                              Theme.of(context).textTheme.bodyText2!.copyWith(
+                                    color: Colors.black,
+                                  ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute<HabitList>(
+                                builder: (BuildContext context) => HabitList(
+                                  updateFunction: _reloadScreen,
+                                ),
+                              ),
+                            );
+                          },
+                          child: const Icon(
+                            Icons.list,
+                            color: Colors.white,
                           ),
                         ),
-                      ),
-                    TrainingFAB(
-                      progressData: progressData,
-                      scrollToActiveTraining: _scrollToActiveTraining,
-                      setHomeState: () => setState(() {}),
+                      ],
                     ),
-                  ],
-                );
-              }
+                  ),
+                  if (progressData.isActive && DataShortcut.testing)
+                    SizedBox(
+                      height: 55,
+                      width: 150,
+                      child: Material(
+                        color: Colors.cyan.withOpacity(0.5),
+                        child: InkWell(
+                          splashColor: Colors.purple,
+                          onTap: () {
+                            // Move one training ahead in time.
+                            TimeHelper.instance.timeTravel(progressData);
+                            print(
+                              'Start ${progressData.currentStartingDate}',
+                            );
+                            print(
+                              'Now   ${TimeHelper.instance.currentTime}\n',
+                            );
+                          },
+                          onLongPress: () {
+                            // Move one trainingPeriod ahead in time.
+                            TimeHelper.instance.superTimeTravel(progressData);
+                            print(
+                              'Start ${progressData.currentStartingDate}',
+                            );
+                            print(
+                              'Now   ${TimeHelper.instance.currentTime}\n',
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  TrainingFAB(
+                    progressData: progressData,
+                    scrollToActiveTraining: _scrollToActiveTraining,
+                    setHomeState: () => setState(() {}),
+                  ),
+                ],
+              );
             } else if (snapshot.hasError) {
               // If connection is done but there was an error:
               print(snapshot.error);

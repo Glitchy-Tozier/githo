@@ -79,100 +79,81 @@ class _HabitListState extends State<HabitList> {
           future: _habitPlanListFuture,
           builder:
               (BuildContext context, AsyncSnapshot<List<HabitPlan>> snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasData) {
-                final List<HabitPlan> habitPlanList = snapshot.data!;
-                final List<Widget> columnItems = <Widget>[];
+            if (snapshot.hasData) {
+              final List<HabitPlan> habitPlanList = snapshot.data!;
+              final List<Widget> columnItems = <Widget>[];
 
-                columnItems.addAll(
-                  const <Widget>[
-                    Padding(
+              columnItems.addAll(
+                const <Widget>[
+                  Padding(
+                    padding: StyleData.screenPadding,
+                    child: ScreenTitle('Habits'),
+                  ),
+                  FatDivider(),
+                ],
+              );
+
+              if (habitPlanList.isEmpty) {
+                // If there are no habit plans
+                columnItems.add(
+                  Expanded(
+                    child: Container(
                       padding: StyleData.screenPadding,
-                      child: ScreenTitle('Habits'),
-                    ),
-                    FatDivider(),
-                  ],
-                );
-
-                if (habitPlanList.isEmpty) {
-                  // If there are no habit plans
-                  columnItems.add(
-                    Expanded(
-                      child: Container(
-                        padding: StyleData.screenPadding,
-                        alignment: Alignment.center,
-                        child: const Text(
-                          'Add a new habit-plan by clicking on the plus-icon.',
-                        ),
+                      alignment: Alignment.center,
+                      child: const Text(
+                        'Add a new habit-plan by clicking on the plus-icon.',
                       ),
                     ),
-                  );
-                } else {
-                  // If habit plans were found in the database
-                  final List<HabitPlan> orderedHabitPlans =
-                      _orderHabitPlans(habitPlanList);
+                  ),
+                );
+              } else {
+                // If habit plans were found in the database
+                final List<HabitPlan> orderedHabitPlans =
+                    _orderHabitPlans(habitPlanList);
 
-                  columnItems.add(
-                    Expanded(
-                      child: ListView.builder(
-                        padding: StyleData.screenPadding,
-                        physics: const BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: orderedHabitPlans.length + 1,
-                        itemBuilder: (BuildContext buildContex, int i) {
-                          if (i < orderedHabitPlans.length) {
-                            final HabitPlan habitPlan = orderedHabitPlans[i];
-                            Color? color;
-                            if (habitPlan.fullyCompleted) {
-                              color = ThemedColors.gold;
-                            } else if (habitPlan.isActive) {
-                              color = ThemedColors.green;
-                            }
-                            return ListButton(
-                              text: habitPlan.habit,
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute<SingleHabitDisplay>(
-                                    builder: (BuildContext context) =>
-                                        SingleHabitDisplay(
-                                      updateFunction: _updateLoadedScreens,
-                                      habitPlan: habitPlan,
-                                    ),
-                                  ),
-                                );
-                              },
-                              color: color,
-                            );
-                          } else {
-                            return ScreenEndingSpacer();
+                columnItems.add(
+                  Expanded(
+                    child: ListView.builder(
+                      padding: StyleData.screenPadding,
+                      physics: const BouncingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: orderedHabitPlans.length + 1,
+                      itemBuilder: (BuildContext buildContex, int i) {
+                        if (i < orderedHabitPlans.length) {
+                          final HabitPlan habitPlan = orderedHabitPlans[i];
+                          Color? color;
+                          if (habitPlan.fullyCompleted) {
+                            color = ThemedColors.gold;
+                          } else if (habitPlan.isActive) {
+                            color = ThemedColors.green;
                           }
-                        },
-                      ),
+                          return ListButton(
+                            text: habitPlan.habit,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute<SingleHabitDisplay>(
+                                  builder: (BuildContext context) =>
+                                      SingleHabitDisplay(
+                                    updateFunction: _updateLoadedScreens,
+                                    habitPlan: habitPlan,
+                                  ),
+                                ),
+                              );
+                            },
+                            color: color,
+                          );
+                        } else {
+                          return ScreenEndingSpacer();
+                        }
+                      },
                     ),
-                  );
-                }
-                return Column(
-                  children: columnItems,
-                );
-              } else if (snapshot.hasError) {
-                // If something went wrong with the database
-                print(snapshot.error);
-
-                return Padding(
-                  padding: StyleData.screenPadding,
-                  child: Column(
-                    children: <Widget>[
-                      const Heading(
-                        'There was an error connecting to the database.',
-                      ),
-                      Text(
-                        snapshot.error.toString(),
-                      ),
-                    ],
                   ),
                 );
               }
+              return Column(
+                children: columnItems,
+              );
             } else if (snapshot.hasError) {
               // If connection is done but there was an error:
               print(snapshot.error);

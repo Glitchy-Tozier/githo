@@ -50,28 +50,23 @@ class SplashScreen extends StatelessWidget {
     return FutureBuilder<SettingsData>(
       future: _settings,
       builder: (BuildContext context, AsyncSnapshot<SettingsData> snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasData) {
-            final SettingsData settings = snapshot.data!;
+        if (snapshot.hasData) {
+          final SettingsData settings = snapshot.data!;
 
-            if (settings.showIntroduction) {
-              // If this is the first start of the app reading the theme-
-              // config isn't needed.
-              return OnBoardingScreen();
-            } else {
-              return FutureBuilder<void>(
-                future: setThemes(settings),
-                builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    return HomeScreen();
-                  }
-                  return Splash();
-                },
-              );
-            }
-          } else if (snapshot.hasError) {
-            // If connection is done but there was an error:
-            print(snapshot.error);
+          if (settings.showIntroduction) {
+            // If this is the first start of the app reading the theme-
+            // config isn't needed.
+            return OnBoardingScreen();
+          } else {
+            return FutureBuilder<void>(
+              future: setThemes(settings),
+              builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return HomeScreen();
+                }
+                return Splash();
+              },
+            );
           }
         } else if (snapshot.hasError) {
           // If connection is done but there was an error:
