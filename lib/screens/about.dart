@@ -56,10 +56,10 @@ class About extends StatelessWidget {
           child: FutureBuilder<PackageInfo>(
             future: futurePackageInfo,
             builder:
-                (BuildContext context, AsyncSnapshot<PackageInfo> snapShot) {
-              if (snapShot.connectionState == ConnectionState.done) {
-                if (snapShot.hasData) {
-                  final PackageInfo packageInfo = snapShot.data!;
+                (BuildContext context, AsyncSnapshot<PackageInfo> snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasData) {
+                  final PackageInfo packageInfo = snapshot.data!;
                   final String version = packageInfo.version;
 
                   return Column(
@@ -105,7 +105,26 @@ class About extends StatelessWidget {
                     ],
                   );
                 }
+              } else if (snapshot.hasError) {
+                // If connection is done but there was an error:
+                print(snapshot.error);
+                return Padding(
+                  padding: StyleData.screenPadding,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      const Heading(
+                        'There was an error connecting to the database.',
+                      ),
+                      Text(
+                        snapshot.error.toString(),
+                      ),
+                    ],
+                  ),
+                );
               }
+              // While loading, do this:
               return const Center(
                 child: CircularProgressIndicator(),
               );

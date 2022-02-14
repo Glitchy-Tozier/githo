@@ -173,6 +173,24 @@ class _HabitListState extends State<HabitList> {
                   ),
                 );
               }
+            } else if (snapshot.hasError) {
+              // If connection is done but there was an error:
+              print(snapshot.error);
+              return Padding(
+                padding: StyleData.screenPadding,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const Heading(
+                      'There was an error connecting to the database.',
+                    ),
+                    Text(
+                      snapshot.error.toString(),
+                    ),
+                  ],
+                ),
+              );
             }
             // While loading, do this:
             return const Center(

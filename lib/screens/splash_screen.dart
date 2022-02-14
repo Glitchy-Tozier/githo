@@ -19,10 +19,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:githo/config/app_theme.dart';
+import 'package:githo/config/style_data.dart';
 import 'package:githo/database/database_helper.dart';
 import 'package:githo/models/settings_data.dart';
 import 'package:githo/screens/home_screen.dart';
 import 'package:githo/screens/introduction.dart';
+import 'package:githo/widgets/headings/heading.dart';
 
 /// A splash screen that decides which view/screen should follow.
 ///
@@ -71,6 +73,24 @@ class SplashScreen extends StatelessWidget {
             // If connection is done but there was an error:
             print(snapshot.error);
           }
+        } else if (snapshot.hasError) {
+          // If connection is done but there was an error:
+          print(snapshot.error);
+          return Padding(
+            padding: StyleData.screenPadding,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                const Heading(
+                  'There was an error connecting to the database.',
+                ),
+                Text(
+                  snapshot.error.toString(),
+                ),
+              ],
+            ),
+          );
         }
         return Splash();
       },
