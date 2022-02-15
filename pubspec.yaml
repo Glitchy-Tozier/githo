@@ -37,6 +37,7 @@ dependencies:
   intl: ^0.17.0
   introduction_screen: ^2.1.0
   lint: ^1.5.3
+  numberpicker: ^2.1.1
   package_info_plus: ^1.0.4
   path_provider: ^2.0.2
   share_plus: ^2.1.4

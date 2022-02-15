@@ -29,6 +29,7 @@ import 'package:githo/models/notification_data.dart';
 import 'package:githo/models/progress_data.dart';
 import 'package:githo/widgets/background.dart';
 import 'package:githo/helpers/notification_helper.dart';
+import 'package:githo/widgets/alert_dialogs/minute_picker.dart';
 import 'package:githo/widgets/dialogs/date_picker.dart';
 import 'package:githo/widgets/dialogs/time_picker.dart';
 import 'package:githo/widgets/dividers/fat_divider.dart';
@@ -91,22 +92,21 @@ Future<DateTime?> Function() getSelectTime(
   switch (trainingTimeIdx) {
     case 0:
       return () async {
-        final TimeOfDay? timeOfDay = await showDialog(
+        TimeOfDay timeOfDay = TimeOfDay(
+          hour: 0,
+          minute: notificationTime.minute,
+        );
+        await showDialog(
           context: context,
-          builder: (BuildContext buildContext) => TimePicker(
-            initialTime: TimeOfDay(
-              hour: 0,
-              minute: notificationTime.minute,
-            ),
+          builder: (BuildContext buildContext) => MinutePicker(
+            initialTime: timeOfDay,
+            resultCallback: (final TimeOfDay newTime) => timeOfDay = newTime,
           ),
         );
-        if (timeOfDay != null) {
-          return now.copyWith(
-            hour: timeOfDay.hour,
-            minute: timeOfDay.minute,
-          );
-        }
-        return null;
+        return now.copyWith(
+          hour: timeOfDay.hour,
+          minute: timeOfDay.minute,
+        );
       };
     case 1:
       return () async {
