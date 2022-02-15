@@ -72,7 +72,8 @@ class TimeStrings {
       case 1:
         return DateFormat('Hm').format(notificationTime);
       default:
-        return DateFormat('EEEE, Hm').format(notificationTime);
+        return '${DateFormat('EEEE').format(notificationTime)}, '
+            '${DateFormat('Hm').format(notificationTime)}';
     }
   }
 
