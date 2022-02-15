@@ -29,6 +29,8 @@ import 'package:githo/models/notification_data.dart';
 import 'package:githo/models/progress_data.dart';
 import 'package:githo/widgets/background.dart';
 import 'package:githo/helpers/notification_helper.dart';
+import 'package:githo/widgets/dialogs/date_picker.dart';
+import 'package:githo/widgets/dialogs/time_picker.dart';
 import 'package:githo/widgets/dividers/fat_divider.dart';
 import 'package:githo/widgets/dividers/thin_divider.dart';
 import 'package:githo/widgets/headings/heading.dart';
@@ -88,11 +90,13 @@ Future<DateTime?> Function() getSelectTime(
   switch (trainingTimeIdx) {
     case 0:
       return () async {
-        final TimeOfDay? timeOfDay = await showTimePicker(
+        final TimeOfDay? timeOfDay = await showDialog(
           context: context,
-          initialTime: TimeOfDay(
-            hour: 0,
-            minute: notificationTime.minute,
+          builder: (BuildContext buildContext) => TimePicker(
+            initialTime: TimeOfDay(
+              hour: 0,
+              minute: notificationTime.minute,
+            ),
           ),
         );
         if (timeOfDay != null) {
@@ -106,11 +110,13 @@ Future<DateTime?> Function() getSelectTime(
     case 1:
       return () async {
         // Get desired starting-timeOfDay
-        final TimeOfDay? timeOfDay = await showTimePicker(
+        final TimeOfDay? timeOfDay = await showDialog(
           context: context,
-          initialTime: TimeOfDay(
-            hour: notificationTime.hour,
-            minute: notificationTime.minute,
+          builder: (BuildContext buildContext) => TimePicker(
+            initialTime: TimeOfDay(
+              hour: notificationTime.hour,
+              minute: notificationTime.minute,
+            ),
           ),
         );
         if (timeOfDay != null) {
@@ -125,21 +131,25 @@ Future<DateTime?> Function() getSelectTime(
     default:
       return () async {
         // Get the desired starting-date
-        final DateTime? dateTime = await showDatePicker(
+        final DateTime? dateTime = await showDialog(
           context: context,
-          initialDate: notificationTime,
-          firstDate: progressData.currentStartingDate,
-          lastDate: progressData.currentStartingDate.add(
-            const Duration(days: 7),
+          builder: (BuildContext buildContext) => DatePicker(
+            initialDate: notificationTime,
+            firstDate: progressData.currentStartingDate,
+            lastDate: progressData.currentStartingDate.add(
+              const Duration(days: 7),
+            ),
           ),
         );
         if (dateTime != null) {
           // Get desired starting-timeOfDay
-          final TimeOfDay? timeOfDay = await showTimePicker(
+          final TimeOfDay? timeOfDay = await showDialog(
             context: context,
-            initialTime: TimeOfDay(
-              hour: notificationTime.hour,
-              minute: notificationTime.minute,
+            builder: (BuildContext buildContext) => TimePicker(
+              initialTime: TimeOfDay(
+                hour: notificationTime.hour,
+                minute: notificationTime.minute,
+              ),
             ),
           );
           if (timeOfDay != null) {
