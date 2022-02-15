@@ -79,4 +79,15 @@ extension MyDateUtils on DateTime {
       microsecond ?? this.microsecond,
     );
   }
+
+  /// Sets [second], [millisecond], and [microsecond] to of the [DateTime] to 0.
+  DateTime clean() {
+    return DateTime(
+      year,
+      month,
+      day,
+      hour,
+      minute,
+    );
+  }
 }

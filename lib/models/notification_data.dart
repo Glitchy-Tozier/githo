@@ -44,13 +44,12 @@ class NotificationData {
   NotificationData.fromHabitPlan(final HabitPlan habitPlan)
       : isEnabled = true,
         keepNotifyingAfterSuccess = false,
-        nextActivationDate = TimeHelper.instance.currentTime.copyWith(
-          hour: 0,
-          minute: 0,
-          second: 0,
-          millisecond: 0,
-          microsecond: 0,
-        ),
+        nextActivationDate = TimeHelper.instance.currentTime
+            .copyWith(
+              hour: 0,
+              minute: 0,
+            )
+            .clean(),
         hoursBetweenNotifications =
             DataShortcut.trainingDurationInHours[habitPlan.trainingTimeIndex];
 

@@ -103,10 +103,12 @@ Future<DateTime?> Function() getSelectTime(
             resultCallback: (final TimeOfDay newTime) => timeOfDay = newTime,
           ),
         );
-        return now.copyWith(
-          hour: timeOfDay.hour,
-          minute: timeOfDay.minute,
-        );
+        return now
+            .copyWith(
+              hour: timeOfDay.hour,
+              minute: timeOfDay.minute,
+            )
+            .clean();
       };
     case 1:
       return () async {
@@ -122,10 +124,12 @@ Future<DateTime?> Function() getSelectTime(
         );
         if (timeOfDay != null) {
           // Turn the TimeOfDay into a DateTime
-          return now.copyWith(
-            hour: timeOfDay.hour,
-            minute: timeOfDay.minute,
-          );
+          return now
+              .copyWith(
+                hour: timeOfDay.hour,
+                minute: timeOfDay.minute,
+              )
+              .clean();
         }
         return null;
       };
@@ -155,10 +159,12 @@ Future<DateTime?> Function() getSelectTime(
           );
           if (timeOfDay != null) {
             // Turn the TimeOfDay into a DateTime
-            return dateTime.copyWith(
-              hour: timeOfDay.hour,
-              minute: timeOfDay.minute,
-            );
+            return dateTime
+                .copyWith(
+                  hour: timeOfDay.hour,
+                  minute: timeOfDay.minute,
+                )
+                .clean();
           }
         }
         return null;
@@ -315,13 +321,18 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                                         await selectTime();
 
                                     if (selectedDateTime != null) {
-                                      notificationData.nextActivationDate =
-                                          selectedDateTime;
-                                      await notificationData.save();
-                                      setState(() {
-                                        cancelNotifications();
-                                        scheduleNotifications();
-                                      });
+                                      // Only do something if the DateTime
+                                      // actually got changed.
+                                      if (selectedDateTime !=
+                                          notificationData.nextActivationDate) {
+                                        notificationData.nextActivationDate =
+                                            selectedDateTime;
+                                        await notificationData.save();
+                                        setState(() {
+                                          cancelNotifications();
+                                          scheduleNotifications();
+                                        });
+                                      }
                                     }
                                   },
                                 ),
