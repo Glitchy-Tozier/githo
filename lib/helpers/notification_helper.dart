@@ -139,7 +139,7 @@ Future<void> scheduleNotifications() async {
           dataSlice.level.text,
         );
       }
-      // Schedule the notification for the beginnig of the next week.
+      // Schedule the notification for the beginnig of the next TrainingPeriod.
       final DateTime? notifyDateTimeNextPeriod = notificationData
           .getNotifyTimeBetween(
             dataSlice.period.trainings.last.startingDate,
@@ -151,7 +151,7 @@ Future<void> scheduleNotifications() async {
         if (activePeriod.currentlyIsSuccessful) {
           msg = 'Tackle the next Level!';
         } else {
-          msg = 'A new week!';
+          msg = 'A new ${activePeriod.durationText}!';
         }
         print('NextWeekNotification scheduled for $notifyDateTimeNextPeriod');
         await _flutterLocalNotificationsPlugin.zonedSchedule(
@@ -225,7 +225,7 @@ Future<void> annihilateNotifcations() async {
 
 /// Cancels a scheduled notification with a specific ID.
 ///
-/// - ID 0 = Next week's notification.
+/// - ID 0 = Next [TrainingPeriod]'s notification.
 /// - ID [training.number] = The notification that corresponds to a specific
 /// training.
 Future<void> cancelNotification(final int id) async {

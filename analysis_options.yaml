@@ -28,3 +28,5 @@ linter:
     avoid_classes_with_only_static_members: false
     
     unawaited_futures: true
+
+    directives_ordering: false
