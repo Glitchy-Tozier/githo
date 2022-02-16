@@ -19,7 +19,7 @@
 import 'package:githo/config/data_shortcut.dart';
 import 'package:githo/models/progress_data.dart';
 
-/// Used intstead of DateTime.now() to help with debugging.
+/// Used intstead of DateTime.now(…) to help with debugging.
 class TimeHelper {
   const TimeHelper._privateConstructor();
 
@@ -29,7 +29,7 @@ class TimeHelper {
 
   /// Returns the current [DateTime].
   ///
-  /// Use this instead of `DateTime.now()` in your code.
+  /// Use this instead of `DateTime.now(…)` in your code.
   DateTime get currentTime {
     final DateTime now = DateTime.now();
 

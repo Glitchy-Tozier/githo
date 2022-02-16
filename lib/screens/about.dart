@@ -56,53 +56,72 @@ class About extends StatelessWidget {
           child: FutureBuilder<PackageInfo>(
             future: futurePackageInfo,
             builder:
-                (BuildContext context, AsyncSnapshot<PackageInfo> snapShot) {
-              if (snapShot.connectionState == ConnectionState.done) {
-                if (snapShot.hasData) {
-                  final PackageInfo packageInfo = snapShot.data!;
-                  final String version = packageInfo.version;
+                (BuildContext context, AsyncSnapshot<PackageInfo> snapshot) {
+              if (snapshot.hasData) {
+                final PackageInfo packageInfo = snapshot.data!;
+                final String version = packageInfo.version;
 
-                  return Column(
-                    children: <Widget>[
-                      const SizedBox(height: 70),
-                      const BorderedImage(
-                        'assets/zoomed_icon.png',
-                        width: 90,
-                      ),
-                      const Heading('Githo'),
-                      Text(version),
-                      const SizedBox(height: 20),
-                      ListButton(
-                        text: 'Source Code',
-                        onPressed: () {
-                          const String url =
-                              'https://github.com/Glitchy-Tozier/githo';
-                          openUrl(context, url);
-                        },
-                      ),
-                      ListButton(
-                        text: 'Privacy Policy',
-                        onPressed: () {
-                          const String url =
-                              'https://github.com/Glitchy-Tozier/githo/blob/main/privacyPolicy.md';
-                          openUrl(context, url);
-                        },
-                      ),
-                      ListButton(
-                        text: 'Licenses',
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute<void>(
+                return Column(
+                  children: <Widget>[
+                    const SizedBox(height: 70),
+                    const BorderedImage(
+                      'assets/zoomed_icon.png',
+                      width: 90,
+                    ),
+                    const Heading('Githo'),
+                    Text(version),
+                    const SizedBox(height: 20),
+                    ListButton(
+                      text: 'Source Code',
+                      onPressed: () {
+                        const String url =
+                            'https://github.com/Glitchy-Tozier/githo';
+                        openUrl(context, url);
+                      },
+                    ),
+                    ListButton(
+                      text: 'Privacy Policy',
+                      onPressed: () {
+                        const String url =
+                            'https://github.com/Glitchy-Tozier/githo/blob/main/privacyPolicy.md';
+                        openUrl(context, url);
+                      },
+                    ),
+                    ListButton(
+                      text: 'Licenses',
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute<void>(
                             builder: (BuildContext context) =>
                                 const CustomLicensePage(
                               applicationName: 'Githo\nGet Into The Habit Of…',
                             ),
-                          ));
-                        },
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                );
+              } else if (snapshot.hasError) {
+                // If connection is done but there was an error:
+                print(snapshot.error);
+                return Padding(
+                  padding: StyleData.screenPadding,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      const Heading(
+                        'There was an error connecting to the database.',
+                      ),
+                      Text(
+                        snapshot.error.toString(),
                       ),
                     ],
-                  );
-                }
+                  ),
+                );
               }
+              // While loading, do this:
               return const Center(
                 child: CircularProgressIndicator(),
               );

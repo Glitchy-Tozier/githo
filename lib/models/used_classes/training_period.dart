@@ -142,6 +142,7 @@ class TrainingPeriod {
         return training;
       }
     }
+    return null;
   }
 
   /// Only used **ONCE**: The first time when the waiting-for-start-period needs
@@ -178,6 +179,44 @@ class TrainingPeriod {
         return training;
       }
     }
+    return null;
+  }
+
+  /// Returns the number of trainings the user may fail (from now on) until the
+  /// whole [TrainingPeriod] is prononunced unsuccessful.
+  int get remainingAllowedUnsuccessfulTrainings {
+    int unsuccessfulTrainings = 0;
+    for (final Training training in trainings) {
+      if (training.status == 'ready' ||
+          training.status == 'ignored' ||
+          training.status == 'started' ||
+          training.status == 'unsuccessful') {
+        unsuccessfulTrainings++;
+      }
+    }
+    final int allowedUnsuccessfulTrainings =
+        trainings.length - requiredTrainings;
+    final int remainingAllowedUnsuccessfulTrainings =
+        allowedUnsuccessfulTrainings - unsuccessfulTrainings;
+    if (remainingAllowedUnsuccessfulTrainings < 0) {
+      return -1;
+    } else {
+      return remainingAllowedUnsuccessfulTrainings;
+    }
+  }
+
+  /// Checks if, AT THE MOMENT, enough [trainings] are successful for [this] to
+  /// be successful, provided the user doesn't decrement them.
+  bool get currentlyIsSuccessful {
+    int successfulTrainings = 0;
+
+    for (final Training training in trainings) {
+      if (training.status == 'successful' || training.status == 'done') {
+        successfulTrainings++;
+      }
+    }
+    final bool wasSuccessful = successfulTrainings >= requiredTrainings;
+    return wasSuccessful;
   }
 
   /// Checks if enough [trainings] were successful for [this] to be successful.
@@ -191,6 +230,19 @@ class TrainingPeriod {
     }
     final bool wasSuccessful = successfulTrainings >= requiredTrainings;
     return wasSuccessful;
+  }
+
+  /// Returns whether [this] has too many unsuccessful trainings.
+  bool get hasFailed {
+    int failedTrainings = 0;
+    for (final Training training in trainings) {
+      if (training.status == 'ignored' || training.status == 'unsuccessful') {
+        failedTrainings++;
+      }
+    }
+    final int allowedUnsuccessfulTrainings =
+        trainings.length - requiredTrainings;
+    return failedTrainings > allowedUnsuccessfulTrainings;
   }
 
   /// Returns how many [trainings] so far were successful
@@ -221,7 +273,7 @@ class TrainingPeriod {
   }
 
   /// Sets the [status] of [this] to 'completed'.
-  void setResult() {
+  void setCompleted() {
     status = 'completed';
   }
 
@@ -230,7 +282,7 @@ class TrainingPeriod {
     final Training lastTraining = trainings.last;
     final DateTime now = TimeHelper.instance.currentTime;
     if (lastTraining.endingDate.isBefore(now)) {
-      setResult();
+      setCompleted();
     }
   }
 

@@ -22,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:githo/config/custom_widget_themes.dart';
 import 'package:githo/helpers/format_date.dart';
 import 'package:githo/helpers/get_duration_diff.dart';
+import 'package:githo/helpers/notification_helper.dart';
 import 'package:githo/helpers/time_helper.dart';
 import 'package:githo/models/progress_data.dart';
 import 'package:githo/models/used_classes/level.dart';
@@ -42,7 +43,7 @@ class TrainingFAB extends StatefulWidget {
     required this.setHomeState,
     Key? key,
   }) : super(key: key);
-  final Future<ProgressData> progressData;
+  final ProgressData progressData;
   final void Function() scrollToActiveTraining;
   final void Function() setHomeState;
 
@@ -53,158 +54,157 @@ class TrainingFAB extends StatefulWidget {
 class _TrainingFABState extends State<TrainingFAB> {
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<ProgressData>(
-      future: widget.progressData,
-      builder: (BuildContext context, AsyncSnapshot<ProgressData> snapshot) {
-        if (snapshot.hasData) {
-          final ProgressData progressData = snapshot.data!;
-          if (progressData.isActive) {
-            final ProgressDataSlice? activeSlice = progressData.activeDataSlice;
+    if (widget.progressData.isActive) {
+      final ProgressDataSlice? activeSlice =
+          widget.progressData.activeDataSlice;
 
-            if (activeSlice == null) {
-              // If the user is waiting for the first training to start.
-              return FloatingActionButton(
-                tooltip: 'Waiting for training to start',
-                backgroundColor: ThemedColors.green,
-                heroTag: null,
-                onPressed: () {
-                  final ProgressDataSlice waitingSlice =
-                      progressData.waitingDataSlice!;
+      if (activeSlice == null) {
+        // If the user is waiting for the first training to start.
+        return FloatingActionButton(
+          tooltip: 'Waiting for training to start',
+          backgroundColor: ThemedColors.green,
+          heroTag: null,
+          onPressed: () {
+            final ProgressDataSlice waitingSlice =
+                widget.progressData.waitingDataSlice!;
 
-                  final Training training = waitingSlice.training;
-                  final Level level = waitingSlice.level;
-                  final String levelDescription = level.text;
+            final Training training = waitingSlice.training;
+            final Level level = waitingSlice.level;
+            final String levelDescription = level.text;
 
-                  final DateTime now = TimeHelper.instance.currentTime;
-                  final String remainingTime = getDurationDiff(
-                    now,
-                    training.startingDate,
-                  );
-                  showModalBottomSheet(
-                    context: context,
-                    backgroundColor: Colors.transparent,
-                    builder: (BuildContext context) => TextSheet(
-                      title: 'Waiting for training to start',
-                      text: TextSpan(
-                        children: <TextSpan>[
-                          TextSpan(
-                            text: 'Starting in ',
-                            style: Theme.of(context).textTheme.bodyText2,
-                          ),
-                          TextSpan(
-                            text: '$remainingTime\n',
-                            style: Theme.of(context).textTheme.bodyText1,
-                          ),
-                          TextSpan(
-                            text:
-                                '(On ${formatDate(training.startingDate)})\n\n',
-                            style: Theme.of(context).textTheme.bodyText2,
-                          ),
-                          TextSpan(
-                            text: 'To-do: ',
-                            style: Theme.of(context).textTheme.bodyText1,
-                          ),
-                          TextSpan(
-                            text: levelDescription,
-                            style: Theme.of(context).textTheme.bodyText2,
-                          ),
-                        ],
-                      ),
+            final DateTime now = TimeHelper.instance.currentTime;
+            final String remainingTime = getDurationDiff(
+              now,
+              training.startingDate,
+            );
+            showModalBottomSheet(
+              context: context,
+              backgroundColor: Colors.transparent,
+              builder: (BuildContext context) => TextSheet(
+                title: 'Waiting for training to start',
+                text: TextSpan(
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: 'Starting in ',
+                      style: Theme.of(context).textTheme.bodyText2,
                     ),
-                  );
-                  widget.scrollToActiveTraining();
-                },
-                child: const Icon(Icons.lock_clock),
-              );
-            } else {
-              // During normal use (= when some training is active).
-              final Level currentLevel = activeSlice.level;
-              final Training currentTraining = activeSlice.training;
-
-              if (currentTraining.status == 'ready') {
-                return FloatingActionButton(
-                  tooltip: 'Start Training',
-                  heroTag: null,
-                  onPressed: null,
-                  child: ClipOval(
-                    child: Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: <Color>[
-                            Colors.deepOrange.shade200,
-                            Colors.pinkAccent.shade400,
-                            Colors.purple.shade900,
-                          ],
-                        ),
-                      ),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          onTap: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext buildContext) {
-                                return ConfirmTrainingStart(
-                                  title: 'Confirm Activation',
-                                  toDo: currentLevel.text,
-                                  training: currentTraining,
-                                  onConfirmation: () {
-                                    currentTraining.activate();
-                                    widget.setHomeState();
-                                  },
-                                );
-                              },
-                            );
-                            widget.scrollToActiveTraining();
-                            widget.setHomeState();
-                          },
-                          child: const Icon(Icons.done),
-                        ),
-                      ),
+                    TextSpan(
+                      text: '$remainingTime\n',
+                      style: Theme.of(context).textTheme.bodyText1,
                     ),
+                    TextSpan(
+                      text: '(On ${formatDate(training.startingDate)})\n\n',
+                      style: Theme.of(context).textTheme.bodyText2,
+                    ),
+                    TextSpan(
+                      text: 'To-do: ',
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                    TextSpan(
+                      text: levelDescription,
+                      style: Theme.of(context).textTheme.bodyText2,
+                    ),
+                  ],
+                ),
+              ),
+            );
+            widget.scrollToActiveTraining();
+          },
+          child: const Icon(Icons.lock_clock),
+        );
+      } else {
+        // During normal use (= when some training is active).
+        final Level currentLevel = activeSlice.level;
+        final Training currentTraining = activeSlice.training;
+
+        if (currentTraining.status == 'ready') {
+          return FloatingActionButton(
+            tooltip: 'Start Training',
+            heroTag: null,
+            onPressed: null,
+            child: ClipOval(
+              child: Container(
+                width: double.infinity,
+                height: double.infinity,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: <Color>[
+                      Colors.deepOrange.shade200,
+                      Colors.pinkAccent.shade400,
+                      Colors.purple.shade900,
+                    ],
                   ),
-                );
-              } else {
-                return FloatingActionButton(
-                  tooltip: 'Mark training as done',
-                  backgroundColor: ThemedColors.green,
-                  heroTag: null,
-                  onPressed: () {
-                    currentTraining.incrementReps();
-                    if (currentTraining.doneReps ==
-                        currentTraining.requiredReps) {
-                      Timer(
-                        const Duration(milliseconds: 700),
-                        () => showDialog(
-                          context: context,
-                          builder: (BuildContext buildContext) {
-                            return TrainingDoneAlert();
-                          },
-                        ),
+                ),
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext buildContext) {
+                          return ConfirmTrainingStart(
+                            title: 'Confirm Activation',
+                            toDo: currentLevel.text,
+                            training: currentTraining,
+                            onConfirmation: () {
+                              currentTraining.activate();
+                              widget.setHomeState();
+                            },
+                          );
+                        },
                       );
-                    }
-                    widget.scrollToActiveTraining();
-                    widget.setHomeState();
-                  },
-                  child: GestureDetector(
-                    onLongPress: () {
-                      currentTraining.decrementReps();
                       widget.scrollToActiveTraining();
                       widget.setHomeState();
                     },
                     child: const Icon(Icons.done),
                   ),
+                ),
+              ),
+            ),
+          );
+        } else {
+          return FloatingActionButton(
+            tooltip: 'Mark training as done',
+            backgroundColor: ThemedColors.green,
+            heroTag: null,
+            onPressed: () async {
+              await currentTraining.incrementReps();
+              if (currentTraining.doneReps == currentTraining.requiredReps) {
+                await cancelNotifications();
+                await scheduleNotifications();
+                Timer(
+                  const Duration(milliseconds: 700),
+                  () => showDialog(
+                    context: context,
+                    builder: (BuildContext buildContext) {
+                      return TrainingDoneAlert();
+                    },
+                  ),
                 );
               }
-            }
-          }
+              widget.scrollToActiveTraining();
+              widget.setHomeState();
+            },
+            child: GestureDetector(
+              onLongPress: () async {
+                await currentTraining.decrementReps();
+                if (currentTraining.doneReps ==
+                    currentTraining.requiredReps - 1) {
+                  await cancelNotifications();
+                  await scheduleNotifications();
+                }
+                widget.scrollToActiveTraining();
+                widget.setHomeState();
+              },
+              child: const Icon(Icons.done),
+            ),
+          );
         }
-        return const SizedBox();
-      },
-    );
+      }
+    } else {
+      return const SizedBox();
+    }
   }
 }

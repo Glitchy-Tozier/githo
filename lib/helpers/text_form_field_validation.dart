@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Functions that are used to validate TextFormFields.
+/// Functions that are used to validate TextFormFields.
 
 import 'dart:convert';
 
@@ -145,4 +145,5 @@ String? validateHabitPlanImport(final String input) {
     print(error);
     return 'This format is not valid';
   }
+  return null;
 }

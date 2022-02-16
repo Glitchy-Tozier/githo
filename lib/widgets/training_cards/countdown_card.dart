@@ -18,8 +18,8 @@
 
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:githo/config/custom_widget_themes.dart';
 
+import 'package:githo/config/custom_widget_themes.dart';
 import 'package:githo/helpers/get_duration_diff.dart';
 import 'package:githo/helpers/time_helper.dart';
 

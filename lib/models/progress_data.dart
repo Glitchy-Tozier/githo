@@ -18,6 +18,7 @@
 
 import 'dart:convert';
 
+import 'package:githo/config/data_shortcut.dart';
 import 'package:githo/database/database_helper.dart';
 import 'package:githo/helpers/time_helper.dart';
 import 'package:githo/helpers/type_extentions.dart';
@@ -74,6 +75,42 @@ class ProgressData {
         habit = '',
         levels = <Level>[];
 
+  /// Creates a new [ProgressData], according to the [HabitPlan].
+  ProgressData.fromHabitPlan({
+    required final HabitPlan habitPlan,
+    required final DateTime startingDate,
+    final int startingLevelNr = 1,
+  })  : habitPlanId = habitPlan.id!,
+        isActive = true,
+        fullyCompleted = habitPlan.fullyCompleted,
+        currentStartingDate = startingDate,
+        habit = habitPlan.habit,
+        levels = <Level>[] {
+    for (int i = 0; i < habitPlan.levels.length; i++) {
+      levels.add(
+        Level.fromHabitPlan(
+          levelIndex: i,
+          habitPlan: habitPlan,
+          save: save,
+        ),
+      );
+    }
+
+    final int startingLevelIdx = startingLevelNr - 1;
+    levels[startingLevelIdx].trainingPeriods[0].status = 'waiting for start';
+
+    final PeriodPosition startingPosition = PeriodPosition(
+      levelIdx: startingLevelIdx,
+      periodIdx: 0,
+    );
+    _setTrainingDates(startingPosition);
+
+    if (startingLevelNr > 0) {
+      // Set the passed trainings' status to 'completed'
+      _completePassedPeriods();
+    }
+  }
+
   /// Converts a Map into [ProgressData].
   ProgressData.fromMap(final Map<String, dynamic> map)
       : habitPlanId = map['habitPlanId'] as int,
@@ -113,44 +150,14 @@ class ProgressData {
     return levels;
   }
 
-  /// Adapts [this] to a HabitPlan.
-  void adaptToHabitPlan({
-    required final HabitPlan habitPlan,
-    required final DateTime startingDate,
-    final int startingLevelNr = 1,
-  }) {
-    habitPlanId = habitPlan.id!;
-    isActive = true;
-    fullyCompleted = habitPlan.fullyCompleted;
-    currentStartingDate = startingDate;
-    habit = habitPlan.habit;
-    levels = <Level>[];
-    for (int i = 0; i < habitPlan.levels.length; i++) {
-      levels.add(
-        Level.fromHabitPlan(
-          levelIndex: i,
-          habitPlan: habitPlan,
-          save: save,
-        ),
-      );
-    }
-
-    final int startingLevelIdx = startingLevelNr - 1;
-    levels[startingLevelIdx].trainingPeriods[0].status = 'waiting for start';
-
-    final PeriodPosition startingPosition = PeriodPosition(
-      levelIdx: startingLevelIdx,
-      periodIdx: 0,
-    );
-    _setTrainingDates(startingPosition);
-
-    if (startingLevelNr > 0) {
-      // Set the passed trainings' status to 'completed'
-      _completePassedPeriods();
-    }
-  }
-
   // Regularly used functions
+
+  /// Reverse-engeneers the [trainingTimeIndex] of the [HabitPlan] that was used
+  /// to create this [ProgressData].
+  int get trainingTimeIndex {
+    final int nrOfTrainings = levels[0].trainingPeriods[0].trainings.length;
+    return DataShortcut.maxTrainings.indexOf(nrOfTrainings);
+  }
 
   /// Checks whether [this] has started or if it still is waiting
   /// for the [currentStartingDate] to arrive.
@@ -194,7 +201,7 @@ class ProgressData {
       inNewTraining = true;
     } else {
       final DateTime now = TimeHelper.instance.currentTime;
-      final ProgressDataSlice? currentSlice = _getDataSliceByDate(now);
+      final ProgressDataSlice? currentSlice = getDataSliceByDate(now);
       if (currentSlice != null) {
         final Training activeTraining = activeSlice.training;
         final Training currentTraining = currentSlice.training;
@@ -234,6 +241,7 @@ class ProgressData {
         return activeSlice;
       }
     }
+    return null;
   }
 
   /// Returns the [Level], the [TrainingPeriod], and the [Training]
@@ -245,6 +253,7 @@ class ProgressData {
         return tempResult;
       }
     }
+    return null;
   }
 
   /// Performs the initial activation of the starting [TrainingPeriod].
@@ -272,11 +281,12 @@ class ProgressData {
   ///
   /// Define [startingPeriodPosition] to start at a specified trainingPeriod.
   /// Without any arguments, all trainings will be re-dated.
-  void _setTrainingDates(
-      [final PeriodPosition startingPeriodPosition = const PeriodPosition(
-        levelIdx: 0,
-        periodIdx: 0,
-      )]) {
+  void _setTrainingDates([
+    final PeriodPosition startingPeriodPosition = const PeriodPosition(
+      levelIdx: 0,
+      periodIdx: 0,
+    ),
+  ]) {
     final int startingLevelIdx = startingPeriodPosition.levelIdx;
     final int startingPeriodIdx = startingPeriodPosition.periodIdx;
 
@@ -305,7 +315,7 @@ class ProgressData {
 
   /// Returns the [Level], the [TrainingPeriod], and the [Training]
   /// that aling with on specific [date].
-  ProgressDataSlice? _getDataSliceByDate(final DateTime date) {
+  ProgressDataSlice? getDataSliceByDate(final DateTime date) {
     ProgressDataSlice? result;
     for (final Level level in levels) {
       result = level.getDataSliceByDate(date);
@@ -313,6 +323,7 @@ class ProgressData {
         return result;
       }
     }
+    return null;
   }
 
   /// Resets a number of [TrainingPeriod]s ([remainingRegressions],
@@ -367,7 +378,7 @@ class ProgressData {
 
     if (habitPlan != null) {
       habitPlan.fullyCompleted = true;
-      habitPlan.save();
+      await habitPlan.save();
     }
   }
 
@@ -424,7 +435,7 @@ class ProgressData {
   /// Activate the next [Training] & [TrainingPeriod].
   void _activateCurrentTraining() {
     final DateTime now = TimeHelper.instance.currentTime;
-    final ProgressDataSlice currentSlice = _getDataSliceByDate(now)!;
+    final ProgressDataSlice currentSlice = getDataSliceByDate(now)!;
 
     final Training currentTraining = currentSlice.training;
     currentTraining.status = 'ready';
@@ -435,7 +446,7 @@ class ProgressData {
 
   /// Checks how much time has passed since the last activity and
   /// adapts [ProgressData] (and the database) accordingly.
-  bool updateSelf() {
+  Future<bool> updateSelf() async {
     final bool somethingChanged;
 
     if (_hasStarted && _inNewTraining) {
@@ -454,7 +465,7 @@ class ProgressData {
       _activateCurrentTraining();
 
       // Save all changes
-      save();
+      await save();
     } else {
       somethingChanged = false;
     }

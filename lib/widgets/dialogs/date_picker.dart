@@ -1,6 +1,6 @@
 /* 
  * Githo – An app that helps you gradually form long-lasting habits.
- * Copyright (C) 2021 Florian Thaler
+ * Copyright (C) 2022 Florian Thaler
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,34 +16,35 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* import 'package:flutter/material.dart';
+import 'dart:ui';
+import 'package:flutter/material.dart';
 
-class Settings extends StatelessWidget {
+/// A [DatePickerDialog] with a blurred background.
+
+class DatePicker extends StatelessWidget {
+  const DatePicker({
+    required this.initialDate,
+    required this.firstDate,
+    required this.lastDate,
+    Key? key,
+  }) : super(key: key);
+
+  final DateTime initialDate;
+  final DateTime firstDate;
+  final DateTime lastDate;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(children: <Widget>[
-        const Text(
-          'List of Habits',
-          style: TextStyle(fontSize: 25),
-        ),
-        Center(
-          child: Column(
-            children: <Widget>[
-              const Text('App Settings'),
-              ElevatedButton(
-                  child: const Text('Go to App Info'),
-                  onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      '/appInfo',
-                    );
-                  }),
-            ],
-          ),
-        ),
-      ]),
+    return BackdropFilter(
+      filter: ImageFilter.blur(
+        sigmaX: 5,
+        sigmaY: 5,
+      ),
+      child: DatePickerDialog(
+        initialDate: initialDate,
+        firstDate: firstDate,
+        lastDate: lastDate,
+      ),
     );
   }
 }
- */

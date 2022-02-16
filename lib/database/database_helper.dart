@@ -25,6 +25,7 @@ import 'package:githo/config/data_shortcut.dart';
 import 'package:githo/database/default_habit_plans.dart';
 
 import 'package:githo/models/habit_plan.dart';
+import 'package:githo/models/notification_data.dart';
 import 'package:githo/models/progress_data.dart';
 import 'package:githo/models/settings_data.dart';
 
@@ -36,7 +37,7 @@ class DatabaseHelper {
   /// The singleton-instance of DatabaseHelper.
   static const DatabaseHelper instance = DatabaseHelper._privateConstructor();
   static Database? _db;
-  static const int version = 3;
+  static const int version = 4;
 
   static const String _habitPlansTable = 'habitPlansTable';
   static const String _colId = 'id';
@@ -50,6 +51,14 @@ class DatabaseHelper {
   static const String _colRequiredTrainings = 'requiredTrainings';
   static const String _colRequiredTrainingPeriods = 'requiredTrainingPeriods';
   static const String _colLastChanged = 'lastChanged';
+
+  static const String _notificationDataTable = 'notificationDataTable';
+  static const String _colNotificationsIsEnabled = 'isEnabled';
+  static const String _colKeepNotifyingAfterSuccess =
+      'keepNotifyingAfterSuccess';
+  static const String _colNextActivationDate = 'nextActivationDate';
+  static const String _colHoursBetweenNotifications =
+      'hoursBetweenNotifications';
 
   static const String _progressDataTable = 'progressDataTable';
   static const String _colHabitPlanId = 'habitPlanId';
@@ -117,7 +126,7 @@ $_colLastChanged TEXT
     final List<HabitPlan> defaultHabitPlans = DefaultHabitPlans.habitPlanList;
     for (final HabitPlan habitPlan in defaultHabitPlans) {
       // Initialize default values
-      db.insert(
+      await db.insert(
         _habitPlansTable,
         habitPlan.toMap(),
       );
@@ -127,7 +136,7 @@ $_colLastChanged TEXT
           DefaultHabitPlans.testingHabitPlanList;
       for (final HabitPlan habitPlan in testingHabitPlans) {
         // Initialize default values
-        db.insert(
+        await db.insert(
           _habitPlansTable,
           habitPlan.toMap(),
         );
@@ -146,7 +155,7 @@ CREATE TABLE $_progressDataTable(
 )''';
     await db.execute(commandString);
 
-    db.insert(
+    await db.insert(
       // Initialize default values
       _progressDataTable,
       ProgressData.emptyData().toMap(),
@@ -162,10 +171,26 @@ CREATE TABLE $_settingsTable(
 )''';
     await db.execute(commandString);
 
-    db.insert(
+    await db.insert(
       // Initialize default values
       _settingsTable,
       SettingsData.initialValues().toMap(),
+    );
+
+    // Initialize notifications-table
+    commandString = '''
+CREATE TABLE $_notificationDataTable(
+  $_colNotificationsIsEnabled INTEGER,
+  $_colKeepNotifyingAfterSuccess INTEGER,
+  $_colNextActivationDate TEXT,
+  $_colHoursBetweenNotifications INTEGER
+)''';
+    await db.execute(commandString);
+
+    await db.insert(
+      // Initialize default values
+      _notificationDataTable,
+      NotificationData.emptyData().toMap(),
     );
   }
 
@@ -178,7 +203,8 @@ CREATE TABLE $_settingsTable(
       // The new, pretty SQLite commands can't be used because Android-versions
       // <=10 don't support them.
 
-      db.execute('''
+      db.execute(
+        '''
 CREATE TABLE newHabitPlansTable(
   $_colId INTEGER PRIMARY KEY AUTOINCREMENT,
   $_colHabitIsActive INTEGER,
@@ -192,8 +218,10 @@ CREATE TABLE newHabitPlansTable(
   $_colRequiredTrainingPeriods INTEGER,
   $_colLastChanged TEXT
 );
-''');
-      db.execute('''
+''',
+      );
+      db.execute(
+        '''
 INSERT INTO newHabitPlansTable(
   $_colId,
   $_colHabitIsActive,
@@ -219,16 +247,22 @@ INSERT INTO newHabitPlansTable(
   requiredTrainingPeriods,
   lastChanged
 FROM $_habitPlansTable;
-''');
-      db.execute('''
+''',
+      );
+      db.execute(
+        '''
 DROP TABLE $_habitPlansTable;
-''');
-      db.execute('''
+''',
+      );
+      db.execute(
+        '''
 ALTER TABLE newHabitPlansTable RENAME TO $_habitPlansTable;
-''');
+''',
+      );
 
       // Do the same thing for the ProgressDataTable.
-      db.execute('''
+      db.execute(
+        '''
 CREATE TABLE newProgressDataTable(
   $_colHabitPlanId INTEGER,
   $_colProgIsActive INTEGER,
@@ -237,8 +271,10 @@ CREATE TABLE newProgressDataTable(
   $_colProgHabit TEXT,
   $_colProgLevels TEXT
 );
-''');
-      db.execute('''
+''',
+      );
+      db.execute(
+        '''
 INSERT INTO newProgressDataTable(
   $_colHabitPlanId,
   $_colProgIsActive,
@@ -254,13 +290,18 @@ INSERT INTO newProgressDataTable(
   goal,
   steps
 FROM $_progressDataTable;
-''');
-      db.execute('''
+''',
+      );
+      db.execute(
+        '''
 DROP TABLE $_progressDataTable;
-''');
-      db.execute('''
+''',
+      );
+      db.execute(
+        '''
 ALTER TABLE newProgressDataTable RENAME TO $_progressDataTable;
-''');
+''',
+      );
 
       // Delete unused Table.
       db.execute('DROP TABLE dbVersionTable');
@@ -271,17 +312,23 @@ ALTER TABLE newProgressDataTable RENAME TO $_progressDataTable;
 
     if (currentVersion == 2) {
       // Add the dark-theme-column to the settings-table.
-      db.execute('''
+      db.execute(
+        '''
 ALTER TABLE $_settingsTable ADD $_colAdaptThemeToSystem INTEGER;
-''');
+''',
+      );
       // Add the light-theme-column to the settings-table.
-      db.execute('''
+      db.execute(
+        '''
 ALTER TABLE $_settingsTable ADD $_colLightTheme TEXT;
-''');
+''',
+      );
       // Add the dark-theme-column to the settings-table.
-      db.execute('''
+      db.execute(
+        '''
 ALTER TABLE $_settingsTable ADD $_colDarkTheme TEXT;
-''');
+''',
+      );
 
       // Fill the columns with their default values.
       final Map<String, dynamic> initialSettings =
@@ -294,6 +341,28 @@ ALTER TABLE $_settingsTable ADD $_colDarkTheme TEXT;
 
       // Update the version-number.
       currentVersion = 3;
+    }
+
+    if (currentVersion == 3) {
+      // Create the notifications-table
+      db.execute(
+        '''
+CREATE TABLE $_notificationDataTable(
+  $_colNotificationsIsEnabled INTEGER,
+  $_colKeepNotifyingAfterSuccess INTEGER,
+  $_colNextActivationDate TEXT,
+  $_colHoursBetweenNotifications INTEGER
+)''',
+      );
+
+      db.insert(
+        // Initialize default values
+        _notificationDataTable,
+        NotificationData.emptyData().toMap(),
+      );
+
+      // Update the version-number.
+      currentVersion = 4;
     }
   }
 
@@ -347,6 +416,7 @@ ALTER TABLE $_settingsTable ADD $_colDarkTheme TEXT;
 
       return habitPlan;
     }
+    return null;
   }
 
   /// Returns the HabitPlan that currently is active.
@@ -404,6 +474,28 @@ ALTER TABLE $_settingsTable ADD $_colDarkTheme TEXT;
       _habitPlansTable,
       where: '$_colId = ?',
       whereArgs: <int>[id],
+    );
+    return result;
+  }
+
+  /// Extracts [NotificationData] from the database and returns it.
+  Future<NotificationData> getNotificationData() async {
+    final List<Map<String, Object?>> queryResultList =
+        await getDataMapList(_notificationDataTable);
+    final Map<String, Object?> queryResult = queryResultList[0];
+
+    final NotificationData result = NotificationData.fromMap(queryResult);
+    return result;
+  }
+
+  /// Updates the [notificationData] in the database.
+  Future<int> updateNotificationData(
+    final NotificationData notificationData,
+  ) async {
+    final Database db = await _getDb;
+    final int result = await db.update(
+      _notificationDataTable,
+      notificationData.toMap(),
     );
     return result;
   }

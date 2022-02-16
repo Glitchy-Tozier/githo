@@ -98,8 +98,9 @@ class LevelToDo extends StatelessWidget {
                             ),
                       ),
                       TextSpan(
-                          text: 'To-do: ',
-                          style: Theme.of(context).textTheme.bodyText1),
+                        text: 'To-do: ',
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
                       TextSpan(
                         text: level.text,
                         style: Theme.of(context).textTheme.bodyText2,

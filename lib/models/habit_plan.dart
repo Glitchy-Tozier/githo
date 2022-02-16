@@ -96,7 +96,7 @@ class HabitPlan {
     await DatabaseHelper.instance.updateHabitPlan(this);
   }
 
-  /// Saves this [HabitPlan] in the [Database].
+  /// Deletes this [HabitPlan] from [Database].
   Future<void> delete() async {
     await DatabaseHelper.instance.deleteHabitPlan(id!);
   }

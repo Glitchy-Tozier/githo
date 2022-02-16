@@ -93,7 +93,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
     final List<Widget> widgetList = <Widget>[];
 
     final int requiredReps = habitPlan.requiredReps;
-    final int trainingTimeIndex = habitPlan.trainingTimeIndex.toInt();
+    final int trainingTimeIndex = habitPlan.trainingTimeIndex;
     final String trainingTimeFrame = DataShortcut.timeFrames[trainingTimeIndex];
     final String periodTimeFrame =
         DataShortcut.timeFrames[trainingTimeIndex + 1];
@@ -114,8 +114,9 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
     widgetList.addAll(
       <Widget>[
         CustomListTile(
-            leadingWidget: BulletPoint(),
-            title: 'Perform $amountString $timeFrameStr'),
+          leadingWidget: BulletPoint(),
+          title: 'Perform $amountString $timeFrameStr',
+        ),
         const SizedBox(
           height: StyleData.listRowSpacing,
         ),
@@ -123,23 +124,23 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
     );
 
     const List<int> maxRequired = DataShortcut.maxTrainings;
-    final int maxReps = maxRequired[trainingTimeIndex].toInt();
-    final int currentReps = habitPlan.requiredTrainings.toInt();
+    final int maxReps = maxRequired[trainingTimeIndex];
+    final int currentReps = habitPlan.requiredTrainings;
     widgetList.addAll(
       <Widget>[
         CustomListTile(
-            leadingWidget: BulletPoint(),
-            title: '$currentReps out of $maxReps ${trainingTimeFrame}s '
-                'must be successful in order to advance to the next '
-                '$periodTimeFrame'),
+          leadingWidget: BulletPoint(),
+          title: '$currentReps out of $maxReps ${trainingTimeFrame}s '
+              'must be successful in order to advance to the next '
+              '$periodTimeFrame',
+        ),
         const SizedBox(
           height: StyleData.listRowSpacing,
         ),
       ],
     );
 
-    final int requiredTrainingPeriods =
-        habitPlan.requiredTrainingPeriods.toInt();
+    final int requiredTrainingPeriods = habitPlan.requiredTrainingPeriods;
     final String periodEnder = (requiredTrainingPeriods == 1) ? ' is' : 's are';
     widgetList.addAll(
       <Widget>[

@@ -47,7 +47,7 @@ class EditHabit extends StatefulWidget {
 
   final String title;
   final HabitPlan habitPlan;
-  final void Function(HabitPlan) onSavedFunction;
+  final Future<void> Function(HabitPlan) onSavedFunction;
   final bool displayImportFAB;
 
   @override
@@ -188,7 +188,8 @@ class _EditHabitState extends State<EditHabit> {
                     Padding(
                       padding: StyleData.screenPadding,
                       child: Heading(
-                          '${trainingAdjTimeFrame.capitalize()} action count'),
+                        '${trainingAdjTimeFrame.capitalize()} action count',
+                      ),
                     ),
                     Padding(
                       padding: StyleData.screenPadding,
@@ -439,10 +440,11 @@ class _EditHabitState extends State<EditHabit> {
               tooltip: 'Save',
               backgroundColor: ThemedColors.green,
               heroTag: null,
-              onPressed: () {
+              onPressed: () async {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
-                  widget.onSavedFunction(widget.habitPlan);
+                  await widget.onSavedFunction(widget.habitPlan);
+                  if (!mounted) return;
                   Navigator.pop(context);
                 }
               },

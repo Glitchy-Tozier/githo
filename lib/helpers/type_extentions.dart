@@ -54,3 +54,40 @@ extension IntExtension on int {
     }
   }
 }
+
+/// An extension on [DateTime].
+extension MyDateUtils on DateTime {
+  /// Copies the [DateTime], while overriding the selected attributes.
+  DateTime copyWith({
+    final int? year,
+    final int? month,
+    final int? day,
+    final int? hour,
+    final int? minute,
+    final int? second,
+    final int? millisecond,
+    final int? microsecond,
+  }) {
+    return DateTime(
+      year ?? this.year,
+      month ?? this.month,
+      day ?? this.day,
+      hour ?? this.hour,
+      minute ?? this.minute,
+      second ?? this.second,
+      millisecond ?? this.millisecond,
+      microsecond ?? this.microsecond,
+    );
+  }
+
+  /// Sets [second], [millisecond], and [microsecond] to of the [DateTime] to 0.
+  DateTime clean() {
+    return DateTime(
+      year,
+      month,
+      day,
+      hour,
+      minute,
+    );
+  }
+}

@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:githo/database/database_helper.dart';
+import 'package:githo/helpers/notification_helper.dart';
 import 'package:githo/helpers/time_helper.dart';
 import 'package:githo/models/habit_plan.dart';
 import 'package:githo/models/progress_data.dart';
@@ -31,10 +32,9 @@ void addNewHabit(
 ) {
   final HabitPlan habitPlan = HabitPlan.emptyHabitPlan();
 
-  void _onSaved(final HabitPlan habitPlan) {
-    DatabaseHelper.instance.insertHabitPlan(habitPlan).then(
-          (_) => updatePrevScreens(),
-        );
+  Future<void> _onSaved(final HabitPlan habitPlan) async {
+    await DatabaseHelper.instance.insertHabitPlan(habitPlan);
+    updatePrevScreens();
   }
 
   Navigator.push(
@@ -56,7 +56,7 @@ void editHabit(
   final void Function(HabitPlan) updatePrevScreens,
   final HabitPlan habitPlan,
 ) {
-  void _onSaved(final HabitPlan habitPlan) {
+  Future<void> _onSaved(final HabitPlan habitPlan) async {
     final DateTime now = TimeHelper.instance.currentTime;
     habitPlan.lastChanged = now;
 
@@ -64,13 +64,14 @@ void editHabit(
     // that nothing gets messed up by changing its values.
     if (habitPlan.isActive) {
       // Reset progressData because it should not be active.
-      final ProgressData newProgressdata = ProgressData.emptyData();
-      newProgressdata.save();
+      await ProgressData.emptyData().save();
+      // If ProgressData gets reset, so should everything notifications-related.
+      await annihilateNotifcations();
 
       habitPlan.isActive = false;
     }
 
-    habitPlan.save();
+    await habitPlan.save();
     updatePrevScreens(habitPlan);
   }
 

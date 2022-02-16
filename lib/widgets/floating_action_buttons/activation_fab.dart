@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 
 import 'package:githo/config/custom_widget_themes.dart';
 import 'package:githo/database/database_helper.dart';
+import 'package:githo/helpers/notification_helper.dart';
 import 'package:githo/models/habit_plan.dart';
 import 'package:githo/models/progress_data.dart';
 import 'package:githo/widgets/alert_dialogs/confirm_activation_change.dart';
@@ -45,14 +46,17 @@ class ActivationFAB extends StatelessWidget {
         await habitPlan.save();
 
         // Clear progressData
-        final ProgressData inactiveProgressData = ProgressData.emptyData();
-        await inactiveProgressData.save();
+        await ProgressData.emptyData().save();
+
+        // If ProgressData gets reset, so should everything notifications-
+        // related.
+        await annihilateNotifcations();
 
         // Update previous screens
         updateFunction(habitPlan);
       }
 
-      showDialog(
+      await showDialog(
         context: context,
         builder: (BuildContext buildContext) => ConfirmActivationChange(
           title: 'Confirm Deactivation',
@@ -91,7 +95,7 @@ class ActivationFAB extends StatelessWidget {
           await DatabaseHelper.instance.getProgressData();
 
       if (progressData.isActive) {
-        showDialog(
+        await showDialog(
           context: context,
           builder: (BuildContext buildContext) => ConfirmActivationChange(
             title: 'Confirm Activation',
