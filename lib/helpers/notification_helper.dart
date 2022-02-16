@@ -28,7 +28,7 @@ import 'package:githo/models/progress_data.dart';
 import 'package:githo/models/used_classes/training.dart';
 
 //
-// Notifications:
+// Private fields & methods:
 
 final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -45,7 +45,7 @@ const NotificationDetails _trainingNotificationDetails = NotificationDetails(
   ),
 );
 
-/// Takes a list of trainings and schedules a message for each of them.
+/// Takes a list of [Training]s and schedules a notification for each of them.
 Future<void> _scheduleTrainingNotifications(
   final List<Training> trainings,
   final NotificationData notificationData,
@@ -95,6 +95,7 @@ Future<void> scheduleNotifications() async {
           !activePeriod.hasFailed) {
         final int nrTrainings = activePeriod.trainings.length;
 
+        // Calculate, for which trainings notifications should get scheduled.
         int startingNotifyIdx =
             dataSlice.training.number - activePeriod.trainings.first.number;
         final int scheduledNotificationCount =
@@ -120,8 +121,8 @@ Future<void> scheduleNotifications() async {
               )!,
             ) &&
             dataSlice.training.status != 'done') {
-          // Add one more training to keep the number of "future trainings"
-          // correct
+          // If the current training is 'done', schedule one more notification
+          // to keep the number of "future trainings" correct.
           endingNotifyIdx++;
         }
 

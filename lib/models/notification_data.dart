@@ -96,6 +96,7 @@ class NotificationData {
         Duration(hours: hoursBetweenNotifications),
       );
     }
+    // See whether we succeeded in finding a datetime between the ttwo dates.
     if ((dateTime.isAfter(start) || dateTime.isAtSameMomentAs(start)) &&
         dateTime.isBefore(end)) {
       return dateTime;
