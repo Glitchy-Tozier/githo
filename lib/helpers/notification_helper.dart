@@ -58,7 +58,6 @@ Future<void> _scheduleTrainingNotifications(
     );
     if (notificationTime != null) {
       if (notificationTime.isAfter(TimeHelper.instance.currentTime)) {
-        print('TrainingNotification scheduled for $notificationTime');
         await _flutterLocalNotificationsPlugin.zonedSchedule(
           training.number,
           'Ready for the next training?',
@@ -153,7 +152,6 @@ Future<void> scheduleNotifications() async {
         } else {
           msg = 'A new ${activePeriod.durationText}!';
         }
-        print('NextWeekNotification scheduled for $notifyDateTimeNextPeriod');
         await _flutterLocalNotificationsPlugin.zonedSchedule(
           0,
           msg,
@@ -172,9 +170,6 @@ Future<void> scheduleNotifications() async {
         final int scheduledNotificationCount = 1 +
             dataSlice.period.trainings.length -
             dataSlice.period.requiredTrainings;
-        print('length: ${dataSlice.period.trainings.length}');
-        print('required: ${dataSlice.period.requiredTrainings}');
-        print('scheduledNotificationCount = $scheduledNotificationCount');
 
         final List<Training> notifiedTrainings =
             dataSlice.period.trainings.sublist(
@@ -234,7 +229,6 @@ Future<void> cancelNotification(final int id) async {
 
 /// Cancels all scheduled notifications.
 Future<void> cancelNotifications() async {
-  print('canceled Notifications');
   await _flutterLocalNotificationsPlugin.cancelAll();
 }
 

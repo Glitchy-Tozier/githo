@@ -71,16 +71,11 @@ class NotificationData {
   /// notification-date lies in the future.
   Future<void> updateActivationDate() async {
     final DateTime now = TimeHelper.instance.currentTime;
-    print('updateActivationDate()');
-    print('starting nextActivationDate: $nextActivationDate');
-    print('now: $now');
     while (nextActivationDate.isBefore(now)) {
-      print('nextActivationDate: $nextActivationDate');
       nextActivationDate = nextActivationDate.add(
         Duration(hours: hoursBetweenNotifications),
       );
     }
-    print('nextActivationDate is at: $nextActivationDate\n');
     await save();
   }
 
