@@ -18,6 +18,7 @@
 
 import 'dart:convert';
 
+import 'package:githo/config/data_shortcut.dart';
 import 'package:githo/database/database_helper.dart';
 import 'package:githo/helpers/time_helper.dart';
 import 'package:githo/helpers/type_extentions.dart';
@@ -150,6 +151,13 @@ class ProgressData {
   }
 
   // Regularly used functions
+
+  /// Reverse-engeneers the [trainingTimeIndex] of the [HabitPlan] that was used
+  /// to create this [ProgressData].
+  int get trainingTimeIndex {
+    final int nrOfTrainings = levels[0].trainingPeriods[0].trainings.length;
+    return DataShortcut.maxTrainings.indexOf(nrOfTrainings);
+  }
 
   /// Checks whether [this] has started or if it still is waiting
   /// for the [currentStartingDate] to arrive.
