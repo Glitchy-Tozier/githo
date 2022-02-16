@@ -10,8 +10,8 @@ Such a gradual acquisition <b>reduces the physical/mental strain</b> and helps y
 <strong>Example of a Habit-Plan:</strong>
 Final Habit: <i>Go jogging every morning</i>
 Levels: <i>Every morning...</i>
-<b>• Week 1:</b> Just step outside on the street, then return home.
-<b>• Week 2:</b> Take a walk around your house/building.
-<b>• Week 3:</b> Take a walk spanning 3-5 buildings.
-<b>• Week 4:</b> Take a longer walk and add short jogging-segments into the mix.
-<b>• Week 5:</b> Go jogging. Well done.
+<b>* Week 1:</b> Just step outside on the street, then return home.
+<b>* Week 2:</b> Take a walk around your house/building.
+<b>* Week 3:</b> Take a walk spanning 3-5 buildings.
+<b>* Week 4:</b> Take a longer walk and add short jogging-segments into the mix.
+<b>* Week 5:</b> Go jogging. Well done.

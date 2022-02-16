@@ -9,8 +9,8 @@ Esta adquisición tan gradual reduce la carga física/mental y te ayuda a crear 
 <strong>Plan de Hábito, ejemplo:</strong>
 Hábito final: <i>Trotar cada mañana</i>
 Pasos: <i>Cada mañana...</i>
-<b>• Semana 1:</b> Sólo parate afuera, en la calle. Después volvé a casa.
-<b>• Semana 2:</b> Caminá alrededor de tu casa/edificio.
-<b>• Semana 3:</b> Date un paseo que abarque 3-5 edificios.
-<b>• Semana 4:</b> Date una caminata más grande, y agregá segmentos de trote cortos a la mezcla.
-<b>• Semana 5:</b> Salí a trotar. Bien hecho.
+<b>* Semana 1:</b> Sólo parate afuera, en la calle. Después volvé a casa.
+<b>* Semana 2:</b> Caminá alrededor de tu casa/edificio.
+<b>* Semana 3:</b> Date un paseo que abarque 3-5 edificios.
+<b>* Semana 4:</b> Date una caminata más grande, y agregá segmentos de trote cortos a la mezcla.
+<b>* Semana 5:</b> Salí a trotar. Bien hecho.
