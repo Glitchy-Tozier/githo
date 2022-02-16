@@ -187,7 +187,7 @@ Future<void> scheduleNotifications() async {
   }
 }
 
-/* /// Exists for testing purposes.
+/// Exists for testing purposes.
 Future<void> messageNotification(String msg) async {
 // Show the notification.
   const NotificationDetails platformChannelSpecifics = NotificationDetails(
@@ -211,7 +211,7 @@ Future<void> messageNotification(String msg) async {
   '${TimeHelper.instance.currentTime.minute}.', */
     platformChannelSpecifics,
   );
-} */
+}
 
 /// Cancels all scheduled notifications and resets [NotificationData].
 Future<void> annihilateNotifcations() async {
@@ -238,9 +238,9 @@ Future<void> initNotifications() async {
   // Initialise the plugin. app_icon needs to be a added as a drawable resource
   // to the Android head project
   const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('repeat');
+      AndroidInitializationSettings('ic_notification_icon');
   const LinuxInitializationSettings initializationSettingsLinux =
-      LinuxInitializationSettings(defaultActionName: 'repeat');
+      LinuxInitializationSettings(defaultActionName: '');
   const InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
     linux: initializationSettingsLinux,
