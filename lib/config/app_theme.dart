@@ -1,6 +1,6 @@
 /* 
  * Githo – An app that helps you gradually form long-lasting habits.
- * Copyright (C) 2021 Florian Thaler
+ * Copyright (C) 2022 Florian Thaler
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
