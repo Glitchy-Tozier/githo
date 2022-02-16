@@ -141,14 +141,14 @@ class ActivationFAB extends StatelessWidget {
     final Color color;
 
     if (habitPlan.isActive == true) {
-      color = ThemedColors.green;
+      color = Theme.of(context).primaryColor;
       child = const Icon(
         Icons.star,
       );
     } else {
-      color = Theme.of(context).primaryColor;
+      color = ThemedColors.green;
       child = const Icon(
-        Icons.star_outline,
+        Icons.play_arrow,
       );
     }
 
