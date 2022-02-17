@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'package:githo/config/app_theme.dart';
 import 'package:githo/config/data_shortcut.dart';
@@ -30,9 +31,12 @@ import 'package:githo/screens/splash_screen.dart';
 
 void main() {
   adaptDatabaseToOS();
-  runApp(MyApp());
-  WidgetsFlutterBinding.ensureInitialized();
+  final WidgetsBinding widgetsBinding =
+      WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   initNotifications();
+
+  runApp(MyApp());
 }
 
 /// This widget is the root of the application.
@@ -51,7 +55,10 @@ class _MyAppState extends State<MyApp> {
     });
     DatabaseHelper.instance
         .getSettings()
-        .then((final SettingsData settingsData) => setThemes(settingsData));
+        .then((final SettingsData settingsData) {
+      setThemes(settingsData);
+      FlutterNativeSplash.remove();
+    });
   }
 
   /// Update the app's themes according to what is stored in the database.
@@ -75,7 +82,7 @@ class _MyAppState extends State<MyApp> {
       theme: AppThemeData.instance.currentLightTheme,
       darkTheme: AppThemeData.instance.currentDarkTheme,
       themeMode: AppThemeData.instance.themeMode,
-      home: SplashScreen(),
+      home: ChooseFirstScreen(),
       debugShowCheckedModeBanner: DataShortcut.testing,
     );
   }

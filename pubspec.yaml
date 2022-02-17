@@ -30,9 +30,9 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   # cupertino_icons: ^1.0.2
-
   flutter_launcher_icons: ^0.9.0
   flutter_local_notifications: ^9.2.0
+  flutter_native_splash: ^2.0.4
   flutter_speed_dial: ^4.1.0
   intl: ^0.17.0
   introduction_screen: ^2.1.0
@@ -77,7 +77,7 @@ flutter:
     - assets/introduction_screen_images/defineLevels.jpeg
     - assets/introduction_screen_images/training.jpeg
     - assets/launcher/foreground.png
-    - assets/pixabayColorGradient.jpg
+    - assets/cropped_background.png
     - assets/zoomed_icon.png
 
   # An image asset can refer to one or more resolution-specific "variants", see

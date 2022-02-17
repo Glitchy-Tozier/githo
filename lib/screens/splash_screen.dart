@@ -32,12 +32,7 @@ import 'package:githo/widgets/headings/heading.dart';
 /// Else:
 /// [HomeScreen].
 
-class SplashScreen extends StatefulWidget {
-  @override
-  State<SplashScreen> createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
+class ChooseFirstScreen extends StatelessWidget {
   final Future<SettingsData> _settings = DatabaseHelper.instance.getSettings();
 
   @override
@@ -74,34 +69,8 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
           );
         }
-        return Splash();
+        return const SizedBox();
       },
-    );
-  }
-}
-
-/// The [Widget] displayed on the [SplashScreen].
-class Splash extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
-    final double screenHeight = MediaQuery.of(context).size.height;
-    final double smallestDimension =
-        screenWidth < screenHeight ? screenWidth : screenHeight;
-
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/pixabayColorGradient.jpg'),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: Center(
-        child: Image(
-          image: const AssetImage('assets/launcher/foreground.png'),
-          width: smallestDimension * 0.7,
-        ),
-      ),
     );
   }
 }
