@@ -33,14 +33,14 @@ dependencies:
   flutter_launcher_icons: ^0.9.0
   flutter_local_notifications: ^9.2.0
   flutter_native_splash: ^2.0.4
-  flutter_speed_dial: ^4.1.0
+  flutter_speed_dial: ^5.0.0+1
   intl: ^0.17.0
-  introduction_screen: ^2.1.0
+  introduction_screen: ^3.0.0
   lint: ^1.5.3
   numberpicker: ^2.1.1
   package_info_plus: ^1.0.4
   path_provider: ^2.0.2
-  share_plus: ^2.1.4
+  share_plus: ^3.0.5
   sqflite: ^2.0.0+3
   sqflite_common_ffi: ^2.0.0+1
   timezone: ^0.8.0

@@ -58,7 +58,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         vertical: 20,
         horizontal: StyleData.screenPaddingValue,
       ),
-      descriptionPadding: StyleData.screenPadding,
+      bodyPadding: StyleData.screenPadding,
       imagePadding: const EdgeInsets.only(
         top: 70,
         right: StyleData.screenPaddingValue,
