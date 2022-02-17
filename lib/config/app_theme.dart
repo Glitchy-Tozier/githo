@@ -59,6 +59,21 @@ class AppThemeData with ChangeNotifier {
   /// The singleton-instance of DatabaseHelper.
   static AppThemeData instance = AppThemeData._privateConstructor();
 
+  /// Populates [_adaptToSystem], [_currentLightThemeEnum], and
+  /// [_currentDarkThemeEnum] with the values found in [settingsData].
+  ///
+  /// Then notifies listeners.
+  void adaptToSettings(final SettingsData settingsData) {
+    if (_adaptToSystem != settingsData.adaptThemeToSystem ||
+        _currentLightThemeEnum != settingsData.lightThemeEnum ||
+        _currentDarkThemeEnum != settingsData.darkThemeEnum) {
+      _adaptToSystem = settingsData.adaptThemeToSystem;
+      _currentLightThemeEnum = settingsData.lightThemeEnum;
+      _currentDarkThemeEnum = settingsData.darkThemeEnum;
+      notifyListeners();
+    }
+  }
+
   /// The bool value that decides whether the app should use light and dark mode
   /// or always light mode.
   bool _adaptToSystem = true;

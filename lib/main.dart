@@ -22,7 +22,10 @@ import 'package:flutter/services.dart';
 import 'package:githo/config/app_theme.dart';
 import 'package:githo/config/data_shortcut.dart';
 import 'package:githo/database/adapt_database_to_os.dart';
+import 'package:githo/database/database_helper.dart';
 import 'package:githo/helpers/notification_helper.dart';
+import 'package:githo/helpers/runtime_variables.dart';
+import 'package:githo/models/settings_data.dart';
 import 'package:githo/screens/splash_screen.dart';
 
 void main() {
@@ -46,6 +49,17 @@ class _MyAppState extends State<MyApp> {
     AppThemeData.instance.addListener(() {
       setState(() {});
     });
+    DatabaseHelper.instance
+        .getSettings()
+        .then((final SettingsData settingsData) => setThemes(settingsData));
+  }
+
+  /// Update the app's themes according to what is stored in the database.
+  void setThemes(final SettingsData settingsData) {
+    if (RuntimeVariables.instance.performInitialSetThemes) {
+      RuntimeVariables.instance.performInitialSetThemes = false;
+      AppThemeData.instance.adaptToSettings(settingsData);
+    }
   }
 
   @override

@@ -27,4 +27,8 @@ class RuntimeVariables {
   /// If true, a [WelcomeSheet]-widget will be shown upon the loading of
   /// [HomeScreen].
   bool showWelcomeSheet = true;
+
+  /// Used to avoid calling [AppThemeData.instance.adaptToSettings] every time
+  /// [AppThemeData.instance] calls [notifyListeners()].
+  bool performInitialSetThemes = true;
 }

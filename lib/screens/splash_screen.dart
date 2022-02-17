@@ -18,7 +18,6 @@
 
 import 'package:flutter/material.dart';
 
-import 'package:githo/config/app_theme.dart';
 import 'package:githo/config/style_data.dart';
 import 'package:githo/database/database_helper.dart';
 import 'package:githo/models/settings_data.dart';
@@ -33,17 +32,13 @@ import 'package:githo/widgets/headings/heading.dart';
 /// Else:
 /// [HomeScreen].
 
-class SplashScreen extends StatelessWidget {
-  final Future<SettingsData> _settings = DatabaseHelper.instance.getSettings();
+class SplashScreen extends StatefulWidget {
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
 
-  /// Update the app's themes according to what is stored in the database.
-  Future<void> setThemes(final SettingsData settingsData) async {
-    await AppThemeData.instance.setAdaptToSystem(
-      value: settingsData.adaptThemeToSystem,
-    );
-    await AppThemeData.instance.setNewLightEnum(settingsData.lightThemeEnum);
-    await AppThemeData.instance.setNewDarkEnum(settingsData.darkThemeEnum);
-  }
+class _SplashScreenState extends State<SplashScreen> {
+  final Future<SettingsData> _settings = DatabaseHelper.instance.getSettings();
 
   @override
   Widget build(BuildContext context) {
@@ -58,15 +53,7 @@ class SplashScreen extends StatelessWidget {
             // config isn't needed.
             return OnBoardingScreen();
           } else {
-            return FutureBuilder<void>(
-              future: setThemes(settings),
-              builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return HomeScreen();
-                }
-                return Splash();
-              },
-            );
+            return HomeScreen();
           }
         } else if (snapshot.hasError) {
           // If connection is done but there was an error:
