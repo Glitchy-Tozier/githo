@@ -302,3 +302,14 @@ class TrainingCardThemes {
     }
   }
 }
+
+/// Returns the dialog's background-color with a fitting opacity.
+Color get dialogBackgroundColor {
+  final ThemeEnum currentTheme = AppThemeData.instance.currentThemeEnum;
+  switch (currentTheme) {
+    case ThemeEnum.light:
+      return Colors.white.withOpacity(0.7);
+    default:
+      return Colors.black.withOpacity(0.6);
+  }
+}

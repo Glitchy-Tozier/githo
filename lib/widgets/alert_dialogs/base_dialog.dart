@@ -18,6 +18,7 @@
 
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:githo/config/custom_widget_themes.dart';
 
 /// An [AlertDialog] that serves as the base for all used Dialogues.
 /// This makes styling all of them at once very easy.
@@ -42,7 +43,7 @@ class BaseDialog extends StatelessWidget {
         sigmaY: 5,
       ),
       child: AlertDialog(
-        backgroundColor: Theme.of(context).backgroundColor.withOpacity(0.6),
+        backgroundColor: dialogBackgroundColor,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(7)),
           side: BorderSide(
