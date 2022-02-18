@@ -23,6 +23,7 @@ import 'package:githo/database/database_helper.dart';
 import 'package:githo/models/settings_data.dart';
 import 'package:githo/screens/home_screen.dart';
 import 'package:githo/screens/introduction.dart';
+import 'package:githo/widgets/background.dart';
 import 'package:githo/widgets/headings/heading.dart';
 
 /// A splash screen that decides which view/screen should follow.
@@ -69,7 +70,7 @@ class ChooseFirstScreen extends StatelessWidget {
             ),
           );
         }
-        return const SizedBox();
+        return const Background();
       },
     );
   }
