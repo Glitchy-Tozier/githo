@@ -1,0 +1,2 @@
+• Added notifications (must be manually enabled)
+• Improved design

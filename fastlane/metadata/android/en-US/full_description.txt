@@ -7,6 +7,7 @@ Define levels of your final habit, going from easy to hard. Then start with the 
 
 Such a gradual acquisition <b>reduces the physical/mental strain</b> and helps you <b>create a routine long before arriving at the final habit</b>.
 
+
 <strong>Example of a Habit-Plan:</strong>
 Final Habit: <i>Go jogging every morning</i>
 Levels: <i>Every morning...</i>
@@ -15,3 +16,7 @@ Levels: <i>Every morning...</i>
 <b>* Week 3:</b> Take a walk spanning 3-5 buildings.
 <b>* Week 4:</b> Take a longer walk and add short jogging-segments into the mix.
 <b>* Week 5:</b> Go jogging. Well done.
+
+
+<b>Permissions</b>
+Permissions are only used to display notifications. They were added by <a href="https://pub.dev/packages/flutter_local_notifications">this package</a>.
