@@ -38,7 +38,7 @@ class Background extends StatelessWidget {
         Container(
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/cropped_background.png'),
+              image: ExactAssetImage('assets/cropped_background.png'),
               fit: BoxFit.fill,
             ),
           ),
