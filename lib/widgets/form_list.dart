@@ -29,7 +29,8 @@ class FormList extends StatefulWidget {
     required this.canBeEmpty,
     required this.valuesGetter,
     required this.initValues,
-  });
+    Key? key,
+  }) : super(key: key);
 
   final String fieldName;
   final bool canBeEmpty;

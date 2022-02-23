@@ -51,6 +51,8 @@ import 'package:githo/widgets/screen_ending_spacer.dart';
 /// The regular home-screen, containing the to-do's.
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -231,7 +233,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         }),
                       ],
                     ),
-                    ScreenEndingSpacer(),
+                    const ScreenEndingSpacer(),
                   ],
                 );
               }
@@ -316,7 +318,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute<About>(
-                                builder: (BuildContext context) => About(),
+                                builder: (BuildContext context) =>
+                                    const About(),
                               ),
                             );
                           },
@@ -337,7 +340,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               context,
                               MaterialPageRoute<ThemeSettings>(
                                 builder: (BuildContext context) =>
-                                    ThemeSettings(),
+                                    const ThemeSettings(),
                               ),
                             );
                           },

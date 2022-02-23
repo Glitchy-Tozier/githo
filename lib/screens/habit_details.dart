@@ -48,7 +48,8 @@ class SingleHabitDisplay extends StatefulWidget {
   const SingleHabitDisplay({
     required this.updateFunction,
     required this.habitPlan,
-  });
+    Key? key,
+  }) : super(key: key);
 
   final void Function() updateFunction;
   final HabitPlan habitPlan;
@@ -76,7 +77,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
       widgetList.addAll(
         <Widget>[
           CustomListTile(
-            leadingWidget: BulletPoint(),
+            leadingWidget: const BulletPoint(),
             title: comment,
           ),
           const SizedBox(
@@ -114,7 +115,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
     widgetList.addAll(
       <Widget>[
         CustomListTile(
-          leadingWidget: BulletPoint(),
+          leadingWidget: const BulletPoint(),
           title: 'Perform $amountString $timeFrameStr',
         ),
         const SizedBox(
@@ -129,7 +130,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
     widgetList.addAll(
       <Widget>[
         CustomListTile(
-          leadingWidget: BulletPoint(),
+          leadingWidget: const BulletPoint(),
           title: '$currentReps out of $maxReps ${trainingTimeFrame}s '
               'must be successful in order to advance to the next '
               '$periodTimeFrame',
@@ -145,7 +146,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
     widgetList.addAll(
       <Widget>[
         CustomListTile(
-          leadingWidget: BulletPoint(),
+          leadingWidget: const BulletPoint(),
           title: '$requiredTrainingPeriods successful '
               '$periodTimeFrame$periodEnder required to level up',
         ),
@@ -263,7 +264,7 @@ class _SingleHabitDisplayState extends State<SingleHabitDisplay> {
                 ],
               ),
             ),
-            ScreenEndingSpacer(),
+            const ScreenEndingSpacer(),
           ],
         ),
       ),

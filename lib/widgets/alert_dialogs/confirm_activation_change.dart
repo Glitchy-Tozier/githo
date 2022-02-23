@@ -26,7 +26,8 @@ class ConfirmActivationChange extends StatelessWidget {
     required this.title,
     required this.content,
     required this.onConfirmation,
-  });
+    Key? key,
+  }) : super(key: key);
 
   final String title;
   final Widget content;

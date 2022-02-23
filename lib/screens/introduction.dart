@@ -29,6 +29,8 @@ import 'package:githo/widgets/bordered_image.dart';
 /// The introduction-screen that explains how this app works.
 
 class OnBoardingScreen extends StatefulWidget {
+  const OnBoardingScreen({Key? key}) : super(key: key);
+
   @override
   State<OnBoardingScreen> createState() => _OnBoardingScreenState();
 }
@@ -44,7 +46,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     if (!mounted) return;
     await Navigator.of(context).pushReplacement(
       MaterialPageRoute<HomeScreen>(
-        builder: (_) => HomeScreen(),
+        builder: (_) => const HomeScreen(),
       ),
     );
   }

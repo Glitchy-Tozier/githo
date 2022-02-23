@@ -22,6 +22,8 @@ import 'package:flutter/material.dart';
 /// Used on the habitDetails.dart-screen
 
 class BulletPoint extends StatelessWidget {
+  const BulletPoint({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Text(

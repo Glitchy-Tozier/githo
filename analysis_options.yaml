@@ -1,4 +1,4 @@
-include: package:lint/analysis_options.yaml
+include: package:flutter_lints/flutter.yaml
 
 # Not happy with the default? Customize the rules depending on your needs. 
 # Here are some examples:

@@ -43,7 +43,8 @@ class EditHabit extends StatefulWidget {
     required this.habitPlan,
     required this.onSavedFunction,
     this.displayImportFAB = false,
-  });
+    Key? key,
+  }) : super(key: key);
 
   final String title;
   final HabitPlan habitPlan;
@@ -404,7 +405,7 @@ class _EditHabitState extends State<EditHabit> {
                   ],
                 ),
               ),
-              ScreenEndingSpacer(),
+              const ScreenEndingSpacer(),
             ],
           ),
         ),

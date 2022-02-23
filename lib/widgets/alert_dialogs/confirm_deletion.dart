@@ -29,7 +29,8 @@ class ConfirmDeletion extends StatefulWidget {
   const ConfirmDeletion({
     required this.habitPlan,
     required this.onConfirmation,
-  });
+    Key? key,
+  }) : super(key: key);
 
   final HabitPlan habitPlan;
   final void Function() onConfirmation;

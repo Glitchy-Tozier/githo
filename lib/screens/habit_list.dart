@@ -35,7 +35,10 @@ import 'package:githo/widgets/screen_ending_spacer.dart';
 
 class HabitList extends StatefulWidget {
   /// Lists all habit-plans
-  const HabitList({required this.updateFunction});
+  const HabitList({
+    required this.updateFunction,
+    Key? key,
+  }) : super(key: key);
 
   final void Function() updateFunction;
 
@@ -144,7 +147,7 @@ class _HabitListState extends State<HabitList> {
                             color: color,
                           );
                         } else {
-                          return ScreenEndingSpacer();
+                          return const ScreenEndingSpacer();
                         }
                       },
                     ),

@@ -179,7 +179,7 @@ class _TrainingFABState extends State<TrainingFAB> {
                   () => showDialog(
                     context: context,
                     builder: (BuildContext buildContext) {
-                      return TrainingDoneAlert();
+                      return const TrainingDoneAlert();
                     },
                   ),
                 );

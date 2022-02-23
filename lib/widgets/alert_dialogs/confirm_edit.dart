@@ -22,7 +22,10 @@ import 'package:githo/widgets/alert_dialogs/base_dialog.dart';
 
 class ConfirmEdit extends StatelessWidget {
   /// Returns a dialog that asks 'Do you really want to edit the habit-plan?'
-  const ConfirmEdit({required this.onConfirmation});
+  const ConfirmEdit({
+    required this.onConfirmation,
+    Key? key,
+  }) : super(key: key);
 
   final void Function() onConfirmation;
 

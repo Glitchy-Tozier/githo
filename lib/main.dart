@@ -36,11 +36,13 @@ void main() {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   initNotifications();
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 /// This widget is the root of the application.
 class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   _MyAppState createState() => _MyAppState();
 }

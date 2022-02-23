@@ -23,7 +23,8 @@ class CustomListTile extends StatelessWidget {
   const CustomListTile({
     required this.leadingWidget,
     required this.title,
-  });
+    Key? key,
+  }) : super(key: key);
 
   final Widget leadingWidget;
   final String title;

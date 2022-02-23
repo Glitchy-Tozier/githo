@@ -24,7 +24,10 @@ class ScreenTitle extends StatelessWidget {
   /// Returns a [Text]-Widget styled like a title.
   ///
   /// This represents the highest unit of order.
-  const ScreenTitle(this._text);
+  const ScreenTitle(
+    this._text, {
+    Key? key,
+  }) : super(key: key);
 
   final String _text;
 

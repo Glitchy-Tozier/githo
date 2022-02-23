@@ -30,6 +30,8 @@ import 'package:githo/widgets/list_button.dart';
 /// Contains licenses and important links.
 
 class About extends StatelessWidget {
+  const About({Key? key}) : super(key: key);
+
   /// Opens an URL-[String]. If something goes wrong, the user gets alerted.
   void openUrl(final BuildContext context, final String url) {
     try {

@@ -23,7 +23,10 @@ import 'package:githo/widgets/alert_dialogs/base_dialog.dart';
 
 class ImportHabit extends StatelessWidget {
   /// Returns a dialog that lets you import a habit-plan.
-  ImportHabit({required this.onImport});
+  ImportHabit({
+    required this.onImport,
+    Key? key,
+  }) : super(key: key);
 
   final void Function(String) onImport;
   final GlobalKey<FormFieldState<String?>> formKey =

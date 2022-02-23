@@ -22,7 +22,10 @@ import 'package:flutter/material.dart';
 
 class Heading extends StatelessWidget {
   /// Returns a [Text]-Widget that is styled like a heading.
-  const Heading(this._text);
+  const Heading(
+    this._text, {
+    Key? key,
+  }) : super(key: key);
 
   final String _text;
 

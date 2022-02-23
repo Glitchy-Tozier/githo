@@ -33,7 +33,8 @@ class NotificationDialogue extends StatefulWidget {
     required this.habitPlan,
     required this.progressData,
     required this.onConfirmation,
-  });
+    Key? key,
+  }) : super(key: key);
 
   final HabitPlan habitPlan;
   final ProgressData progressData;

@@ -34,6 +34,8 @@ import 'package:githo/widgets/headings/heading.dart';
 /// [HomeScreen].
 
 class ChooseFirstScreen extends StatelessWidget {
+  ChooseFirstScreen({Key? key}) : super(key: key);
+
   final Future<SettingsData> _settings = DatabaseHelper.instance.getSettings();
 
   @override
@@ -47,9 +49,9 @@ class ChooseFirstScreen extends StatelessWidget {
           if (settings.showIntroduction) {
             // If this is the first start of the app reading the theme-
             // config isn't needed.
-            return OnBoardingScreen();
+            return const OnBoardingScreen();
           } else {
-            return HomeScreen();
+            return const HomeScreen();
           }
         } else if (snapshot.hasError) {
           // If connection is done but there was an error:

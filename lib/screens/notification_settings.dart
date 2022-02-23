@@ -322,7 +322,7 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                       ],
                     ),
                   ),
-                  ScreenEndingSpacer(),
+                  const ScreenEndingSpacer(),
                 ],
               );
             } else if (snapshot.hasError) {

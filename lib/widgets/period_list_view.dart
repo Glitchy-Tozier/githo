@@ -37,7 +37,8 @@ class PeriodListView extends StatefulWidget {
     required this.levelDescription,
     required this.activeCardKey,
     required this.setHomeState,
-  });
+    Key? key,
+  }) : super(key: key);
 
   final TrainingPeriod trainingPeriod;
   final String levelDescription;

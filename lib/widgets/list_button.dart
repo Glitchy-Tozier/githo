@@ -26,7 +26,8 @@ class ListButton extends StatelessWidget {
     required this.onPressed,
     this.text = '',
     this.child,
-  });
+    Key? key,
+  }) : super(key: key);
 
   final Color? color;
   final void Function() onPressed;

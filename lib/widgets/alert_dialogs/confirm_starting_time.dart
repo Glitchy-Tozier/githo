@@ -36,7 +36,8 @@ class ConfirmStartingTime extends StatefulWidget {
   const ConfirmStartingTime({
     required this.habitPlan,
     required this.onConfirmation,
-  });
+    Key? key,
+  }) : super(key: key);
 
   final HabitPlan habitPlan;
   final void Function(HabitPlan) onConfirmation;

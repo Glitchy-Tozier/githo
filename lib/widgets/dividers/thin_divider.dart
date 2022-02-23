@@ -21,7 +21,10 @@ import 'package:githo/config/style_data.dart';
 
 class ThinDivider extends StatelessWidget {
   /// Creates a thin divider.
-  const ThinDivider({this.color});
+  const ThinDivider({
+    this.color,
+    Key? key,
+  }) : super(key: key);
 
   final Color? color;
 

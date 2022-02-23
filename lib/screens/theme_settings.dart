@@ -34,6 +34,8 @@ import 'package:githo/widgets/screen_ending_spacer.dart';
 /// A view that allows for changing the app's theme.
 
 class ThemeSettings extends StatefulWidget {
+  const ThemeSettings({Key? key}) : super(key: key);
+
   @override
   State<ThemeSettings> createState() => _ThemeSettingsState();
 }
@@ -168,7 +170,7 @@ class _ThemeSettingsState extends State<ThemeSettings>
                       ],
                     ),
                   ),
-                  ScreenEndingSpacer(),
+                  const ScreenEndingSpacer(),
                 ],
               ),
             ),

@@ -24,6 +24,8 @@ import 'package:githo/widgets/alert_dialogs/base_dialog.dart';
 /// Notifies the user of his success.
 
 class TrainingDoneAlert extends StatelessWidget {
+  const TrainingDoneAlert({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     const List<String> buttonStrings = <String>[

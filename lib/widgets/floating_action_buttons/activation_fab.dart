@@ -32,7 +32,8 @@ class ActivationFAB extends StatelessWidget {
   const ActivationFAB({
     required this.habitPlan,
     required this.updateFunction,
-  });
+    Key? key,
+  }) : super(key: key);
 
   final HabitPlan habitPlan;
   final void Function(HabitPlan) updateFunction;

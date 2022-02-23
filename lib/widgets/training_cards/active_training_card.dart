@@ -90,7 +90,7 @@ class _ActiveTrainingCardState extends State<ActiveTrainingCard> {
                   () => showDialog(
                     context: context,
                     builder: (BuildContext buildContext) {
-                      return TrainingDoneAlert();
+                      return const TrainingDoneAlert();
                     },
                   ),
                 );

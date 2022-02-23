@@ -29,7 +29,8 @@ class ConfirmTrainingStart extends StatelessWidget {
     required this.toDo,
     required this.training,
     required this.onConfirmation,
-  });
+    Key? key,
+  }) : super(key: key);
 
   final String title;
   final String toDo;
