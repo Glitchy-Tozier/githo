@@ -83,9 +83,10 @@ class _ThemeSettingsState extends State<ThemeSettings>
               child: SwitchListTile(
                 title: const Text('Sync with system'),
                 value: AppThemeData.instance.adaptToSystem,
-                onChanged: (final bool value) => setState(
-                  () => AppThemeData.instance.setAdaptToSystem(value: value),
-                ),
+                onChanged: (final bool value) async {
+                  await AppThemeData.instance.setAdaptToSystem(value: value);
+                  setState(() {});
+                },
               ),
             ),
             const FatDivider(),
