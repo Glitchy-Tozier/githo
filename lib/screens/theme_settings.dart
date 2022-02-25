@@ -114,16 +114,19 @@ class _ThemeSettingsState extends State<ThemeSettings>
                   ThemeButton(
                     changesLightMode: true,
                     themeEnum: ThemeEnum.light,
+                    setStateCallback: setState,
                   ),
                   const SizedBox(width: 10),
                   ThemeButton(
                     changesLightMode: true,
                     themeEnum: ThemeEnum.dark,
+                    setStateCallback: setState,
                   ),
                   const SizedBox(width: 10),
                   ThemeButton(
                     changesLightMode: true,
                     themeEnum: ThemeEnum.black,
+                    setStateCallback: setState,
                   ),
                 ],
               ),
@@ -156,16 +159,19 @@ class _ThemeSettingsState extends State<ThemeSettings>
                         ThemeButton(
                           changesLightMode: false,
                           themeEnum: ThemeEnum.light,
+                          setStateCallback: setState,
                         ),
                         const SizedBox(width: 10),
                         ThemeButton(
                           changesLightMode: false,
                           themeEnum: ThemeEnum.dark,
+                          setStateCallback: setState,
                         ),
                         const SizedBox(width: 10),
                         ThemeButton(
                           changesLightMode: false,
                           themeEnum: ThemeEnum.black,
+                          setStateCallback: setState,
                         ),
                       ],
                     ),
@@ -188,11 +194,13 @@ class ThemeButton extends StatelessWidget {
   ThemeButton({
     required this.changesLightMode,
     required this.themeEnum,
+    required this.setStateCallback,
     Key? key,
   }) : super(key: key);
 
   final bool changesLightMode;
   final ThemeEnum themeEnum;
+  final void Function(void Function()) setStateCallback;
 
   @override
   Widget build(BuildContext context) {
@@ -206,10 +214,16 @@ class ThemeButton extends StatelessWidget {
 
     if (changesLightMode) {
       currentThemeEnum = themeClass.currentLightThemeEnum;
-      onPressed = () => themeClass.setNewLightEnum(themeEnum);
+      onPressed = () async {
+        await themeClass.setNewLightEnum(themeEnum);
+        setStateCallback(() {});
+      };
     } else {
       currentThemeEnum = themeClass.currentDarkThemeEnum;
-      onPressed = () => themeClass.setNewDarkEnum(themeEnum);
+      onPressed = () async {
+        await themeClass.setNewDarkEnum(themeEnum);
+        setStateCallback(() {});
+      };
     }
 
     if (currentThemeEnum == themeEnum) {
