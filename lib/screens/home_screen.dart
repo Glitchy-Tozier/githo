@@ -340,7 +340,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               context,
                               MaterialPageRoute<ThemeSettings>(
                                 builder: (BuildContext context) =>
-                                    const ThemeSettings(),
+                                    ThemeSettings(
+                                  setStateCallback: () {
+                                    setState(() {});
+                                    _scrollToActiveTraining();
+                                  },
+                                ),
                               ),
                             );
                           },

@@ -34,7 +34,13 @@ import 'package:githo/widgets/screen_ending_spacer.dart';
 /// A view that allows for changing the app's theme.
 
 class ThemeSettings extends StatefulWidget {
-  const ThemeSettings({Key? key}) : super(key: key);
+  const ThemeSettings({
+    required this.setStateCallback,
+    Key? key,
+  }) : super(key: key);
+
+  /// A function that updates the previous screen(s).
+  final void Function() setStateCallback;
 
   @override
   State<ThemeSettings> createState() => _ThemeSettingsState();
@@ -116,19 +122,19 @@ class _ThemeSettingsState extends State<ThemeSettings>
                   ThemeButton(
                     changesLightMode: true,
                     themeEnum: ThemeEnum.light,
-                    setStateCallback: setState,
+                    setStateCallback: widget.setStateCallback,
                   ),
                   const SizedBox(width: 10),
                   ThemeButton(
                     changesLightMode: true,
                     themeEnum: ThemeEnum.dark,
-                    setStateCallback: setState,
+                    setStateCallback: widget.setStateCallback,
                   ),
                   const SizedBox(width: 10),
                   ThemeButton(
                     changesLightMode: true,
                     themeEnum: ThemeEnum.black,
-                    setStateCallback: setState,
+                    setStateCallback: widget.setStateCallback,
                   ),
                 ],
               ),
@@ -161,19 +167,19 @@ class _ThemeSettingsState extends State<ThemeSettings>
                         ThemeButton(
                           changesLightMode: false,
                           themeEnum: ThemeEnum.light,
-                          setStateCallback: setState,
+                          setStateCallback: widget.setStateCallback,
                         ),
                         const SizedBox(width: 10),
                         ThemeButton(
                           changesLightMode: false,
                           themeEnum: ThemeEnum.dark,
-                          setStateCallback: setState,
+                          setStateCallback: widget.setStateCallback,
                         ),
                         const SizedBox(width: 10),
                         ThemeButton(
                           changesLightMode: false,
                           themeEnum: ThemeEnum.black,
-                          setStateCallback: setState,
+                          setStateCallback: widget.setStateCallback,
                         ),
                       ],
                     ),
@@ -202,7 +208,7 @@ class ThemeButton extends StatelessWidget {
 
   final bool changesLightMode;
   final ThemeEnum themeEnum;
-  final void Function(void Function()) setStateCallback;
+  final void Function() setStateCallback;
 
   @override
   Widget build(BuildContext context) {
@@ -218,13 +224,13 @@ class ThemeButton extends StatelessWidget {
       currentThemeEnum = themeClass.currentLightThemeEnum;
       onPressed = () async {
         await themeClass.setNewLightEnum(themeEnum);
-        setStateCallback(() {});
+        setStateCallback();
       };
     } else {
       currentThemeEnum = themeClass.currentDarkThemeEnum;
       onPressed = () async {
         await themeClass.setNewDarkEnum(themeEnum);
-        setStateCallback(() {});
+        setStateCallback();
       };
     }
 
