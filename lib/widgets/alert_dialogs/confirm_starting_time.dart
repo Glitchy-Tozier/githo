@@ -131,81 +131,83 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
       title: const Text(
         'Confirm starting time',
       ),
-      content: GestureDetector(
-        onTap: FocusScope.of(context).unfocus,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            RichText(
-              text: TextSpan(
-                children: <TextSpan>[
-                  TextSpan(
-                    text: '$startingPeriod will ',
-                    style: Theme.of(context).textTheme.bodyText2,
+      content: SingleChildScrollView(
+        child: GestureDetector(
+          onTap: FocusScope.of(context).unfocus,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              RichText(
+                text: TextSpan(
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: '$startingPeriod will ',
+                      style: Theme.of(context).textTheme.bodyText2,
+                    ),
+                    TextSpan(
+                      text: 'start on $startingDateString.',
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  TextFormField(
+                    controller: dateController,
+                    decoration: const InputDecoration(
+                      labelText: 'Starting date',
+                    ),
+                    readOnly: true,
+                    onTap: () {
+                      final DateTime now = TimeHelper.instance.currentTime;
+                      showDatePicker(
+                        context: context,
+                        firstDate: firstDate,
+                        initialDate: initialDate,
+                        lastDate: DateTime(now.year + 2000),
+                      ).then(
+                        (DateTime? newStartingDate) {
+                          if (newStartingDate != null) {
+                            setState(() {
+                              initialDate = newStartingDate;
+                            });
+                          }
+                        },
+                      );
+                    },
                   ),
-                  TextSpan(
-                    text: 'start on $startingDateString.',
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
+                  if (widget.habitPlan.levels.length > 1) ...<Widget>[
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      initialValue: startingLevelNr.toString(),
+                      key: formKey,
+                      onFieldSubmitted: (_) => formKey.currentState!.validate(),
+                      textAlign: TextAlign.end,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      decoration: const InputDecoration(
+                        labelText: 'Starting level',
+                      ),
+                      validator: (final String? input) => validateNumberField(
+                        input: input,
+                        maxInput: widget.habitPlan.levels.length,
+                        toFillIn: 'the starting level',
+                        textIfZero: 'Fill in number between 1 and '
+                            '${widget.habitPlan.levels.length}',
+                      ),
+                      onSaved: (final String? input) =>
+                          startingLevelNr = int.parse(input.toString().trim()),
+                    ),
+                  ],
                 ],
               ),
-            ),
-            const SizedBox(height: 20),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                TextFormField(
-                  controller: dateController,
-                  decoration: const InputDecoration(
-                    labelText: 'Starting date',
-                  ),
-                  readOnly: true,
-                  onTap: () {
-                    final DateTime now = TimeHelper.instance.currentTime;
-                    showDatePicker(
-                      context: context,
-                      firstDate: firstDate,
-                      initialDate: initialDate,
-                      lastDate: DateTime(now.year + 2000),
-                    ).then(
-                      (DateTime? newStartingDate) {
-                        if (newStartingDate != null) {
-                          setState(() {
-                            initialDate = newStartingDate;
-                          });
-                        }
-                      },
-                    );
-                  },
-                ),
-                if (widget.habitPlan.levels.length > 1) ...<Widget>[
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    initialValue: startingLevelNr.toString(),
-                    key: formKey,
-                    onFieldSubmitted: (_) => formKey.currentState!.validate(),
-                    textAlign: TextAlign.end,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
-                    decoration: const InputDecoration(
-                      labelText: 'Starting level',
-                    ),
-                    validator: (final String? input) => validateNumberField(
-                      input: input,
-                      maxInput: widget.habitPlan.levels.length,
-                      toFillIn: 'the starting level',
-                      textIfZero: 'Fill in number between 1 and '
-                          '${widget.habitPlan.levels.length}',
-                    ),
-                    onSaved: (final String? input) =>
-                        startingLevelNr = int.parse(input.toString().trim()),
-                  ),
-                ],
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       actions: <Widget>[

@@ -79,64 +79,66 @@ class _NotificationDialogueState extends State<NotificationDialogue> {
       title: const Text(
         'Notifications',
       ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          SwitchListTile(
-            contentPadding: EdgeInsets.zero,
-            title: const Text('Use notifications'),
-            value: notificationData.isEnabled,
-            onChanged: (final bool value) async {
-              setState(() {
-                notificationData.isEnabled = value;
-              });
-            },
-          ),
-          Visibility(
-            visible: notificationData.isEnabled,
-            child: Column(
-              children: <Widget>[
-                const SizedBox(height: 20),
-                RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: 'Every $trainingDuration, you will '
-                            'be notified $notificationTimePrefix ',
-                        style: Theme.of(context).textTheme.bodyText2,
-                      ),
-                      TextSpan(
-                        text: notificationTimeStr,
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                      TextSpan(
-                        text: '.',
-                        style: Theme.of(context).textTheme.bodyText2,
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  controller: dateController,
-                  decoration: const InputDecoration(
-                    labelText: 'Notification Time',
-                  ),
-                  readOnly: true,
-                  onTap: () async {
-                    final DateTime? selectedDateTime = await selectTime();
-
-                    if (selectedDateTime != null) {
-                      notificationData.nextActivationDate = selectedDateTime;
-                      setState(() {});
-                    }
-                  },
-                ),
-              ],
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            SwitchListTile(
+              contentPadding: EdgeInsets.zero,
+              title: const Text('Use notifications'),
+              value: notificationData.isEnabled,
+              onChanged: (final bool value) async {
+                setState(() {
+                  notificationData.isEnabled = value;
+                });
+              },
             ),
-          ),
-        ],
+            Visibility(
+              visible: notificationData.isEnabled,
+              child: Column(
+                children: <Widget>[
+                  const SizedBox(height: 20),
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: 'Every $trainingDuration, you will '
+                              'be notified $notificationTimePrefix ',
+                          style: Theme.of(context).textTheme.bodyText2,
+                        ),
+                        TextSpan(
+                          text: notificationTimeStr,
+                          style: Theme.of(context).textTheme.bodyText1,
+                        ),
+                        TextSpan(
+                          text: '.',
+                          style: Theme.of(context).textTheme.bodyText2,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    controller: dateController,
+                    decoration: const InputDecoration(
+                      labelText: 'Notification Time',
+                    ),
+                    readOnly: true,
+                    onTap: () async {
+                      final DateTime? selectedDateTime = await selectTime();
+
+                      if (selectedDateTime != null) {
+                        notificationData.nextActivationDate = selectedDateTime;
+                        setState(() {});
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
       actions: <Widget>[
         Row(
