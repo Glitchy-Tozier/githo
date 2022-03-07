@@ -19,4 +19,4 @@ Levels: <i>Every morning...</i>
 
 
 <b>Permissions</b>
-Permissions are only used to display notifications. They were added by <a href="https://pub.dev/packages/flutter_local_notifications">this package</a>.
+Permissions are only used to display notifications.
