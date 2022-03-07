@@ -166,7 +166,6 @@ class _TrainingFABState extends State<TrainingFAB> {
           );
         } else {
           return FloatingActionButton(
-            tooltip: 'Mark training as done',
             backgroundColor: ThemedColors.green,
             heroTag: null,
             onPressed: () async {
