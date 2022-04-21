@@ -78,13 +78,13 @@ class _EditHabitState extends State<EditHabit> {
 
   /// Used for receiving the onSaved-values from formList.dart
   // ignore: use_setters_to_change_properties
-  void _getLevelValues(final List<String> valueList) {
+  void _setLevelValues(final List<String> valueList) {
     widget.habitPlan.levels = valueList;
   }
 
   /// Used for receiving the onSaved-values from formList.dart
   // ignore: use_setters_to_change_properties
-  void _getCommentValues(final List<String> valueList) {
+  void _setCommentValues(final List<String> valueList) {
     widget.habitPlan.comments = valueList;
   }
 
@@ -237,8 +237,8 @@ class _EditHabitState extends State<EditHabit> {
                       child: FormList(
                         fieldName: 'level',
                         canBeEmpty: false,
-                        valuesGetter: _getLevelValues,
-                        initValues: levels,
+                        valuesSetter: _setLevelValues,
+                        initialValues: levels,
                       ),
                     ),
                     const ThinDivider(),
@@ -259,8 +259,8 @@ class _EditHabitState extends State<EditHabit> {
                       child: FormList(
                         fieldName: 'comment',
                         canBeEmpty: true,
-                        valuesGetter: _getCommentValues,
-                        initValues: comments,
+                        valuesSetter: _setCommentValues,
+                        initialValues: comments,
                       ),
                     ),
 

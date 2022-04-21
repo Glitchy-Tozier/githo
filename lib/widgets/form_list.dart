@@ -27,15 +27,15 @@ class FormList extends StatefulWidget {
   const FormList({
     required this.fieldName,
     required this.canBeEmpty,
-    required this.valuesGetter,
-    required this.initValues,
+    required this.valuesSetter,
+    required this.initialValues,
     Key? key,
   }) : super(key: key);
 
   final String fieldName;
   final bool canBeEmpty;
-  final void Function(List<String>) valuesGetter;
-  final List<String> initValues;
+  final void Function(List<String>) valuesSetter;
+  final List<String> initialValues;
 
   @override
   _FormListState createState() => _FormListState();
@@ -50,7 +50,7 @@ class _FormListState extends State<FormList> {
     (_) => '',
   );
 
-  late List<String> prevInitValues;
+  late List<String> values;
 
   @override
   void initState() {
@@ -60,12 +60,13 @@ class _FormListState extends State<FormList> {
 
   /// Initialize the List of default-values.
   void _initList() {
-    final List<String> initialValues = List<String>.from(widget.initValues);
+    final List<String> initialValues = List<String>.from(widget.initialValues);
 
+    // Make sure the list isn't empty
     if (initialValues.isEmpty) {
       initialValues.add('');
     }
-
+    // Make sure we have an additional empty slot at the end of our list
     if (initialValues.length < DataShortcut.maxLevelCount) {
       initialValues.add('');
     }
@@ -79,7 +80,7 @@ class _FormListState extends State<FormList> {
     }
 
     // Save current initValues to make sure change is detected.
-    prevInitValues = widget.initValues;
+    values = widget.initialValues;
   }
 
   Widget textFormField(
@@ -177,7 +178,7 @@ class _FormListState extends State<FormList> {
             }
 
             // Send the results back to the EditHabit()-screen.
-            widget.valuesGetter(returnValues);
+            widget.valuesSetter(returnValues);
           },
         ),
         const SizedBox(height: 10),
@@ -187,7 +188,7 @@ class _FormListState extends State<FormList> {
 
   @override
   Widget build(BuildContext context) {
-    if (prevInitValues != widget.initValues) {
+    if (values != widget.initialValues) {
       _initList();
     }
 
