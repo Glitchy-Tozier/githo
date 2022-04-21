@@ -50,8 +50,6 @@ class _FormListState extends State<FormList> {
     (_) => '',
   );
 
-  late List<String> values;
-
   @override
   void initState() {
     super.initState();
@@ -60,8 +58,8 @@ class _FormListState extends State<FormList> {
 
   /// Initialize the List of default-values.
   void _initList() {
+    // The values that will be placed inside [formFields]
     final List<String> initialValues = List<String>.from(widget.initialValues);
-
     // Make sure the list isn't empty
     if (initialValues.isEmpty) {
       initialValues.add('');
@@ -78,9 +76,6 @@ class _FormListState extends State<FormList> {
         textFormField(widget.fieldName, i, initialValues[i]),
       );
     }
-
-    // Save current initValues to make sure change is detected.
-    values = widget.initialValues;
   }
 
   Widget textFormField(
@@ -188,10 +183,6 @@ class _FormListState extends State<FormList> {
 
   @override
   Widget build(BuildContext context) {
-    if (values != widget.initialValues) {
-      _initList();
-    }
-
     return Column(
       children: <Widget>[
         ...formFields,
