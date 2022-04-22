@@ -27,20 +27,19 @@ class DefaultHabitPlans {
       habit: 'Consistently go jogging',
       requiredReps: 1,
       levels: const <String>[
-        '''
-Dress up and step outside on the street. 
-Then go back and do whatever you want to do.''',
+        'Dress up and step outside on the street. '
+            'Then go back and do whatever you want to do.',
         'Take a walk around your house/building',
         'Take a walk spanning 3-5 buildings',
         'Jog around 3-5 buildings',
         'Go jogging. Well done.'
       ],
       comments: const <String>[
-        '''
-Dress up in your running-gear for each challenge, even for the first one.''',
-        '''
-Whatever level you're on, don't overdo it. 
-We want to go jogging CONSISTENTLY, not twice and then have a hurting foot for a week.'''
+        'Dress up in your running-gear for each challenge, '
+            'even for the first one.',
+        "Whatever level you're on, don't overdo it. "
+            'We want to go jogging CONSISTENTLY, '
+            'not just twice and then have a hurting foot for a week.'
       ],
       trainingTimeIndex: 1,
       requiredTrainings: 6,
@@ -58,12 +57,10 @@ We want to go jogging CONSISTENTLY, not twice and then have a hurting foot for a
         'Ask for the time',
         'Ask for directions to a landmark/location',
         'Give a compliment',
-        '''
-Ask a simple question about the other Person 
-(For example: 'Where did you get your headphones?')''',
-        '''
-Give a compliment, then don't walk on. After they say something, reply. 
-(After your reply, you may run away, screaming in terror.)''',
+        'Ask a simple question about the other Person '
+            "(For example: 'Where did you get your headphones?')",
+        "Give a compliment, then don't walk on. After they say something, "
+            'reply. (After your reply, you may run away, screaming in terror.)',
         'Make small-talk about anything'
       ],
       comments: const <String>['Approach one male and one female'],
@@ -90,13 +87,12 @@ Give a compliment, then don't walk on. After they say something, reply.
         'This is level faive',
       ],
       comments: const <String>[
-        '''
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.''',
-        '''
-Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium 
-doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo 
-inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.''',
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed '
+            'do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+        'Sed ut perspiciatis unde omnis iste natus error sit voluptatem '
+            'accusantium doloremque laudantium, totam rem aperiam, eaque ipsa '
+            'quae ab illo inventore veritatis et quasi architecto beatae '
+            'vitae dicta sunt explicabo.',
       ],
       trainingTimeIndex: 1,
       requiredTrainings: 1,
