@@ -27,8 +27,8 @@ class WelcomeSheet extends StatelessWidget {
   /// Returns a bottom sheet that welcomes the user and
   /// supplies the most relevant information.
   const WelcomeSheet({
-    required this.progressData,
     Key? key,
+    required this.progressData,
   }) : super(key: key);
 
   final ProgressData progressData;

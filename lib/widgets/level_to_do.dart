@@ -33,10 +33,10 @@ class LevelToDo extends StatelessWidget {
   /// Create the to-do-section for a whole [Level].
   /// Used in the [HomeScreen].
   const LevelToDo({
+    Key? key,
     required this.activeCardKey,
     required this.level,
     required this.setHomeState,
-    Key? key,
   }) : super(key: key);
 
   final Level level;

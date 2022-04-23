@@ -23,10 +23,10 @@ import 'package:githo/widgets/alert_dialogs/base_dialog.dart';
 class ConfirmActivationChange extends StatelessWidget {
   /// Returns a dialog that asks 'Do you really want to activate/deactivate the habit-plan?'
   const ConfirmActivationChange({
+    Key? key,
     required this.title,
     required this.content,
     required this.onConfirmation,
-    Key? key,
   }) : super(key: key);
 
   final String title;

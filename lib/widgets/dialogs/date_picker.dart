@@ -23,10 +23,10 @@ import 'package:flutter/material.dart';
 
 class DatePicker extends StatelessWidget {
   const DatePicker({
+    Key? key,
     required this.initialDate,
     required this.firstDate,
     required this.lastDate,
-    Key? key,
   }) : super(key: key);
 
   final DateTime initialDate;

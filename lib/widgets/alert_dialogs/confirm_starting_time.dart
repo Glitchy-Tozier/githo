@@ -34,9 +34,9 @@ class ConfirmStartingTime extends StatefulWidget {
   /// 1. when his journey will start
   /// 2. what level it should start with.
   const ConfirmStartingTime({
+    Key? key,
     required this.habitPlan,
     required this.onConfirmation,
-    Key? key,
   }) : super(key: key);
 
   final HabitPlan habitPlan;

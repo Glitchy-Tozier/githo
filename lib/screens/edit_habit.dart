@@ -39,11 +39,11 @@ import 'package:githo/widgets/screen_ending_spacer.dart';
 class EditHabit extends StatefulWidget {
   /// Edit the values of the input [HabitPlan].
   const EditHabit({
+    Key? key,
     required this.title,
     required this.habitPlan,
     required this.onSavedFunction,
     this.displayImportFAB = false,
-    Key? key,
   }) : super(key: key);
 
   final String title;

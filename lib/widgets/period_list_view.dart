@@ -33,11 +33,11 @@ import 'package:githo/widgets/training_cards/training_card.dart';
 class PeriodListView extends StatefulWidget {
   /// Creates one of those horizontal training-listViews made out of cards.
   const PeriodListView({
+    Key? key,
     required this.trainingPeriod,
     required this.levelDescription,
     required this.activeCardKey,
     required this.setHomeState,
-    Key? key,
   }) : super(key: key);
 
   final TrainingPeriod trainingPeriod;

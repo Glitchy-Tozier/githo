@@ -22,12 +22,12 @@ class GradientTrainingCard extends StatelessWidget {
   /// Returns a beautiful training-card that is used
   /// for the current training if it hasn't been started yet.
   const GradientTrainingCard({
+    Key? key,
     required this.horizontalMargin,
     required this.cardWidth,
     required this.cardHeight,
     required this.onTap,
     required this.textSize,
-    Key? key,
   }) : super(key: key);
 
   final double horizontalMargin;

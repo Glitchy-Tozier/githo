@@ -25,11 +25,11 @@ import 'package:githo/config/app_theme.dart';
 
 class CustomLicensePage extends StatelessWidget {
   const CustomLicensePage({
+    Key? key,
     this.applicationIcon,
     this.applicationLegalese,
     this.applicationName,
     this.applicationVersion,
-    Key? key,
   }) : super(key: key);
 
   final Widget? applicationIcon;

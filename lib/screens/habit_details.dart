@@ -46,9 +46,9 @@ class SingleHabitDisplay extends StatefulWidget {
   /// - comments,
   /// - and levels.
   const SingleHabitDisplay({
+    Key? key,
     required this.updateFunction,
     required this.habitPlan,
-    Key? key,
   }) : super(key: key);
 
   final void Function() updateFunction;

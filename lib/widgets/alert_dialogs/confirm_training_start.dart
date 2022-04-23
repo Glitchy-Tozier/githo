@@ -25,11 +25,11 @@ class ConfirmTrainingStart extends StatelessWidget {
   /// Returns a dialog that lets the user confirm that he really
   /// wants to start the current training.
   const ConfirmTrainingStart({
+    Key? key,
     required this.title,
     required this.toDo,
     required this.training,
     required this.onConfirmation,
-    Key? key,
   }) : super(key: key);
 
   final String title;

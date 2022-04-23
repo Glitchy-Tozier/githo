@@ -22,11 +22,11 @@ import 'package:githo/config/custom_widget_themes.dart';
 class ListButton extends StatelessWidget {
   /// The default list-item used in this application.
   const ListButton({
+    Key? key,
     this.color,
     required this.onPressed,
     this.text = '',
     this.child,
-    Key? key,
   }) : super(key: key);
 
   final Color? color;

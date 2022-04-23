@@ -22,13 +22,13 @@ import 'package:githo/config/custom_widget_themes.dart';
 class TrainingCard extends StatelessWidget {
   /// Returns the default training-card.
   const TrainingCard({
+    Key? key,
     required this.horizontalMargin,
     required this.cardWidth,
     required this.cardHeight,
     this.shadowColor,
     required this.color,
     required this.child,
-    Key? key,
   }) : super(key: key);
 
   final double horizontalMargin;

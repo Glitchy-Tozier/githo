@@ -25,10 +25,10 @@ import 'package:githo/config/custom_widget_themes.dart';
 
 class BaseDialog extends StatelessWidget {
   const BaseDialog({
+    Key? key,
     this.title,
     this.content,
     this.actions,
-    Key? key,
   }) : super(key: key);
 
   final Widget? title;

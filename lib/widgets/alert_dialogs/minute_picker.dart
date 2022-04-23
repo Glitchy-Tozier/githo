@@ -26,9 +26,9 @@ import 'package:githo/widgets/alert_dialogs/base_dialog.dart';
 
 class MinutePicker extends StatefulWidget {
   const MinutePicker({
+    Key? key,
     required this.initialTime,
     required this.resultCallback,
-    Key? key,
   }) : super(key: key);
 
   final TimeOfDay initialTime;

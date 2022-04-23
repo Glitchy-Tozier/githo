@@ -23,8 +23,8 @@ import 'package:flutter/material.dart';
 
 class TimePicker extends StatelessWidget {
   const TimePicker({
-    required this.initialTime,
     Key? key,
+    required this.initialTime,
   }) : super(key: key);
 
   final TimeOfDay initialTime;

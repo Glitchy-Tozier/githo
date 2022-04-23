@@ -24,8 +24,8 @@ import 'package:githo/widgets/alert_dialogs/base_dialog.dart';
 class ImportHabit extends StatelessWidget {
   /// Returns a dialog that lets you import a habit-plan.
   ImportHabit({
-    required this.onImport,
     Key? key,
+    required this.onImport,
   }) : super(key: key);
 
   final void Function(String) onImport;

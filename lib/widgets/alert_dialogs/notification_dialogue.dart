@@ -30,10 +30,10 @@ import 'package:githo/widgets/alert_dialogs/base_dialog.dart';
 class NotificationDialogue extends StatefulWidget {
   /// Returns a dialog that asks 'Do you really want to edit the habit-plan?'
   const NotificationDialogue({
+    Key? key,
     required this.habitPlan,
     required this.progressData,
     required this.onConfirmation,
-    Key? key,
   }) : super(key: key);
 
   final HabitPlan habitPlan;

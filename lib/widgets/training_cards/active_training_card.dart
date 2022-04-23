@@ -27,13 +27,13 @@ import 'package:githo/widgets/alert_dialogs/training_done.dart';
 class ActiveTrainingCard extends StatefulWidget {
   /// Returns the default training-card.
   const ActiveTrainingCard({
+    Key? key,
     required this.training,
     required this.horizontalMargin,
     required this.cardWidth,
     required this.cardHeight,
     required this.textSize,
     required this.setHomeState,
-    Key? key,
   }) : super(key: key);
 
   final Training training;

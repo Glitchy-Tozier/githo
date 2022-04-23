@@ -22,8 +22,8 @@ class BorderedImage extends StatelessWidget {
   /// Loads an image, wraps a pretty border around it, and then returns it.
   const BorderedImage(
     this.location, {
-    this.width = double.infinity,
     Key? key,
+    this.width = double.infinity,
   }) : super(key: key);
 
   final String location;

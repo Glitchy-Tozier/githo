@@ -23,9 +23,9 @@ import 'package:githo/widgets/headings/heading.dart';
 class TextSheet extends StatelessWidget {
   /// Returns a bottom-sheet containing the input title and text(span).
   const TextSheet({
+    Key? key,
     required this.title,
     required this.text,
-    Key? key,
   }) : super(key: key);
 
   final String title;

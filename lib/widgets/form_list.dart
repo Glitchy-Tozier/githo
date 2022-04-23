@@ -25,12 +25,12 @@ class FormList extends StatefulWidget {
   /// Creates a [Column] of [TextFormField]s that manipulate a given
   /// [List] of [String]s.
   const FormList({
+    Key? key,
     required this.header,
     required this.fieldName,
     required this.canBeEmpty,
     required List<String> initialValues,
     required this.valuesSetter,
-    Key? key,
   })  : values = initialValues,
         super(key: key);
 

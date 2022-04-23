@@ -36,8 +36,8 @@ import 'package:githo/widgets/screen_ending_spacer.dart';
 class HabitList extends StatefulWidget {
   /// Lists all habit-plans
   const HabitList({
-    required this.updateFunction,
     Key? key,
+    required this.updateFunction,
   }) : super(key: key);
 
   final void Function() updateFunction;

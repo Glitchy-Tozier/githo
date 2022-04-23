@@ -38,10 +38,10 @@ import 'package:githo/widgets/bottom_sheets/text_sheet.dart';
 
 class TrainingFAB extends StatefulWidget {
   const TrainingFAB({
+    Key? key,
     required this.progressData,
     required this.scrollToActiveTraining,
     required this.setHomeState,
-    Key? key,
   }) : super(key: key);
   final ProgressData progressData;
   final void Function() scrollToActiveTraining;

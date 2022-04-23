@@ -30,9 +30,9 @@ class ActivationFAB extends StatelessWidget {
   /// The middle FloatingActionButton in the habitDetals.dart-screen.
   /// It's used to activate/deactivate the viewed habit.
   const ActivationFAB({
+    Key? key,
     required this.habitPlan,
     required this.updateFunction,
-    Key? key,
   }) : super(key: key);
 
   final HabitPlan habitPlan;

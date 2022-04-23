@@ -35,8 +35,8 @@ import 'package:githo/widgets/screen_ending_spacer.dart';
 
 class ThemeSettings extends StatefulWidget {
   const ThemeSettings({
-    required this.setStateCallback,
     Key? key,
+    required this.setStateCallback,
   }) : super(key: key);
 
   /// A function that updates the previous screen(s).
@@ -200,10 +200,10 @@ class _ThemeSettingsState extends State<ThemeSettings>
 class ThemeButton extends StatelessWidget {
   // ignore: prefer_const_constructors_in_immutables
   ThemeButton({
+    Key? key,
     required this.changesLightMode,
     required this.themeEnum,
     required this.setStateCallback,
-    Key? key,
   }) : super(key: key);
 
   final bool changesLightMode;

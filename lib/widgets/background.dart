@@ -24,8 +24,8 @@ import 'package:githo/config/style_data.dart';
 class Background extends StatelessWidget {
   /// Returns a background and places the child in the foreground.
   const Background({
-    this.child = const SizedBox(),
     Key? key,
+    this.child = const SizedBox(),
   }) : super(key: key);
 
   final Widget child;

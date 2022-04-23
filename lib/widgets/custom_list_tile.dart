@@ -21,9 +21,9 @@ import 'package:flutter/material.dart';
 class CustomListTile extends StatelessWidget {
   /// A list-item used in the habitDetails.dart-screen.
   const CustomListTile({
+    Key? key,
     required this.leadingWidget,
     required this.title,
-    Key? key,
   }) : super(key: key);
 
   final Widget leadingWidget;

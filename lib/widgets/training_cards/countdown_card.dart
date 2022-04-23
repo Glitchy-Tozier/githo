@@ -27,6 +27,7 @@ class CountdownCard extends StatefulWidget {
   /// Returns a training-card that displays a countdown for
   /// how much time is left until the training starts.
   const CountdownCard({
+    Key? key,
     required this.horizontalMargin,
     required this.cardWidth,
     required this.cardHeight,
@@ -34,7 +35,6 @@ class CountdownCard extends StatefulWidget {
     required this.textSize,
     required this.color,
     this.onTap,
-    Key? key,
   }) : super(key: key);
 
   final double horizontalMargin;

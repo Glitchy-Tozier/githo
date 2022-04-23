@@ -26,6 +26,7 @@ import 'package:githo/helpers/type_extentions.dart';
 class FormListItem extends StatefulWidget {
   /// A [TextFormField] with some added functionality.
   const FormListItem({
+    Key? key,
     required this.canBeEmpty,
     required this.value,
     required this.itemName,
@@ -33,7 +34,6 @@ class FormListItem extends StatefulWidget {
     required this.onChanged,
     required this.removalCallback,
     required this.addingCallback,
-    Key? key,
   })  : number = index + 1,
         super(key: key);
 

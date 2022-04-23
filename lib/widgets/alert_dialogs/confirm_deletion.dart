@@ -27,9 +27,9 @@ class ConfirmDeletion extends StatefulWidget {
   /// Returns a dialog that asks 'Do you really want to delete the habit-plan?'
   /// If the user says confirms, the habit-plan is deleted.
   const ConfirmDeletion({
+    Key? key,
     required this.habitPlan,
     required this.onConfirmation,
-    Key? key,
   }) : super(key: key);
 
   final HabitPlan habitPlan;
