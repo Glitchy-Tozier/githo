@@ -51,6 +51,7 @@ class FormListItem extends StatefulWidget {
 }
 
 class _FormListItemState extends State<FormListItem> {
+  final FocusNode textFieldFocusNode = FocusNode();
   bool showOptions = false;
   Timer? timer;
 
@@ -74,7 +75,11 @@ class _FormListItemState extends State<FormListItem> {
             timer?.cancel();
             if (hasFocus) {
               setState(
-                () => showOptions = true,
+                () {
+                  showOptions = true;
+                  // Make sue the TextFormField really was focused
+                  textFieldFocusNode.requestFocus();
+                },
               );
             } else {
               // Delay switch to create time To press a button without the
@@ -88,6 +93,7 @@ class _FormListItemState extends State<FormListItem> {
             }
           },
           child: TextFormField(
+            focusNode: textFieldFocusNode,
             initialValue: widget.value,
             decoration: InputDecoration(labelText: fieldName),
             maxLength: DataShortcut.maxLevelCharacters,
