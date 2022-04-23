@@ -405,59 +405,61 @@ class _EditHabitState extends State<EditHabit> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Padding(
-        padding: StyleData.floatingActionButtonPadding,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Visibility(
-              visible: widget.displayImportFAB,
-              child: FloatingActionButton(
-                backgroundColor: ThemedColors.lightBlue,
-                tooltip: 'Import habit-plan.',
+      floatingActionButton: ExcludeFocus(
+        child: Padding(
+          padding: StyleData.floatingActionButtonPadding,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Visibility(
+                visible: widget.displayImportFAB,
+                child: FloatingActionButton(
+                  backgroundColor: ThemedColors.lightBlue,
+                  tooltip: 'Import habit-plan.',
+                  heroTag: null,
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext buildContext) => ImportHabit(
+                        onImport: (final String json) {
+                          setState(() {
+                            _updateTextFormFields(json);
+                          });
+                        },
+                      ),
+                    );
+                  },
+                  child: const Icon(Icons.download),
+                ),
+              ),
+              FloatingActionButton(
+                tooltip: 'Save',
+                backgroundColor: ThemedColors.green,
                 heroTag: null,
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext buildContext) => ImportHabit(
-                      onImport: (final String json) {
-                        setState(() {
-                          _updateTextFormFields(json);
-                        });
-                      },
-                    ),
-                  );
-                },
-                child: const Icon(Icons.download),
-              ),
-            ),
-            FloatingActionButton(
-              tooltip: 'Save',
-              backgroundColor: ThemedColors.green,
-              heroTag: null,
-              onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    _formKey.currentState!.save();
 
-                  // Remove all empty comments
-                  widget.habitPlan.comments.removeWhere(
-                    (final String c) => c == '',
-                  );
-                  // (except one, if there's no other ones)
-                  if (widget.habitPlan.comments.isEmpty) {
-                    widget.habitPlan.comments.add('');
+                    // Remove all empty comments
+                    widget.habitPlan.comments.removeWhere(
+                      (final String c) => c == '',
+                    );
+                    // (except one, if there's no other ones)
+                    if (widget.habitPlan.comments.isEmpty) {
+                      widget.habitPlan.comments.add('');
+                    }
+
+                    await widget.onSavedFunction(widget.habitPlan);
+                    if (!mounted) return;
+                    Navigator.pop(context);
                   }
-
-                  await widget.onSavedFunction(widget.habitPlan);
-                  if (!mounted) return;
-                  Navigator.pop(context);
-                }
-              },
-              child: const Icon(
-                Icons.save,
+                },
+                child: const Icon(
+                  Icons.save,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
