@@ -76,13 +76,13 @@ class _EditHabitState extends State<EditHabit> {
   final List<String> _adjTimeFrames = DataShortcut.adjectiveTimeFrames;
   final List<int> _maxTrainings = DataShortcut.maxTrainings;
 
-  /// Used for receiving the onSaved-values from formList.dart
+  /// Used for setting the onSaved-values from form_list.dart
   // ignore: use_setters_to_change_properties
   void _setLevelValues(final List<String> valueList) {
     widget.habitPlan.levels = valueList;
   }
 
-  /// Used for receiving the onSaved-values from formList.dart
+  /// Used for setting the onSaved-values from form_list.dart
   // ignore: use_setters_to_change_properties
   void _setCommentValues(final List<String> valueList) {
     widget.habitPlan.comments = valueList;
@@ -228,17 +228,14 @@ class _EditHabitState extends State<EditHabit> {
                     const ThinDivider(),
 
                     // Create the level-form-fields
-                    const Padding(
-                      padding: StyleData.screenPadding,
-                      child: Heading('Levels of the habit'),
-                    ),
                     Padding(
                       padding: StyleData.screenPadding,
                       child: FormList(
+                        header: const Heading('Levels of the habit'),
                         fieldName: 'level',
                         canBeEmpty: false,
-                        valuesSetter: _setLevelValues,
                         initialValues: levels,
+                        valuesSetter: _setLevelValues,
                       ),
                     ),
                     const ThinDivider(),
@@ -246,21 +243,18 @@ class _EditHabitState extends State<EditHabit> {
                     // Create the form-fields for your personal comments
                     Padding(
                       padding: StyleData.screenPadding,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const <Widget>[
-                          Heading('Comments'),
-                          Text('(Optional)'),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: StyleData.screenPadding,
                       child: FormList(
+                        header: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: const <Widget>[
+                            Heading('Comments'),
+                            Text('(Optional)'),
+                          ],
+                        ),
                         fieldName: 'comment',
                         canBeEmpty: true,
-                        valuesSetter: _setCommentValues,
                         initialValues: comments,
+                        valuesSetter: _setCommentValues,
                       ),
                     ),
 
@@ -444,6 +438,16 @@ class _EditHabitState extends State<EditHabit> {
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
+
+                  // Remove all empty comments
+                  widget.habitPlan.comments.removeWhere(
+                    (final String c) => c == '',
+                  );
+                  // (except one, if there's no other ones)
+                  if (widget.habitPlan.comments.isEmpty) {
+                    widget.habitPlan.comments.add('');
+                  }
+
                   await widget.onSavedFunction(widget.habitPlan);
                   if (!mounted) return;
                   Navigator.pop(context);
