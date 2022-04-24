@@ -104,7 +104,7 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
     return initialDate;
   }
 
-  /// Adapts the database so that [initialHabitPlan] is active.
+  /// Adapts the database so that the given [HabitPlan] is active.
   Future<void> _startHabitPlan() async {
     // Mark the old plan as inactive.
     final List<HabitPlan> activeHabitPlanList =

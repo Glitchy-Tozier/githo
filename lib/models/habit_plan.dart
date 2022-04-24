@@ -79,6 +79,10 @@ class HabitPlan {
         requiredTrainingPeriods = map['requiredTrainingPeriods'] as int,
         lastChanged = DateTime.parse(map['lastChanged'] as String);
 
+  /// Clone the given [HabitPlan] to create a new object that can't influence
+  /// the original one.
+  HabitPlan clone() => HabitPlan.fromMap(toMap());
+
   final int? id;
   bool isActive;
   bool fullyCompleted;

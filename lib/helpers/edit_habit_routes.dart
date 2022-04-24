@@ -42,7 +42,7 @@ void addNewHabit(
     MaterialPageRoute<EditHabit>(
       builder: (BuildContext context) => EditHabit(
         title: 'Add Habit-Plan',
-        habitPlan: habitPlan,
+        initialHabitPlan: habitPlan,
         onSavedFunction: _onSaved,
         displayImportFAB: true,
       ),
@@ -80,7 +80,7 @@ void editHabit(
     MaterialPageRoute<EditHabit>(
       builder: (BuildContext context) => EditHabit(
         title: 'Edit Habit-Plan',
-        habitPlan: habitPlan,
+        initialHabitPlan: habitPlan,
         onSavedFunction: _onSaved,
       ),
     ),

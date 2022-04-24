@@ -41,13 +41,13 @@ class EditHabit extends StatefulWidget {
   const EditHabit({
     Key? key,
     required this.title,
-    required this.habitPlan,
+    required this.initialHabitPlan,
     required this.onSavedFunction,
     this.displayImportFAB = false,
   }) : super(key: key);
 
   final String title;
-  final HabitPlan habitPlan;
+  final HabitPlan initialHabitPlan;
   final Future<void> Function(HabitPlan) onSavedFunction;
   final bool displayImportFAB;
 
@@ -59,16 +59,18 @@ class _EditHabitState extends State<EditHabit> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController habitController = TextEditingController();
   final TextEditingController repsController = TextEditingController();
+  late HabitPlan habitPlan;
   late List<String> levels;
   late List<String> comments;
 
   @override
   void initState() {
     super.initState();
-    habitController.text = widget.habitPlan.habit;
-    repsController.text = widget.habitPlan.requiredReps.toString();
-    levels = widget.habitPlan.levels;
-    comments = widget.habitPlan.comments;
+    habitPlan = widget.initialHabitPlan.clone();
+    habitController.text = habitPlan.habit;
+    repsController.text = habitPlan.requiredReps.toString();
+    levels = habitPlan.levels;
+    comments = habitPlan.comments;
   }
 
   // Text used to describe the slider-values
@@ -79,13 +81,13 @@ class _EditHabitState extends State<EditHabit> {
   /// Used for setting the onSaved-values from form_list.dart
   // ignore: use_setters_to_change_properties
   void _setLevelValues(final List<String> valueList) {
-    widget.habitPlan.levels = valueList;
+    habitPlan.levels = valueList;
   }
 
   /// Used for setting the onSaved-values from form_list.dart
   // ignore: use_setters_to_change_properties
   void _setCommentValues(final List<String> valueList) {
-    widget.habitPlan.comments = valueList;
+    habitPlan.comments = valueList;
   }
 
   /// Converts a [json]-like [String] into a list of [String]s.
@@ -106,15 +108,14 @@ class _EditHabitState extends State<EditHabit> {
     repsController.text = (map['requiredReps'] as int).toString();
     levels = _jsonToStringList(map['levels'] as String);
     comments = _jsonToStringList(map['comments'] as String);
-    widget.habitPlan.trainingTimeIndex = map['trainingTimeIndex'] as int;
-    widget.habitPlan.requiredTrainings = map['requiredTrainings'] as int;
-    widget.habitPlan.requiredTrainingPeriods =
-        map['requiredTrainingPeriods'] as int;
+    habitPlan.trainingTimeIndex = map['trainingTimeIndex'] as int;
+    habitPlan.requiredTrainings = map['requiredTrainings'] as int;
+    habitPlan.requiredTrainingPeriods = map['requiredTrainingPeriods'] as int;
   }
 
   @override
   Widget build(BuildContext context) {
-    final int trainingTimeIndex = widget.habitPlan.trainingTimeIndex;
+    final int trainingTimeIndex = habitPlan.trainingTimeIndex;
     final String trainingTimeFrame = _timeFrames[trainingTimeIndex];
     final String trainingAdjTimeFrame = _adjTimeFrames[trainingTimeIndex];
 
@@ -130,7 +131,7 @@ class _EditHabitState extends State<EditHabit> {
     }
 
     final String thirdSliderText;
-    if (widget.habitPlan.requiredTrainingPeriods == 1) {
+    if (habitPlan.requiredTrainingPeriods == 1) {
       thirdSliderText = ' is';
     } else {
       thirdSliderText = 's are';
@@ -180,7 +181,7 @@ class _EditHabitState extends State<EditHabit> {
                               DataShortcut.maxHabitCharacters,
                             );
                           }
-                          widget.habitPlan.habit = correctedInput;
+                          habitPlan.habit = correctedInput;
                         },
                       ),
                     ),
@@ -221,7 +222,8 @@ class _EditHabitState extends State<EditHabit> {
                           );
                         },
                         textInputAction: TextInputAction.next,
-                        onSaved: (final String? input) => widget.habitPlan
+                        onSaved: (final String? input) => widget
+                            .initialHabitPlan
                             .requiredReps = int.parse(input.toString().trim()),
                       ),
                     ),
@@ -292,7 +294,7 @@ class _EditHabitState extends State<EditHabit> {
                     Padding(
                       padding: StyleData.screenPadding,
                       child: Slider(
-                        value: widget.habitPlan.trainingTimeIndex.toDouble(),
+                        value: habitPlan.trainingTimeIndex.toDouble(),
                         // It is -2 BECAUSE
                         //-1: .length return a value that is 1 too large AND
                         //-1: I want exclude the last value.
@@ -303,12 +305,12 @@ class _EditHabitState extends State<EditHabit> {
                             final int newTimeIndex = value.toInt();
 
                             // Set the correct value for THIS slider
-                            widget.habitPlan.trainingTimeIndex = newTimeIndex;
+                            habitPlan.trainingTimeIndex = newTimeIndex;
 
                             // Correct the Value for the NEXT slider
                             final double newMaxTrainings =
                                 _maxTrainings[newTimeIndex].toDouble();
-                            widget.habitPlan.requiredTrainings =
+                            habitPlan.requiredTrainings =
                                 (newMaxTrainings * 0.9).floor();
                           });
                         },
@@ -328,7 +330,7 @@ class _EditHabitState extends State<EditHabit> {
                                 style: Theme.of(context).textTheme.headline4,
                               ),
                               TextSpan(
-                                text: '${widget.habitPlan.requiredTrainings} ',
+                                text: '${habitPlan.requiredTrainings} ',
                                 style: Theme.of(context).textTheme.headline3,
                               ),
                               TextSpan(
@@ -344,13 +346,13 @@ class _EditHabitState extends State<EditHabit> {
                     Padding(
                       padding: StyleData.screenPadding,
                       child: Slider(
-                        value: widget.habitPlan.requiredTrainings.toDouble(),
+                        value: habitPlan.requiredTrainings.toDouble(),
                         min: 1,
                         max: currentMaxTrainings,
                         divisions: currentMaxTrainings.toInt() - 1,
                         onChanged: (final double value) {
                           setState(() {
-                            widget.habitPlan.requiredTrainings = value.toInt();
+                            habitPlan.requiredTrainings = value.toInt();
                           });
                         },
                       ),
@@ -365,7 +367,8 @@ class _EditHabitState extends State<EditHabit> {
                           text: TextSpan(
                             children: <TextSpan>[
                               TextSpan(
-                                text: widget.habitPlan.requiredTrainingPeriods
+                                text: widget
+                                    .initialHabitPlan.requiredTrainingPeriods
                                     .toString(),
                                 style: Theme.of(context).textTheme.headline3,
                               ),
@@ -383,15 +386,13 @@ class _EditHabitState extends State<EditHabit> {
                     Padding(
                       padding: StyleData.screenPadding,
                       child: Slider(
-                        value:
-                            widget.habitPlan.requiredTrainingPeriods.toDouble(),
+                        value: habitPlan.requiredTrainingPeriods.toDouble(),
                         min: 1,
                         max: 10,
                         divisions: 9,
                         onChanged: (final double value) {
                           setState(() {
-                            widget.habitPlan.requiredTrainingPeriods =
-                                value.toInt();
+                            habitPlan.requiredTrainingPeriods = value.toInt();
                           });
                         },
                       ),
@@ -441,15 +442,15 @@ class _EditHabitState extends State<EditHabit> {
                     _formKey.currentState!.save();
 
                     // Remove all empty comments
-                    widget.habitPlan.comments.removeWhere(
+                    habitPlan.comments.removeWhere(
                       (final String c) => c == '',
                     );
                     // (except one, if there's no other ones)
-                    if (widget.habitPlan.comments.isEmpty) {
-                      widget.habitPlan.comments.add('');
+                    if (habitPlan.comments.isEmpty) {
+                      habitPlan.comments.add('');
                     }
 
-                    await widget.onSavedFunction(widget.habitPlan);
+                    await widget.onSavedFunction(habitPlan);
                     if (!mounted) return;
                     Navigator.pop(context);
                   }
