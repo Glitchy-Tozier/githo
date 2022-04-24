@@ -123,31 +123,41 @@ class _FormListItemState extends State<FormListItem> {
                 // Only show if the TextField is focused.
                 visible: showOptions,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    IconButton(
-                      padding: EdgeInsets.zero,
+                    TextButton(
                       onPressed: widget.removalCallback == null
                           ? null
                           : () {
                               widget.removalCallback!(widget.index);
                               showOptions = false;
                             },
-                      icon: const Icon(Icons.delete),
+                      child: Icon(
+                        Icons.delete,
+                        color: Theme.of(context).iconTheme.color,
+                      ),
                     ),
-                    IconButton(
-                      padding: EdgeInsets.zero,
+                    TextButton(
                       onPressed: widget.addingCallback == null
                           ? null
                           : () {
                               widget.addingCallback!(widget.index);
                               showOptions = false;
                             },
-                      icon: const Icon(Icons.add),
+                      child: Icon(
+                        Icons.add,
+                        color: Theme.of(context).iconTheme.color,
+                      ),
                     ),
                     ReorderableDragStartListener(
                       index: widget.index,
-                      child: const Icon(Icons.drag_handle),
+                      child: TextButton(
+                        onPressed: null,
+                        child: Icon(
+                          Icons.drag_handle,
+                          color: Theme.of(context).iconTheme.color,
+                        ),
+                      ),
                     )
                   ],
                 ),
