@@ -16,7 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:githo/config/data_shortcut.dart';
@@ -54,13 +53,6 @@ class FormListItem extends StatefulWidget {
 
 class _FormListItemState extends State<FormListItem> {
   bool showOptions = false;
-  Timer? timer;
-
-  @override
-  void dispose() {
-    timer?.cancel();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +65,6 @@ class _FormListItemState extends State<FormListItem> {
       children: <Widget>[
         Focus(
           onFocusChange: (final bool hasFocus) {
-            timer?.cancel();
             if (hasFocus) {
               setState(
                 () {
@@ -84,14 +75,9 @@ class _FormListItemState extends State<FormListItem> {
                 },
               );
             } else {
-              // Delay switch to create time To press a button without the
-              // button disappearing from under your finger.
-              timer = Timer(
-                const Duration(seconds: 1),
-                () => setState(
-                  () => showOptions = false,
-                ),
-              );
+              setState(() {
+                showOptions = false;
+              });
             }
           },
           child: TextFormField(
@@ -152,6 +138,8 @@ class _FormListItemState extends State<FormListItem> {
                     ReorderableDragStartListener(
                       index: widget.index,
                       child: TextButton(
+                        // This TextButon is used to give its icon-child the
+                        // same styling as is used in the two other buttons.
                         onPressed: null,
                         child: Icon(
                           Icons.drag_handle,
