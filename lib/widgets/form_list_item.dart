@@ -31,6 +31,7 @@ class FormListItem extends StatefulWidget {
     required this.value,
     required this.itemName,
     required this.index,
+    required this.focusNode,
     required this.onChanged,
     required this.removalCallback,
     required this.addingCallback,
@@ -42,6 +43,7 @@ class FormListItem extends StatefulWidget {
   final String itemName;
   final int index;
   final int number;
+  final FocusNode focusNode;
   final void Function(int, String) onChanged;
   final void Function(int)? removalCallback;
   final void Function(int)? addingCallback;
@@ -51,7 +53,6 @@ class FormListItem extends StatefulWidget {
 }
 
 class _FormListItemState extends State<FormListItem> {
-  final FocusNode textFieldFocusNode = FocusNode();
   bool showOptions = false;
   Timer? timer;
 
@@ -78,7 +79,8 @@ class _FormListItemState extends State<FormListItem> {
                 () {
                   showOptions = true;
                   // Make sue the TextFormField really was focused
-                  textFieldFocusNode.requestFocus();
+                  // (Necessary when using tab to move around)
+                  widget.focusNode.requestFocus();
                 },
               );
             } else {
@@ -93,7 +95,7 @@ class _FormListItemState extends State<FormListItem> {
             }
           },
           child: TextFormField(
-            focusNode: textFieldFocusNode,
+            focusNode: widget.focusNode,
             initialValue: widget.value,
             decoration: InputDecoration(labelText: fieldName),
             maxLength: DataShortcut.maxLevelCharacters,
