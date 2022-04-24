@@ -94,10 +94,19 @@ class _FormListItemState extends State<FormListItem> {
             validator: widget.canBeEmpty
                 ? null
                 : (final String? input) {
-                    return complainIfEmpty(
+                    final String? complaint = complainIfEmpty(
                       input: input,
                       toFillIn: fieldName,
                     );
+                    if (complaint != null) {
+                      // A really hacky solution to scrolling to a bad TextField
+                      widget.focusNode.unfocus();
+                      Future<void>.delayed(
+                        const Duration(seconds: 0),
+                        widget.focusNode.requestFocus,
+                      );
+                    }
+                    return complaint;
                   },
             textInputAction: TextInputAction.next,
           ),
