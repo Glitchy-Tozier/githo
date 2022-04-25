@@ -104,7 +104,7 @@ class _FormListItemState extends State<FormListItem> {
                         widget.focusNode.context!,
                         duration: const Duration(milliseconds: 500),
                         alignment: 0.5,
-                      );
+                      ).then((_) => widget.focusNode.requestFocus());
                     }
                     return complaint;
                   },
