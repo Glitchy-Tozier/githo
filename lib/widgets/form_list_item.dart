@@ -99,11 +99,11 @@ class _FormListItemState extends State<FormListItem> {
                       toFillIn: fieldName,
                     );
                     if (complaint != null) {
-                      // A really hacky solution to scrolling to a bad TextField
-                      widget.focusNode.unfocus();
-                      Future<void>.delayed(
-                        const Duration(seconds: 0),
-                        widget.focusNode.requestFocus,
+                      // Scroll to faulty input
+                      Scrollable.ensureVisible(
+                        widget.focusNode.context!,
+                        duration: const Duration(seconds: 1),
+                        alignment: 0.5,
                       );
                     }
                     return complaint;
