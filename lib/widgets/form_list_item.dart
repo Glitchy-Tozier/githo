@@ -129,7 +129,9 @@ class _FormListItemState extends State<FormListItem> {
                             },
                       child: Icon(
                         Icons.delete,
-                        color: Theme.of(context).iconTheme.color,
+                        color: widget.removalCallback == null
+                            ? Theme.of(context).disabledColor
+                            : Theme.of(context).iconTheme.color,
                       ),
                     ),
                     TextButton(
@@ -141,7 +143,9 @@ class _FormListItemState extends State<FormListItem> {
                             },
                       child: Icon(
                         Icons.add,
-                        color: Theme.of(context).iconTheme.color,
+                        color: widget.addingCallback == null
+                            ? Theme.of(context).disabledColor
+                            : Theme.of(context).iconTheme.color,
                       ),
                     ),
                     ReorderableDragStartListener(
