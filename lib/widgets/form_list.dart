@@ -172,10 +172,13 @@ class _FormListState extends State<FormList> {
             removalCallback: keyValueList.length == 1
                 ? null
                 : (final int idx) {
+                    final bool wasLastElement = idx + 1 == keyValueList.length;
+                    final int nextIdxToFocus = wasLastElement ? idx - 1 : idx;
                     setState(() {
-                      node.unfocus();
                       keyValueList.removeAt(idx);
                       widget.valuesSetter(keyValueList.values);
+                      // Turn focus to the appropriate next TextField
+                      toFocus = nextIdxToFocus;
                     });
                   },
             addingCallback: keyValueList.length == DataShortcut.maxLevelCount
@@ -185,7 +188,7 @@ class _FormListState extends State<FormList> {
                     setState(() {
                       keyValueList.insertNew(newIdx, '');
                       widget.valuesSetter(keyValueList.values);
-                      toFocus = newIdx;
+                      toFocus = newIdx; // Focus the new TextFormField
                     });
                   },
           );
