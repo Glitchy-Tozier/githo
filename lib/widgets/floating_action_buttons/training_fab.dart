@@ -52,6 +52,14 @@ class TrainingFAB extends StatefulWidget {
 }
 
 class _TrainingFABState extends State<TrainingFAB> {
+  Timer? timer;
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.progressData.isActive) {
@@ -173,7 +181,8 @@ class _TrainingFABState extends State<TrainingFAB> {
               if (currentTraining.doneReps == currentTraining.requiredReps) {
                 await cancelNotifications();
                 await scheduleNotifications();
-                Timer(
+                timer?.cancel();
+                timer = Timer(
                   const Duration(milliseconds: 700),
                   () => showDialog(
                     context: context,

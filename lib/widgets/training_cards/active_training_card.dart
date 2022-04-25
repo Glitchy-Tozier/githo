@@ -48,6 +48,14 @@ class ActiveTrainingCard extends StatefulWidget {
 }
 
 class _ActiveTrainingCardState extends State<ActiveTrainingCard> {
+  Timer? timer;
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
+
   double get height {
     final double height = widget.cardHeight +
         TrainingCardThemes.topMargin +
@@ -85,7 +93,8 @@ class _ActiveTrainingCardState extends State<ActiveTrainingCard> {
               if (widget.training.doneReps == widget.training.requiredReps) {
                 await cancelNotifications();
                 await scheduleNotifications();
-                Timer(
+                timer?.cancel();
+                timer = Timer(
                   const Duration(milliseconds: 700),
                   () => showDialog(
                     context: context,
