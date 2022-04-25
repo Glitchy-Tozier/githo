@@ -67,7 +67,7 @@ class HabitPlan {
 
   /// Converts a Map into a [HabitPlan].
   HabitPlan.fromMap(final Map<String, dynamic> map)
-      : id = map['id'] as int,
+      : id = map['id'] as int?,
         isActive = (map['isActive'] as int).toBool(),
         fullyCompleted = (map['fullyCompleted'] as int).toBool(),
         habit = map['habit'] as String,
