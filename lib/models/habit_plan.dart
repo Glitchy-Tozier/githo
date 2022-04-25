@@ -79,10 +79,6 @@ class HabitPlan {
         requiredTrainingPeriods = map['requiredTrainingPeriods'] as int,
         lastChanged = DateTime.parse(map['lastChanged'] as String);
 
-  /// Clone the given [HabitPlan] to create a new object that can't influence
-  /// the original one.
-  HabitPlan clone() => HabitPlan.fromMap(toMap());
-
   final int? id;
   bool isActive;
   bool fullyCompleted;
@@ -94,6 +90,10 @@ class HabitPlan {
   int requiredTrainings;
   int requiredTrainingPeriods;
   DateTime lastChanged;
+
+  /// Clone the given [HabitPlan] to create a new object that can't influence
+  /// the original one.
+  HabitPlan clone() => HabitPlan.fromMap(toMap());
 
   /// Saves this [HabitPlan] in the [Database].
   Future<void> save() async {
@@ -118,22 +118,19 @@ class HabitPlan {
 
   /// Converts the [HabitPlan] into a Map.
   Map<String, dynamic> toMap() {
-    final Map<String, dynamic> map = <String, dynamic>{};
-
-    if (id != null) {
-      map['id'] = id;
-    }
-    map['isActive'] = isActive.toInt();
-    map['fullyCompleted'] = fullyCompleted.toInt();
-    map['habit'] = habit;
-    map['requiredReps'] = requiredReps;
-    map['levels'] = jsonEncode(levels);
-    map['comments'] = jsonEncode(comments);
-    map['trainingTimeIndex'] = trainingTimeIndex;
-    map['requiredTrainings'] = requiredTrainings;
-    map['requiredTrainingPeriods'] = requiredTrainingPeriods;
-    map['lastChanged'] = lastChanged.toString();
-
+    final Map<String, dynamic> map = <String, dynamic>{
+      'id': id,
+      'isActive': isActive.toInt(),
+      'fullyCompleted': fullyCompleted.toInt(),
+      'habit': habit,
+      'requiredReps': requiredReps,
+      'levels': jsonEncode(levels),
+      'comments': jsonEncode(comments),
+      'trainingTimeIndex': trainingTimeIndex,
+      'requiredTrainings': requiredTrainings,
+      'requiredTrainingPeriods': requiredTrainingPeriods,
+      'lastChanged': lastChanged.toString(),
+    };
     return map;
   }
 
