@@ -59,8 +59,8 @@ class _EditHabitState extends State<EditHabit> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController habitController = TextEditingController();
   final TextEditingController repsController = TextEditingController();
-  final FocusNode habitFocusNode = FocusNode();
-  final FocusNode repsFocusNode = FocusNode();
+  late FocusNode habitFocusNode;
+  late FocusNode repsFocusNode;
   late HabitPlan habitPlan;
   late List<String> levels;
   late List<String> comments;
@@ -71,8 +71,17 @@ class _EditHabitState extends State<EditHabit> {
     habitPlan = widget.initialHabitPlan.clone();
     habitController.text = habitPlan.habit;
     repsController.text = habitPlan.requiredReps.toString();
+    habitFocusNode = FocusNode();
+    repsFocusNode = FocusNode();
     levels = habitPlan.levels;
     comments = habitPlan.comments;
+  }
+
+  @override
+  void dispose() {
+    habitFocusNode.dispose();
+    repsFocusNode.dispose();
+    super.dispose();
   }
 
   // Text used to describe the slider-values

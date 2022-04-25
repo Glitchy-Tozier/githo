@@ -55,6 +55,12 @@ class _FormListItemState extends State<FormListItem> {
   bool showOptions = false;
 
   @override
+  void dispose() {
+    widget.focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // Create a pretty name such as "Level 4"
     final String fieldName = widget.number < DataShortcut.maxLevelCount

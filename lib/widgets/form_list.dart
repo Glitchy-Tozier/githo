@@ -76,6 +76,13 @@ class KeyValueList {
     return key;
   }
 
+  /// Disposes all [FocusNode]s in [focusNodes].
+  void disposeNodes() {
+    for (final FocusNode focusNode in focusNodes) {
+      focusNode.dispose();
+    }
+  }
+
   final List<int> _keys;
   final List<String> _values;
   final List<FocusNode> _focusNodes;
@@ -122,6 +129,12 @@ class _FormListState extends State<FormList> {
   void initState() {
     super.initState();
     keyValueList = KeyValueList.fromList(widget.initialValues);
+  }
+
+  @override
+  void dispose() {
+    keyValueList.disposeNodes();
+    super.dispose();
   }
 
   @override
@@ -175,7 +188,9 @@ class _FormListState extends State<FormList> {
                     final bool wasLastElement = idx + 1 == keyValueList.length;
                     final int nextIdxToFocus = wasLastElement ? idx - 1 : idx;
                     setState(() {
-                      keyValueList.removeAt(idx);
+                      final KeyValuePair removedData =
+                          keyValueList.removeAt(idx);
+                      removedData.focusNode.dispose();
                       widget.valuesSetter(keyValueList.values);
                       // Turn focus to the appropriate next TextField
                       toFocus = nextIdxToFocus;
