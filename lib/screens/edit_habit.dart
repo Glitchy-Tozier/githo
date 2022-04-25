@@ -59,6 +59,8 @@ class _EditHabitState extends State<EditHabit> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController habitController = TextEditingController();
   final TextEditingController repsController = TextEditingController();
+  final FocusNode habitFocusNode = FocusNode();
+  final FocusNode repsFocusNode = FocusNode();
   late HabitPlan habitPlan;
   late List<String> levels;
   late List<String> comments;
@@ -164,15 +166,27 @@ class _EditHabitState extends State<EditHabit> {
                     Padding(
                       padding: StyleData.screenPadding,
                       child: TextFormField(
+                        focusNode: habitFocusNode,
                         controller: habitController,
                         decoration: const InputDecoration(
                           labelText: 'The final habit',
                         ),
                         maxLength: DataShortcut.maxHabitCharacters,
-                        validator: (final String? input) => complainIfEmpty(
-                          input: input,
-                          toFillIn: 'your final habit',
-                        ),
+                        validator: (final String? input) {
+                          final String? complaint = complainIfEmpty(
+                            input: input,
+                            toFillIn: 'your final habit',
+                          );
+                          if (complaint != null) {
+                            // Scroll to faulty input
+                            Scrollable.ensureVisible(
+                              habitFocusNode.context!,
+                              duration: const Duration(milliseconds: 500),
+                              alignment: 0.5,
+                            ).then((_) => habitFocusNode.requestFocus());
+                          }
+                          return complaint;
+                        },
                         textInputAction: TextInputAction.next,
                         onSaved: (final String? input) {
                           String correctedInput = input.toString().trim();
@@ -198,6 +212,7 @@ class _EditHabitState extends State<EditHabit> {
                     Padding(
                       padding: StyleData.screenPadding,
                       child: TextFormField(
+                        focusNode: repsFocusNode,
                         controller: repsController,
                         textAlign: TextAlign.end,
                         keyboardType: TextInputType.number,
@@ -215,13 +230,22 @@ class _EditHabitState extends State<EditHabit> {
                           } else {
                             timeFrameArticle = 'a';
                           }
-                          return validateNumberField(
+                          final String? complaint = validateNumberField(
                             input: input,
                             maxInput: 99,
                             toFillIn: 'the required repetitions',
                             textIfZero: 'It has to be at least one '
                                 'rep $timeFrameArticle $trainingTimeFrame',
                           );
+                          if (complaint != null) {
+                            // Scroll to faulty input
+                            Scrollable.ensureVisible(
+                              repsFocusNode.context!,
+                              duration: const Duration(milliseconds: 500),
+                              alignment: 0.5,
+                            ).then((_) => repsFocusNode.requestFocus());
+                          }
+                          return complaint;
                         },
                         textInputAction: TextInputAction.next,
                         onSaved: (final String? input) => widget
