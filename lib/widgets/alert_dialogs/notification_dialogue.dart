@@ -57,6 +57,12 @@ class _NotificationDialogueState extends State<NotificationDialogue> {
   }
 
   @override
+  void dispose() {
+    dateController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final int trainingTimeIndex = widget.habitPlan.trainingTimeIndex;
     final String trainingDuration = DataShortcut.timeFrames[trainingTimeIndex];

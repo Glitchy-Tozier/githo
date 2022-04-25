@@ -64,6 +64,12 @@ class _ConfirmStartingTimeState extends State<ConfirmStartingTime> {
     initialDate = _getInitialDate();
   }
 
+  @override
+  void dispose() {
+    dateController.dispose();
+    super.dispose();
+  }
+
   /// Returns earliest possible [DateTime] where the first training may start.
   DateTime _getFirstDate() {
     final DateTime now = TimeHelper.instance.currentTime;

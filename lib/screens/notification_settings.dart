@@ -189,6 +189,12 @@ class _NotificationSettingsState extends State<NotificationSettings> {
       DatabaseHelper.instance.getNotificationData();
 
   @override
+  void dispose() {
+    dateController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Background(

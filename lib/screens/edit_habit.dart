@@ -79,6 +79,8 @@ class _EditHabitState extends State<EditHabit> {
 
   @override
   void dispose() {
+    habitController.dispose();
+    repsController.dispose();
     habitFocusNode.dispose();
     repsFocusNode.dispose();
     super.dispose();
