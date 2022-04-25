@@ -104,13 +104,15 @@ class _EditHabitState extends State<EditHabit> {
   void _updateTextFormFields(final String json) {
     final Map<String, dynamic> map = jsonDecode(json) as Map<String, dynamic>;
 
-    habitController.text = map['habit'] as String;
-    repsController.text = (map['requiredReps'] as int).toString();
-    levels = _jsonToStringList(map['levels'] as String);
-    comments = _jsonToStringList(map['comments'] as String);
-    habitPlan.trainingTimeIndex = map['trainingTimeIndex'] as int;
-    habitPlan.requiredTrainings = map['requiredTrainings'] as int;
-    habitPlan.requiredTrainingPeriods = map['requiredTrainingPeriods'] as int;
+    setState(() {
+      habitController.text = map['habit'] as String;
+      repsController.text = (map['requiredReps'] as int).toString();
+      levels = _jsonToStringList(map['levels'] as String);
+      comments = _jsonToStringList(map['comments'] as String);
+      habitPlan.trainingTimeIndex = map['trainingTimeIndex'] as int;
+      habitPlan.requiredTrainings = map['requiredTrainings'] as int;
+      habitPlan.requiredTrainingPeriods = map['requiredTrainingPeriods'] as int;
+    });
   }
 
   @override
@@ -422,11 +424,8 @@ class _EditHabitState extends State<EditHabit> {
                     showDialog(
                       context: context,
                       builder: (BuildContext buildContext) => ImportHabit(
-                        onImport: (final String json) {
-                          setState(() {
-                            _updateTextFormFields(json);
-                          });
-                        },
+                        onImport: (final String json) =>
+                            _updateTextFormFields(json),
                       ),
                     );
                   },
