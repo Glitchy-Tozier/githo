@@ -102,7 +102,7 @@ class _FormListItemState extends State<FormListItem> {
                       // Scroll to faulty input
                       Scrollable.ensureVisible(
                         widget.focusNode.context!,
-                        duration: const Duration(seconds: 1),
+                        duration: const Duration(milliseconds: 500),
                         alignment: 0.5,
                       );
                     }
