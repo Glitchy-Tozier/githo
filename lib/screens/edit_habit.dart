@@ -221,6 +221,7 @@ class _EditHabitState extends State<EditHabit> {
                         ],
                         decoration: const InputDecoration(
                           labelText: 'Nr of required actions',
+                          counter: SizedBox(),
                         ),
                         maxLength: 2,
                         validator: (final String? input) {

@@ -83,7 +83,10 @@ class _FormListItemState extends State<FormListItem> {
           child: TextFormField(
             focusNode: widget.focusNode,
             initialValue: widget.value,
-            decoration: InputDecoration(labelText: fieldName),
+            decoration: InputDecoration(
+              labelText: fieldName,
+              counter: const SizedBox(),
+            ),
             maxLength: DataShortcut.maxLevelCharacters,
             onChanged: (final String newValue) {
               widget.onChanged(
