@@ -35,7 +35,8 @@ class About extends StatelessWidget {
   /// Opens an URL-[String]. If something goes wrong, the user gets alerted.
   void openUrl(final BuildContext context, final String url) {
     try {
-      launch(url);
+      final Uri uri = Uri.parse(url);
+      launchUrl(uri);
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
