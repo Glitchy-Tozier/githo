@@ -38,9 +38,7 @@ const NotificationDetails _trainingNotificationDetails = NotificationDetails(
     'training_notifications',
     'Training Notifications',
     channelDescription: 'Reminders, shown for every training.',
-    importance: Importance.max,
     styleInformation: BigTextStyleInformation(''),
-    priority: Priority.high,
     ticker: 'ticker',
   ),
 );
@@ -195,9 +193,7 @@ Future<void> messageNotification(String msg) async {
       'debug_notifications',
       'Debug Notifications',
       channelDescription: 'Exists for testing purposes.',
-      importance: Importance.max,
       styleInformation: BigTextStyleInformation(''),
-      priority: Priority.high,
       ticker: 'ticker',
     ),
   );
