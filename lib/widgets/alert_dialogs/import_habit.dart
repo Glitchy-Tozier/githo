@@ -38,11 +38,13 @@ class ImportHabit extends StatelessWidget {
       title: const Text(
         'Import habit-plan',
       ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
+      content: ListView(
+        shrinkWrap: true,
         children: <Widget>[
           Text(
-            'Copy the habit-plan-text into the field below.',
+            'Copy the habit-plan-JSON into the field below.\n'
+            'You can obtain such a text via the share-button '
+            'on the details-page of a preexisting habit.\n',
             style: Theme.of(context).textTheme.bodyText2,
           ),
           Text(
