@@ -52,7 +52,13 @@ class FormListItem extends StatefulWidget {
 }
 
 class _FormListItemState extends State<FormListItem> {
-  bool showOptions = false;
+  @override
+  void initState() {
+    super.initState();
+    widget.focusNode.addListener(() {
+      setState(() {});
+    });
+  }
 
   @override
   void dispose() {
@@ -69,63 +75,45 @@ class _FormListItemState extends State<FormListItem> {
 
     return Column(
       children: <Widget>[
-        Focus(
-          onFocusChange: (final bool hasFocus) {
-            if (hasFocus) {
-              setState(
-                () {
-                  showOptions = true;
-                  // Make sue the TextFormField really was focused
-                  // (Necessary when using tab to move around)
-                  widget.focusNode.requestFocus();
-                },
-              );
-            } else {
-              setState(() {
-                showOptions = false;
-              });
-            }
-          },
-          child: TextFormField(
-            focusNode: widget.focusNode,
-            initialValue: widget.value,
-            decoration: InputDecoration(
-              labelText: fieldName,
-              counter: const SizedBox(),
-            ),
-            maxLength: DataShortcut.maxLevelCharacters,
-            onChanged: (final String newValue) {
-              widget.onChanged(
-                widget.index,
-                newValue.trim(),
-              );
-            },
-            validator: widget.canBeEmpty
-                ? null
-                : (final String? input) {
-                    final String? complaint = complainIfEmpty(
-                      input: input,
-                      toFillIn: fieldName,
-                    );
-                    if (complaint != null) {
-                      // Scroll to faulty input
-                      Scrollable.ensureVisible(
-                        widget.focusNode.context!,
-                        duration: const Duration(milliseconds: 500),
-                        alignment: 0.5,
-                      ).then((_) => widget.focusNode.requestFocus());
-                    }
-                    return complaint;
-                  },
-            textInputAction: TextInputAction.next,
+        TextFormField(
+          focusNode: widget.focusNode,
+          initialValue: widget.value,
+          decoration: InputDecoration(
+            labelText: fieldName,
+            counter: const SizedBox(),
           ),
+          maxLength: DataShortcut.maxLevelCharacters,
+          onChanged: (final String newValue) {
+            widget.onChanged(
+              widget.index,
+              newValue.trim(),
+            );
+          },
+          validator: widget.canBeEmpty
+              ? null
+              : (final String? input) {
+                  final String? complaint = complainIfEmpty(
+                    input: input,
+                    toFillIn: fieldName,
+                  );
+                  if (complaint != null) {
+                    // Scroll to faulty input
+                    Scrollable.ensureVisible(
+                      widget.focusNode.context!,
+                      duration: const Duration(milliseconds: 500),
+                      alignment: 0.5,
+                    ).then((_) => widget.focusNode.requestFocus());
+                  }
+                  return complaint;
+                },
+          textInputAction: TextInputAction.next,
         ),
         ExcludeFocus(
           child: Column(
             children: <Widget>[
               Visibility(
                 // Only show if the TextField is focused.
-                visible: showOptions,
+                visible: widget.focusNode.hasFocus,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -134,7 +122,6 @@ class _FormListItemState extends State<FormListItem> {
                           ? null
                           : () {
                               widget.removalCallback!(widget.index);
-                              showOptions = false;
                             },
                       child: Icon(
                         Icons.delete,
@@ -148,7 +135,6 @@ class _FormListItemState extends State<FormListItem> {
                           ? null
                           : () {
                               widget.addingCallback!(widget.index);
-                              showOptions = false;
                             },
                       child: Icon(
                         Icons.add,
