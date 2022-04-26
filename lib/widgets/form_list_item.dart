@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:githo/config/data_shortcut.dart';
 import 'package:githo/helpers/text_form_field_validation.dart';
@@ -148,7 +149,16 @@ class _FormListItemState extends State<FormListItem> {
                       child: TextButton(
                         // This TextButon is used to give its icon-child the
                         // same styling as is used in the two other buttons.
-                        onPressed: null,
+                        onPressed: () => Fluttertoast.showToast(
+                          msg: 'Use the drag-handle to reorder '
+                              '${widget.itemName}s',
+                          toastLength: Toast.LENGTH_LONG,
+                          backgroundColor: Theme.of(context).primaryColor,
+                          textColor: Theme.of(context)
+                              .primaryTextTheme
+                              .bodyText2!
+                              .color,
+                        ),
                         child: Icon(
                           Icons.drag_handle,
                           color: Theme.of(context).iconTheme.color,

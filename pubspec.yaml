@@ -34,6 +34,7 @@ dependencies:
   flutter_local_notifications: ^9.4.1
   flutter_native_splash: ^2.0.4
   flutter_speed_dial: ^5.0.0+1
+  fluttertoast: ^8.0.9
   intl: ^0.17.0
   introduction_screen: ^3.0.0
   lint: ^1.8.2
