@@ -119,6 +119,11 @@ class _FormListItemState extends State<FormListItem> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     TextButton(
+                      style: ButtonStyle(
+                        overlayColor: MaterialStateProperty.all<Color>(
+                          Theme.of(context).primaryColor.withOpacity(0.5),
+                        ),
+                      ),
                       onPressed: widget.removalCallback == null
                           ? null
                           : () {
@@ -132,6 +137,11 @@ class _FormListItemState extends State<FormListItem> {
                       ),
                     ),
                     TextButton(
+                      style: ButtonStyle(
+                        overlayColor: MaterialStateProperty.all<Color>(
+                          Theme.of(context).primaryColor.withOpacity(0.5),
+                        ),
+                      ),
                       onPressed: widget.addingCallback == null
                           ? null
                           : () {
@@ -147,6 +157,11 @@ class _FormListItemState extends State<FormListItem> {
                     ReorderableDragStartListener(
                       index: widget.index,
                       child: TextButton(
+                        style: ButtonStyle(
+                          overlayColor: MaterialStateProperty.all<Color>(
+                            Colors.transparent,
+                          ),
+                        ),
                         // This TextButon is used to give its icon-child the
                         // same styling as is used in the two other buttons.
                         onPressed: () => Fluttertoast.showToast(
