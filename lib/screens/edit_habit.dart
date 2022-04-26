@@ -260,8 +260,7 @@ class _EditHabitState extends State<EditHabit> {
                           return complaint;
                         },
                         textInputAction: TextInputAction.next,
-                        onSaved: (final String? input) => widget
-                            .initialHabitPlan
+                        onSaved: (final String? input) => habitPlan
                             .requiredReps = int.parse(input.toString().trim()),
                       ),
                     ),
@@ -405,8 +404,7 @@ class _EditHabitState extends State<EditHabit> {
                           text: TextSpan(
                             children: <TextSpan>[
                               TextSpan(
-                                text: widget
-                                    .initialHabitPlan.requiredTrainingPeriods
+                                text: habitPlan.requiredTrainingPeriods
                                     .toString(),
                                 style: Theme.of(context).textTheme.headline3,
                               ),
