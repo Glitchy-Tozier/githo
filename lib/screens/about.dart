@@ -36,7 +36,7 @@ class About extends StatelessWidget {
   void openUrl(final BuildContext context, final String url) {
     try {
       final Uri uri = Uri.parse(url);
-      launchUrl(uri);
+      launchUrl(uri, mode: LaunchMode.externalApplication);
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
