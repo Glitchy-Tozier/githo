@@ -165,6 +165,7 @@ class _FormListState extends State<FormList> {
           }
           return FormListItem(
             key: ValueKey<int>(key),
+            itemCount: keyValueList.length,
             canBeEmpty: widget.canBeEmpty,
             value: value,
             itemName: widget.fieldName,

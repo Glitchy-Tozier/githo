@@ -27,6 +27,7 @@ class FormListItem extends StatefulWidget {
   /// A [TextFormField] with some added functionality.
   const FormListItem({
     Key? key,
+    required this.itemCount,
     required this.canBeEmpty,
     required this.value,
     required this.itemName,
@@ -38,6 +39,7 @@ class FormListItem extends StatefulWidget {
   })  : number = index + 1,
         super(key: key);
 
+  final int itemCount;
   final bool canBeEmpty;
   final String value;
   final String itemName;
@@ -73,6 +75,15 @@ class _FormListItemState extends State<FormListItem> {
     final String fieldName = widget.number < DataShortcut.maxLevelCount
         ? '${widget.itemName.capitalize()} ${widget.number}'
         : 'Final ${widget.itemName}';
+
+    final MaterialStateProperty<Color> transparent =
+        MaterialStateProperty.all<Color>(
+      Colors.transparent,
+    );
+    final MaterialStateProperty<Color> primaryWithOpacity =
+        MaterialStateProperty.all<Color>(
+      Theme.of(context).primaryColor.withOpacity(0.5),
+    );
 
     return Column(
       children: <Widget>[
@@ -120,15 +131,13 @@ class _FormListItemState extends State<FormListItem> {
                   children: <Widget>[
                     TextButton(
                       style: ButtonStyle(
-                        overlayColor: MaterialStateProperty.all<Color>(
-                          Theme.of(context).primaryColor.withOpacity(0.5),
-                        ),
+                        overlayColor: widget.removalCallback == null
+                            ? transparent
+                            : primaryWithOpacity,
                       ),
                       onPressed: widget.removalCallback == null
-                          ? null
-                          : () {
-                              widget.removalCallback!(widget.index);
-                            },
+                          ? widget.focusNode.requestFocus
+                          : () => widget.removalCallback!(widget.index),
                       child: Icon(
                         Icons.delete,
                         color: widget.removalCallback == null
@@ -138,15 +147,13 @@ class _FormListItemState extends State<FormListItem> {
                     ),
                     TextButton(
                       style: ButtonStyle(
-                        overlayColor: MaterialStateProperty.all<Color>(
-                          Theme.of(context).primaryColor.withOpacity(0.5),
-                        ),
+                        overlayColor: widget.addingCallback == null
+                            ? transparent
+                            : primaryWithOpacity,
                       ),
                       onPressed: widget.addingCallback == null
-                          ? null
-                          : () {
-                              widget.addingCallback!(widget.index);
-                            },
+                          ? widget.focusNode.requestFocus
+                          : () => widget.addingCallback!(widget.index),
                       child: Icon(
                         Icons.add,
                         color: widget.addingCallback == null
