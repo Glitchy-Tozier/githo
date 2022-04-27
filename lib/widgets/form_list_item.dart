@@ -162,13 +162,10 @@ class _FormListItemState extends State<FormListItem> {
                       ),
                     ),
                     ReorderableDragStartListener(
+                      enabled: widget.itemCount > 1,
                       index: widget.index,
                       child: TextButton(
-                        style: ButtonStyle(
-                          overlayColor: MaterialStateProperty.all<Color>(
-                            Colors.transparent,
-                          ),
-                        ),
+                        style: ButtonStyle(overlayColor: transparent),
                         // This TextButon is used to give its icon-child the
                         // same styling as is used in the two other buttons.
                         onPressed: () => Fluttertoast.showToast(
@@ -183,10 +180,12 @@ class _FormListItemState extends State<FormListItem> {
                         ),
                         child: Icon(
                           Icons.drag_handle,
-                          color: Theme.of(context).iconTheme.color,
+                          color: widget.itemCount > 1
+                              ? Theme.of(context).iconTheme.color
+                              : Theme.of(context).disabledColor,
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
