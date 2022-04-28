@@ -1,0 +1,2 @@
+• Adjusted priority of notifications
+• Improved habit-editing-screen
